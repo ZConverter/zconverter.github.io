@@ -1,15 +1,14 @@
 ---
 layout: page
-title: ZDM API Documentation (한국어)
+title: ZDM API RESTful Documentation
 ---
-
 ## Table of Contents
 
 1. [Overview](#overview)
 2. [Authentication](#authentication)
 3. [Standard API Response Format](#standard-api-response-format)
 4. [Authentication Endpoints](#authentication-endpoints)
-   - [POST /auth/issue](#post-authissue) - 토근 발급
+   - [POST /auth/issue](#post-authissue) - 토큰 발급
 5. [User Management](#user-management)
    - [GET /users](#get-users) - 사용자 목록 조회
    - [GET /users/:identifier](#get-usersidentifier) - 특정 사용자 조회
@@ -63,7 +62,7 @@ ZDM-API는 백업, 복구, 시스템 관리를 위한 REST API 서버입니다. 
 **Base URL**: `/api/v1`
 
 ## Authentication
-모든 보호된 엔드포인트는 토근이 필요합니다:
+모든 보호된 엔드포인트는 토큰이 필요합니다:
 ```
 Authorization: Bearer <token>
 ```
@@ -118,13 +117,15 @@ Authorization: Bearer <token>
 ## Authentication Endpoints
 
 ### POST `/auth/issue`
-토근을 발급합니다.
+토큰을 발급합니다.
+
 
 **Request Body:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | email | string | Required | 사용자 이메일 |
 | password | string | Required | 사용자 비밀번호 |
+
 
 **Response:**
 ```json
@@ -152,6 +153,7 @@ Authorization: Bearer <token>
 ### GET `/users`
 사용자 목록을 조회합니다.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -159,6 +161,7 @@ Authorization: Bearer <token>
 | position | string | Optional | 직책 필터 |
 | company | string | Optional | 회사명 필터 |
 | country | string | Optional | 국가 필터 |
+
 
 **Response:**
 ```json
@@ -183,10 +186,12 @@ Authorization: Bearer <token>
 ### GET `/users/:identifier`
 특정 사용자 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 사용자 ID 또는 이메일 |
+
 
 **Query Parameters:**
 | Parameter | Type | Required | Description |
@@ -195,6 +200,7 @@ Authorization: Bearer <token>
 | position | string | Optional | 직책 필터 |
 | company | string | Optional | 회사명 필터 |
 | country | string | Optional | 국가 필터 |
+
 
 **Response:**
 ```json
@@ -217,10 +223,12 @@ Authorization: Bearer <token>
 ### PUT `/users/:identifier`
 사용자 정보를 업데이트합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 사용자 ID 또는 이메일 |
+
 
 **Request Body:**
 | Field | Type | Required | Description |
@@ -231,6 +239,7 @@ Authorization: Bearer <token>
 | position | string | Optional | 직책 |
 | company | string | Optional | 회사명 |
 | country | string | Optional | 국가 코드 (2자리, 예: KR, US) |
+
 
 **Response:**
 ```json
@@ -282,6 +291,7 @@ Authorization: Bearer <token>
 ### GET `/servers`
 서버 목록을 조회합니다.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -294,6 +304,7 @@ Authorization: Bearer <token>
 | partition | boolean | Optional | 파티션 정보 포함 여부 |
 | repository | boolean | Optional | 리포지토리 정보 포함 여부 |
 | detail | boolean | Optional | 상세 정보 포함 여부 |
+
 
 **Response:**
 ```json
@@ -336,12 +347,14 @@ Authorization: Bearer <token>
 ### GET `/servers/:identifier`
 특정 서버 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 서버 ID 또는 서버명 |
 
 **Query Parameters:** (위의 GET `/servers`와 동일)
+
 
 **Response:**
 ```json
@@ -378,10 +391,12 @@ Authorization: Bearer <token>
 ### GET `/servers/:identifier/partitions`
 특정 서버의 파티션 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 서버 ID 또는 서버명 |
+
 
 **Query Parameters:**
 | Parameter | Type | Required | Description |
@@ -390,6 +405,7 @@ Authorization: Bearer <token>
 
 ### GET `/servers/partitions`
 모든 서버의 파티션 정보를 조회합니다.
+
 
 **Query Parameters:**
 | Parameter | Type | Required | Description |
@@ -404,6 +420,7 @@ Authorization: Bearer <token>
 ### GET `/schedules`
 스케줄 목록을 조회합니다.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -411,6 +428,7 @@ Authorization: Bearer <token>
 | type | string | Optional | 스케줄 타입 필터 |
 | state | string | Optional | 활성 상태 필터 |
 | jobName | string | Optional | 작업명 필터 |
+
 
 **Response:**
 ```json
@@ -439,12 +457,14 @@ Authorization: Bearer <token>
 ### GET `/schedules/:identifier`
 특정 스케줄 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 스케줄 ID 또는 작업명 |
 
 **Query Parameters:** (위의 GET `/schedules`와 동일)
+
 
 **Response:**
 ```json
@@ -471,6 +491,7 @@ Authorization: Bearer <token>
 ### POST `/schedules`
 새 스케줄을 생성합니다.
 
+
 **Request Body:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -484,6 +505,7 @@ Authorization: Bearer <token>
 | advanced | object | Optional | 고급 스케줄 설정 |
 | advanced.type | string | Optional | 고급 스케줄 타입 |
 | advanced.description | string | Optional | 고급 스케줄 설명 |
+
 
 **Response:**
 ```json
@@ -516,6 +538,7 @@ Authorization: Bearer <token>
 ### GET `/backups`
 백업 작업 목록을 조회합니다.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -531,6 +554,7 @@ Authorization: Bearer <token>
 | active | boolean | Optional | 활성 작업만 조회 |
 | history | boolean | Optional | 히스토리 포함 |
 | logs | boolean | Optional | 로그 포함 |
+
 
 **Response:**
 ```json
@@ -580,12 +604,14 @@ Authorization: Bearer <token>
 ### GET `/backups/:identifier`
 특정 백업 작업 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
 **Query Parameters:** (위의 GET `/backups`와 동일)
+
 
 **Response:**
 ```json
@@ -633,6 +659,7 @@ Authorization: Bearer <token>
 ### POST `/backups`
 새 백업 작업을 등록합니다.
 
+
 **Request Body:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -658,6 +685,7 @@ Authorization: Bearer <token>
 | mailEvent | string | Optional | 메일 알림 설정 |
 | networkLimit | number | Optional | 네트워크 제한 |
 | autoStart | string | Optional | 자동 시작 여부 |
+
 
 **Response:**
 ```json
@@ -693,12 +721,14 @@ Authorization: Bearer <token>
 ### PUT `/backups/:identifier`
 백업 작업을 수정합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
 **Request Body:** (POST `/backups`와 동일)
+
 
 **Response:**
 ```json
@@ -717,15 +747,18 @@ Authorization: Bearer <token>
 ### DELETE `/backups/:identifier`
 백업 작업을 삭제합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | force | boolean | Optional | 강제 삭제 여부 |
+
 
 **Response:**
 ```json
@@ -744,10 +777,12 @@ Authorization: Bearer <token>
 ### GET `/backups/monitoring/job/:identifier`
 특정 백업 작업의 모니터링 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
+
 
 **Response:**
 ```json
@@ -787,10 +822,12 @@ Authorization: Bearer <token>
 ### GET `/backups/monitoring/system/:identifier`
 특정 시스템의 백업 모니터링 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 시스템 ID 또는 시스템명 |
+
 
 **Response:**
 ```json
@@ -822,6 +859,7 @@ Authorization: Bearer <token>
 ### GET `/recoveries`
 복구 작업 목록을 조회합니다.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -837,6 +875,7 @@ Authorization: Bearer <token>
 | detail | boolean | Optional | 상세 정보 포함 여부 |
 | server | string | Optional | 서버명 필터 |
 | serverType | string | Optional | 서버 타입 필터 |
+
 
 **Response:**
 ```json
@@ -886,12 +925,14 @@ Authorization: Bearer <token>
 ### GET `/recoveries/:identifier`
 특정 복구 작업 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
 **Query Parameters:** (위의 GET `/recoveries`와 동일)
+
 
 **Response:**
 ```json
@@ -939,6 +980,7 @@ Authorization: Bearer <token>
 ### POST `/recoveries`
 새 복구 작업을 등록합니다.
 
+
 **Request Body:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -976,6 +1018,7 @@ Authorization: Bearer <token>
 | jobList[].mode | string | Required | 복구 모드 |
 | jobList[].repository | object | Required | 리포지토리 정보 |
 
+
 **Response:**
 ```json
 {
@@ -998,12 +1041,14 @@ Authorization: Bearer <token>
 ### PUT `/recoveries/:identifier`
 복구 작업을 수정합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
 **Request Body:** (POST `/recoveries`와 동일)
+
 
 **Response:**
 ```json
@@ -1022,15 +1067,18 @@ Authorization: Bearer <token>
 ### DELETE `/recoveries/:identifier`
 복구 작업을 삭제합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | force | boolean | Optional | 강제 삭제 여부 |
+
 
 **Response:**
 ```json
@@ -1097,10 +1145,12 @@ Authorization: Bearer <token>
 ### GET `/recoveries/monitoring/job/:identifier`
 특정 복구 작업의 모니터링 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
+
 
 **Response:**
 ```json
@@ -1141,10 +1191,12 @@ Authorization: Bearer <token>
 ### GET `/recoveries/monitoring/system/:identifier`
 특정 시스템의 복구 모니터링 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 시스템 ID 또는 시스템명 |
+
 
 **Response:**
 ```json
@@ -1181,6 +1233,7 @@ Authorization: Bearer <token>
 |-------|------|----------|-------------|
 | file | file | Required | 업로드할 파일 |
 
+
 **Response:**
 ```json
 {
@@ -1216,10 +1269,12 @@ Authorization: Bearer <token>
 ### GET `/files/download/:fileName`
 파일을 다운로드합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | fileName | string | Required | 다운로드할 파일명 |
+
 
 **Query Parameters:**
 | Parameter | Type | Required | Description |
@@ -1258,6 +1313,7 @@ Authorization: Bearer <token>
 
 ### GET `/files/list`
 업로드된 파일 목록을 조회합니다.
+
 
 **Response:**
 ```json
@@ -1304,6 +1360,7 @@ Authorization: Bearer <token>
 ### GET `/licenses`
 라이선스 목록을 조회합니다.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -1311,6 +1368,7 @@ Authorization: Bearer <token>
 | exp | string | Optional | 만료일 필터 (YYYY-MM-DD) |
 | created | string | Optional | 생성일 필터 (YYYY-MM-DD) |
 | status | string | Optional | 상태 필터 (active, expired, expiring) |
+
 
 **Response:**
 ```json
@@ -1344,12 +1402,14 @@ Authorization: Bearer <token>
 ### GET `/licenses/:identifier`
 특정 라이선스 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 라이선스 ID 또는 이름 |
 
 **Query Parameters:** (위의 GET `/licenses`와 동일)
+
 
 **Response:**
 ```json
@@ -1388,10 +1448,12 @@ Authorization: Bearer <token>
 ### GET `/licenses/key/:key`
 키로 라이선스 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | key | string | Required | 라이선스 키 |
+
 
 **Response:**
 ```json
@@ -1424,6 +1486,7 @@ Authorization: Bearer <token>
 ### POST `/licenses`
 새 라이선스를 등록합니다.
 
+
 **Request Body:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -1433,6 +1496,7 @@ Authorization: Bearer <token>
 | copies | number | Required | 총 라이선스 수 |
 | expirationDate | string | Required | 만료일 (YYYY-MM-DD) |
 | description | string | Optional | 설명 |
+
 
 **Response:**
 ```json
@@ -1471,11 +1535,13 @@ Authorization: Bearer <token>
 ### PUT `/licenses/assign`
 라이선스를 서버에 할당합니다.
 
+
 **Request Body:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | licenseKey | string | Required | 라이선스 키 |
 | serverId | string | Required | 서버 ID 또는 서버명 |
+
 
 **Response:**
 ```json
@@ -1522,6 +1588,7 @@ Authorization: Bearer <token>
 ### GET `/zdms`
 ZDM 센터 목록을 조회합니다.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -1533,6 +1600,7 @@ ZDM 센터 목록을 조회합니다.
 | repository | boolean | Optional | 리포지토리 정보 포함 여부 |
 | zosRepository | boolean | Optional | zOS 리포지토리 정보 포함 여부 |
 | detail | boolean | Optional | 상세 정보 포함 여부 |
+
 
 **Response:**
 ```json
@@ -1581,12 +1649,14 @@ ZDM 센터 목록을 조회합니다.
 ### GET `/zdms/:identifier`
 특정 ZDM 센터 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | ZDM 센터 ID 또는 센터명 |
 
 **Query Parameters:** (위의 GET `/zdms`와 동일)
+
 
 **Response:**
 ```json
@@ -1627,10 +1697,12 @@ ZDM 센터 목록을 조회합니다.
 ### GET `/zdms/:identifier/repositories`
 특정 ZDM 센터의 리포지토리 정보를 조회합니다.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | ZDM 센터 ID 또는 센터명 |
+
 
 **Query Parameters:**
 | Parameter | Type | Required | Description |
@@ -1638,6 +1710,7 @@ ZDM 센터 목록을 조회합니다.
 | type | string | Optional | 리포지토리 타입 필터 |
 | path | string | Optional | 경로 필터 |
 | status | string | Optional | 상태 필터 |
+
 
 **Response:**
 ```json
@@ -1667,6 +1740,7 @@ ZDM 센터 목록을 조회합니다.
 ### GET `/zdms/repositories`
 모든 ZDM 리포지토리 정보를 조회합니다.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -1674,6 +1748,7 @@ ZDM 센터 목록을 조회합니다.
 | type | string | Optional | 리포지토리 타입 필터 |
 | path | string | Optional | 경로 필터 |
 | status | string | Optional | 상태 필터 |
+
 
 **Response:**
 ```json

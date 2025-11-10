@@ -120,11 +120,13 @@ All API responses follow the standard format below:
 ### POST `/auth/issue`
 Issues a token.
 
+
 **Request Body:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | email | string | Required | User email |
 | password | string | Required | User password |
+
 
 **Response:**
 ```json
@@ -152,6 +154,7 @@ Issues a token.
 ### GET `/users`
 Retrieves the user list.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -159,6 +162,7 @@ Retrieves the user list.
 | position | string | Optional | Filter by position |
 | company | string | Optional | Filter by company |
 | country | string | Optional | Filter by country |
+
 
 **Response:**
 ```json
@@ -183,10 +187,12 @@ Retrieves the user list.
 ### GET `/users/:identifier`
 Retrieves specific user information.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | User ID or email |
+
 
 **Query Parameters:**
 | Parameter | Type | Required | Description |
@@ -195,6 +201,7 @@ Retrieves specific user information.
 | position | string | Optional | Filter by position |
 | company | string | Optional | Filter by company |
 | country | string | Optional | Filter by country |
+
 
 **Response:**
 ```json
@@ -217,10 +224,12 @@ Retrieves specific user information.
 ### PUT `/users/:identifier`
 Updates user information.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | User ID or email |
+
 
 **Request Body:**
 | Field | Type | Required | Description |
@@ -231,6 +240,7 @@ Updates user information.
 | position | string | Optional | Position |
 | company | string | Optional | Company name |
 | country | string | Optional | Country code (2 characters, e.g., KR, US) |
+
 
 **Response:**
 ```json
@@ -282,6 +292,7 @@ Updates user information.
 ### GET `/servers`
 Retrieves the server list.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -294,6 +305,7 @@ Retrieves the server list.
 | partition | boolean | Optional | Include partition information |
 | repository | boolean | Optional | Include repository information |
 | detail | boolean | Optional | Include detailed information |
+
 
 **Response:**
 ```json
@@ -336,12 +348,14 @@ Retrieves the server list.
 ### GET `/servers/:identifier`
 Retrieves specific server information.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Server ID or server name |
 
 **Query Parameters:** (Same as GET `/servers`)
+
 
 **Response:**
 ```json
@@ -378,10 +392,12 @@ Retrieves specific server information.
 ### GET `/servers/:identifier/partitions`
 Retrieves partition information for a specific server.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Server ID or server name |
+
 
 **Query Parameters:**
 | Parameter | Type | Required | Description |
@@ -390,6 +406,7 @@ Retrieves partition information for a specific server.
 
 ### GET `/servers/partitions`
 Retrieves partition information for all servers.
+
 
 **Query Parameters:**
 | Parameter | Type | Required | Description |
@@ -404,6 +421,7 @@ Retrieves partition information for all servers.
 ### GET `/schedules`
 Retrieves the schedule list.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -411,6 +429,7 @@ Retrieves the schedule list.
 | type | string | Optional | Filter by schedule type |
 | state | string | Optional | Filter by active state |
 | jobName | string | Optional | Filter by job name |
+
 
 **Response:**
 ```json
@@ -439,12 +458,14 @@ Retrieves the schedule list.
 ### GET `/schedules/:identifier`
 Retrieves specific schedule information.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Schedule ID or job name |
 
 **Query Parameters:** (Same as GET `/schedules`)
+
 
 **Response:**
 ```json
@@ -471,6 +492,7 @@ Retrieves specific schedule information.
 ### POST `/schedules`
 Creates a new schedule.
 
+
 **Request Body:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -484,6 +506,7 @@ Creates a new schedule.
 | advanced | object | Optional | Advanced schedule settings |
 | advanced.type | string | Optional | Advanced schedule type |
 | advanced.description | string | Optional | Advanced schedule description |
+
 
 **Response:**
 ```json
@@ -516,6 +539,7 @@ Creates a new schedule.
 ### GET `/backups`
 Retrieves the backup job list.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -531,6 +555,7 @@ Retrieves the backup job list.
 | active | boolean | Optional | Show only active jobs |
 | history | boolean | Optional | Include history |
 | logs | boolean | Optional | Include logs |
+
 
 **Response:**
 ```json
@@ -580,12 +605,14 @@ Retrieves the backup job list.
 ### GET `/backups/:identifier`
 Retrieves specific backup job information.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Backup job ID or job name |
 
 **Query Parameters:** (Same as GET `/backups`)
+
 
 **Response:**
 ```json
@@ -633,6 +660,7 @@ Retrieves specific backup job information.
 ### POST `/backups`
 Registers a new backup job.
 
+
 **Request Body:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -658,6 +686,7 @@ Registers a new backup job.
 | mailEvent | string | Optional | Email notification settings |
 | networkLimit | number | Optional | Network limit |
 | autoStart | string | Optional | Auto-start option |
+
 
 **Response:**
 ```json
@@ -693,12 +722,14 @@ Registers a new backup job.
 ### PUT `/backups/:identifier`
 Updates a backup job.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Backup job ID or job name |
 
 **Request Body:** (Same as POST `/backups`)
+
 
 **Response:**
 ```json
@@ -717,15 +748,18 @@ Updates a backup job.
 ### DELETE `/backups/:identifier`
 Deletes a backup job.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Backup job ID or job name |
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | force | boolean | Optional | Force delete |
+
 
 **Response:**
 ```json
@@ -744,10 +778,12 @@ Deletes a backup job.
 ### GET `/backups/monitoring/job/:identifier`
 Retrieves monitoring information for a specific backup job.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Backup job ID or job name |
+
 
 **Response:**
 ```json
@@ -787,10 +823,12 @@ Retrieves monitoring information for a specific backup job.
 ### GET `/backups/monitoring/system/:identifier`
 Retrieves backup monitoring information for a specific system.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | System ID or system name |
+
 
 **Response:**
 ```json
@@ -822,6 +860,7 @@ Retrieves backup monitoring information for a specific system.
 ### GET `/recoveries`
 Retrieves the recovery job list.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -837,6 +876,7 @@ Retrieves the recovery job list.
 | detail | boolean | Optional | Include detailed information |
 | server | string | Optional | Filter by server name |
 | serverType | string | Optional | Filter by server type |
+
 
 **Response:**
 ```json
@@ -886,12 +926,14 @@ Retrieves the recovery job list.
 ### GET `/recoveries/:identifier`
 Retrieves specific recovery job information.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Recovery job ID or job name |
 
 **Query Parameters:** (Same as GET `/recoveries`)
+
 
 **Response:**
 ```json
@@ -939,6 +981,7 @@ Retrieves specific recovery job information.
 ### POST `/recoveries`
 Registers a new recovery job.
 
+
 **Request Body:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -976,6 +1019,7 @@ Registers a new recovery job.
 | jobList[].mode | string | Required | Recovery mode |
 | jobList[].repository | object | Required | Repository information |
 
+
 **Response:**
 ```json
 {
@@ -998,12 +1042,14 @@ Registers a new recovery job.
 ### PUT `/recoveries/:identifier`
 Updates a recovery job.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Recovery job ID or job name |
 
 **Request Body:** (Same as POST `/recoveries`)
+
 
 **Response:**
 ```json
@@ -1022,15 +1068,18 @@ Updates a recovery job.
 ### DELETE `/recoveries/:identifier`
 Deletes a recovery job.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Recovery job ID or job name |
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | force | boolean | Optional | Force delete |
+
 
 **Response:**
 ```json
@@ -1097,10 +1146,12 @@ Deletes a recovery job.
 ### GET `/recoveries/monitoring/job/:identifier`
 Retrieves monitoring information for a specific recovery job.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Recovery job ID or job name |
+
 
 **Response:**
 ```json
@@ -1141,10 +1192,12 @@ Retrieves monitoring information for a specific recovery job.
 ### GET `/recoveries/monitoring/system/:identifier`
 Retrieves recovery monitoring information for a specific system.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | System ID or system name |
+
 
 **Response:**
 ```json
@@ -1181,6 +1234,7 @@ Uploads a file.
 |-------|------|----------|-------------|
 | file | file | Required | File to upload |
 
+
 **Response:**
 ```json
 {
@@ -1216,10 +1270,12 @@ Uploads a file.
 ### GET `/files/download/:fileName`
 Downloads a file.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | fileName | string | Required | File name to download |
+
 
 **Query Parameters:**
 | Parameter | Type | Required | Description |
@@ -1258,6 +1314,7 @@ Downloads a file.
 
 ### GET `/files/list`
 Retrieves the list of uploaded files.
+
 
 **Response:**
 ```json
@@ -1304,6 +1361,7 @@ Retrieves the list of uploaded files.
 ### GET `/licenses`
 Retrieves the license list.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -1311,6 +1369,7 @@ Retrieves the license list.
 | exp | string | Optional | Filter by expiration date (YYYY-MM-DD) |
 | created | string | Optional | Filter by creation date (YYYY-MM-DD) |
 | status | string | Optional | Filter by status (active, expired, expiring) |
+
 
 **Response:**
 ```json
@@ -1344,12 +1403,14 @@ Retrieves the license list.
 ### GET `/licenses/:identifier`
 Retrieves specific license information.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | License ID or name |
 
 **Query Parameters:** (Same as GET `/licenses`)
+
 
 **Response:**
 ```json
@@ -1388,10 +1449,12 @@ Retrieves specific license information.
 ### GET `/licenses/key/:key`
 Retrieves license information by key.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | key | string | Required | License key |
+
 
 **Response:**
 ```json
@@ -1424,6 +1487,7 @@ Retrieves license information by key.
 ### POST `/licenses`
 Registers a new license.
 
+
 **Request Body:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -1433,6 +1497,7 @@ Registers a new license.
 | copies | number | Required | Total number of licenses |
 | expirationDate | string | Required | Expiration date (YYYY-MM-DD) |
 | description | string | Optional | Description |
+
 
 **Response:**
 ```json
@@ -1471,11 +1536,13 @@ Registers a new license.
 ### PUT `/licenses/assign`
 Assigns a license to a server.
 
+
 **Request Body:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | licenseKey | string | Required | License key |
 | serverId | string | Required | Server ID or server name |
+
 
 **Response:**
 ```json
@@ -1522,6 +1589,7 @@ Assigns a license to a server.
 ### GET `/zdms`
 Retrieves the ZDM center list.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -1533,6 +1601,7 @@ Retrieves the ZDM center list.
 | repository | boolean | Optional | Include repository information |
 | zosRepository | boolean | Optional | Include zOS repository information |
 | detail | boolean | Optional | Include detailed information |
+
 
 **Response:**
 ```json
@@ -1581,12 +1650,14 @@ Retrieves the ZDM center list.
 ### GET `/zdms/:identifier`
 Retrieves specific ZDM center information.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | ZDM center ID or center name |
 
 **Query Parameters:** (Same as GET `/zdms`)
+
 
 **Response:**
 ```json
@@ -1627,10 +1698,12 @@ Retrieves specific ZDM center information.
 ### GET `/zdms/:identifier/repositories`
 Retrieves repository information for a specific ZDM center.
 
+
 **Path Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | ZDM center ID or center name |
+
 
 **Query Parameters:**
 | Parameter | Type | Required | Description |
@@ -1638,6 +1711,7 @@ Retrieves repository information for a specific ZDM center.
 | type | string | Optional | Filter by repository type |
 | path | string | Optional | Filter by path |
 | status | string | Optional | Filter by status |
+
 
 **Response:**
 ```json
@@ -1667,6 +1741,7 @@ Retrieves repository information for a specific ZDM center.
 ### GET `/zdms/repositories`
 Retrieves all ZDM repository information.
 
+
 **Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -1674,6 +1749,7 @@ Retrieves all ZDM repository information.
 | type | string | Optional | Filter by repository type |
 | path | string | Optional | Filter by path |
 | status | string | Optional | Filter by status |
+
 
 **Response:**
 ```json
