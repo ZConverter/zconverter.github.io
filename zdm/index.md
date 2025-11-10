@@ -3,15 +3,26 @@ layout: page
 title: ZDM Documentation
 ---
 
-# ZDM (ZConverter Data Migration)
+# ZDM DOCS
+`zdm-cli`, `zdm-api`에 관련된 문서들을 제공합니다.
 
-ZDM은 데이터베이스 마이그레이션을 위한 도구입니다.
+## ZDM-CLI
+version: 1.0.0
+lastupdate: 2025-11-06
 
-## 문서
+## ZDM-API
+version: 1.0.0
+lastupdate: 2025-11-06
 
-- [CLI 문서](/zdm/cli/)
-- [API 문서](/zdm/api/)
+---
 
-## 소개
+# ZDM DOCS
+Provides documentation related to `zdm-cli` and `zdm-api`.
 
-ZDM을 사용하면 다양한 데이터베이스 간의 데이터 마이그레이션을 쉽게 수행할 수 있습니다.
+## ZDM-CLI
+version: 1.0.0
+lastupdate: 2025-11-06
+
+## ZDM-API
+version: 1.0.0
+lastupdate: 2025-11-06
