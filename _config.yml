@@ -1,0 +1,28 @@
+# Site settings
+title: ZConverter Documentation
+description: ZConverter 문서 사이트
+baseurl: ""
+url: "https://zconverter.github.io"
+
+# Build settings
+markdown: kramdown
+theme: minima
+
+# Collections
+collections:
+  docs:
+    output: true
+    permalink: /:collection/:path/
+
+# Navigation
+nav_links:
+  - title: Home
+    url: /
+  - title: ZDM
+    url: /zdm/
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
