@@ -120,7 +120,9 @@ Authorization: Bearer <token>
 토큰을 발급합니다.
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | email | string | Required | 사용자 이메일 |
@@ -154,7 +156,9 @@ Authorization: Bearer <token>
 사용자 목록을 조회합니다.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | userName | string | Optional | 사용자명 필터 |
@@ -187,13 +191,17 @@ Authorization: Bearer <token>
 특정 사용자 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 사용자 ID 또는 이메일 |
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | userName | string | Optional | 사용자명 필터 |
@@ -224,13 +232,17 @@ Authorization: Bearer <token>
 사용자 정보를 업데이트합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 사용자 ID 또는 이메일 |
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | userName | string | Optional | 사용자명 |
@@ -292,7 +304,9 @@ Authorization: Bearer <token>
 서버 목록을 조회합니다.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | mode | string | Optional | 시스템 모드 (source, target) |
@@ -348,7 +362,9 @@ Authorization: Bearer <token>
 특정 서버 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 서버 ID 또는 서버명 |
@@ -392,13 +408,17 @@ Authorization: Bearer <token>
 특정 서버의 파티션 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 서버 ID 또는 서버명 |
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | detail | boolean | Optional | 상세 정보 포함 여부 |
@@ -407,7 +427,9 @@ Authorization: Bearer <token>
 모든 서버의 파티션 정보를 조회합니다.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | serverName | string | Optional | 서버명 필터 |
@@ -421,7 +443,9 @@ Authorization: Bearer <token>
 스케줄 목록을 조회합니다.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | id | string | Optional | 스케줄 ID 필터 |
@@ -458,7 +482,9 @@ Authorization: Bearer <token>
 특정 스케줄 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 스케줄 ID 또는 작업명 |
@@ -492,7 +518,9 @@ Authorization: Bearer <token>
 새 스케줄을 생성합니다.
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | center | string | Required | 센터 ID 또는 이름 |
@@ -539,7 +567,9 @@ Authorization: Bearer <token>
 백업 작업 목록을 조회합니다.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | mode | string | Optional | 백업 모드 필터 |
@@ -605,7 +635,9 @@ Authorization: Bearer <token>
 특정 백업 작업 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
@@ -660,7 +692,9 @@ Authorization: Bearer <token>
 새 백업 작업을 등록합니다.
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | center | string | Required | 센터 ID 또는 이름 |
@@ -722,7 +756,9 @@ Authorization: Bearer <token>
 백업 작업을 수정합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
@@ -748,13 +784,17 @@ Authorization: Bearer <token>
 백업 작업을 삭제합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | force | boolean | Optional | 강제 삭제 여부 |
@@ -778,7 +818,9 @@ Authorization: Bearer <token>
 특정 백업 작업의 모니터링 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
@@ -823,7 +865,9 @@ Authorization: Bearer <token>
 특정 시스템의 백업 모니터링 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 시스템 ID 또는 시스템명 |
@@ -860,7 +904,9 @@ Authorization: Bearer <token>
 복구 작업 목록을 조회합니다.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | status | string | Optional | 작업 상태 필터 |
@@ -926,7 +972,9 @@ Authorization: Bearer <token>
 특정 복구 작업 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
@@ -981,7 +1029,9 @@ Authorization: Bearer <token>
 새 복구 작업을 등록합니다.
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | center | string | Required | 센터 ID 또는 이름 |
@@ -1042,7 +1092,9 @@ Authorization: Bearer <token>
 복구 작업을 수정합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
@@ -1068,13 +1120,17 @@ Authorization: Bearer <token>
 복구 작업을 삭제합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | force | boolean | Optional | 강제 삭제 여부 |
@@ -1146,7 +1202,9 @@ Authorization: Bearer <token>
 특정 복구 작업의 모니터링 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
@@ -1192,7 +1250,9 @@ Authorization: Bearer <token>
 특정 시스템의 복구 모니터링 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 시스템 ID 또는 시스템명 |
@@ -1270,13 +1330,17 @@ Authorization: Bearer <token>
 파일을 다운로드합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | fileName | string | Required | 다운로드할 파일명 |
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | download | boolean | Optional | 강제 다운로드 모드 |
@@ -1361,7 +1425,9 @@ Authorization: Bearer <token>
 라이선스 목록을 조회합니다.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | category | string | Optional | 라이선스 카테고리 필터 |
@@ -1403,7 +1469,9 @@ Authorization: Bearer <token>
 특정 라이선스 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 라이선스 ID 또는 이름 |
@@ -1449,7 +1517,9 @@ Authorization: Bearer <token>
 키로 라이선스 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | key | string | Required | 라이선스 키 |
@@ -1487,7 +1557,9 @@ Authorization: Bearer <token>
 새 라이선스를 등록합니다.
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | name | string | Required | 라이선스명 |
@@ -1536,7 +1608,9 @@ Authorization: Bearer <token>
 라이선스를 서버에 할당합니다.
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | licenseKey | string | Required | 라이선스 키 |
@@ -1589,7 +1663,9 @@ Authorization: Bearer <token>
 ZDM 센터 목록을 조회합니다.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | connection | string | Optional | 연결 상태 필터 (online, offline) |
@@ -1650,7 +1726,9 @@ ZDM 센터 목록을 조회합니다.
 특정 ZDM 센터 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | ZDM 센터 ID 또는 센터명 |
@@ -1698,13 +1776,17 @@ ZDM 센터 목록을 조회합니다.
 특정 ZDM 센터의 리포지토리 정보를 조회합니다.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | ZDM 센터 ID 또는 센터명 |
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | type | string | Optional | 리포지토리 타입 필터 |
@@ -1741,7 +1823,9 @@ ZDM 센터 목록을 조회합니다.
 모든 ZDM 리포지토리 정보를 조회합니다.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | centerName | string | Optional | 센터명 필터 |

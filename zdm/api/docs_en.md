@@ -121,7 +121,9 @@ All API responses follow the standard format below:
 Issues a token.
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | email | string | Required | User email |
@@ -155,7 +157,9 @@ Issues a token.
 Retrieves the user list.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | userName | string | Optional | Filter by username |
@@ -188,13 +192,17 @@ Retrieves the user list.
 Retrieves specific user information.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | User ID or email |
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | userName | string | Optional | Filter by username |
@@ -225,13 +233,17 @@ Retrieves specific user information.
 Updates user information.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | User ID or email |
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | userName | string | Optional | Username |
@@ -293,7 +305,9 @@ Updates user information.
 Retrieves the server list.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | mode | string | Optional | System mode (source, target) |
@@ -349,7 +363,9 @@ Retrieves the server list.
 Retrieves specific server information.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Server ID or server name |
@@ -393,13 +409,17 @@ Retrieves specific server information.
 Retrieves partition information for a specific server.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Server ID or server name |
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | detail | boolean | Optional | Include detailed information |
@@ -408,7 +428,9 @@ Retrieves partition information for a specific server.
 Retrieves partition information for all servers.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | serverName | string | Optional | Filter by server name |
@@ -422,7 +444,9 @@ Retrieves partition information for all servers.
 Retrieves the schedule list.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | id | string | Optional | Filter by schedule ID |
@@ -459,7 +483,9 @@ Retrieves the schedule list.
 Retrieves specific schedule information.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Schedule ID or job name |
@@ -493,7 +519,9 @@ Retrieves specific schedule information.
 Creates a new schedule.
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | center | string | Required | Center ID or name |
@@ -540,7 +568,9 @@ Creates a new schedule.
 Retrieves the backup job list.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | mode | string | Optional | Filter by backup mode |
@@ -606,7 +636,9 @@ Retrieves the backup job list.
 Retrieves specific backup job information.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Backup job ID or job name |
@@ -661,7 +693,9 @@ Retrieves specific backup job information.
 Registers a new backup job.
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | center | string | Required | Center ID or name |
@@ -723,7 +757,9 @@ Registers a new backup job.
 Updates a backup job.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Backup job ID or job name |
@@ -749,13 +785,17 @@ Updates a backup job.
 Deletes a backup job.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Backup job ID or job name |
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | force | boolean | Optional | Force delete |
@@ -779,7 +819,9 @@ Deletes a backup job.
 Retrieves monitoring information for a specific backup job.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Backup job ID or job name |
@@ -824,7 +866,9 @@ Retrieves monitoring information for a specific backup job.
 Retrieves backup monitoring information for a specific system.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | System ID or system name |
@@ -861,7 +905,9 @@ Retrieves backup monitoring information for a specific system.
 Retrieves the recovery job list.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | status | string | Optional | Filter by job status |
@@ -927,7 +973,9 @@ Retrieves the recovery job list.
 Retrieves specific recovery job information.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Recovery job ID or job name |
@@ -982,7 +1030,9 @@ Retrieves specific recovery job information.
 Registers a new recovery job.
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | center | string | Required | Center ID or name |
@@ -1043,7 +1093,9 @@ Registers a new recovery job.
 Updates a recovery job.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Recovery job ID or job name |
@@ -1069,13 +1121,17 @@ Updates a recovery job.
 Deletes a recovery job.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Recovery job ID or job name |
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | force | boolean | Optional | Force delete |
@@ -1147,7 +1203,9 @@ Deletes a recovery job.
 Retrieves monitoring information for a specific recovery job.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | Recovery job ID or job name |
@@ -1193,7 +1251,9 @@ Retrieves monitoring information for a specific recovery job.
 Retrieves recovery monitoring information for a specific system.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | System ID or system name |
@@ -1271,13 +1331,17 @@ Uploads a file.
 Downloads a file.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | fileName | string | Required | File name to download |
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | download | boolean | Optional | Force download mode |
@@ -1362,7 +1426,9 @@ Retrieves the list of uploaded files.
 Retrieves the license list.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | category | string | Optional | Filter by license category |
@@ -1404,7 +1470,9 @@ Retrieves the license list.
 Retrieves specific license information.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | License ID or name |
@@ -1450,7 +1518,9 @@ Retrieves specific license information.
 Retrieves license information by key.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | key | string | Required | License key |
@@ -1488,7 +1558,9 @@ Retrieves license information by key.
 Registers a new license.
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | name | string | Required | License name |
@@ -1537,7 +1609,9 @@ Registers a new license.
 Assigns a license to a server.
 
 
+
 **Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | licenseKey | string | Required | License key |
@@ -1590,7 +1664,9 @@ Assigns a license to a server.
 Retrieves the ZDM center list.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | connection | string | Optional | Filter by connection status (online, offline) |
@@ -1651,7 +1727,9 @@ Retrieves the ZDM center list.
 Retrieves specific ZDM center information.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | ZDM center ID or center name |
@@ -1699,13 +1777,17 @@ Retrieves specific ZDM center information.
 Retrieves repository information for a specific ZDM center.
 
 
+
 **Path Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | ZDM center ID or center name |
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | type | string | Optional | Filter by repository type |
@@ -1742,7 +1824,9 @@ Retrieves repository information for a specific ZDM center.
 Retrieves all ZDM repository information.
 
 
+
 **Query Parameters:**
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | centerName | string | Optional | Filter by center name |
