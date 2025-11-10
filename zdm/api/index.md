@@ -3,9 +3,7 @@ layout: page
 title: ZDM API Documentation
 ---
 
-# ZDM API Documentation
-
 ## 문서 보기
 
 - [한국어 문서](docs_kr)
-- [English Documentation](docs_en)
+<!-- - [English Documentation](docs_en) -->

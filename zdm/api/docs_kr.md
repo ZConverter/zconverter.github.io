@@ -359,9 +359,8 @@ Authorization: Bearer <token>
 ```
 
 ### GET `/servers/:identifier`
+
 특정 서버 정보를 조회합니다.
-
-
 
 **Path Parameters:**
 
@@ -371,8 +370,8 @@ Authorization: Bearer <token>
 
 **Query Parameters:** (위의 GET `/servers`와 동일)
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -405,17 +404,14 @@ Authorization: Bearer <token>
 ```
 
 ### GET `/servers/:identifier/partitions`
+
 특정 서버의 파티션 정보를 조회합니다.
-
-
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 서버 ID 또는 서버명 |
-
-
 
 **Query Parameters:**
 
@@ -424,9 +420,8 @@ Authorization: Bearer <token>
 | detail | boolean | Optional | 상세 정보 포함 여부 |
 
 ### GET `/servers/partitions`
+
 모든 서버의 파티션 정보를 조회합니다.
-
-
 
 **Query Parameters:**
 
@@ -440,9 +435,8 @@ Authorization: Bearer <token>
 ## Schedule Management
 
 ### GET `/schedules`
+
 스케줄 목록을 조회합니다.
-
-
 
 **Query Parameters:**
 
@@ -453,8 +447,8 @@ Authorization: Bearer <token>
 | state | string | Optional | 활성 상태 필터 |
 | jobName | string | Optional | 작업명 필터 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -479,9 +473,8 @@ Authorization: Bearer <token>
 ```
 
 ### GET `/schedules/:identifier`
+
 특정 스케줄 정보를 조회합니다.
-
-
 
 **Path Parameters:**
 
@@ -491,8 +484,8 @@ Authorization: Bearer <token>
 
 **Query Parameters:** (위의 GET `/schedules`와 동일)
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -515,9 +508,8 @@ Authorization: Bearer <token>
 ```
 
 ### POST `/schedules`
+
 새 스케줄을 생성합니다.
-
-
 
 **Request Body:**
 
@@ -534,8 +526,8 @@ Authorization: Bearer <token>
 | advanced.type | string | Optional | 고급 스케줄 타입 |
 | advanced.description | string | Optional | 고급 스케줄 설명 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -564,9 +556,8 @@ Authorization: Bearer <token>
 ## Backup Management
 
 ### GET `/backups`
+
 백업 작업 목록을 조회합니다.
-
-
 
 **Query Parameters:**
 
@@ -585,8 +576,8 @@ Authorization: Bearer <token>
 | history | boolean | Optional | 히스토리 포함 |
 | logs | boolean | Optional | 로그 포함 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -632,9 +623,8 @@ Authorization: Bearer <token>
 ```
 
 ### GET `/backups/:identifier`
+
 특정 백업 작업 정보를 조회합니다.
-
-
 
 **Path Parameters:**
 
@@ -644,8 +634,8 @@ Authorization: Bearer <token>
 
 **Query Parameters:** (위의 GET `/backups`와 동일)
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -689,9 +679,8 @@ Authorization: Bearer <token>
 ```
 
 ### POST `/backups`
+
 새 백업 작업을 등록합니다.
-
-
 
 **Request Body:**
 
@@ -720,8 +709,8 @@ Authorization: Bearer <token>
 | networkLimit | number | Optional | 네트워크 제한 |
 | autoStart | string | Optional | 자동 시작 여부 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -753,9 +742,8 @@ Authorization: Bearer <token>
 ```
 
 ### PUT `/backups/:identifier`
+
 백업 작업을 수정합니다.
-
-
 
 **Path Parameters:**
 
@@ -765,8 +753,8 @@ Authorization: Bearer <token>
 
 **Request Body:** (POST `/backups`와 동일)
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -781,9 +769,8 @@ Authorization: Bearer <token>
 ```
 
 ### DELETE `/backups/:identifier`
+
 백업 작업을 삭제합니다.
-
-
 
 **Path Parameters:**
 
@@ -791,16 +778,14 @@ Authorization: Bearer <token>
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
-
-
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | force | boolean | Optional | 강제 삭제 여부 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -815,9 +800,8 @@ Authorization: Bearer <token>
 ```
 
 ### GET `/backups/monitoring/job/:identifier`
+
 특정 백업 작업의 모니터링 정보를 조회합니다.
-
-
 
 **Path Parameters:**
 
@@ -825,8 +809,8 @@ Authorization: Bearer <token>
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -862,9 +846,8 @@ Authorization: Bearer <token>
 ```
 
 ### GET `/backups/monitoring/system/:identifier`
+
 특정 시스템의 백업 모니터링 정보를 조회합니다.
-
-
 
 **Path Parameters:**
 
@@ -872,8 +855,8 @@ Authorization: Bearer <token>
 |-----------|------|----------|-------------|
 | identifier | string | Required | 시스템 ID 또는 시스템명 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -901,9 +884,8 @@ Authorization: Bearer <token>
 ## Recovery Management
 
 ### GET `/recoveries`
+
 복구 작업 목록을 조회합니다.
-
-
 
 **Query Parameters:**
 
@@ -922,8 +904,8 @@ Authorization: Bearer <token>
 | server | string | Optional | 서버명 필터 |
 | serverType | string | Optional | 서버 타입 필터 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -969,9 +951,8 @@ Authorization: Bearer <token>
 ```
 
 ### GET `/recoveries/:identifier`
+
 특정 복구 작업 정보를 조회합니다.
-
-
 
 **Path Parameters:**
 
@@ -981,8 +962,8 @@ Authorization: Bearer <token>
 
 **Query Parameters:** (위의 GET `/recoveries`와 동일)
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1026,9 +1007,8 @@ Authorization: Bearer <token>
 ```
 
 ### POST `/recoveries`
+
 새 복구 작업을 등록합니다.
-
-
 
 **Request Body:**
 
@@ -1068,8 +1048,8 @@ Authorization: Bearer <token>
 | jobList[].mode | string | Required | 복구 모드 |
 | jobList[].repository | object | Required | 리포지토리 정보 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1089,9 +1069,8 @@ Authorization: Bearer <token>
 ```
 
 ### PUT `/recoveries/:identifier`
+
 복구 작업을 수정합니다.
-
-
 
 **Path Parameters:**
 
@@ -1101,8 +1080,8 @@ Authorization: Bearer <token>
 
 **Request Body:** (POST `/recoveries`와 동일)
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1117,9 +1096,8 @@ Authorization: Bearer <token>
 ```
 
 ### DELETE `/recoveries/:identifier`
+
 복구 작업을 삭제합니다.
-
-
 
 **Path Parameters:**
 
@@ -1127,16 +1105,14 @@ Authorization: Bearer <token>
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
-
-
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | force | boolean | Optional | 강제 삭제 여부 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1173,6 +1149,7 @@ Authorization: Bearer <token>
 ```
 
 **Response Fields:**
+
 - `jobInfo`: 삭제된 작업 정보 배열
   - `name`: 작업명
   - `partition`: 관련 파티션 목록 (쉼표로 구분, 예: "/, /test/, /de")
@@ -1193,15 +1170,15 @@ Authorization: Bearer <token>
     - `logDataDeleted`: 삭제된 로그 레코드 수
 
 **Status Codes:**
+
 - `200` - 삭제 성공
 - `400` - 잘못된 요청
 - `404` - 작업을 찾을 수 없음
 - `500` - 서버 오류
 
 ### GET `/recoveries/monitoring/job/:identifier`
+
 특정 복구 작업의 모니터링 정보를 조회합니다.
-
-
 
 **Path Parameters:**
 
@@ -1209,8 +1186,8 @@ Authorization: Bearer <token>
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1247,9 +1224,8 @@ Authorization: Bearer <token>
 ```
 
 ### GET `/recoveries/monitoring/system/:identifier`
+
 특정 시스템의 복구 모니터링 정보를 조회합니다.
-
-
 
 **Path Parameters:**
 
@@ -1257,8 +1233,8 @@ Authorization: Bearer <token>
 |-----------|------|----------|-------------|
 | identifier | string | Required | 시스템 ID 또는 시스템명 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1286,15 +1262,17 @@ Authorization: Bearer <token>
 ## File Management
 
 ### POST `/files/upload`
+
 파일을 업로드합니다.
 
 **Request:** Multipart form data
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | file | file | Required | 업로드할 파일 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1315,6 +1293,7 @@ Authorization: Bearer <token>
 ```
 
 **특징:**
+
 - Multipart form data 형식으로 파일 전송
 - 최대 파일 크기: 10MB
 - 최대 파일 개수: 5개
@@ -1322,22 +1301,20 @@ Authorization: Bearer <token>
 - 고유한 파일명 자동 생성 (타임스탬프 + 랜덤 숫자)
 
 **Status Codes:**
+
 - `201` - 업로드 성공
 - `400` - 잘못된 요청 (파일 크기 초과, 파일 개수 초과 등)
 - `500` - 서버 오류
 
 ### GET `/files/download/:fileName`
+
 파일을 다운로드합니다.
-
-
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | fileName | string | Required | 다운로드할 파일명 |
-
-
 
 **Query Parameters:**
 
@@ -1352,6 +1329,7 @@ Authorization: Bearer <token>
 **성공 시:** 파일이 직접 다운로드됩니다.
 
 **실패 시 (파일 없음):**
+
 ```json
 {
   "success": false,
@@ -1366,20 +1344,23 @@ Authorization: Bearer <token>
 ```
 
 **특징:**
+
 - Content-Disposition 헤더를 통한 파일명 전달
 - 한글 파일명 지원 (UTF-8 인코딩)
 - MIME 타입 자동 감지
 
 **Status Codes:**
+
 - `200` - 다운로드 성공
 - `404` - 파일을 찾을 수 없음
 - `500` - 서버 오류
 
 ### GET `/files/list`
+
 업로드된 파일 목록을 조회합니다.
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1407,6 +1388,7 @@ Authorization: Bearer <token>
 ```
 
 **Response Fields:**
+
 - `fileName`: 서버에 저장된 실제 파일명 (타임스탬프 포함)
 - `fileOriginName`: 원본 파일명
 - `size`: 파일 크기 (MB/KB 단위로 변환)
@@ -1414,6 +1396,7 @@ Authorization: Bearer <token>
 - `totalCount`: 총 파일 개수
 
 **Status Codes:**
+
 - `200` - 조회 성공
 - `500` - 서버 오류
 
@@ -1422,9 +1405,8 @@ Authorization: Bearer <token>
 ## License Management
 
 ### GET `/licenses`
+
 라이선스 목록을 조회합니다.
-
-
 
 **Query Parameters:**
 
@@ -1435,8 +1417,8 @@ Authorization: Bearer <token>
 | created | string | Optional | 생성일 필터 (YYYY-MM-DD) |
 | status | string | Optional | 상태 필터 (active, expired, expiring) |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1466,9 +1448,8 @@ Authorization: Bearer <token>
 ```
 
 ### GET `/licenses/:identifier`
+
 특정 라이선스 정보를 조회합니다.
-
-
 
 **Path Parameters:**
 
@@ -1478,8 +1459,8 @@ Authorization: Bearer <token>
 
 **Query Parameters:** (위의 GET `/licenses`와 동일)
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1514,9 +1495,8 @@ Authorization: Bearer <token>
 ```
 
 ### GET `/licenses/key/:key`
+
 키로 라이선스 정보를 조회합니다.
-
-
 
 **Path Parameters:**
 
@@ -1524,8 +1504,8 @@ Authorization: Bearer <token>
 |-----------|------|----------|-------------|
 | key | string | Required | 라이선스 키 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1554,9 +1534,8 @@ Authorization: Bearer <token>
 ```
 
 ### POST `/licenses`
+
 새 라이선스를 등록합니다.
-
-
 
 **Request Body:**
 
@@ -1569,8 +1548,8 @@ Authorization: Bearer <token>
 | expirationDate | string | Required | 만료일 (YYYY-MM-DD) |
 | description | string | Optional | 설명 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1599,15 +1578,15 @@ Authorization: Bearer <token>
 ```
 
 **Status Codes:**
+
 - `201` - 등록 성공
 - `400` - 잘못된 요청 데이터 (유효하지 않은 라이선스 키, 중복 등)
 - `409` - 라이선스 키 충돌
 - `500` - 서버 오류
 
 ### PUT `/licenses/assign`
+
 라이선스를 서버에 할당합니다.
-
-
 
 **Request Body:**
 
@@ -1616,8 +1595,8 @@ Authorization: Bearer <token>
 | licenseKey | string | Required | 라이선스 키 |
 | serverId | string | Required | 서버 ID 또는 서버명 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1649,6 +1628,7 @@ Authorization: Bearer <token>
 ```
 
 **Status Codes:**
+
 - `200` - 할당 성공
 - `400` - 잘못된 요청 데이터
 - `404` - 라이선스 또는 서버를 찾을 수 없음
@@ -1660,9 +1640,8 @@ Authorization: Bearer <token>
 ## ZDM Center Management
 
 ### GET `/zdms`
+
 ZDM 센터 목록을 조회합니다.
-
-
 
 **Query Parameters:**
 
@@ -1677,8 +1656,8 @@ ZDM 센터 목록을 조회합니다.
 | zosRepository | boolean | Optional | zOS 리포지토리 정보 포함 여부 |
 | detail | boolean | Optional | 상세 정보 포함 여부 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1723,9 +1702,8 @@ ZDM 센터 목록을 조회합니다.
 ```
 
 ### GET `/zdms/:identifier`
+
 특정 ZDM 센터 정보를 조회합니다.
-
-
 
 **Path Parameters:**
 
@@ -1735,8 +1713,8 @@ ZDM 센터 목록을 조회합니다.
 
 **Query Parameters:** (위의 GET `/zdms`와 동일)
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1773,17 +1751,14 @@ ZDM 센터 목록을 조회합니다.
 ```
 
 ### GET `/zdms/:identifier/repositories`
+
 특정 ZDM 센터의 리포지토리 정보를 조회합니다.
-
-
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | ZDM 센터 ID 또는 센터명 |
-
-
 
 **Query Parameters:**
 
@@ -1793,8 +1768,8 @@ ZDM 센터 목록을 조회합니다.
 | path | string | Optional | 경로 필터 |
 | status | string | Optional | 상태 필터 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1820,9 +1795,8 @@ ZDM 센터 목록을 조회합니다.
 ```
 
 ### GET `/zdms/repositories`
+
 모든 ZDM 리포지토리 정보를 조회합니다.
-
-
 
 **Query Parameters:**
 
@@ -1833,8 +1807,8 @@ ZDM 센터 목록을 조회합니다.
 | path | string | Optional | 경로 필터 |
 | status | string | Optional | 상태 필터 |
 
-
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1870,7 +1844,9 @@ ZDM 센터 목록을 조회합니다.
 ## Common Patterns
 
 ### Error Response Format
+
 모든 에러 응답은 다음 형식을 따릅니다:
+
 ```json
 {
   "error": {
@@ -1882,6 +1858,7 @@ ZDM 센터 목록을 조회합니다.
 ```
 
 ### Status Codes
+
 - `200` - 성공
 - `201` - 생성 성공
 - `400` - 잘못된 요청
@@ -1892,12 +1869,16 @@ ZDM 센터 목록을 조회합니다.
 - `500` - 서버 오류
 
 ### Identifier Pattern
+
 대부분의 엔드포인트는 유연한 식별자 해석을 지원합니다:
+
 - **숫자 값**: ID로 처리
 - **문자열 값**: Name/Email 등으로 처리
 
 ### Pagination
+
 목록 조회 엔드포인트는 표준 페이지네이션을 지원합니다:
+
 ```json
 {
   "data": [],

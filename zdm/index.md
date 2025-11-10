@@ -3,18 +3,21 @@ layout: page
 title: ZDM Documentation
 ---
 
-# ZDM DOCS
+## ZDM DOCS
+
 `zdm-cli`, `zdm-api`에 관련된 문서들을 제공합니다.
 
-## [ZDM-CLI](/zdm/cli/)
-- version: 1.0.0
-- lastupdate: 2025-11-06
-- [문서](/zdm/cli/docs_kr)
+## [ZDM-CLI](/zdm/cli/docs_kr)
 
-## [ZDM-API](/zdm/api/)
 - version: 1.0.0
-- lastupdate: 2025-11-06
-- [문서](/zdm/api/docs_kr)
+- lastupdate: {{ site.time | date: "%Y-%m-%d" }}
+<!-- - [문서](/zdm/cli/docs_kr) -->
+
+## [ZDM-API](/zdm/api/docs_kr)
+
+- version: 1.0.0
+- lastupdate: {{ site.time | date: "%Y-%m-%d" }}
+<!-- - [문서](/zdm/api/docs_kr) -->
 
 <!-- ---
 
