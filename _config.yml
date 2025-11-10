@@ -8,6 +8,12 @@ url: "https://zconverter.github.io"
 markdown: kramdown
 theme: minima
 
+# Kramdown settings
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
+
 # Permalink style
 permalink: pretty
 
