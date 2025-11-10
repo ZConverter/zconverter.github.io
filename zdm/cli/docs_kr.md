@@ -1,10 +1,10 @@
 ---
 layout: page
-title: ZDM CLI Documentation (\m�)
+title: ZDM CLI Documentation (한국어)
 ---
 
 # ZDM CLI Documentation
 
-ZDM CLI \m� 8���.
+ZDM CLI 한국어 문서입니다.
 
-�1 ...
+작성 중...

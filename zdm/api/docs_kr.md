@@ -3,8 +3,6 @@ layout: page
 title: ZDM API Documentation (한국어)
 ---
 
-# ZDM API RESTful Documentation
-
 ## Table of Contents
 
 1. [Overview](#overview)
