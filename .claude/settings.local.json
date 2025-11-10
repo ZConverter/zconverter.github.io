@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(jekyll --version)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git config:*)"
     ],
     "deny": [],
     "ask": []
