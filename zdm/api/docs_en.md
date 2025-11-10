@@ -1,3 +1,8 @@
+---
+layout: page
+title: ZDM API Documentation (English)
+---
+
 # ZDM API RESTful Documentation
 
 ## Table of Contents
