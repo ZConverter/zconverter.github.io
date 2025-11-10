@@ -8,11 +8,27 @@ url: "https://zconverter.github.io"
 markdown: kramdown
 theme: minima
 
+# Permalink style
+permalink: pretty
+
+# Include all markdown files
+include:
+  - "zdm/**/*.md"
+  - "_layouts"
+  - "_includes"
+
 # Collections
 collections:
   docs:
     output: true
     permalink: /:collection/:path/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "page"
 
 # Navigation
 nav_links:
