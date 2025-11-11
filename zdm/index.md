@@ -8,9 +8,9 @@ sidebar:
       - title: "ZDM 홈"
         url: "/zdm/"
       - title: "ZDM-CLI 문서"
-        url: "/zdm/cli/docs_kr"
+        url: "/zdm/cli/index"
       - title: "ZDM-API 문서"
-        url: "/zdm/api/docs_kr"
+        url: "/zdm/api/index"
 ---
 
 ## ZDM 소개
@@ -42,7 +42,7 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 
 | 항목 | 내용 |
 |------|------|
-| 문서 | [ZDM-CLI 문서 바로가기](/zdm/cli/docs_kr) |
+| 문서 | [ZDM-CLI 문서 바로가기](/zdm/cli/index) |
 | 현재 버전 | 1.0.0 |
 | 최종 업데이트 | {{ site.time | date: "%Y-%m-%d" }} |
 
@@ -56,7 +56,7 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 
 | 항목 | 내용 |
 |------|------|
-| 문서 | [ZDM-API 문서 바로가기](/zdm/api/docs_kr) |
+| 문서 | [ZDM-API 문서 바로가기](/zdm/api/index) |
 | 현재 버전 | 1.0.0 |
 | 최종 업데이트 | {{ site.time | date: "%Y-%m-%d" }} |
 
@@ -71,7 +71,7 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 2. **API 호출**: Authorization 헤더에 토큰을 포함하여 API를 호출합니다
 3. **리소스 관리**: 서버, 백업, 스케줄 등을 관리합니다
 
-자세한 내용은 [API 문서](/zdm/api/docs_kr)를 참조하세요.
+자세한 내용은 [API 문서](/zdm/api/)를 참조하세요.
 
 </details>
 

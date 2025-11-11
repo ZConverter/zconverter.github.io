@@ -29,8 +29,8 @@ ZDM은 데이터 보호와 시스템 관리를 위한 포괄적인 솔루션을 
 | 문서 | 링크 |
 |------|------|
 | ZDM 홈 | [바로가기](/zdm/) |
-| ZDM-API 문서 | [바로가기](/zdm/api/docs_kr) |
-| ZDM-CLI 문서 | [바로가기](/zdm/cli/docs_kr) |
+| ZDM-API 문서 | [바로가기](/zdm/api) |
+| ZDM-CLI 문서 | [바로가기](/zdm/cli) |
 
 ---
 

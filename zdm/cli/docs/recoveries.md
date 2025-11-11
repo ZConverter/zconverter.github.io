@@ -6,38 +6,38 @@ sidebar:
   - title: "CLI Documentation"
     links:
       - title: "CLI 소개"
-        url: "/zdm/cli/docs_kr"
+        url: "/zdm/cli/docs"
       - title: "Overview"
-        url: "/zdm/cli/docs_kr/overview"
+        url: "/zdm/cli/docs/overview"
       - title: "Authentication"
-        url: "/zdm/cli/docs_kr/authentication"
+        url: "/zdm/cli/docs/authentication"
       - title: "Config Management"
-        url: "/zdm/cli/docs_kr/config"
+        url: "/zdm/cli/docs/config"
       - title: "ZDM Center Management"
-        url: "/zdm/cli/docs_kr/zdm-centers"
+        url: "/zdm/cli/docs/zdm-centers"
       - title: "Server Management"
-        url: "/zdm/cli/docs_kr/servers"
+        url: "/zdm/cli/docs/servers"
       - title: "License Management"
-        url: "/zdm/cli/docs_kr/licenses"
+        url: "/zdm/cli/docs/licenses"
       - title: "Backup Management"
-        url: "/zdm/cli/docs_kr/backups"
+        url: "/zdm/cli/docs/backups"
       - title: "Recovery Management"
-        url: "/zdm/cli/docs_kr/recoveries"
+        url: "/zdm/cli/docs/recoveries"
         sublinks:
           - title: "복구 목록 조회"
-            url: "/zdm/cli/docs_kr/recoveries#recovery-list"
+            url: "/zdm/cli/docs/recoveries#recovery-list"
           - title: "복구 작업 등록"
-            url: "/zdm/cli/docs_kr/recoveries#recovery-regist"
+            url: "/zdm/cli/docs/recoveries#recovery-regist"
           - title: "복구 작업 삭제"
-            url: "/zdm/cli/docs_kr/recoveries#recovery-delete"
+            url: "/zdm/cli/docs/recoveries#recovery-delete"
           - title: "복구 작업 수정"
-            url: "/zdm/cli/docs_kr/recoveries#recovery-update"
+            url: "/zdm/cli/docs/recoveries#recovery-update"
           - title: "복구 모니터링"
-            url: "/zdm/cli/docs_kr/recoveries#recovery-monit"
+            url: "/zdm/cli/docs/recoveries#recovery-monit"
       - title: "Schedule Management"
-        url: "/zdm/cli/docs_kr/schedules"
+        url: "/zdm/cli/docs/schedules"
       - title: "File Management"
-        url: "/zdm/cli/docs_kr/files"
+        url: "/zdm/cli/docs/files"
 ---
 
 복구 작업을 등록, 조회, 수정, 삭제하고 모니터링합니다.
@@ -489,7 +489,7 @@ zdm-cli recovery regist \
 zdm-cli recovery update --id 1 --schedule weekly-recovery
 ```
 
-스케줄 생성 방법은 [Schedule Management](/zdm/cli/docs_kr/schedules) 참조
+스케줄 생성 방법은 [Schedule Management](/zdm/cli/docs/schedules) 참조
 
 </details>
 

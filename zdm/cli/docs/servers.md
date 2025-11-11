@@ -6,30 +6,30 @@ sidebar:
   - title: "CLI Documentation"
     links:
       - title: "CLI 소개"
-        url: "/zdm/cli/docs_kr"
+        url: "/zdm/cli/docs"
       - title: "Overview"
-        url: "/zdm/cli/docs_kr/overview"
+        url: "/zdm/cli/docs/overview"
       - title: "Authentication"
-        url: "/zdm/cli/docs_kr/authentication"
+        url: "/zdm/cli/docs/authentication"
       - title: "Config Management"
-        url: "/zdm/cli/docs_kr/config"
+        url: "/zdm/cli/docs/config"
       - title: "ZDM Center Management"
-        url: "/zdm/cli/docs_kr/zdm-centers"
+        url: "/zdm/cli/docs/zdm-centers"
       - title: "Server Management"
-        url: "/zdm/cli/docs_kr/servers"
+        url: "/zdm/cli/docs/servers"
         sublinks:
           - title: "서버 목록 조회"
-            url: "/zdm/cli/docs_kr/servers#server-list"
+            url: "/zdm/cli/docs/servers#server-list"
       - title: "License Management"
-        url: "/zdm/cli/docs_kr/licenses"
+        url: "/zdm/cli/docs/licenses"
       - title: "Backup Management"
-        url: "/zdm/cli/docs_kr/backups"
+        url: "/zdm/cli/docs/backups"
       - title: "Recovery Management"
-        url: "/zdm/cli/docs_kr/recoveries"
+        url: "/zdm/cli/docs/recoveries"
       - title: "Schedule Management"
-        url: "/zdm/cli/docs_kr/schedules"
+        url: "/zdm/cli/docs/schedules"
       - title: "File Management"
-        url: "/zdm/cli/docs_kr/files"
+        url: "/zdm/cli/docs/files"
 ---
 
 서버 목록을 조회하고 관리합니다.
@@ -218,7 +218,7 @@ zdm-cli license assign --license 1 --server web-server-01
 zdm-cli server list --name web-server-01
 ```
 
-자세한 내용은 [License Management](/zdm/cli/docs_kr/licenses) 참조
+자세한 내용은 [License Management](/zdm/cli/docs/licenses) 참조
 
 </details>
 

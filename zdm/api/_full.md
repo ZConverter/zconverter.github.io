@@ -1,77 +1,102 @@
 ---
-layout: page
-title: ZDM API Documentation (English)
+layout: docs
+title: ZDM API Documentation (Full)
+section_title: ZDM API Documentation
+sidebar:
+  - title: "API Documentation"
+    links:
+      - title: "Overview & Authentication"
+        url: "/zdm/api/docs/overview"
+      - title: "User Management"
+        url: "/zdm/api/docs/users"
+      - title: "Server Management"
+        url: "/zdm/api/docs/servers"
+      - title: "Schedule Management"
+        url: "/zdm/api/docs/schedules"
+      - title: "Backup Management"
+        url: "/zdm/api/docs/backups"
+      - title: "Recovery Management"
+        url: "/zdm/api/docs/recoveries"
+      - title: "File Management"
+        url: "/zdm/api/docs/files"
+      - title: "License Management"
+        url: "/zdm/api/docs/licenses"
+      - title: "ZDM Center Management"
+        url: "/zdm/api/docs/zdm-centers"
 ---
-
 ## Table of Contents
 
 1. [Overview](#overview)
 2. [Authentication](#authentication)
 3. [Standard API Response Format](#standard-api-response-format)
 4. [Authentication Endpoints](#authentication-endpoints)
-   - [POST /auth/issue](#post-authissue) - Issue Token
+   - [POST /auth/issue](#post-authissue) - 토큰 발급
 5. [User Management](#user-management)
-   - [GET /users](#get-users) - Get User List
-   - [GET /users/:identifier](#get-usersidentifier) - Get Specific User
-   - [PUT /users/:identifier](#put-usersidentifier) - Update User Information
+   - [GET /users](#get-users) - 사용자 목록 조회
+   - [GET /users/:identifier](#get-usersidentifier) - 특정 사용자 조회
+   - [PUT /users/:identifier](#put-usersidentifier) - 사용자 정보 업데이트
 6. [Server Management](#server-management)
-   - [GET /servers](#get-servers) - Get Server List
-   - [GET /servers/:identifier](#get-serversidentifier) - Get Specific Server
-   - [GET /servers/:identifier/partitions](#get-serversidentifierpartitions) - Get Server Partitions
-   - [GET /servers/partitions](#get-serverspartitions) - Get All Partitions
+   - [GET /servers](#get-servers) - 서버 목록 조회
+   - [GET /servers/:identifier](#get-serversidentifier) - 특정 서버 조회
+   - [GET /servers/:identifier/partitions](#get-serversidentifierpartitions) - 특정 서버 파티션 조회
+   - [GET /servers/partitions](#get-serverspartitions) - 모든 서버 파티션 조회
 7. [Schedule Management](#schedule-management)
-   - [GET /schedules](#get-schedules) - Get Schedule List
-   - [GET /schedules/:identifier](#get-schedulesidentifier) - Get Specific Schedule
-   - [POST /schedules](#post-schedules) - Create Schedule
+   - [GET /schedules](#get-schedules) - 스케줄 목록 조회
+   - [GET /schedules/:identifier](#get-schedulesidentifier) - 특정 스케줄 조회
+   - [POST /schedules](#post-schedules) - 스케줄 생성
 8. [Backup Management](#backup-management)
-   - [GET /backups](#get-backups) - Get Backup List
-   - [GET /backups/:identifier](#get-backupsidentifier) - Get Specific Backup
-   - [POST /backups](#post-backups) - Register Backup Job
-   - [PUT /backups/:identifier](#put-backupsidentifier) - Update Backup Job
-   - [DELETE /backups/:identifier](#delete-backupsidentifier) - Delete Backup Job
-   - [GET /backups/monitoring/job/:identifier](#get-backupsmonitoringjobidentifier) - Monitor Backup Job
-   - [GET /backups/monitoring/system/:identifier](#get-backupsmonitoringsystemidentifier) - Monitor System Backup
+   - [GET /backups](#get-backups) - 백업 목록 조회
+   - [GET /backups/:identifier](#get-backupsidentifier) - 특정 백업 조회
+   - [POST /backups](#post-backups) - 백업 작업 등록
+   - [PUT /backups/:identifier](#put-backupsidentifier) - 백업 작업 수정
+   - [DELETE /backups/:identifier](#delete-backupsidentifier) - 백업 작업 삭제
+   - [GET /backups/monitoring/job/:identifier](#get-backupsmonitoringjobidentifier) - 백업 작업 모니터링
+   - [GET /backups/monitoring/system/:identifier](#get-backupsmonitoringsystemidentifier) - 백업 시스템 모니터링
 9. [Recovery Management](#recovery-management)
-   - [GET /recoveries](#get-recoveries) - Get Recovery List
-   - [GET /recoveries/:identifier](#get-recoveriesidentifier) - Get Specific Recovery
-   - [POST /recoveries](#post-recoveries) - Register Recovery Job
-   - [PUT /recoveries/:identifier](#put-recoveriesidentifier) - Update Recovery Job
-   - [DELETE /recoveries/:identifier](#delete-recoveriesidentifier) - Delete Recovery Job
-   - [GET /recoveries/monitoring/job/:identifier](#get-recoveriesmonitoringjobidentifier) - Monitor Recovery Job
-   - [GET /recoveries/monitoring/system/:identifier](#get-recoveriesmonitoringsystemidentifier) - Monitor System Recovery
+   - [GET /recoveries](#get-recoveries) - 복구 목록 조회
+   - [GET /recoveries/:identifier](#get-recoveriesidentifier) - 특정 복구 조회
+   - [POST /recoveries](#post-recoveries) - 복구 작업 등록
+   - [PUT /recoveries/:identifier](#put-recoveriesidentifier) - 복구 작업 수정
+   - [DELETE /recoveries/:identifier](#delete-recoveriesidentifier) - 복구 작업 삭제
+   - [GET /recoveries/monitoring/job/:identifier](#get-recoveriesmonitoringjobidentifier) - 복구 작업 모니터링
+   - [GET /recoveries/monitoring/system/:identifier](#get-recoveriesmonitoringsystemidentifier) - 복구 시스템 모니터링
 10. [File Management](#file-management)
-    - [POST /files/upload](#post-filesupload) - Upload File
-    - [GET /files/list](#get-fileslist) - Get Uploaded File List
-    - [GET /files/download/:fileName](#get-filesdownloadfilename) - Download File
+    - [POST /files/upload](#post-filesupload) - 파일 업로드
+    - [GET /files/list](#get-fileslist) - 업로드된 파일 목록 조회
+    - [GET /files/download/:fileName](#get-filesdownloadfilename) - 파일 다운로드
 11. [License Management](#license-management)
-    - [GET /licenses](#get-licenses) - Get License List
-    - [GET /licenses/:identifier](#get-licensesidentifier) - Get Specific License
-    - [GET /licenses/key/:key](#get-licenseskeykey) - Get License by Key
-    - [POST /licenses](#post-licenses) - Register License
-    - [PUT /licenses/assign](#put-licensesassign) - Assign License
+    - [GET /licenses](#get-licenses) - 라이선스 목록 조회
+    - [GET /licenses/:identifier](#get-licensesidentifier) - 특정 라이선스 조회
+    - [GET /licenses/key/:key](#get-licenseskeykey) - 키로 라이선스 조회
+    - [POST /licenses](#post-licenses) - 라이선스 등록
+    - [PUT /licenses/assign](#put-licensesassign) - 라이선스 할당
 12. [ZDM Center Management](#zdm-center-management)
-    - [GET /zdms](#get-zdms) - Get ZDM Center List
-    - [GET /zdms/:identifier](#get-zdmsidentifier) - Get Specific ZDM Center
-    - [GET /zdms/:identifier/repositories](#get-zdmsidentifierrepositories) - Get ZDM Center Repositories
-    - [GET /zdms/repositories](#get-zdmsrepositories) - Get All ZDM Repositories
+    - [GET /zdms](#get-zdms) - ZDM 센터 목록 조회
+    - [GET /zdms/:identifier](#get-zdmsidentifier) - 특정 ZDM 센터 조회
+    - [GET /zdms/:identifier/repositories](#get-zdmsidentifierrepositories) - ZDM 센터 리포지토리 조회
+    - [GET /zdms/repositories](#get-zdmsrepositories) - 모든 ZDM 리포지토리 조회
 13. [Common Patterns](#common-patterns)
-14. [API Endpoints Summary](#api-endpoints-summary)
 
 ## Overview
-ZDM-API is a REST API server for backup, recovery, and system management. It is based on token authentication and follows domain-driven design architecture.
+
+ZDM-API는 백업, 복구, 시스템 관리를 위한 REST API 서버입니다. 토큰 인증을 기반으로 하며, 도메인 주도 설계 아키텍처를 따릅니다.
 
 **Base URL**: `/api/v1`
 
 ## Authentication
-All protected endpoints require a token:
-```
+
+모든 보호된 엔드포인트는 토큰이 필요합니다:
+
+```text
 Authorization: Bearer <token>
 ```
 
 ## Standard API Response Format
-All API responses follow the standard format below:
+
+모든 API 응답은 다음 표준 형식을 따릅니다:
 
 **Success Response:**
+
 ```json
 {
   "success": true,
@@ -84,6 +109,7 @@ All API responses follow the standard format below:
 ```
 
 **Error Response:**
+
 ```json
 {
   "success": false,
@@ -95,6 +121,7 @@ All API responses follow the standard format below:
 ```
 
 **Pagination Response:**
+
 ```json
 {
   "success": true,
@@ -118,19 +145,18 @@ All API responses follow the standard format below:
 ## Authentication Endpoints
 
 ### POST `/auth/issue`
-Issues a token.
 
-
+토큰을 발급합니다.
 
 **Request Body:**
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| email | string | Required | User email |
-| password | string | Required | User password |
-
+| email | string | Required | 사용자 이메일 |
+| password | string | Required | 사용자 비밀번호 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -139,36 +165,36 @@ Issues a token.
     "token": "eyJhbGciOiJIUzI1NiIs...",
     "expiresAt": "2024-12-31T23:59:59.000Z"
   },
-  "message": "Token issued successfully",
+  "message": "토큰이 성공적으로 발급되었습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 **Status Codes:**
-- `201` - Token issued successfully
-- `400` - Invalid request data
-- `401` - Authentication failed
+
+- `201` - 토큰 발급 성공
+- `400` - 잘못된 요청 데이터
+- `401` - 인증 실패
 
 ---
 
 ## User Management
 
 ### GET `/users`
-Retrieves the user list.
 
-
+사용자 목록을 조회합니다.
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| userName | string | Optional | Filter by username |
-| position | string | Optional | Filter by position |
-| company | string | Optional | Filter by company |
-| country | string | Optional | Filter by country |
-
+| userName | string | Optional | 사용자명 필터 |
+| position | string | Optional | 직책 필터 |
+| company | string | Optional | 회사명 필터 |
+| country | string | Optional | 국가 필터 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -177,41 +203,38 @@ Retrieves the user list.
     {
       "id": "1",
       "email": "user@example.com",
-      "userName": "John Doe",
+      "userName": "홍길동",
       "company": "ZDM Corp",
-      "country": "US",
-      "position": "Developer"
+      "country": "KR",
+      "position": "개발자"
     }
   ],
-  "message": "User list retrieved successfully",
+  "message": "사용자 목록을 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/users/:identifier`
-Retrieves specific user information.
 
-
+특정 사용자 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | User ID or email |
-
-
+| identifier | string | Required | 사용자 ID 또는 이메일 |
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| userName | string | Optional | Filter by username |
-| position | string | Optional | Filter by position |
-| company | string | Optional | Filter by company |
-| country | string | Optional | Filter by country |
-
+| userName | string | Optional | 사용자명 필터 |
+| position | string | Optional | 직책 필터 |
+| company | string | Optional | 회사명 필터 |
+| country | string | Optional | 국가 필터 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -219,42 +242,39 @@ Retrieves specific user information.
   "data": {
     "id": "1",
     "email": "user@example.com",
-    "userName": "John Doe",
+    "userName": "홍길동",
     "company": "ZDM Corp",
-    "country": "US",
-    "position": "Developer"
+    "country": "KR",
+    "position": "개발자"
   },
-  "message": "User information retrieved successfully",
+  "message": "사용자 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### PUT `/users/:identifier`
-Updates user information.
 
-
+사용자 정보를 업데이트합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | User ID or email |
-
-
+| identifier | string | Required | 사용자 ID 또는 이메일 |
 
 **Request Body:**
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| userName | string | Optional | Username |
-| password | string | Optional | Password |
-| pwData | string | Optional | Password data |
-| position | string | Optional | Position |
-| company | string | Optional | Company name |
-| country | string | Optional | Country code (2 characters, e.g., KR, US) |
-
+| userName | string | Optional | 사용자명 |
+| password | string | Optional | 비밀번호 |
+| pwData | string | Optional | 비밀번호 데이터 |
+| position | string | Optional | 직책 |
+| company | string | Optional | 회사명 |
+| country | string | Optional | 국가 코드 (2자리, 예: KR, US) |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -263,65 +283,66 @@ Updates user information.
     "userInfo": {
       "id": "1",
       "email": "user@example.com",
-      "userName": "John Doe",
+      "userName": "홍길동",
       "company": "ZDM Corp",
-      "country": "US",
+      "country": "KR",
       "position": "Senior Developer"
     },
     "summary": {
       "state": "success",
-      "message": "User information updated successfully",
+      "message": "사용자 정보가 성공적으로 업데이트되었습니다",
       "updatedFieldsCount": 1,
       "updatedFields": [
         {
-          "field": "Position",
-          "previous": "Developer",
+          "field": "직책",
+          "previous": "개발자",
           "new": "Senior Developer"
         }
       ]
     }
   },
-  "message": "User information updated successfully",
+  "message": "사용자 정보가 성공적으로 업데이트되었습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
-**Features:**
-- Change history tracking: Tracks previous and new values for each modified field
-- Security field masking: password and pwData fields are displayed as `********` in responses
-- Partial updates: Only provided fields are updated
+**특징:**
+
+- 변경 이력 추적: 수정된 각 필드의 이전 값과 새 값을 추적
+- 보안 필드 마스킹: password, pwData 필드는 응답에서 `********`로 표시
+- 부분 업데이트: 제공된 필드만 업데이트
 
 **Status Codes:**
-- `200` - Update successful
-- `400` - Invalid request data
-- `404` - User not found
-- `500` - Server error
+
+- `200` - 업데이트 성공
+- `400` - 잘못된 요청 데이터
+- `404` - 사용자를 찾을 수 없음
+- `500` - 서버 오류
 
 ---
 
 ## Server Management
 
 ### GET `/servers`
-Retrieves the server list.
 
-
+서버 목록을 조회합니다.
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| mode | string | Optional | System mode (source, target) |
-| os | string | Optional | Operating system type (linux, windows) |
-| connection | string | Optional | Connection status (online, offline) |
-| license | string | Optional | License assignment status |
-| network | boolean | Optional | Include network information |
-| disk | boolean | Optional | Include disk information |
-| partition | boolean | Optional | Include partition information |
-| repository | boolean | Optional | Include repository information |
-| detail | boolean | Optional | Include detailed information |
-
+| mode | string | Optional | 시스템 모드 (source, target) |
+| os | string | Optional | 운영체제 타입 (linux, windows) |
+| connection | string | Optional | 연결 상태 (online, offline) |
+| license | string | Optional | 라이선스 할당 상태 |
+| network | boolean | Optional | 네트워크 정보 포함 여부 |
+| disk | boolean | Optional | 디스크 정보 포함 여부 |
+| partition | boolean | Optional | 파티션 정보 포함 여부 |
+| repository | boolean | Optional | 리포지토리 정보 포함 여부 |
+| detail | boolean | Optional | 상세 정보 포함 여부 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -354,26 +375,25 @@ Retrieves the server list.
       "lastUpdated": "2024-01-31T10:30:45.123Z"
     }
   ],
-  "message": "Server list retrieved successfully",
+  "message": "서버 목록을 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/servers/:identifier`
-Retrieves specific server information.
 
-
+특정 서버 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | Server ID or server name |
+| identifier | string | Required | 서버 ID 또는 서버명 |
 
-**Query Parameters:** (Same as GET `/servers`)
-
+**Query Parameters:** (위의 GET `/servers`와 동일)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -400,62 +420,57 @@ Retrieves specific server information.
     },
     "lastUpdated": "2024-01-31T10:30:45.123Z"
   },
-  "message": "Server information retrieved successfully",
+  "message": "서버 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/servers/:identifier/partitions`
-Retrieves partition information for a specific server.
 
-
+특정 서버의 파티션 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | Server ID or server name |
-
-
+| identifier | string | Required | 서버 ID 또는 서버명 |
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| detail | boolean | Optional | Include detailed information |
+| detail | boolean | Optional | 상세 정보 포함 여부 |
 
 ### GET `/servers/partitions`
-Retrieves partition information for all servers.
 
-
+모든 서버의 파티션 정보를 조회합니다.
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| serverName | string | Optional | Filter by server name |
-| detail | boolean | Optional | Include detailed information |
+| serverName | string | Optional | 서버명 필터 |
+| detail | boolean | Optional | 상세 정보 포함 여부 |
 
 ---
 
 ## Schedule Management
 
 ### GET `/schedules`
-Retrieves the schedule list.
 
-
+스케줄 목록을 조회합니다.
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| id | string | Optional | Filter by schedule ID |
-| type | string | Optional | Filter by schedule type |
-| state | string | Optional | Filter by active state |
-| jobName | string | Optional | Filter by job name |
-
+| id | string | Optional | 스케줄 ID 필터 |
+| type | string | Optional | 스케줄 타입 필터 |
+| state | string | Optional | 활성 상태 필터 |
+| jobName | string | Optional | 작업명 필터 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -474,26 +489,25 @@ Retrieves the schedule list.
       "description": "Daily backup schedule"
     }
   ],
-  "message": "Schedule list retrieved successfully",
+  "message": "스케줄 목록을 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/schedules/:identifier`
-Retrieves specific schedule information.
 
-
+특정 스케줄 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | Schedule ID or job name |
+| identifier | string | Required | 스케줄 ID 또는 작업명 |
 
-**Query Parameters:** (Same as GET `/schedules`)
-
+**Query Parameters:** (위의 GET `/schedules`와 동일)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -510,33 +524,32 @@ Retrieves specific schedule information.
     "lastRunTime": "2024-01-31T02:00:00.000Z",
     "description": "Daily backup schedule"
   },
-  "message": "Schedule information retrieved successfully",
+  "message": "스케줄 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### POST `/schedules`
-Creates a new schedule.
 
-
+새 스케줄을 생성합니다.
 
 **Request Body:**
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| center | string | Required | Center ID or name |
-| user | string | Required | User ID or email |
-| jobName | string | Required | Job name |
-| type | number | Required | Schedule type (1: Smart, 2: Common) |
-| basic | object | Required | Basic schedule settings |
-| basic.type | string | Required | Basic schedule type |
-| basic.description | string | Required | Basic schedule description |
-| advanced | object | Optional | Advanced schedule settings |
-| advanced.type | string | Optional | Advanced schedule type |
-| advanced.description | string | Optional | Advanced schedule description |
-
+| center | string | Required | 센터 ID 또는 이름 |
+| user | string | Required | 사용자 ID 또는 이메일 |
+| jobName | string | Required | 작업명 |
+| type | number | Required | 스케줄 타입 (1: Smart, 2: Common) |
+| basic | object | Required | 기본 스케줄 설정 |
+| basic.type | string | Required | 기본 스케줄 타입 |
+| basic.description | string | Required | 기본 스케줄 설명 |
+| advanced | object | Optional | 고급 스케줄 설정 |
+| advanced.type | string | Optional | 고급 스케줄 타입 |
+| advanced.description | string | Optional | 고급 스케줄 설명 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -555,7 +568,7 @@ Creates a new schedule.
       "advanced": "daily at 2:00 AM"
     }
   },
-  "message": "Schedule created successfully",
+  "message": "스케줄이 성공적으로 생성되었습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
@@ -565,29 +578,28 @@ Creates a new schedule.
 ## Backup Management
 
 ### GET `/backups`
-Retrieves the backup job list.
 
-
+백업 작업 목록을 조회합니다.
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| mode | string | Optional | Filter by backup mode |
-| partition | string | Optional | Filter by partition |
-| status | string | Optional | Filter by job status |
-| repositoryID | string | Optional | Filter by repository ID |
-| repositoryType | string | Optional | Filter by repository type |
-| repositoryPath | string | Optional | Filter by repository path |
-| serverName | string | Optional | Filter by server name |
-| serverType | string | Optional | Filter by server type |
-| detail | boolean | Optional | Include detailed information |
-| active | boolean | Optional | Show only active jobs |
-| history | boolean | Optional | Include history |
-| logs | boolean | Optional | Include logs |
-
+| mode | string | Optional | 백업 모드 필터 |
+| partition | string | Optional | 파티션 필터 |
+| status | string | Optional | 작업 상태 필터 |
+| repositoryID | string | Optional | 리포지토리 ID 필터 |
+| repositoryType | string | Optional | 리포지토리 타입 필터 |
+| repositoryPath | string | Optional | 리포지토리 경로 필터 |
+| serverName | string | Optional | 서버명 필터 |
+| serverType | string | Optional | 서버 타입 필터 |
+| detail | boolean | Optional | 상세 정보 포함 여부 |
+| active | boolean | Optional | 활성 작업만 조회 |
+| history | boolean | Optional | 히스토리 포함 |
+| logs | boolean | Optional | 로그 포함 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -627,26 +639,25 @@ Retrieves the backup job list.
       }
     }
   ],
-  "message": "Backup job list retrieved successfully",
+  "message": "백업 작업 목록을 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/backups/:identifier`
-Retrieves specific backup job information.
 
-
+특정 백업 작업 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | Backup job ID or job name |
+| identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
-**Query Parameters:** (Same as GET `/backups`)
-
+**Query Parameters:** (위의 GET `/backups`와 동일)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -684,45 +695,44 @@ Retrieves specific backup job information.
       "path": "/backup/storage"
     }
   },
-  "message": "Backup job information retrieved successfully",
+  "message": "백업 작업 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### POST `/backups`
-Registers a new backup job.
 
-
+새 백업 작업을 등록합니다.
 
 **Request Body:**
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| center | string | Required | Center ID or name |
-| server | string | Required | Server ID or name |
-| type | string | Required | Backup type |
-| partition | array | Required | Partitions to backup |
-| repository | object | Required | Repository information |
-| repository.id | number | Required | Repository ID |
-| repository.type | string | Required | Repository type |
-| repository.path | string | Required | Repository path |
-| jobName | string | Required | Job name |
-| user | string | Required | User ID or email |
-| schedule | object | Required | Schedule information |
-| schedule.type | string | Required | Schedule type |
-| schedule.description | string | Required | Schedule description |
-| description | string | Optional | Job description |
-| rotation | number | Optional | Retention period |
-| compression | string | Optional | Compression settings |
-| encryption | string | Optional | Encryption settings |
-| excludeDir | array | Optional | Directories to exclude |
-| excludePartition | array | Optional | Partitions to exclude |
-| mailEvent | string | Optional | Email notification settings |
-| networkLimit | number | Optional | Network limit |
-| autoStart | string | Optional | Auto-start option |
-
+| center | string | Required | 센터 ID 또는 이름 |
+| server | string | Required | 서버 ID 또는 이름 |
+| type | string | Required | 백업 타입 |
+| partition | array | Required | 백업할 파티션 목록 |
+| repository | object | Required | 리포지토리 정보 |
+| repository.id | number | Required | 리포지토리 ID |
+| repository.type | string | Required | 리포지토리 타입 |
+| repository.path | string | Required | 리포지토리 경로 |
+| jobName | string | Required | 작업명 |
+| user | string | Required | 사용자 ID 또는 이메일 |
+| schedule | object | Required | 스케줄 정보 |
+| schedule.type | string | Required | 스케줄 타입 |
+| schedule.description | string | Required | 스케줄 설명 |
+| description | string | Optional | 작업 설명 |
+| rotation | number | Optional | 보존 주기 |
+| compression | string | Optional | 압축 설정 |
+| encryption | string | Optional | 암호화 설정 |
+| excludeDir | array | Optional | 제외할 디렉토리 |
+| excludePartition | array | Optional | 제외할 파티션 |
+| mailEvent | string | Optional | 메일 알림 설정 |
+| networkLimit | number | Optional | 네트워크 제한 |
+| autoStart | string | Optional | 자동 시작 여부 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -748,26 +758,25 @@ Registers a new backup job.
       "failed": 0
     }
   },
-  "message": "Backup job registered successfully",
+  "message": "백업 작업이 성공적으로 등록되었습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### PUT `/backups/:identifier`
-Updates a backup job.
 
-
+백업 작업을 수정합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | Backup job ID or job name |
+| identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
-**Request Body:** (Same as POST `/backups`)
-
+**Request Body:** (POST `/backups`와 동일)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -776,32 +785,29 @@ Updates a backup job.
     "jobName": "updated-backup-job",
     "status": "updated"
   },
-  "message": "Backup job updated successfully",
+  "message": "백업 작업이 성공적으로 수정되었습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### DELETE `/backups/:identifier`
-Deletes a backup job.
 
-
+백업 작업을 삭제합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | Backup job ID or job name |
-
-
+| identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| force | boolean | Optional | Force delete |
-
+| force | boolean | Optional | 강제 삭제 여부 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -810,24 +816,23 @@ Deletes a backup job.
     "deletedJobName": "daily-backup-web",
     "deletedAt": "2024-01-31T10:30:45.123Z"
   },
-  "message": "Backup job deleted successfully",
+  "message": "백업 작업이 성공적으로 삭제되었습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/backups/monitoring/job/:identifier`
-Retrieves monitoring information for a specific backup job.
 
-
+특정 백업 작업의 모니터링 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | Backup job ID or job name |
-
+| identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -857,24 +862,23 @@ Retrieves monitoring information for a specific backup job.
       ]
     }
   },
-  "message": "Backup monitoring information retrieved successfully",
+  "message": "백업 모니터링 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/backups/monitoring/system/:identifier`
-Retrieves backup monitoring information for a specific system.
 
-
+특정 시스템의 백업 모니터링 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | System ID or system name |
-
+| identifier | string | Required | 시스템 ID 또는 시스템명 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -892,7 +896,7 @@ Retrieves backup monitoring information for a specific system.
       }
     ]
   },
-  "message": "System backup monitoring information retrieved successfully",
+  "message": "시스템 백업 모니터링 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
@@ -902,29 +906,28 @@ Retrieves backup monitoring information for a specific system.
 ## Recovery Management
 
 ### GET `/recoveries`
-Retrieves the recovery job list.
 
-
+복구 작업 목록을 조회합니다.
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| status | string | Optional | Filter by job status |
-| platform | string | Optional | Filter by platform type |
-| mode | string | Optional | Filter by recovery mode |
-| partition | string | Optional | Filter by partition |
-| drive | string | Optional | Filter by drive |
-| backupName | string | Optional | Filter by backup name |
-| repositoryID | string | Optional | Filter by repository ID |
-| repositoryType | string | Optional | Filter by repository type |
-| repositoryPath | string | Optional | Filter by repository path |
-| detail | boolean | Optional | Include detailed information |
-| server | string | Optional | Filter by server name |
-| serverType | string | Optional | Filter by server type |
-
+| status | string | Optional | 작업 상태 필터 |
+| platform | string | Optional | 플랫폼 타입 필터 |
+| mode | string | Optional | 복구 모드 필터 |
+| partition | string | Optional | 파티션 필터 |
+| drive | string | Optional | 드라이브 필터 |
+| backupName | string | Optional | 백업명 필터 |
+| repositoryID | string | Optional | 리포지토리 ID 필터 |
+| repositoryType | string | Optional | 리포지토리 타입 필터 |
+| repositoryPath | string | Optional | 리포지토리 경로 필터 |
+| detail | boolean | Optional | 상세 정보 포함 여부 |
+| server | string | Optional | 서버명 필터 |
+| serverType | string | Optional | 서버 타입 필터 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -964,26 +967,25 @@ Retrieves the recovery job list.
       }
     }
   ],
-  "message": "Recovery job list retrieved successfully",
+  "message": "복구 작업 목록을 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/recoveries/:identifier`
-Retrieves specific recovery job information.
 
-
+특정 복구 작업 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | Recovery job ID or job name |
+| identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
-**Query Parameters:** (Same as GET `/recoveries`)
-
+**Query Parameters:** (위의 GET `/recoveries`와 동일)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1021,56 +1023,55 @@ Retrieves specific recovery job information.
       "detail": []
     }
   },
-  "message": "Recovery job information retrieved successfully",
+  "message": "복구 작업 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### POST `/recoveries`
-Registers a new recovery job.
 
-
+새 복구 작업을 등록합니다.
 
 **Request Body:**
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| center | string | Required | Center ID or name |
-| source | string | Required | Source server ID or name |
-| target | string | Required | Target server ID or name |
-| platform | string | Required | Platform type |
-| repository | object | Required | Repository information |
-| repository.id | number | Required | Repository ID |
-| repository.type | string | Required | Repository type |
-| repository.path | string | Required | Repository path |
-| mode | string | Required | Recovery mode |
-| jobName | string | Required | Job name |
-| overwrite | string | Required | Overwrite option |
-| user | string | Required | User ID or email |
-| schedule | object | Required | Schedule information |
-| schedule.type | string | Required | Schedule type |
-| schedule.description | string | Required | Schedule description |
-| description | string | Optional | Job description |
-| afterReboot | string | Optional | Action after reboot |
-| networkLimit | number | Optional | Network limit |
-| excludePartition | array | Optional | Partitions to exclude |
-| mailEvent | string | Optional | Email notification settings |
-| autoStart | string | Optional | Auto-start option |
-| scriptPath | string | Optional | Script path |
-| scriptRun | string | Optional | Script execution option |
-| cloudAuth | number | Optional | Cloud authentication ID |
-| listOnly | boolean | Optional | List only mode |
-| jobList | array | Optional | Job list |
-| jobList[].sourcePartition | string | Required | Source partition |
-| jobList[].targetPartition | string | Required | Target partition |
-| jobList[].overwrite | string | Required | Overwrite option |
-| jobList[].isOverwrite | boolean | Required | Overwrite flag |
-| jobList[].backupFile | string | Required | Backup file name |
-| jobList[].mode | string | Required | Recovery mode |
-| jobList[].repository | object | Required | Repository information |
-
+| center | string | Required | 센터 ID 또는 이름 |
+| source | string | Required | 소스 서버 ID 또는 이름 |
+| target | string | Required | 타겟 서버 ID 또는 이름 |
+| platform | string | Required | 플랫폼 타입 |
+| repository | object | Required | 리포지토리 정보 |
+| repository.id | number | Required | 리포지토리 ID |
+| repository.type | string | Required | 리포지토리 타입 |
+| repository.path | string | Required | 리포지토리 경로 |
+| mode | string | Required | 복구 모드 |
+| jobName | string | Required | 작업명 |
+| overwrite | string | Required | 덮어쓰기 옵션 |
+| user | string | Required | 사용자 ID 또는 이메일 |
+| schedule | object | Required | 스케줄 정보 |
+| schedule.type | string | Required | 스케줄 타입 |
+| schedule.description | string | Required | 스케줄 설명 |
+| description | string | Optional | 작업 설명 |
+| afterReboot | string | Optional | 재부팅 후 동작 |
+| networkLimit | number | Optional | 네트워크 제한 |
+| excludePartition | array | Optional | 제외할 파티션 |
+| mailEvent | string | Optional | 메일 알림 설정 |
+| autoStart | string | Optional | 자동 시작 여부 |
+| scriptPath | string | Optional | 스크립트 경로 |
+| scriptRun | string | Optional | 스크립트 실행 여부 |
+| cloudAuth | number | Optional | 클라우드 인증 ID |
+| listOnly | boolean | Optional | 목록만 조회 여부 |
+| jobList | array | Optional | 작업 목록 |
+| jobList[].sourcePartition | string | Required | 소스 파티션 |
+| jobList[].targetPartition | string | Required | 타겟 파티션 |
+| jobList[].overwrite | string | Required | 덮어쓰기 옵션 |
+| jobList[].isOverwrite | boolean | Required | 덮어쓰기 여부 |
+| jobList[].backupFile | string | Required | 백업 파일명 |
+| jobList[].mode | string | Required | 복구 모드 |
+| jobList[].repository | object | Required | 리포지토리 정보 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1084,26 +1085,25 @@ Registers a new recovery job.
     },
     "status": "registered"
   },
-  "message": "Recovery job registered successfully",
+  "message": "복구 작업이 성공적으로 등록되었습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### PUT `/recoveries/:identifier`
-Updates a recovery job.
 
-
+복구 작업을 수정합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | Recovery job ID or job name |
+| identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
-**Request Body:** (Same as POST `/recoveries`)
-
+**Request Body:** (POST `/recoveries`와 동일)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1112,32 +1112,29 @@ Updates a recovery job.
     "jobName": "updated-recovery-job",
     "status": "updated"
   },
-  "message": "Recovery job updated successfully",
+  "message": "복구 작업이 성공적으로 수정되었습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### DELETE `/recoveries/:identifier`
-Deletes a recovery job.
 
-
+복구 작업을 삭제합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | Recovery job ID or job name |
-
-
+| identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| force | boolean | Optional | Force delete |
-
+| force | boolean | Optional | 강제 삭제 여부 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1168,50 +1165,51 @@ Deletes a recovery job.
       }
     }
   },
-  "message": "Recovery job deleted successfully",
+  "message": "복구 작업이 성공적으로 삭제되었습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 **Response Fields:**
-- `jobInfo`: Array of deleted job information
-  - `name`: Job name
-  - `partition`: Related partition list (comma-separated, e.g., "/, /test/, /de")
-  - `deletedComponents`: Deleted component status
-    - `basicInfo`: Basic information deletion status
-    - `additionalInfo`: Additional information deletion status
-    - `detailInfo`: Detail information deletion status
-    - `historyData`: History data deletion status
-    - `logData`: Log data deletion status
-  - `errorMessage`: Error message (only on failure)
-- `summary`: Deletion summary information
-  - `state`: Overall job status ("success" | "fail")
-  - `affectedComponents`: Actual deleted record counts
-    - `basicInfoDeleted`: Number of basic info records deleted (typically 1)
-    - `additionalInfoDeleted`: Number of additional info records deleted (typically 1)
-    - `detailInfoDeleted`: Number of detail info records deleted (can be as many as partition count)
-    - `historyDataDeleted`: Number of history records deleted
-    - `logDataDeleted`: Number of log records deleted
+
+- `jobInfo`: 삭제된 작업 정보 배열
+  - `name`: 작업명
+  - `partition`: 관련 파티션 목록 (쉼표로 구분, 예: "/, /test/, /de")
+  - `deletedComponents`: 삭제된 컴포넌트 상태
+    - `basicInfo`: 기본 정보 삭제 여부
+    - `additionalInfo`: 추가 정보 삭제 여부
+    - `detailInfo`: 상세 정보 삭제 여부
+    - `historyData`: 히스토리 데이터 삭제 여부
+    - `logData`: 로그 데이터 삭제 여부
+  - `errorMessage`: 오류 메시지 (실패 시에만)
+- `summary`: 삭제 요약 정보
+  - `state`: 전체 작업 상태 ("success" | "fail")
+  - `affectedComponents`: 실제 삭제된 레코드 개수
+    - `basicInfoDeleted`: 삭제된 기본 정보 레코드 수 (일반적으로 1)
+    - `additionalInfoDeleted`: 삭제된 추가 정보 레코드 수 (일반적으로 1)
+    - `detailInfoDeleted`: 삭제된 상세 정보 레코드 수 (파티션 개수만큼 가능)
+    - `historyDataDeleted`: 삭제된 히스토리 레코드 수
+    - `logDataDeleted`: 삭제된 로그 레코드 수
 
 **Status Codes:**
-- `200` - Delete successful
-- `400` - Invalid request
-- `404` - Job not found
-- `500` - Server error
+
+- `200` - 삭제 성공
+- `400` - 잘못된 요청
+- `404` - 작업을 찾을 수 없음
+- `500` - 서버 오류
 
 ### GET `/recoveries/monitoring/job/:identifier`
-Retrieves monitoring information for a specific recovery job.
 
-
+특정 복구 작업의 모니터링 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | Recovery job ID or job name |
-
+| identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1242,24 +1240,23 @@ Retrieves monitoring information for a specific recovery job.
       ]
     }
   },
-  "message": "Recovery monitoring information retrieved successfully",
+  "message": "복구 모니터링 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/recoveries/monitoring/system/:identifier`
-Retrieves recovery monitoring information for a specific system.
 
-
+특정 시스템의 복구 모니터링 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | System ID or system name |
-
+| identifier | string | Required | 시스템 ID 또는 시스템명 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1277,7 +1274,7 @@ Retrieves recovery monitoring information for a specific system.
       }
     ]
   },
-  "message": "System recovery monitoring information retrieved successfully",
+  "message": "시스템 복구 모니터링 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
@@ -1287,15 +1284,17 @@ Retrieves recovery monitoring information for a specific system.
 ## File Management
 
 ### POST `/files/upload`
-Uploads a file.
+
+파일을 업로드합니다.
 
 **Request:** Multipart form data
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| file | file | Required | File to upload |
-
+| file | file | Required | 업로드할 파일 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1310,49 +1309,49 @@ Uploads a file.
       "uploadedAt": "2024-01-31T10:30:45.123Z"
     }
   },
-  "message": "File uploaded successfully",
+  "message": "파일이 성공적으로 업로드되었습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
-**Features:**
-- Multipart form data format for file transmission
-- Maximum file size: 10MB
-- Maximum file count: 5 files
-- Korean filename support
-- Unique filename generation (timestamp + random number)
+**특징:**
+
+- Multipart form data 형식으로 파일 전송
+- 최대 파일 크기: 10MB
+- 최대 파일 개수: 5개
+- 한글 파일명 지원
+- 고유한 파일명 자동 생성 (타임스탬프 + 랜덤 숫자)
 
 **Status Codes:**
-- `201` - Upload successful
-- `400` - Invalid request (file size exceeded, file count exceeded, etc.)
-- `500` - Server error
+
+- `201` - 업로드 성공
+- `400` - 잘못된 요청 (파일 크기 초과, 파일 개수 초과 등)
+- `500` - 서버 오류
 
 ### GET `/files/download/:fileName`
-Downloads a file.
 
-
+파일을 다운로드합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| fileName | string | Required | File name to download |
-
-
+| fileName | string | Required | 다운로드할 파일명 |
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| download | boolean | Optional | Force download mode |
-| preview | boolean | Optional | Preview mode |
-| range | string | Optional | Partial download range (bytes=0-1023) |
+| download | boolean | Optional | 강제 다운로드 모드 |
+| preview | boolean | Optional | 미리보기 모드 |
+| range | string | Optional | 부분 다운로드 범위 (bytes=0-1023) |
 
-**Response:** File stream or error response
+**Response:** 파일 스트림 또는 에러 응답
 
-**On Success:** File is downloaded directly.
+**성공 시:** 파일이 직접 다운로드됩니다.
 
-**On Failure (File not found):**
+**실패 시 (파일 없음):**
+
 ```json
 {
   "success": false,
@@ -1361,26 +1360,29 @@ Downloads a file.
   "timestamp": "2024-01-31T10:30:45.123Z",
   "detail": {
     "fileName": "nonexistent.pdf",
-    "message": "The requested file could not be found"
+    "message": "요청한 파일을 찾을 수 없습니다"
   }
 }
 ```
 
-**Features:**
-- Filename delivery via Content-Disposition header
-- Korean filename support (UTF-8 encoding)
-- Automatic MIME type detection
+**특징:**
+
+- Content-Disposition 헤더를 통한 파일명 전달
+- 한글 파일명 지원 (UTF-8 인코딩)
+- MIME 타입 자동 감지
 
 **Status Codes:**
-- `200` - Download successful
-- `404` - File not found
-- `500` - Server error
+
+- `200` - 다운로드 성공
+- `404` - 파일을 찾을 수 없음
+- `500` - 서버 오류
 
 ### GET `/files/list`
-Retrieves the list of uploaded files.
 
+업로드된 파일 목록을 조회합니다.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1408,36 +1410,37 @@ Retrieves the list of uploaded files.
 ```
 
 **Response Fields:**
-- `fileName`: Actual filename stored on server (includes timestamp)
-- `fileOriginName`: Original filename
-- `size`: File size (converted to MB/KB units)
-- `uploadDate`: Upload timestamp
-- `totalCount`: Total file count
+
+- `fileName`: 서버에 저장된 실제 파일명 (타임스탬프 포함)
+- `fileOriginName`: 원본 파일명
+- `size`: 파일 크기 (MB/KB 단위로 변환)
+- `uploadDate`: 업로드 일시
+- `totalCount`: 총 파일 개수
 
 **Status Codes:**
-- `200` - Retrieval successful
-- `500` - Server error
+
+- `200` - 조회 성공
+- `500` - 서버 오류
 
 ---
 
 ## License Management
 
 ### GET `/licenses`
-Retrieves the license list.
 
-
+라이선스 목록을 조회합니다.
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| category | string | Optional | Filter by license category |
-| exp | string | Optional | Filter by expiration date (YYYY-MM-DD) |
-| created | string | Optional | Filter by creation date (YYYY-MM-DD) |
-| status | string | Optional | Filter by status (active, expired, expiring) |
-
+| category | string | Optional | 라이선스 카테고리 필터 |
+| exp | string | Optional | 만료일 필터 (YYYY-MM-DD) |
+| created | string | Optional | 생성일 필터 (YYYY-MM-DD) |
+| status | string | Optional | 상태 필터 (active, expired, expiring) |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1461,26 +1464,25 @@ Retrieves the license list.
       }
     }
   ],
-  "message": "License list retrieved successfully",
+  "message": "라이선스 목록을 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/licenses/:identifier`
-Retrieves specific license information.
 
-
+특정 라이선스 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | License ID or name |
+| identifier | string | Required | 라이선스 ID 또는 이름 |
 
-**Query Parameters:** (Same as GET `/licenses`)
-
+**Query Parameters:** (위의 GET `/licenses`와 동일)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1509,24 +1511,23 @@ Retrieves specific license information.
       }
     ]
   },
-  "message": "License information retrieved successfully",
+  "message": "라이선스 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/licenses/key/:key`
-Retrieves license information by key.
 
-
+키로 라이선스 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| key | string | Required | License key |
-
+| key | string | Required | 라이선스 키 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1549,29 +1550,28 @@ Retrieves license information by key.
       "daysRemaining": 334
     }
   },
-  "message": "License key information retrieved successfully",
+  "message": "라이선스 키 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### POST `/licenses`
-Registers a new license.
 
-
+새 라이선스를 등록합니다.
 
 **Request Body:**
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| name | string | Required | License name |
-| licenseKey | string | Required | License key |
-| category | string | Required | License category |
-| copies | number | Required | Total number of licenses |
-| expirationDate | string | Required | Expiration date (YYYY-MM-DD) |
-| description | string | Optional | Description |
-
+| name | string | Required | 라이선스명 |
+| licenseKey | string | Required | 라이선스 키 |
+| category | string | Required | 라이선스 카테고리 |
+| copies | number | Required | 총 라이선스 수 |
+| expirationDate | string | Required | 만료일 (YYYY-MM-DD) |
+| description | string | Optional | 설명 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1594,31 +1594,31 @@ Registers a new license.
       "daysRemaining": 334
     }
   },
-  "message": "License registered successfully",
+  "message": "라이선스가 성공적으로 등록되었습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 **Status Codes:**
-- `201` - Registration successful
-- `400` - Invalid request data (invalid license key, duplicate, etc.)
-- `409` - License key conflict
-- `500` - Server error
+
+- `201` - 등록 성공
+- `400` - 잘못된 요청 데이터 (유효하지 않은 라이선스 키, 중복 등)
+- `409` - 라이선스 키 충돌
+- `500` - 서버 오류
 
 ### PUT `/licenses/assign`
-Assigns a license to a server.
 
-
+라이선스를 서버에 할당합니다.
 
 **Request Body:**
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| licenseKey | string | Required | License key |
-| serverId | string | Required | Server ID or server name |
-
+| licenseKey | string | Required | 라이선스 키 |
+| serverId | string | Required | 서버 ID 또는 서버명 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1644,42 +1644,42 @@ Assigns a license to a server.
       "percentage": "76%"
     }
   },
-  "message": "License assigned successfully",
+  "message": "라이선스가 성공적으로 할당되었습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 **Status Codes:**
-- `200` - Assignment successful
-- `400` - Invalid request data
-- `404` - License or server not found
-- `409` - License already assigned or insufficient available licenses
-- `500` - Server error
+
+- `200` - 할당 성공
+- `400` - 잘못된 요청 데이터
+- `404` - 라이선스 또는 서버를 찾을 수 없음
+- `409` - 이미 할당된 라이선스 또는 사용 가능한 라이선스 부족
+- `500` - 서버 오류
 
 ---
 
 ## ZDM Center Management
 
 ### GET `/zdms`
-Retrieves the ZDM center list.
 
-
+ZDM 센터 목록을 조회합니다.
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| connection | string | Optional | Filter by connection status (online, offline) |
-| activation | string | Optional | Filter by activation status (active, inactive) |
-| network | boolean | Optional | Include network information |
-| disk | boolean | Optional | Include disk information |
-| partition | boolean | Optional | Include partition information |
-| repository | boolean | Optional | Include repository information |
-| zosRepository | boolean | Optional | Include zOS repository information |
-| detail | boolean | Optional | Include detailed information |
-
+| connection | string | Optional | 연결 상태 필터 (online, offline) |
+| activation | string | Optional | 활성화 상태 필터 (active, inactive) |
+| network | boolean | Optional | 네트워크 정보 포함 여부 |
+| disk | boolean | Optional | 디스크 정보 포함 여부 |
+| partition | boolean | Optional | 파티션 정보 포함 여부 |
+| repository | boolean | Optional | 리포지토리 정보 포함 여부 |
+| zosRepository | boolean | Optional | zOS 리포지토리 정보 포함 여부 |
+| detail | boolean | Optional | 상세 정보 포함 여부 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1718,26 +1718,25 @@ Retrieves the ZDM center list.
       "lastUpdated": "2024-01-31T10:30:45.123Z"
     }
   ],
-  "message": "ZDM center list retrieved successfully",
+  "message": "ZDM 센터 목록을 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/zdms/:identifier`
-Retrieves specific ZDM center information.
 
-
+특정 ZDM 센터 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | ZDM center ID or center name |
+| identifier | string | Required | ZDM 센터 ID 또는 센터명 |
 
-**Query Parameters:** (Same as GET `/zdms`)
-
+**Query Parameters:** (위의 GET `/zdms`와 동일)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1768,34 +1767,31 @@ Retrieves specific ZDM center information.
     },
     "lastUpdated": "2024-01-31T10:30:45.123Z"
   },
-  "message": "ZDM center information retrieved successfully",
+  "message": "ZDM 센터 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/zdms/:identifier/repositories`
-Retrieves repository information for a specific ZDM center.
 
-
+특정 ZDM 센터의 리포지토리 정보를 조회합니다.
 
 **Path Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| identifier | string | Required | ZDM center ID or center name |
-
-
+| identifier | string | Required | ZDM 센터 ID 또는 센터명 |
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| type | string | Optional | Filter by repository type |
-| path | string | Optional | Filter by path |
-| status | string | Optional | Filter by status |
-
+| type | string | Optional | 리포지토리 타입 필터 |
+| path | string | Optional | 경로 필터 |
+| status | string | Optional | 상태 필터 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1815,27 +1811,26 @@ Retrieves repository information for a specific ZDM center.
       }
     }
   ],
-  "message": "ZDM center repository information retrieved successfully",
+  "message": "ZDM 센터 리포지토리 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
 
 ### GET `/zdms/repositories`
-Retrieves all ZDM repository information.
 
-
+모든 ZDM 리포지토리 정보를 조회합니다.
 
 **Query Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| centerName | string | Optional | Filter by center name |
-| type | string | Optional | Filter by repository type |
-| path | string | Optional | Filter by path |
-| status | string | Optional | Filter by status |
-
+| centerName | string | Optional | 센터명 필터 |
+| type | string | Optional | 리포지토리 타입 필터 |
+| path | string | Optional | 경로 필터 |
+| status | string | Optional | 상태 필터 |
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1861,7 +1856,7 @@ Retrieves all ZDM repository information.
       }
     }
   ],
-  "message": "All ZDM repository information retrieved successfully",
+  "message": "모든 ZDM 리포지토리 정보를 성공적으로 조회했습니다",
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
@@ -1871,7 +1866,9 @@ Retrieves all ZDM repository information.
 ## Common Patterns
 
 ### Error Response Format
-All error responses follow this format:
+
+모든 에러 응답은 다음 형식을 따릅니다:
+
 ```json
 {
   "error": {
@@ -1883,22 +1880,27 @@ All error responses follow this format:
 ```
 
 ### Status Codes
-- `200` - Success
-- `201` - Created successfully
-- `400` - Invalid request
-- `401` - Authentication failed
-- `403` - Insufficient permissions
-- `404` - Resource not found
-- `409` - Conflict
-- `500` - Server error
+
+- `200` - 성공
+- `201` - 생성 성공
+- `400` - 잘못된 요청
+- `401` - 인증 실패
+- `403` - 권한 부족
+- `404` - 리소스 없음
+- `409` - 충돌
+- `500` - 서버 오류
 
 ### Identifier Pattern
-Most endpoints support flexible identifier interpretation:
-- **Numeric value**: Processed as ID
-- **String value**: Processed as Name/Email, etc.
+
+대부분의 엔드포인트는 유연한 식별자 해석을 지원합니다:
+
+- **숫자 값**: ID로 처리
+- **문자열 값**: Name/Email 등으로 처리
 
 ### Pagination
-List retrieval endpoints support standard pagination:
+
+목록 조회 엔드포인트는 표준 페이지네이션을 지원합니다:
+
 ```json
 {
   "data": [],
