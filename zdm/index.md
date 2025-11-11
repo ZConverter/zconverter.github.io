@@ -5,10 +5,10 @@ title: ZDM Documentation
 
 `zdm-cli`, `zdm-api`에 관련된 문서들을 제공합니다.
 
-## [ZDM-CLI](/zdm/cli/docs_kr)
+<!-- ## [ZDM-CLI](/zdm/cli/docs_kr)
 
 - version: 1.0.0
-- lastupdate: {{ site.time | date: "%Y-%m-%d" }}
+- lastupdate: {{ site.time | date: "%Y-%m-%d" }} -->
 <!-- - [문서](/zdm/cli/docs_kr) -->
 
 ## [ZDM-API](/zdm/api/docs_kr)

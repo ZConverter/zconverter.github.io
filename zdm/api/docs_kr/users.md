@@ -40,7 +40,8 @@ sidebar:
 
 사용자 목록을 조회합니다.
 
-**Query Parameters:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -49,7 +50,10 @@ sidebar:
 | company | string | Optional | 회사명 필터 |
 | country | string | Optional | 국가 필터 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -70,17 +74,24 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### GET `/users/:identifier` {#get-user}
 
 특정 사용자 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 사용자 ID 또는 이메일 |
 
-**Query Parameters:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -89,7 +100,10 @@ sidebar:
 | company | string | Optional | 회사명 필터 |
 | country | string | Optional | 국가 필터 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -108,17 +122,24 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### PUT `/users/:identifier` {#update-user}
 
 사용자 정보를 업데이트합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 사용자 ID 또는 이메일 |
 
-**Request Body:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Request Body</strong></summary>
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -129,7 +150,10 @@ sidebar:
 | company | string | Optional | 회사명 |
 | country | string | Optional | 국가 코드 (2자리, 예: KR, US) |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -162,15 +186,6 @@ sidebar:
 }
 ```
 
-**특징:**
+</details>
 
-- 변경 이력 추적: 수정된 각 필드의 이전 값과 새 값을 추적
-- 보안 필드 마스킹: password, pwData 필드는 응답에서 `********`로 표시
-- 부분 업데이트: 제공된 필드만 업데이트
-
-**Status Codes:**
-
-- `200` - 업데이트 성공
-- `400` - 잘못된 요청 데이터
-- `404` - 사용자를 찾을 수 없음
-- `500` - 서버 오류
+---

@@ -48,7 +48,8 @@ sidebar:
 
 복구 작업 목록을 조회합니다.
 
-**Query Parameters:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -65,7 +66,10 @@ sidebar:
 | server | string | Optional | 서버명 필터 |
 | serverType | string | Optional | 서버 타입 필터 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -111,19 +115,31 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### GET `/recoveries/:identifier` {#get-recovery}
 
 특정 복구 작업 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
-**Query Parameters:** (위의 GET `/recoveries`와 동일)
+</details>
 
-**Response:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
+
+위의 GET `/recoveries`와 동일
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -167,11 +183,15 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### POST `/recoveries` {#create-recovery}
 
 새 복구 작업을 등록합니다.
 
-**Request Body:**
+<details markdown="1" open>
+<summary><strong>Request Body</strong></summary>
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -209,7 +229,10 @@ sidebar:
 | jobList[].mode | string | Required | 복구 모드 |
 | jobList[].repository | object | Required | 리포지토리 정보 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -229,19 +252,31 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### PUT `/recoveries/:identifier` {#update-recovery}
 
 복구 작업을 수정합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
-**Request Body:** (POST `/recoveries`와 동일)
+</details>
 
-**Response:**
+<details markdown="1" open>
+<summary><strong>Request Body</strong></summary>
+
+POST `/recoveries`와 동일
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -256,23 +291,33 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### DELETE `/recoveries/:identifier` {#delete-recovery}
 
 복구 작업을 삭제합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
-**Query Parameters:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | force | boolean | Optional | 강제 삭제 여부 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -309,7 +354,10 @@ sidebar:
 }
 ```
 
-**Response Fields:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response Fields</strong></summary>
 
 - `jobInfo`: 삭제된 작업 정보 배열
   - `name`: 작업명
@@ -330,24 +378,24 @@ sidebar:
     - `historyDataDeleted`: 삭제된 히스토리 레코드 수
     - `logDataDeleted`: 삭제된 로그 레코드 수
 
-**Status Codes:**
+</details>
 
-- `200` - 삭제 성공
-- `400` - 잘못된 요청
-- `404` - 작업을 찾을 수 없음
-- `500` - 서버 오류
-
+---
 ### GET `/recoveries/monitoring/job/:identifier` {#monitor-recovery-job}
 
 특정 복구 작업의 모니터링 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 복구 작업 ID 또는 작업명 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -384,17 +432,24 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### GET `/recoveries/monitoring/system/:identifier` {#monitor-recovery-system}
 
 특정 시스템의 복구 모니터링 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 시스템 ID 또는 시스템명 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -417,3 +472,5 @@ sidebar:
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
+
+</details>

@@ -48,7 +48,8 @@ sidebar:
 
 백업 작업 목록을 조회합니다.
 
-**Query Parameters:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -65,7 +66,10 @@ sidebar:
 | history | boolean | Optional | 히스토리 포함 |
 | logs | boolean | Optional | 로그 포함 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -111,19 +115,31 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### GET `/backups/:identifier` {#get-backup}
 
 특정 백업 작업 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
-**Query Parameters:** (위의 GET `/backups`와 동일)
+</details>
 
-**Response:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
+
+위의 GET `/backups`와 동일
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -167,11 +183,15 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### POST `/backups` {#create-backup}
 
 새 백업 작업을 등록합니다.
 
-**Request Body:**
+<details markdown="1" open>
+<summary><strong>Request Body</strong></summary>
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -198,7 +218,10 @@ sidebar:
 | networkLimit | number | Optional | 네트워크 제한 |
 | autoStart | string | Optional | 자동 시작 여부 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -230,19 +253,31 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### PUT `/backups/:identifier` {#update-backup}
 
 백업 작업을 수정합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
-**Request Body:** (POST `/backups`와 동일)
+</details>
 
-**Response:**
+<details markdown="1" open>
+<summary><strong>Request Body</strong></summary>
+
+POST `/backups`와 동일
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -257,23 +292,33 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### DELETE `/backups/:identifier` {#delete-backup}
 
 백업 작업을 삭제합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
-**Query Parameters:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | force | boolean | Optional | 강제 삭제 여부 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -288,17 +333,24 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### GET `/backups/monitoring/job/:identifier` {#monitor-backup-job}
 
 특정 백업 작업의 모니터링 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 백업 작업 ID 또는 작업명 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -334,17 +386,24 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### GET `/backups/monitoring/system/:identifier` {#monitor-backup-system}
 
 특정 시스템의 백업 모니터링 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 시스템 ID 또는 시스템명 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -367,3 +426,5 @@ sidebar:
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
+
+</details>

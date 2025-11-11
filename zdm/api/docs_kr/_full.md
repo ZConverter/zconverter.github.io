@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: ZDM API RESTful Documentation (Full)
+title: ZDM API Documentation (Full)
 section_title: ZDM API Documentation
 sidebar:
   - title: "API Documentation"

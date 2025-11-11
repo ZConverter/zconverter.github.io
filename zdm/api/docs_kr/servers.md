@@ -42,7 +42,8 @@ sidebar:
 
 서버 목록을 조회합니다.
 
-**Query Parameters:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -56,7 +57,10 @@ sidebar:
 | repository | boolean | Optional | 리포지토리 정보 포함 여부 |
 | detail | boolean | Optional | 상세 정보 포함 여부 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -95,19 +99,31 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### GET `/servers/:identifier` {#get-server}
 
 특정 서버 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 서버 ID 또는 서버명 |
 
-**Query Parameters:** (위의 GET `/servers`와 동일)
+</details>
 
-**Response:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
+
+위의 GET `/servers`와 동일
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -140,29 +156,42 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### GET `/servers/:identifier/partitions` {#get-server-partitions}
 
 특정 서버의 파티션 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 서버 ID 또는 서버명 |
 
-**Query Parameters:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | detail | boolean | Optional | 상세 정보 포함 여부 |
 
+</details>
+
+---
 ### GET `/servers/partitions` {#get-partitions}
 
 모든 서버의 파티션 정보를 조회합니다.
 
-**Query Parameters:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | serverName | string | Optional | 서버명 필터 |
 | detail | boolean | Optional | 상세 정보 포함 여부 |
+
+</details>

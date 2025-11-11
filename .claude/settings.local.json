@@ -22,7 +22,8 @@
       "Bash(curl:*)",
       "Bash(kill:*)",
       "Bash(bundle exec jekyll clean:*)",
-      "Bash(git ls-tree:*)"
+      "Bash(git ls-tree:*)",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": []

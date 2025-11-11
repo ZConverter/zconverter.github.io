@@ -44,7 +44,8 @@ sidebar:
 
 라이선스 목록을 조회합니다.
 
-**Query Parameters:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -53,7 +54,10 @@ sidebar:
 | created | string | Optional | 생성일 필터 (YYYY-MM-DD) |
 | status | string | Optional | 상태 필터 (active, expired, expiring) |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -83,19 +87,31 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### GET `/licenses/:identifier` {#get-license}
 
 특정 라이선스 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 라이선스 ID 또는 이름 |
 
-**Query Parameters:** (위의 GET `/licenses`와 동일)
+</details>
 
-**Response:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
+
+위의 GET `/licenses`와 동일
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -130,17 +146,24 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### GET `/licenses/key/:key` {#get-license-by-key}
 
 키로 라이선스 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | key | string | Required | 라이선스 키 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -169,11 +192,15 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### POST `/licenses` {#create-license}
 
 새 라이선스를 등록합니다.
 
-**Request Body:**
+<details markdown="1" open>
+<summary><strong>Request Body</strong></summary>
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -184,7 +211,10 @@ sidebar:
 | expirationDate | string | Required | 만료일 (YYYY-MM-DD) |
 | description | string | Optional | 설명 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -213,25 +243,25 @@ sidebar:
 }
 ```
 
-**Status Codes:**
+</details>
 
-- `201` - 등록 성공
-- `400` - 잘못된 요청 데이터 (유효하지 않은 라이선스 키, 중복 등)
-- `409` - 라이선스 키 충돌
-- `500` - 서버 오류
-
+---
 ### PUT `/licenses/assign` {#assign-license}
 
 라이선스를 서버에 할당합니다.
 
-**Request Body:**
+<details markdown="1" open>
+<summary><strong>Request Body</strong></summary>
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | licenseKey | string | Required | 라이선스 키 |
 | serverId | string | Required | 서버 ID 또는 서버명 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -263,10 +293,4 @@ sidebar:
 }
 ```
 
-**Status Codes:**
-
-- `200` - 할당 성공
-- `400` - 잘못된 요청 데이터
-- `404` - 라이선스 또는 서버를 찾을 수 없음
-- `409` - 이미 할당된 라이선스 또는 사용 가능한 라이선스 부족
-- `500` - 서버 오류
+</details>

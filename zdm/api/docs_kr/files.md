@@ -40,13 +40,19 @@ sidebar:
 
 파일을 업로드합니다.
 
-**Request:** Multipart form data
+<details markdown="1" open>
+<summary><strong>Request</strong></summary>
+
+Multipart form data
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | file | file | Required | 업로드할 파일 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -67,31 +73,33 @@ sidebar:
 }
 ```
 
+</details>
+
+<!--
 **특징:**
 
 - Multipart form data 형식으로 파일 전송
 - 최대 파일 크기: 10MB
 - 최대 파일 개수: 5개
 - 한글 파일명 지원
-- 고유한 파일명 자동 생성 (타임스탬프 + 랜덤 숫자)
+- 고유한 파일명 자동 생성 (타임스탬프 + 랜덤 숫자) -->
 
-**Status Codes:**
-
-- `201` - 업로드 성공
-- `400` - 잘못된 요청 (파일 크기 초과, 파일 개수 초과 등)
-- `500` - 서버 오류
-
+---
 ### GET `/files/download/:fileName` {#download-file}
 
 파일을 다운로드합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | fileName | string | Required | 다운로드할 파일명 |
 
-**Query Parameters:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -99,7 +107,12 @@ sidebar:
 | preview | boolean | Optional | 미리보기 모드 |
 | range | string | Optional | 부분 다운로드 범위 (bytes=0-1023) |
 
-**Response:** 파일 스트림 또는 에러 응답
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
+
+파일 스트림 또는 에러 응답
 
 **성공 시:** 파일이 직접 다운로드됩니다.
 
@@ -118,23 +131,21 @@ sidebar:
 }
 ```
 
-**특징:**
+</details>
+
+<!-- **특징:**
 
 - Content-Disposition 헤더를 통한 파일명 전달
 - 한글 파일명 지원 (UTF-8 인코딩)
-- MIME 타입 자동 감지
+- MIME 타입 자동 감지 -->
 
-**Status Codes:**
-
-- `200` - 다운로드 성공
-- `404` - 파일을 찾을 수 없음
-- `500` - 서버 오류
-
+---
 ### GET `/files/list` {#list-files}
 
 업로드된 파일 목록을 조회합니다.
 
-**Response:**
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -162,7 +173,10 @@ sidebar:
 }
 ```
 
-**Response Fields:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response Fields</strong></summary>
 
 - `fileName`: 서버에 저장된 실제 파일명 (타임스탬프 포함)
 - `fileOriginName`: 원본 파일명
@@ -170,7 +184,4 @@ sidebar:
 - `uploadDate`: 업로드 일시
 - `totalCount`: 총 파일 개수
 
-**Status Codes:**
-
-- `200` - 조회 성공
-- `500` - 서버 오류
+</details>

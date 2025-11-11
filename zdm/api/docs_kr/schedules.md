@@ -40,7 +40,8 @@ sidebar:
 
 스케줄 목록을 조회합니다.
 
-**Query Parameters:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -49,7 +50,10 @@ sidebar:
 | state | string | Optional | 활성 상태 필터 |
 | jobName | string | Optional | 작업명 필터 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -74,19 +78,31 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### GET `/schedules/:identifier` {#get-schedule}
 
 특정 스케줄 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | 스케줄 ID 또는 작업명 |
 
-**Query Parameters:** (위의 GET `/schedules`와 동일)
+</details>
 
-**Response:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
+
+위의 GET `/schedules`와 동일
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -109,11 +125,15 @@ sidebar:
 }
 ```
 
+</details>
+
+---
 ### POST `/schedules` {#create-schedule}
 
 새 스케줄을 생성합니다.
 
-**Request Body:**
+<details markdown="1" open>
+<summary><strong>Request Body</strong></summary>
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -128,7 +148,10 @@ sidebar:
 | advanced.type | string | Optional | 고급 스케줄 타입 |
 | advanced.description | string | Optional | 고급 스케줄 설명 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -152,3 +175,5 @@ sidebar:
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
+
+</details>

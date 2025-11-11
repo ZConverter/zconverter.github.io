@@ -42,7 +42,8 @@ sidebar:
 
 ZDM 센터 목록을 조회합니다.
 
-**Query Parameters:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -55,7 +56,10 @@ ZDM 센터 목록을 조회합니다.
 | zosRepository | boolean | Optional | zOS 리포지토리 정보 포함 여부 |
 | detail | boolean | Optional | 상세 정보 포함 여부 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -100,19 +104,31 @@ ZDM 센터 목록을 조회합니다.
 }
 ```
 
+</details>
+
+---
 ### GET `/zdms/:identifier` {#get-zdm}
 
 특정 ZDM 센터 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | ZDM 센터 ID 또는 센터명 |
 
-**Query Parameters:** (위의 GET `/zdms`와 동일)
+</details>
 
-**Response:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
+
+위의 GET `/zdms`와 동일
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -149,17 +165,24 @@ ZDM 센터 목록을 조회합니다.
 }
 ```
 
+</details>
+
+---
 ### GET `/zdms/:identifier/repositories` {#get-zdm-repositories}
 
 특정 ZDM 센터의 리포지토리 정보를 조회합니다.
 
-**Path Parameters:**
+<details markdown="1" open>
+<summary><strong>Path Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | identifier | string | Required | ZDM 센터 ID 또는 센터명 |
 
-**Query Parameters:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -167,7 +190,10 @@ ZDM 센터 목록을 조회합니다.
 | path | string | Optional | 경로 필터 |
 | status | string | Optional | 상태 필터 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -193,11 +219,15 @@ ZDM 센터 목록을 조회합니다.
 }
 ```
 
+</details>
+
+---
 ### GET `/zdms/repositories` {#get-repositories}
 
 모든 ZDM 리포지토리 정보를 조회합니다.
 
-**Query Parameters:**
+<details markdown="1" open>
+<summary><strong>Query Parameters</strong></summary>
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -206,7 +236,10 @@ ZDM 센터 목록을 조회합니다.
 | path | string | Optional | 경로 필터 |
 | status | string | Optional | 상태 필터 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -237,3 +270,5 @@ ZDM 센터 목록을 조회합니다.
   "timestamp": "2024-01-31T10:30:45.123Z"
 }
 ```
+
+</details>

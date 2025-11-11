@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: ZDM API RESTful Documentation
+title: ZDM API Documentation
 section_title: ZDM API Documentation
 sidebar:
   - title: "API Documentation"
@@ -31,40 +31,80 @@ sidebar:
 
 ## ZDM API 소개
 
-ZDM-API는 백업, 복구, 시스템 관리를 위한 RESTful API 서버입니다.
+ZDM-API는 백업, 복구, 시스템 관리를 위한 **API 서버**입니다.
 
-### 주요 기능
+---
+
+## 주요 기능
+
+<details markdown="1" open>
+<summary><strong>핵심 기능</strong></summary>
 
 - **토큰 기반 인증** - 안전한 API 접근 제어
-- **사용자 및 서버 관리** - 시스템 리소스 통합 관리
-- **백업/복구 작업** - 자동화된 데이터 보호
+- **사용자 관리** - 사용자 계정 및 권한 관리
+- **서버 관리** - 시스템 리소스 통합 관리
+- **백업/복구** - 자동화된 데이터 보호 및 복원
 - **스케줄링** - 정기적인 백업 작업 예약
+- **파일 관리** - 백업 파일 업로드/다운로드
 - **라이선스 관리** - 라이선스 발급 및 할당
+- **ZDM 센터** - 멀티 센터 환경 관리
 
-### 시작하기
+</details>
 
-좌측 사이드바에서 원하는 API 섹션을 선택하여 상세 문서를 확인하세요.
+---
 
-**Base URL**: `/api/v1`
+## Quick Start
 
-### API 응답 형식
+### 1. 토큰 발급
 
-모든 API는 표준 JSON 응답 형식을 사용합니다:
+모든 API 요청에는 인증 토큰이 필요합니다.
 
-```json
+<details markdown="1" open>
+<summary><strong>토큰 발급 예시</strong></summary>
+
+```bash
+POST /api/v1/auth/issue
+Content-Type: application/json
+
 {
-  "success": true,
-  "requestID": "string",
-  "data": {},
-  "message": "string",
-  "timestamp": "string"
+  "email": "user@example.com",
+  "password": "your-password"
 }
 ```
 
-### 인증 방법
-
-모든 보호된 엔드포인트는 토큰이 필요합니다:
-
-```text
-Authorization: <token>
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIs...",
+    "expiresAt": "2024-12-31T23:59:59.000Z"
+  }
+}
 ```
+
+</details>
+
+### 2. API 호출
+
+발급받은 토큰을 Authorization 헤더에 포함하여 API를 호출합니다.
+
+<details markdown="1" open>
+<summary><strong>API 호출 예시</strong></summary>
+
+```bash
+GET /api/v1/users
+Authorization: eyJhbGciOiJIUzI1NiIs...
+```
+
+</details>
+
+---
+
+## Base URL
+
+```
+/api/v1
+```
+
+모든 API 엔드포인트는 위 Base URL을 기준으로 합니다.

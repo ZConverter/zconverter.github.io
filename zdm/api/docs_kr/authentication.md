@@ -44,14 +44,18 @@ Authorization: Bearer <token>
 
 토큰을 발급합니다.
 
-**Request Body:**
+<details markdown="1" open>
+<summary><strong>Request Body</strong></summary>
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | email | string | Required | 사용자 이메일 |
 | password | string | Required | 사용자 비밀번호 |
 
-**Response:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>Response</strong></summary>
 
 ```json
 {
@@ -66,8 +70,4 @@ Authorization: Bearer <token>
 }
 ```
 
-**Status Codes:**
-
-- `201` - 토큰 발급 성공
-- `400` - 잘못된 요청 데이터
-- `401` - 인증 실패
+</details>
