@@ -1,39 +1,63 @@
----
-layout: default
----
-
-<div class="docs-layout">
-  <aside class="docs-sidebar">
-    <nav class="docs-nav">
-      <h3>{{ page.section_title | default: "Documentation" }}</h3>
-
-      {% if page.sidebar %}
-        {% for item in page.sidebar %}
-          <div class="nav-section">
-            {% if item.title %}
-              <h4>{{ item.title }}</h4>
-            {% endif %}
-            <ul>
-              {% for link in item.links %}
-                <li>
-                  <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>
-                    {{ link.title }}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} - {{ site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
+      <nav>
+        {% for link in site.nav_links %}
+        <a href="{{ link.url | relative_url }}">{{ link.title }}</a>
         {% endfor %}
-      {% endif %}
-    </nav>
-  </aside>
+      </nav>
+    </div>
+  </header>
 
-  <main class="docs-content">
-    <article class="page">
-      <h1>{{ page.title }}</h1>
-      <div class="content">
-        {{ content }}
-      </div>
-    </article>
-  </main>
-</div>
+  <div class="docs-layout">
+    <aside class="docs-sidebar">
+      <nav class="docs-nav">
+        <h3>{{ page.section_title | default: "Documentation" }}</h3>
+
+        {% if page.sidebar %}
+          {% for item in page.sidebar %}
+            <div class="nav-section">
+              {% if item.title %}
+                <h4>{{ item.title }}</h4>
+              {% endif %}
+              <ul>
+                {% for link in item.links %}
+                  <li>
+                    <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>
+                      {{ link.title }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </nav>
+    </aside>
+
+    <main class="docs-content">
+      <article class="page">
+        <h1>{{ page.title }}</h1>
+        <div class="content">
+          {{ content }}
+        </div>
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; {{ 'now' | date: "%Y" }} ZConverter. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
