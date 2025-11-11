@@ -107,13 +107,6 @@ zdm-cli recovery list --source web-server-01 --mode full --status complete
 새로운 복구 작업을 등록합니다.
 
 <details markdown="1" open>
-<summary><strong>엔드포인트</strong></summary>
-
-`POST /api/recoveries`
-
-</details>
-
-<details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
@@ -192,13 +185,6 @@ zdm-cli recovery regist \
 복구 작업을 삭제합니다.
 
 <details markdown="1" open>
-<summary><strong>엔드포인트</strong></summary>
-
-`DELETE /api/recoveries/{IDENTIFIER}`
-
-</details>
-
-<details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
@@ -228,13 +214,6 @@ zdm-cli recovery delete --name disaster-recovery
 ### `recovery update` {#recovery-update}
 
 복구 작업 정보를 수정합니다.
-
-<details markdown="1" open>
-<summary><strong>엔드포인트</strong></summary>
-
-`PUT /api/recoveries/{IDENTIFIER}`
-
-</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -305,13 +284,6 @@ zdm-cli recovery update \
 복구 작업 진행 상황을 모니터링합니다.
 
 <details markdown="1" open>
-<summary><strong>엔드포인트</strong></summary>
-
-`GET /api/recoveries/monitoring/job/{IDENTIFIER}` | `GET /api/recoveries/monitoring/system/{IDENTIFIER}`
-
-</details>
-
-<details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
@@ -362,20 +334,10 @@ zdm-cli recovery monit --server-name "WinServer" --drive C
 <details markdown="1" open>
 <summary><strong>복구 모드 설명</strong></summary>
 
-| 모드 | 설명 | 사용 시나리오 |
+| 모드 | 설명 | 동작 방식 |
 |------|------|--------------|
 | `full` | 전체 복구 | 전체 시스템 복구 |
 | `increment` | 증분 복구 | 변경된 데이터만 복구 |
-
-**Full Recovery:**
-- 전체 시스템을 복구
-- 가장 최근 전체 백업 사용
-- 완전한 시스템 재구성
-
-**Increment Recovery:**
-- 증분 백업 데이터로 복구
-- 전체 백업 + 증분 백업 조합
-- 특정 시점 복구
 
 </details>
 
@@ -460,8 +422,7 @@ zdm-cli recovery regist --source web-01 --target recovery-01 --platform aws --mo
 ```
 
 **주의사항:**
-- `allow` 사용 시 대상 서버의 기존 데이터가 삭제됨
-- 운영 서버에 복구 시 주의 필요
+- `allow` 사용 시 taget 서버에 동일한 파티션이 없는경우 "/" 파티션에 강제 통합됨 ( `Linux` 전용 )
 
 </details>
 
@@ -559,173 +520,6 @@ zdm-cli recovery regist \
   --scriptRun after
 ```
 
-**스크립트 사용 예:**
-- 복구 전: 대상 시스템 준비, 네트워크 설정
-- 복구 후: 애플리케이션 시작, 설정 적용, 알림 발송
-
 </details>
 
 ---
-
-## 사용 시나리오
-
-<details markdown="1" open>
-<summary><strong>AWS 클라우드 복구</strong></summary>
-
-```bash
-# 1. Source 서버 백업 확인
-zdm-cli backup list --server web-server-01
-
-# 2. Target 서버 확인
-zdm-cli server list --mode target --name aws-instance
-
-# 3. 클라우드 인증 정보 확인 (웹 포털)
-
-# 4. 복구 작업 등록
-zdm-cli recovery regist \
-  --source web-server-01 \
-  --target aws-instance \
-  --platform aws \
-  --mode full \
-  --cloudAuth aws-credentials \
-  --jobName "aws-migration" \
-  --description "Migrate to AWS" \
-  --afterReboot reboot
-
-# 5. 복구 모니터링
-zdm-cli recovery monit --job-name "aws-migration" --detail
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>재해 복구 (DR)</strong></summary>
-
-```bash
-# 1. 재해 발생 시 백업 확인
-zdm-cli backup list --server failed-server
-
-# 2. DR 서버 준비
-zdm-cli server list --mode target --name dr-server
-
-# 3. 긴급 복구 실행
-zdm-cli recovery regist \
-  --source failed-server \
-  --target dr-server \
-  --platform vmware \
-  --mode full \
-  --overwrite allow \
-  --afterReboot reboot \
-  --jobName "emergency-recovery" \
-  --start
-
-# 4. 실시간 모니터링
-zdm-cli recovery monit --job-name "emergency-recovery" --detail
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>테스트 복구</strong></summary>
-
-```bash
-# 1. 테스트 서버에 복구
-zdm-cli recovery regist \
-  --source production-server \
-  --target test-server \
-  --platform vmware \
-  --mode full \
-  --afterReboot shutdown \
-  --jobName "test-recovery"
-
-# 2. 복구 완료 후 검증
-# (서버가 shutdown 상태에서 검증)
-
-# 3. 검증 완료 후 테스트 서버 시작
-# (수동으로 서버 시작)
-```
-
-</details>
-
----
-
-## 문제 해결
-
-<details markdown="1" open>
-<summary><strong>복구 등록 실패</strong></summary>
-
-**원인:**
-- Source 서버 백업 없음
-- Target 서버 미등록
-- 플랫폼 인증 정보 없음
-
-**해결 방법:**
-```bash
-# Source 백업 확인
-zdm-cli backup list --server source-server
-
-# Target 서버 확인
-zdm-cli server list --name target-server
-
-# 클라우드 인증 확인 (웹 포털)
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>복구 진행 중 실패</strong></summary>
-
-**원인:**
-- 네트워크 문제
-- Target 서버 리소스 부족
-- 클라우드 인증 만료
-
-**해결 방법:**
-```bash
-# 복구 상태 확인
-zdm-cli recovery monit --job-name "failed-recovery" --detail
-
-# 복구 작업 삭제 후 재등록
-zdm-cli recovery delete --name "failed-recovery"
-zdm-cli recovery regist --source src --target tgt --platform aws --mode full
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>클라우드 인증 오류</strong></summary>
-
-**원인:**
-- 잘못된 인증 정보
-- 인증 정보 만료
-- 권한 부족
-
-**해결 방법:**
-1. 웹 포털에서 인증 정보 재확인
-2. 클라우드 콘솔에서 권한 확인
-3. 인증 정보 재등록
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>복구 후 부팅 실패</strong></summary>
-
-**원인:**
-- 하드웨어 호환성 문제
-- 드라이버 문제
-- 부팅 설정 오류
-
-**해결 방법:**
-```bash
-# afterReboot를 maintain으로 설정하여 재시도
-zdm-cli recovery regist \
-  --source src \
-  --target tgt \
-  --platform vmware \
-  --mode full \
-  --afterReboot maintain
-
-# 복구 완료 후 수동으로 부팅 설정 확인
-```
-
-</details>

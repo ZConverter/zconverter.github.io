@@ -107,13 +107,6 @@ zdm-cli backup list --server web-server-01 --mode full --status complete
 새로운 백업 작업을 등록합니다.
 
 <details markdown="1" open>
-<summary><strong>엔드포인트</strong></summary>
-
-`POST /api/backups`
-
-</details>
-
-<details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
@@ -192,13 +185,6 @@ zdm-cli backup regist \
 백업 작업을 삭제합니다.
 
 <details markdown="1" open>
-<summary><strong>엔드포인트</strong></summary>
-
-`DELETE /api/backups/{IDENTIFIER}`
-
-</details>
-
-<details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
@@ -228,13 +214,6 @@ zdm-cli backup delete --name daily-backup
 ### `backup update` {#backup-update}
 
 백업 작업 정보를 수정합니다.
-
-<details markdown="1" open>
-<summary><strong>엔드포인트</strong></summary>
-
-`PUT /api/backups/{IDENTIFIER}`
-
-</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -305,13 +284,6 @@ zdm-cli backup update \
 백업 작업 진행 상황을 모니터링합니다.
 
 <details markdown="1" open>
-<summary><strong>엔드포인트</strong></summary>
-
-`GET /api/backups/monitoring/job/{IDENTIFIER}` | `GET /api/backups/monitoring/system/{IDENTIFIER}`
-
-</details>
-
-<details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
@@ -361,25 +333,11 @@ zdm-cli backup monit --server-name "DB-Server" --repository-path "/backup/db"
 <details markdown="1" open>
 <summary><strong>백업 모드 설명</strong></summary>
 
-| 모드 | 설명 | 사용 시나리오 |
+| 모드 | 설명 | 동작 방식 |
 |------|------|--------------|
-| `full` | 전체 백업 | 첫 백업, 정기 전체 백업 |
+| `full` | 전체 백업 | 전체 백업 |
 | `increment` | 증분 백업 | 변경된 데이터만 백업 |
-| `smart` | 스마트 백업 | 자동으로 전체/증분 결정 |
-
-**Full Backup:**
-- 모든 데이터를 백업
-- 복구 시 하나의 백업만 필요
-- 시간과 저장 공간이 많이 필요
-
-**Increment Backup:**
-- 이전 백업 이후 변경된 데이터만 백업
-- 빠르고 저장 공간 절약
-- 복구 시 여러 백업 필요
-
-**Smart Backup:**
-- 상황에 따라 자동으로 전체/증분 선택
-- 효율적인 백업 전략
+| `smart` | 스마트 백업 | 스케쥴에 따라 전체와 증분 백업 복합적으로 진행 |
 
 </details>
 
@@ -419,11 +377,6 @@ zdm-cli backup regist --server web-server-01 --mode full --no-compression
 zdm-cli backup update --id 1 --compression
 ```
 
-**압축 사용 시:**
-- 저장 공간 절약
-- 네트워크 전송 속도 향상
-- CPU 사용률 증가
-
 </details>
 
 <details markdown="1" open>
@@ -436,12 +389,6 @@ zdm-cli backup regist --server web-server-01 --mode full --encryption
 # 기존 작업 암호화 활성화
 zdm-cli backup update --id 1 --encryption
 ```
-
-**암호화 사용 시:**
-- 데이터 보안 강화
-- 규정 준수
-- 약간의 성능 오버헤드
-
 </details>
 
 <details markdown="1" open>
@@ -474,10 +421,6 @@ zdm-cli backup regist --server web-server-01 --mode full --networkLimit 0
 zdm-cli backup update --id 1 --networkLimit 500
 ```
 
-**사용 시나리오:**
-- 운영 시간 중 백업 시 네트워크 영향 최소화
-- 원격지 백업 시 대역폭 제한
-
 </details>
 
 <details markdown="1" open>
@@ -490,15 +433,6 @@ zdm-cli backup regist --server web-server-01 --mode full --rotation 5
 # Rotation 변경
 zdm-cli backup update --id 1 --rotation 10
 ```
-
-**Rotation 설명:**
-- 보관할 백업 버전 수
-- 오래된 백업은 자동 삭제
-- 저장 공간 관리
-
-**예시:**
-- rotation=5: 최근 5개 백업 보관
-- rotation=1: 최신 백업 1개만 보관
 
 </details>
 
@@ -554,10 +488,6 @@ zdm-cli backup regist \
 zdm-cli backup update --id 1 --scriptPath /scripts/backup.sh --scriptRun before
 ```
 
-**스크립트 사용 예:**
-- 백업 전: 데이터베이스 일관성 체크, 서비스 중지
-- 백업 후: 서비스 재시작, 알림 발송, 로그 기록
-
 **주의사항:**
 - 스크립트는 서버에 미리 업로드되어 있어야 함
 - 절대 경로 사용
@@ -566,145 +496,3 @@ zdm-cli backup update --id 1 --scriptPath /scripts/backup.sh --scriptRun before
 </details>
 
 ---
-
-## 사용 시나리오
-
-<details markdown="1" open>
-<summary><strong>일반 전체 백업</strong></summary>
-
-```bash
-# 1. 서버 확인
-zdm-cli server list --name web-server-01
-
-# 2. Repository 확인
-zdm-cli zdm list --repository
-
-# 3. 백업 등록
-zdm-cli backup regist \
-  --server web-server-01 \
-  --mode full \
-  --jobName "web-full-backup" \
-  --description "Web server full backup"
-
-# 4. 백업 시작 확인
-zdm-cli backup list --name web-full-backup
-
-# 5. 모니터링
-zdm-cli backup monit --job-name "web-full-backup" --detail
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>정기 백업 설정</strong></summary>
-
-```bash
-# 1. 스케줄 생성
-zdm-cli schedule create --type 3 --basic-time 02:00 --path ./daily-schedule.json
-
-# 2. 스케줄 등록
-zdm-cli schedule regist --path ./daily-schedule.json
-
-# 3. 스케줄 백업 등록
-zdm-cli backup regist \
-  --server web-server-01 \
-  --mode smart \
-  --schedule daily-schedule \
-  --encryption \
-  --rotation 7 \
-  --jobName "daily-auto-backup"
-
-# 4. 등록 확인
-zdm-cli backup list --name daily-auto-backup
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>선택적 파티션 백업</strong></summary>
-
-```bash
-# 1. 서버 파티션 확인
-zdm-cli server list --name web-server-01 --partition-only
-
-# 2. 특정 파티션만 백업
-zdm-cli backup regist \
-  --server web-server-01 \
-  --mode full \
-  --partition /,/home \
-  --excludeDir /home/user/temp \
-  --jobName "selective-backup"
-
-# 3. 백업 시작 및 모니터링
-zdm-cli backup monit --job-name "selective-backup"
-```
-
-</details>
-
----
-
-## 문제 해결
-
-<details markdown="1" open>
-<summary><strong>백업 등록 실패</strong></summary>
-
-**원인:**
-- 라이센스 미할당
-- 서버 에이전트 미실행
-- Repository 접근 불가
-
-**해결 방법:**
-```bash
-# 서버 상태 확인
-zdm-cli server list --name web-server-01
-
-# 라이센스 확인 및 할당
-zdm-cli license list
-zdm-cli license assign --license 1 --server web-server-01
-
-# Repository 확인
-zdm-cli zdm list --repository
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>백업 진행 중 실패</strong></summary>
-
-**원인:**
-- 네트워크 문제
-- 디스크 공간 부족
-- 권한 문제
-
-**해결 방법:**
-```bash
-# 백업 상태 확인
-zdm-cli backup monit --job-name "failed-backup" --detail
-
-# 백업 작업 삭제 후 재등록
-zdm-cli backup delete --name "failed-backup"
-zdm-cli backup regist --server web-server-01 --mode full
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>스케줄 백업 실행 안됨</strong></summary>
-
-**원인:**
-- 스케줄 설정 오류
-- ZDM 센터 연결 끊김
-
-**해결 방법:**
-```bash
-# 스케줄 확인
-zdm-cli schedule list
-
-# 백업 작업 확인
-zdm-cli backup list --name "scheduled-backup"
-
-# 스케줄 재설정
-zdm-cli backup update --id 1 --schedule correct-schedule
-```
-
-</details>

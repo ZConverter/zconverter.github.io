@@ -88,13 +88,6 @@ zdm-cli schedule list --type 3 --state active --output table
 새로운 스케줄을 등록합니다.
 
 <details markdown="1" open>
-<summary><strong>엔드포인트</strong></summary>
-
-`POST /api/schedules`
-
-</details>
-
-<details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
@@ -664,65 +657,3 @@ zdm-cli backup regist --server app-01 --mode smart --schedule smart-weekly
 </details>
 
 ---
-
-## 문제 해결
-
-<details markdown="1" open>
-<summary><strong>스케줄 생성 실패</strong></summary>
-
-**원인:**
-- 잘못된 타입 번호
-- 필수 파라미터 누락
-- 잘못된 값 형식
-
-**해결 방법:**
-```bash
-# 타입별 필수 파라미터 확인
-zdm-cli schedule create --help
-
-# 올바른 형식으로 재생성
-zdm-cli schedule create --type 3 --basic-time 02:00
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>스케줄 검증 실패</strong></summary>
-
-**원인:**
-- JSON 형식 오류
-- 필수 필드 누락
-- 잘못된 값
-
-**해결 방법:**
-```bash
-# JSON 파일 내용 확인
-cat ./schedule.json
-
-# 스케줄 재생성
-zdm-cli schedule create --type 3 --basic-time 02:00 --path ./schedule.json
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>스케줄 실행 안됨</strong></summary>
-
-**원인:**
-- ZDM 센터 연결 끊김
-- 작업 상태 오류
-- 스케줄 설정 오류
-
-**해결 방법:**
-```bash
-# 스케줄 확인
-zdm-cli schedule list
-
-# 작업 확인
-zdm-cli backup list --name scheduled-backup
-
-# ZDM 연결 확인
-zdm-cli zdm list
-```
-
-</details>

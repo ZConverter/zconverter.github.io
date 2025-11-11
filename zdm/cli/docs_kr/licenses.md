@@ -117,13 +117,6 @@ Licenses:
 서버에 라이센스를 할당합니다.
 
 <details markdown="1" open>
-<summary><strong>엔드포인트</strong></summary>
-
-`POST /api/licenses/assign`
-
-</details>
-
-<details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
@@ -176,13 +169,6 @@ zdm-cli license assign --license 3 --server app-server-01
 ### `license regist` {#license-regist}
 
 라이센스를 등록합니다.
-
-<details markdown="1" open>
-<summary><strong>엔드포인트</strong></summary>
-
-`POST /api/licenses`
-
-</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -252,9 +238,8 @@ zdm-cli license regist \
 
 | 타입 | 설명 | 용도 |
 |------|------|------|
-| `backup` | 백업 라이센스 | Source 서버 백업 작업용 |
-| `recovery` | 복구 라이센스 | Target 서버 복구 작업용 |
-| `full` | 전체 라이센스 | 백업 및 복구 모두 사용 가능 |
+| `backup` | 백업 라이센스 | 서버 백업 작업용 |
+| `recovery` | 복구 라이센스 | 서버 복구 작업용 |
 
 </details>
 
@@ -329,115 +314,6 @@ zdm-cli license list --output json
 
 ---
 
-## 라이센스 할당 관리
-
-<details markdown="1" open>
-<summary><strong>할당 워크플로우</strong></summary>
-
-**1단계: 사용 가능한 라이센스 확인**
-```bash
-zdm-cli license list
-```
-
-**2단계: 할당 대상 서버 확인**
-```bash
-zdm-cli server list --mode source --license-un-assign-only
-```
-
-**3단계: 라이센스 할당**
-```bash
-zdm-cli license assign --license 1 --server web-server-01
-```
-
-**4단계: 할당 확인**
-```bash
-zdm-cli license list --license-id 1
-zdm-cli server list --name web-server-01
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>할당 해제</strong></summary>
-
-현재 CLI에서는 직접 할당 해제 기능을 제공하지 않습니다. 웹 포털을 사용하거나 API를 직접 호출해야 합니다.
-
-**API 호출 예시:**
-```bash
-curl -X DELETE \
-  -H "Authorization: Bearer <token>" \
-  http://<zdm-ip>:<port>/api/licenses/assign/<license-id>
-```
-
-</details>
-
----
-
-## 사용 시나리오
-
-<details markdown="1" open>
-<summary><strong>신규 라이센스 등록 및 할당</strong></summary>
-
-```bash
-# 1. 라이센스 등록
-zdm-cli license regist \
-  --center zdm-center-01 \
-  --key LICENSE-KEY-NEW-12345 \
-  --name "New Production License" \
-  --user admin@example.com
-
-# 2. 등록된 라이센스 확인 (ID 확인)
-zdm-cli license list
-
-# 3. 할당 대상 서버 확인
-zdm-cli server list --mode source --license-un-assign-only
-
-# 4. 라이센스 할당
-zdm-cli license assign --license <new-license-id> --server web-server-01
-
-# 5. 할당 확인
-zdm-cli server list --name web-server-01
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>만료 예정 라이센스 확인</strong></summary>
-
-```bash
-# 모든 라이센스 조회
-zdm-cli license list --output json
-
-# 특정 날짜 전 만료 라이센스 확인
-zdm-cli license list --expiration-date 2025-03-31
-
-# Table 형식으로 한눈에 확인
-zdm-cli license list --output table
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>라이센스 재할당</strong></summary>
-
-```bash
-# 1. 현재 할당 상태 확인
-zdm-cli license list --license-id 1
-
-# 2. 할당 해제 (웹 포털 또는 API 사용)
-# curl -X DELETE ...
-
-# 3. 새로운 서버에 할당
-zdm-cli license assign --license 1 --server new-server-01
-
-# 4. 확인
-zdm-cli license list --license-id 1
-```
-
-</details>
-
----
-
 ## 출력 형식
 
 <details markdown="1" open>
@@ -468,97 +344,3 @@ zdm-cli license list --output table
 </details>
 
 ---
-
-## 문제 해결
-
-<details markdown="1" open>
-<summary><strong>라이센스 등록 실패</strong></summary>
-
-**원인:**
-- 유효하지 않은 라이센스 키
-- 이미 등록된 라이센스
-- ZDM 센터 연결 문제
-- 권한 부족
-
-**해결 방법:**
-```bash
-# ZDM 센터 연결 확인
-zdm-cli zdm list
-
-# 라이센스 키 재확인
-zdm-cli license regist --center zdm-center-01 --key <correct-key>
-
-# 이미 등록된 라이센스 확인
-zdm-cli license list
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>라이센스 할당 실패</strong></summary>
-
-**원인:**
-- 라이센스가 이미 다른 서버에 할당됨
-- 서버가 존재하지 않음
-- 라이센스 타입 불일치
-
-**해결 방법:**
-```bash
-# 라이센스 상태 확인
-zdm-cli license list --license-id 1
-
-# 서버 존재 확인
-zdm-cli server list --name web-server-01
-
-# 라이센스 타입과 서버 모드 확인
-zdm-cli license list --license-id 1
-zdm-cli server list --name web-server-01
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>만료된 라이센스</strong></summary>
-
-**증상:**
-```text
-Status: Expired
-```
-
-**해결 방법:**
-1. 새 라이센스 키 발급
-2. 새 라이센스 등록
-```bash
-zdm-cli license regist --center zdm-center-01 --key NEW-LICENSE-KEY
-```
-3. 기존 서버에 새 라이센스 할당
-```bash
-zdm-cli license assign --license <new-id> --server web-server-01
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>라이센스 없이 백업 시도</strong></summary>
-
-**증상:**
-```text
-Error: No valid license assigned to server
-```
-
-**해결 방법:**
-```bash
-# 1. 서버 확인
-zdm-cli server list --name web-server-01
-
-# 2. 사용 가능한 라이센스 확인
-zdm-cli license list
-
-# 3. 라이센스 할당
-zdm-cli license assign --license 1 --server web-server-01
-
-# 4. 백업 재시도
-zdm-cli backup regist --server web-server-01 --mode full
-```
-
-</details>

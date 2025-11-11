@@ -126,19 +126,36 @@ zdm-cli config set --zdm-ip 192.168.1.100 --zdm-id zdm-center-01 --zdm-repo-id 1
 
 ```json
 {
-  "zdmIpAddress": "192.168.1.100",
-  "zdmApiPort": 53307,
-  "zdmId": "zdm-center-01",
-  "zdmRepoId": 1,
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "type": "",
+  "zconverter_dir_path": "",
+  "token": "abcdefg...",
+  "user": {
+    "mail": "user@zconverter.com"
+  },
+  "zdm": {
+    "ip": "127.0.0.1",
+    "port": 53307,
+    "id": 1,
+    "repository": {
+      "id": 2,
+      "path": ""
+    },
+    "zos_repository": {
+      "id": null,
+      "platform": ""
+    }
+  }
 }
 ```
 
 **필드 설명:**
-- `zdmIpAddress`: ZDM 서버의 IP 주소
-- `zdmApiPort`: ZDM API 서버 포트 (기본값: 53307)
-- `zdmId`: 기본으로 사용할 ZDM Center ID
-- `zdmRepoId`: 기본으로 사용할 Repository ID
+- `zdm.ip`: ZDM 서버의 IP 주소
+- `zdm.port`: ZDM API 서버 포트 (기본값: 53307)
+- `zdm.id`: 기본으로 사용할 ZDM Center ID
+- `zdm.repository.id`: 기본으로 사용할 Repository ID
+- `zdm.repository.path`: 기본으로 사용할 Repository Path
+- `zdm.zos_repository.id`: 기본으로 사용할 Repository ID
+- `zdm.zos_repository.platform`: 기본으로 사용할 Object Storage 제공 Platform
 - `token`: 인증 토큰 (자동 저장)
 
 </details>
@@ -190,68 +207,9 @@ zdm-cli config set --zdm-repo-id 1
 zdm-cli config show
 ```
 
-**환경별 설정:**
-- 개발 환경과 운영 환경의 설정을 분리하여 관리
-- 환경 변수를 사용하여 동적으로 설정 변경 가능
-
 </details>
-
-<details markdown="1" open>
-<summary><strong>설정 백업</strong></summary>
-
-```bash
-# Linux/macOS
-cp ~/.zdm-cli/config.json ~/.zdm-cli/config.json.backup
-
-# Windows
-copy %USERPROFILE%\.zdm-cli\config.json %USERPROFILE%\.zdm-cli\config.json.backup
-```
-
-</details>
-
 ---
 
-## 문제 해결
+## 참고사항
 
-<details markdown="1" open>
-<summary><strong>설정 파일이 없는 경우</strong></summary>
-
-CLI를 처음 실행하면 자동으로 설정 디렉토리와 파일이 생성됩니다.
-
-```bash
-# 토큰 발급 시 자동으로 설정 파일 생성
-zdm-cli token issue -m admin@example.com -p password
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>설정 초기화</strong></summary>
-
-```bash
-# Linux/macOS
-rm -rf ~/.zdm-cli/
-
-# Windows
-rmdir /s %USERPROFILE%\.zdm-cli\
-```
-
-설정 파일 삭제 후 다시 토큰 발급부터 시작하세요.
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>연결 오류</strong></summary>
-
-```bash
-# 현재 설정 확인
-zdm-cli config show
-
-# IP 주소가 올바른지 확인
-ping <zdm-ip-address>
-
-# 포트가 열려있는지 확인
-telnet <zdm-ip-address> 53307
-```
-
-</details>
+- CLI를 처음 실행하면 자동으로 설정 디렉토리와 파일이 생성됩니다.

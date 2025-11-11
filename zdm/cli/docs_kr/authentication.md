@@ -49,7 +49,7 @@ API 접근을 위한 인증 토큰을 발급받습니다.
 # 기본 사용
 zdm-cli token issue -m admin@example.com -p password
 
-# 이메일 입력 없이 (프롬프트로 입력)
+# 이메일 입력 없이 (config.json 파일입력값 자동으로 가져감)
 zdm-cli token issue -p password
 ```
 
@@ -104,47 +104,28 @@ zdm-cli token issue -p password
 
 ```json
 {
-  "zdmIpAddress": "192.168.1.100",
-  "zdmApiPort": 53307,
-  "zdmId": "zdm-center-01",
-  "zdmRepoId": 1,
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "type": "",
+  "zconverter_dir_path": "",
+  "token": "abcdefg...",
+  "user": {
+    "mail": "user@zconverter.com"
+  },
+  "zdm": {
+    "ip": "127.0.0.1",
+    "port": 53307,
+    "id": 1,
+    "repository": {
+      "id": 2,
+      "path": ""
+    },
+    "zos_repository": {
+      "id": null,
+      "platform": ""
+    }
+  }
 }
 ```
 
 </details>
 
 ---
-
-## 문제 해결
-
-<details markdown="1" open>
-<summary><strong>인증 오류 해결</strong></summary>
-
-토큰이 만료되었거나 유효하지 않은 경우:
-
-```bash
-# 토큰 재발급
-zdm-cli token issue -m your-email@example.com -p your-password
-```
-
-**일반적인 인증 오류:**
-- 잘못된 이메일 또는 비밀번호
-- 토큰 만료
-- 네트워크 연결 문제
-- ZDM 서버 접근 불가
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>연결 오류 해결</strong></summary>
-
-```bash
-# ZDM IP 주소 확인
-zdm-cli config show
-
-# ZDM IP 주소 재설정
-zdm-cli config set --zdm-ip 192.168.1.100
-```
-
-</details>

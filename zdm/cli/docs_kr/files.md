@@ -135,13 +135,6 @@ Total: 2 files
 파일을 서버에 업로드합니다.
 
 <details markdown="1" open>
-<summary><strong>엔드포인트</strong></summary>
-
-`POST /api/files/upload`
-
-</details>
-
-<details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
@@ -194,13 +187,6 @@ zdm-cli file upload --file-path ./configs/backup-config.json
 ### `file download` {#file-download}
 
 서버에서 파일을 다운로드합니다.
-
-<details markdown="1" open>
-<summary><strong>엔드포인트</strong></summary>
-
-`GET /api/files/download/{fileName}`
-
-</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -289,7 +275,7 @@ zdm-cli file list
 
 ---
 
-## 파일 타입 및 용도
+<!-- ## 파일 타입 및 용도
 
 <details markdown="1" open>
 <summary><strong>지원 파일 타입</strong></summary>
@@ -317,7 +303,7 @@ zdm-cli file list
 </details>
 
 <details markdown="1" open>
-<summary><strong>파일 용도</strong></summary>
+<summary><strong>파일 용도</strong></summary>CLI를 처음 실행하면 자동으로 설정 디렉토리와 파일이 생성됩니다.
 
 **스크립트 실행:**
 백업/복구 작업 전후에 실행할 스크립트를 업로드합니다.
@@ -517,140 +503,4 @@ zdm-cli file upload --file-path ./pre-backup.sh
 
 </details>
 
----
-
-## 문제 해결
-
-<details markdown="1" open>
-<summary><strong>파일 업로드 실패</strong></summary>
-
-**원인:**
-- 파일 크기 초과
-- 네트워크 타임아웃
-- 디스크 공간 부족
-- 권한 문제
-
-**해결 방법:**
-```bash
-# 파일 크기 확인
-ls -lh ./file.tar.gz
-
-# 네트워크 연결 확인
-zdm-cli config show
-
-# 서버 상태 확인
-zdm-cli zdm list
-
-# 재시도
-zdm-cli file upload --file-path ./file.tar.gz
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>파일 다운로드 실패</strong></summary>
-
-**원인:**
-- 파일이 존재하지 않음
-- 네트워크 문제
-- 디스크 공간 부족
-
-**해결 방법:**
-```bash
-# 파일 목록 확인
-zdm-cli file list
-
-# 올바른 파일명으로 다운로드
-zdm-cli file download --file-name correct-filename.tar.gz
-
-# 디스크 공간 확인
-df -h
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>파일 목록 조회 실패</strong></summary>
-
-**원인:**
-- 인증 토큰 만료
-- ZDM 서버 연결 끊김
-- 권한 문제
-
-**해결 방법:**
-```bash
-# 토큰 재발급
-zdm-cli token issue -m admin@example.com -p password
-
-# ZDM 연결 확인
-zdm-cli zdm list
-
-# 파일 목록 재조회
-zdm-cli file list
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>진행률 표시 안됨</strong></summary>
-
-**원인:**
-- 터미널 호환성 문제
-- 파일 크기가 너무 작음
-
-**해결 방법:**
-- 진행률이 표시되지 않아도 다운로드는 정상 진행
-- JSON 형식으로 결과 확인:
-```bash
-zdm-cli file list --output json
-```
-
-</details>
-
----
-
-## 파일 정리
-
-<details markdown="1" open>
-<summary><strong>오래된 파일 관리</strong></summary>
-
-현재 CLI에서는 직접 파일 삭제 기능을 제공하지 않습니다. 웹 포털을 사용하거나 API를 직접 호출해야 합니다.
-
-**API 호출 예시:**
-```bash
-curl -X DELETE \
-  -H "Authorization: Bearer <token>" \
-  http://<zdm-ip>:<port>/api/files/<filename>
-```
-
-**권장사항:**
-- 정기적으로 파일 목록 확인
-- 불필요한 파일은 웹 포털에서 삭제
-- 중요 파일은 로컬에 백업 보관
-
-</details>
-
----
-
-## 출력 형식
-
-<details markdown="1" open>
-<summary><strong>출력 옵션</strong></summary>
-
-```bash
-# Text 형식 (기본값)
-zdm-cli file list
-
-# JSON 형식 (스크립트 처리용)
-zdm-cli file list --output json
-
-# Table 형식 (가독성)
-zdm-cli file list --output table
-```
-
-**출력 형식 선택 가이드:**
-- `text`: 일반 사용자, 간단한 확인
-- `json`: 스크립트 자동화, 데이터 파싱
-- `table`: 많은 파일 비교, 한눈에 확인
-
-</details>
+--- -->

@@ -185,66 +185,39 @@ zdm-cli backup list --server user@example.com
 
 ```json
 {
-  "zdmIpAddress": "192.168.1.100",
-  "zdmApiPort": 53307,
-  "zdmId": "zdm-center-01",
-  "zdmRepoId": 1,
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "type": "",
+  "zconverter_dir_path": "",
+  "token": "abcdefg...",
+  "user": {
+    "mail": "user@zconverter.com"
+  },
+  "zdm": {
+    "ip": "127.0.0.1",
+    "port": 53307,
+    "id": 1,
+    "repository": {
+      "id": 2,
+      "path": ""
+    },
+    "zos_repository": {
+      "id": null,
+      "platform": ""
+    }
+  }
 }
 ```
 
 **필드 설명:**
-- `zdmIpAddress`: ZDM 서버 IP 주소
-- `zdmApiPort`: ZDM API 포트 번호
-- `zdmId`: ZDM Center ID
-- `zdmRepoId`: 기본 Repository ID
-- `token`: 인증 토큰
+- `zdm.ip`: ZDM 서버의 IP 주소
+- `zdm.port`: ZDM API 서버 포트 (기본값: 53307)
+- `zdm.id`: 기본으로 사용할 ZDM Center ID
+- `zdm.repository.id`: 기본으로 사용할 Repository ID
+- `zdm.repository.path`: 기본으로 사용할 Repository Path
+- `zdm.zos_repository.id`: 기본으로 사용할 Repository ID
+- `zdm.zos_repository.platform`: 기본으로 사용할 Object Storage 제공 Platform
+- `token`: 인증 토큰 (자동 저장)
 
 </details>
-
----
-
-## 문제 해결
-
-### 인증 오류
-
-<details markdown="1" open>
-<summary><strong>해결 방법</strong></summary>
-
-```bash
-# 토큰 재발급
-zdm-cli token issue -m your-email@example.com -p your-password
-```
-
-</details>
-
-### 연결 오류
-
-<details markdown="1" open>
-<summary><strong>해결 방법</strong></summary>
-
-```bash
-# ZDM IP 주소 확인
-zdm-cli config show
-
-# ZDM IP 주소 재설정
-zdm-cli config set --zdm-ip 192.168.1.100
-```
-
-</details>
-
-### 디버그 모드
-
-<details markdown="1" open>
-<summary><strong>활성화 방법</strong></summary>
-
-```bash
-# 환경 변수로 로그 레벨 설정
-LOG_LEVEL=debug zdm-cli backup list
-```
-
-</details>
-
 ---
 
 ## 참고사항
