@@ -27,11 +27,20 @@ sidebar:
         url: "/zdm/api/docs_kr/licenses"
       - title: "ZDM Center Management"
         url: "/zdm/api/docs_kr/zdm-centers"
+        sublinks:
+          - title: "ZDM 센터 목록 조회"
+            url: "/zdm/api/docs_kr/zdm-centers#get-zdms"
+          - title: "특정 ZDM 센터 조회"
+            url: "/zdm/api/docs_kr/zdm-centers#get-zdm"
+          - title: "ZDM 센터 레포지토리"
+            url: "/zdm/api/docs_kr/zdm-centers#get-zdm-repositories"
+          - title: "전체 레포지토리 조회"
+            url: "/zdm/api/docs_kr/zdm-centers#get-repositories"
 ---
 
 ## ZDM Center Management
 
-### GET `/zdms`
+### GET `/zdms` {#get-zdms}
 
 ZDM 센터 목록을 조회합니다.
 
@@ -93,7 +102,7 @@ ZDM 센터 목록을 조회합니다.
 }
 ```
 
-### GET `/zdms/:identifier`
+### GET `/zdms/:identifier` {#get-zdm}
 
 특정 ZDM 센터 정보를 조회합니다.
 
@@ -142,7 +151,7 @@ ZDM 센터 목록을 조회합니다.
 }
 ```
 
-### GET `/zdms/:identifier/repositories`
+### GET `/zdms/:identifier/repositories` {#get-zdm-repositories}
 
 특정 ZDM 센터의 리포지토리 정보를 조회합니다.
 
@@ -186,7 +195,7 @@ ZDM 센터 목록을 조회합니다.
 }
 ```
 
-### GET `/zdms/repositories`
+### GET `/zdms/repositories` {#get-repositories}
 
 모든 ZDM 리포지토리 정보를 조회합니다.
 

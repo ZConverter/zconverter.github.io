@@ -13,6 +13,13 @@ sidebar:
         url: "/zdm/api/docs_kr/authentication"
       - title: "User Management"
         url: "/zdm/api/docs_kr/users"
+        sublinks:
+          - title: "전체 목록 조회"
+            url: "/zdm/api/docs_kr/users#get-users"
+          - title: "특정 사용자 조회"
+            url: "/zdm/api/docs_kr/users#get-user"
+          - title: "사용자 정보 수정"
+            url: "/zdm/api/docs_kr/users#update-user"
       - title: "Server Management"
         url: "/zdm/api/docs_kr/servers"
       - title: "Schedule Management"
@@ -31,7 +38,7 @@ sidebar:
 
 ## User Management
 
-### GET `/users`
+### GET `/users` {#get-users}
 
 사용자 목록을 조회합니다.
 
@@ -65,7 +72,7 @@ sidebar:
 }
 ```
 
-### GET `/users/:identifier`
+### GET `/users/:identifier` {#get-user}
 
 특정 사용자 정보를 조회합니다.
 
@@ -103,7 +110,7 @@ sidebar:
 }
 ```
 
-### PUT `/users/:identifier`
+### PUT `/users/:identifier` {#update-user}
 
 사용자 정보를 업데이트합니다.
 

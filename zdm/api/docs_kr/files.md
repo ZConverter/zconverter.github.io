@@ -23,6 +23,13 @@ sidebar:
         url: "/zdm/api/docs_kr/recoveries"
       - title: "File Management"
         url: "/zdm/api/docs_kr/files"
+        sublinks:
+          - title: "파일 업로드"
+            url: "/zdm/api/docs_kr/files#upload-file"
+          - title: "파일 다운로드"
+            url: "/zdm/api/docs_kr/files#download-file"
+          - title: "파일 목록 조회"
+            url: "/zdm/api/docs_kr/files#list-files"
       - title: "License Management"
         url: "/zdm/api/docs_kr/licenses"
       - title: "ZDM Center Management"
@@ -31,7 +38,7 @@ sidebar:
 
 ## File Management
 
-### POST `/files/upload`
+### POST `/files/upload` {#upload-file}
 
 파일을 업로드합니다.
 
@@ -76,7 +83,7 @@ sidebar:
 - `400` - 잘못된 요청 (파일 크기 초과, 파일 개수 초과 등)
 - `500` - 서버 오류
 
-### GET `/files/download/:fileName`
+### GET `/files/download/:fileName` {#download-file}
 
 파일을 다운로드합니다.
 
@@ -125,7 +132,7 @@ sidebar:
 - `404` - 파일을 찾을 수 없음
 - `500` - 서버 오류
 
-### GET `/files/list`
+### GET `/files/list` {#list-files}
 
 업로드된 파일 목록을 조회합니다.
 

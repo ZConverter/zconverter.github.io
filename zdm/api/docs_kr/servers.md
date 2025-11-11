@@ -15,6 +15,15 @@ sidebar:
         url: "/zdm/api/docs_kr/users"
       - title: "Server Management"
         url: "/zdm/api/docs_kr/servers"
+        sublinks:
+          - title: "서버 목록 조회"
+            url: "/zdm/api/docs_kr/servers#get-servers"
+          - title: "특정 서버 조회"
+            url: "/zdm/api/docs_kr/servers#get-server"
+          - title: "서버 파티션 조회"
+            url: "/zdm/api/docs_kr/servers#get-server-partitions"
+          - title: "전체 파티션 조회"
+            url: "/zdm/api/docs_kr/servers#get-partitions"
       - title: "Schedule Management"
         url: "/zdm/api/docs_kr/schedules"
       - title: "Backup Management"
@@ -31,7 +40,7 @@ sidebar:
 
 ## Server Management
 
-### GET `/servers`
+### GET `/servers` {#get-servers}
 
 서버 목록을 조회합니다.
 
@@ -88,7 +97,7 @@ sidebar:
 }
 ```
 
-### GET `/servers/:identifier`
+### GET `/servers/:identifier` {#get-server}
 
 특정 서버 정보를 조회합니다.
 
@@ -133,7 +142,7 @@ sidebar:
 }
 ```
 
-### GET `/servers/:identifier/partitions`
+### GET `/servers/:identifier/partitions` {#get-server-partitions}
 
 특정 서버의 파티션 정보를 조회합니다.
 
@@ -149,7 +158,7 @@ sidebar:
 |-----------|------|----------|-------------|
 | detail | boolean | Optional | 상세 정보 포함 여부 |
 
-### GET `/servers/partitions`
+### GET `/servers/partitions` {#get-partitions}
 
 모든 서버의 파티션 정보를 조회합니다.
 

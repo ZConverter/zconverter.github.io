@@ -19,6 +19,21 @@ sidebar:
         url: "/zdm/api/docs_kr/schedules"
       - title: "Backup Management"
         url: "/zdm/api/docs_kr/backups"
+        sublinks:
+          - title: "백업 목록 조회"
+            url: "/zdm/api/docs_kr/backups#get-backups"
+          - title: "특정 백업 조회"
+            url: "/zdm/api/docs_kr/backups#get-backup"
+          - title: "백업 생성"
+            url: "/zdm/api/docs_kr/backups#create-backup"
+          - title: "백업 수정"
+            url: "/zdm/api/docs_kr/backups#update-backup"
+          - title: "백업 삭제"
+            url: "/zdm/api/docs_kr/backups#delete-backup"
+          - title: "백업 작업 모니터링"
+            url: "/zdm/api/docs_kr/backups#monitor-backup-job"
+          - title: "시스템 모니터링"
+            url: "/zdm/api/docs_kr/backups#monitor-backup-system"
       - title: "Recovery Management"
         url: "/zdm/api/docs_kr/recoveries"
       - title: "File Management"
@@ -31,7 +46,7 @@ sidebar:
 
 ## Backup Management
 
-### GET `/backups`
+### GET `/backups` {#get-backups}
 
 백업 작업 목록을 조회합니다.
 
@@ -98,7 +113,7 @@ sidebar:
 }
 ```
 
-### GET `/backups/:identifier`
+### GET `/backups/:identifier` {#get-backup}
 
 특정 백업 작업 정보를 조회합니다.
 
@@ -154,7 +169,7 @@ sidebar:
 }
 ```
 
-### POST `/backups`
+### POST `/backups` {#create-backup}
 
 새 백업 작업을 등록합니다.
 
@@ -217,7 +232,7 @@ sidebar:
 }
 ```
 
-### PUT `/backups/:identifier`
+### PUT `/backups/:identifier` {#update-backup}
 
 백업 작업을 수정합니다.
 
@@ -244,7 +259,7 @@ sidebar:
 }
 ```
 
-### DELETE `/backups/:identifier`
+### DELETE `/backups/:identifier` {#delete-backup}
 
 백업 작업을 삭제합니다.
 
@@ -275,7 +290,7 @@ sidebar:
 }
 ```
 
-### GET `/backups/monitoring/job/:identifier`
+### GET `/backups/monitoring/job/:identifier` {#monitor-backup-job}
 
 특정 백업 작업의 모니터링 정보를 조회합니다.
 
@@ -321,7 +336,7 @@ sidebar:
 }
 ```
 
-### GET `/backups/monitoring/system/:identifier`
+### GET `/backups/monitoring/system/:identifier` {#monitor-backup-system}
 
 특정 시스템의 백업 모니터링 정보를 조회합니다.
 

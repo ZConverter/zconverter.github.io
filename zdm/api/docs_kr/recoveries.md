@@ -21,6 +21,21 @@ sidebar:
         url: "/zdm/api/docs_kr/backups"
       - title: "Recovery Management"
         url: "/zdm/api/docs_kr/recoveries"
+        sublinks:
+          - title: "복구 목록 조회"
+            url: "/zdm/api/docs_kr/recoveries#get-recoveries"
+          - title: "특정 복구 조회"
+            url: "/zdm/api/docs_kr/recoveries#get-recovery"
+          - title: "복구 생성"
+            url: "/zdm/api/docs_kr/recoveries#create-recovery"
+          - title: "복구 수정"
+            url: "/zdm/api/docs_kr/recoveries#update-recovery"
+          - title: "복구 삭제"
+            url: "/zdm/api/docs_kr/recoveries#delete-recovery"
+          - title: "복구 작업 모니터링"
+            url: "/zdm/api/docs_kr/recoveries#monitor-recovery-job"
+          - title: "시스템 모니터링"
+            url: "/zdm/api/docs_kr/recoveries#monitor-recovery-system"
       - title: "File Management"
         url: "/zdm/api/docs_kr/files"
       - title: "License Management"
@@ -31,7 +46,7 @@ sidebar:
 
 ## Recovery Management
 
-### GET `/recoveries`
+### GET `/recoveries` {#get-recoveries}
 
 복구 작업 목록을 조회합니다.
 
@@ -98,7 +113,7 @@ sidebar:
 }
 ```
 
-### GET `/recoveries/:identifier`
+### GET `/recoveries/:identifier` {#get-recovery}
 
 특정 복구 작업 정보를 조회합니다.
 
@@ -154,7 +169,7 @@ sidebar:
 }
 ```
 
-### POST `/recoveries`
+### POST `/recoveries` {#create-recovery}
 
 새 복구 작업을 등록합니다.
 
@@ -216,7 +231,7 @@ sidebar:
 }
 ```
 
-### PUT `/recoveries/:identifier`
+### PUT `/recoveries/:identifier` {#update-recovery}
 
 복구 작업을 수정합니다.
 
@@ -243,7 +258,7 @@ sidebar:
 }
 ```
 
-### DELETE `/recoveries/:identifier`
+### DELETE `/recoveries/:identifier` {#delete-recovery}
 
 복구 작업을 삭제합니다.
 
@@ -324,7 +339,7 @@ sidebar:
 - `404` - 작업을 찾을 수 없음
 - `500` - 서버 오류
 
-### GET `/recoveries/monitoring/job/:identifier`
+### GET `/recoveries/monitoring/job/:identifier` {#monitor-recovery-job}
 
 특정 복구 작업의 모니터링 정보를 조회합니다.
 
@@ -371,7 +386,7 @@ sidebar:
 }
 ```
 
-### GET `/recoveries/monitoring/system/:identifier`
+### GET `/recoveries/monitoring/system/:identifier` {#monitor-recovery-system}
 
 특정 시스템의 복구 모니터링 정보를 조회합니다.
 

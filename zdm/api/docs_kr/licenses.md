@@ -25,13 +25,24 @@ sidebar:
         url: "/zdm/api/docs_kr/files"
       - title: "License Management"
         url: "/zdm/api/docs_kr/licenses"
+        sublinks:
+          - title: "라이선스 목록 조회"
+            url: "/zdm/api/docs_kr/licenses#get-licenses"
+          - title: "특정 라이선스 조회"
+            url: "/zdm/api/docs_kr/licenses#get-license"
+          - title: "키로 라이선스 조회"
+            url: "/zdm/api/docs_kr/licenses#get-license-by-key"
+          - title: "라이선스 생성"
+            url: "/zdm/api/docs_kr/licenses#create-license"
+          - title: "라이선스 할당"
+            url: "/zdm/api/docs_kr/licenses#assign-license"
       - title: "ZDM Center Management"
         url: "/zdm/api/docs_kr/zdm-centers"
 ---
 
 ## License Management
 
-### GET `/licenses`
+### GET `/licenses` {#get-licenses}
 
 라이선스 목록을 조회합니다.
 
@@ -74,7 +85,7 @@ sidebar:
 }
 ```
 
-### GET `/licenses/:identifier`
+### GET `/licenses/:identifier` {#get-license}
 
 특정 라이선스 정보를 조회합니다.
 
@@ -121,7 +132,7 @@ sidebar:
 }
 ```
 
-### GET `/licenses/key/:key`
+### GET `/licenses/key/:key` {#get-license-by-key}
 
 키로 라이선스 정보를 조회합니다.
 
@@ -160,7 +171,7 @@ sidebar:
 }
 ```
 
-### POST `/licenses`
+### POST `/licenses` {#create-license}
 
 새 라이선스를 등록합니다.
 
@@ -211,7 +222,7 @@ sidebar:
 - `409` - 라이선스 키 충돌
 - `500` - 서버 오류
 
-### PUT `/licenses/assign`
+### PUT `/licenses/assign` {#assign-license}
 
 라이선스를 서버에 할당합니다.
 

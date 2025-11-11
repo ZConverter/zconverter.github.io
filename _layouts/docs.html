@@ -35,6 +35,15 @@
                     <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>
                       {{ link.title }}
                     </a>
+                    {% if link.sublinks %}
+                      <ul class="sublinks">
+                        {% for sublink in link.sublinks %}
+                          <li>
+                            <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
                   </li>
                 {% endfor %}
               </ul>

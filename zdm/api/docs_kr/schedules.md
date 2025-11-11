@@ -17,6 +17,13 @@ sidebar:
         url: "/zdm/api/docs_kr/servers"
       - title: "Schedule Management"
         url: "/zdm/api/docs_kr/schedules"
+        sublinks:
+          - title: "스케줄 목록 조회"
+            url: "/zdm/api/docs_kr/schedules#get-schedules"
+          - title: "특정 스케줄 조회"
+            url: "/zdm/api/docs_kr/schedules#get-schedule"
+          - title: "스케줄 생성"
+            url: "/zdm/api/docs_kr/schedules#create-schedule"
       - title: "Backup Management"
         url: "/zdm/api/docs_kr/backups"
       - title: "Recovery Management"
@@ -31,7 +38,7 @@ sidebar:
 
 ## Schedule Management
 
-### GET `/schedules`
+### GET `/schedules` {#get-schedules}
 
 스케줄 목록을 조회합니다.
 
@@ -69,7 +76,7 @@ sidebar:
 }
 ```
 
-### GET `/schedules/:identifier`
+### GET `/schedules/:identifier` {#get-schedule}
 
 특정 스케줄 정보를 조회합니다.
 
@@ -104,7 +111,7 @@ sidebar:
 }
 ```
 
-### POST `/schedules`
+### POST `/schedules` {#create-schedule}
 
 새 스케줄을 생성합니다.
 

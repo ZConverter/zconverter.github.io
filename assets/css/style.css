@@ -215,6 +215,29 @@ th {
   font-weight: 500;
 }
 
+/* Sublinks styling */
+.docs-nav ul.sublinks {
+  margin-top: 0.3rem;
+  margin-left: 0.5rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid #ecf0f1;
+}
+
+.docs-nav ul.sublinks li {
+  margin-bottom: 0.2rem;
+}
+
+.docs-nav ul.sublinks li a {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.docs-nav ul.sublinks li a:hover {
+  background-color: #f8f9fa;
+  color: #3498db;
+}
+
 .docs-content {
   flex: 1;
   min-width: 0;

@@ -17,7 +17,9 @@
       "Bash(for file in zdm/api/docs_kr/{users,servers,schedules,backups,recoveries,files,licenses,zdm-centers}.md)",
       "Bash(do echo \"=== $file ===\" head -26 \"$file\")",
       "Bash(lsof:*)",
-      "Bash(xargs kill:*)"
+      "Bash(xargs kill:*)",
+      "Bash(done)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

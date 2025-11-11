@@ -3,8 +3,6 @@ layout: page
 title: ZDM Documentation
 ---
 
-## ZDM DOCS
-
 `zdm-cli`, `zdm-api`에 관련된 문서들을 제공합니다.
 
 ## [ZDM-CLI](/zdm/cli/docs_kr)
