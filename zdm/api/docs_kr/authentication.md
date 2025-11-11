@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: ZDM API RESTful Documentation
+# title: Authentication
 section_title: ZDM API Documentation
 sidebar:
   - title: "API Documentation"
@@ -29,42 +29,44 @@ sidebar:
         url: "/zdm/api/docs_kr/zdm-centers"
 ---
 
-## ZDM API 소개
-
-ZDM-API는 백업, 복구, 시스템 관리를 위한 RESTful API 서버입니다.
-
-### 주요 기능
-
-- **토큰 기반 인증** - 안전한 API 접근 제어
-- **사용자 및 서버 관리** - 시스템 리소스 통합 관리
-- **백업/복구 작업** - 자동화된 데이터 보호
-- **스케줄링** - 정기적인 백업 작업 예약
-- **라이선스 관리** - 라이선스 발급 및 할당
-
-### 시작하기
-
-좌측 사이드바에서 원하는 API 섹션을 선택하여 상세 문서를 확인하세요.
-
-**Base URL**: `/api/v1`
-
-### API 응답 형식
-
-모든 API는 표준 JSON 응답 형식을 사용합니다:
-
-```json
-{
-  "success": true,
-  "requestID": "string",
-  "data": {},
-  "message": "string",
-  "timestamp": "string"
-}
-```
-
-### 인증 방법
+## Authentication
 
 모든 보호된 엔드포인트는 토큰이 필요합니다:
 
 ```text
-Authorization: <token>
+Authorization: Bearer <token>
 ```
+
+## Authentication Endpoints
+
+### POST `/auth/issue`
+
+토큰을 발급합니다.
+
+**Request Body:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| email | string | Required | 사용자 이메일 |
+| password | string | Required | 사용자 비밀번호 |
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "requestID": "req-123",
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIs...",
+    "expiresAt": "2024-12-31T23:59:59.000Z"
+  },
+  "message": "토큰이 성공적으로 발급되었습니다",
+  "timestamp": "2024-01-31T10:30:45.123Z"
+}
+```
+
+**Status Codes:**
+
+- `201` - 토큰 발급 성공
+- `400` - 잘못된 요청 데이터
+- `401` - 인증 실패

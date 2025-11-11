@@ -1,12 +1,16 @@
 ---
 layout: docs
-title: Schedule Management
+# title: Schedule Management
 section_title: ZDM API Documentation
 sidebar:
   - title: "API Documentation"
     links:
-      - title: "Overview & Authentication"
+      - title: "API 소개"
+        url: "/zdm/api/docs_kr"
+      - title: "Overview"
         url: "/zdm/api/docs_kr/overview"
+      - title: "Authentication"
+        url: "/zdm/api/docs_kr/authentication"
       - title: "User Management"
         url: "/zdm/api/docs_kr/users"
       - title: "Server Management"
