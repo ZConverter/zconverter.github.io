@@ -1,9 +1,16 @@
 ---
-layout: page
+layout: docs
 title: ZDM Documentation
+section_title: ZDM Documentation
+sidebar:
+  - title: "ZDM Services"
+    links:
+      - title: "ZDM 홈"
+        url: "/zdm/"
+      - title: "ZDM-API 문서"
+        url: "/zdm/api/docs_kr"
 ---
 
----
 ## ZDM 소개
 
 ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.

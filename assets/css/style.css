@@ -157,6 +157,7 @@ th {
   padding: 2rem 2rem 0 2rem;
   flex: 1;
   align-items: stretch;
+  position: relative;
 }
 
 .docs-sidebar {
