@@ -1,6 +1,6 @@
 ---
 layout: docs
-# title: ZDM Center Management
+title: ZDM Center Management
 section_title: ZDM API Documentation
 sidebar:
   - title: "API Documentation"
@@ -37,8 +37,6 @@ sidebar:
           - title: "전체 레포지토리 조회"
             url: "/zdm/api/docs_kr/zdm-centers#get-repositories"
 ---
-
-## ZDM Center Management
 
 ### GET `/zdms` {#get-zdms}
 

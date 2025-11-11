@@ -1,6 +1,6 @@
 ---
 layout: docs
-# title: User Management
+title: User Management
 section_title: ZDM API Documentation
 sidebar:
   - title: "API Documentation"
@@ -35,8 +35,6 @@ sidebar:
       - title: "ZDM Center Management"
         url: "/zdm/api/docs_kr/zdm-centers"
 ---
-
-## User Management
 
 ### GET `/users` {#get-users}
 

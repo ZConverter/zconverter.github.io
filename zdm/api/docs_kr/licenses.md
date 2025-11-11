@@ -1,6 +1,6 @@
 ---
 layout: docs
-# title: License Management
+title: License Management
 section_title: ZDM API Documentation
 sidebar:
   - title: "API Documentation"
@@ -39,8 +39,6 @@ sidebar:
       - title: "ZDM Center Management"
         url: "/zdm/api/docs_kr/zdm-centers"
 ---
-
-## License Management
 
 ### GET `/licenses` {#get-licenses}
 

@@ -19,7 +19,9 @@
       "Bash(lsof:*)",
       "Bash(xargs kill:*)",
       "Bash(done)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(kill:*)",
+      "Bash(bundle exec jekyll clean:*)"
     ],
     "deny": [],
     "ask": []

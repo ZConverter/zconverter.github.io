@@ -1,6 +1,6 @@
 ---
 layout: docs
-# title: Server Management
+title: Server Management
 section_title: ZDM API Documentation
 sidebar:
   - title: "API Documentation"
@@ -37,8 +37,6 @@ sidebar:
       - title: "ZDM Center Management"
         url: "/zdm/api/docs_kr/zdm-centers"
 ---
-
-## Server Management
 
 ### GET `/servers` {#get-servers}
 

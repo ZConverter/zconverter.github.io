@@ -1,6 +1,6 @@
 ---
 layout: docs
-# title: Recovery Management
+title: Recovery Management
 section_title: ZDM API Documentation
 sidebar:
   - title: "API Documentation"
@@ -43,8 +43,6 @@ sidebar:
       - title: "ZDM Center Management"
         url: "/zdm/api/docs_kr/zdm-centers"
 ---
-
-## Recovery Management
 
 ### GET `/recoveries` {#get-recoveries}
 

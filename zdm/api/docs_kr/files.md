@@ -1,6 +1,6 @@
 ---
 layout: docs
-# title: File Management
+title: File Management
 section_title: ZDM API Documentation
 sidebar:
   - title: "API Documentation"
@@ -35,8 +35,6 @@ sidebar:
       - title: "ZDM Center Management"
         url: "/zdm/api/docs_kr/zdm-centers"
 ---
-
-## File Management
 
 ### POST `/files/upload` {#upload-file}
 
