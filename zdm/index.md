@@ -76,7 +76,3 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 </details>
 
 ---
-
-## 지원
-
-기술 지원이나 문의사항은 [dev@zconverter.com](mailto:dev@zconverter.com)으로 연락주세요.
