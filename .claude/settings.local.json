@@ -23,7 +23,9 @@
       "Bash(kill:*)",
       "Bash(bundle exec jekyll clean:*)",
       "Bash(git ls-tree:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(python3:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []

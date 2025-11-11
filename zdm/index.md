@@ -7,6 +7,8 @@ sidebar:
     links:
       - title: "ZDM 홈"
         url: "/zdm/"
+      - title: "ZDM-CLI 문서"
+        url: "/zdm/cli/docs_kr"
       - title: "ZDM-API 문서"
         url: "/zdm/api/docs_kr"
 ---
@@ -14,14 +16,6 @@ sidebar:
 ## ZDM 소개
 
 ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
-
----
-
-## 제공 서비스
-
-### ZDM-API
-
-백업, 복구, 시스템 관리를 위한 API 서버
 
 <summary><strong>주요 기능</strong></summary>
 
@@ -34,6 +28,30 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 - **라이선스 관리** - 라이선스 발급 및 할당
 - **ZDM 센터** - 멀티 센터 환경 관리
 
+
+---
+
+## 제공 서비스
+
+### ZDM-CLI
+
+백업, 복구, 시스템 관리를 위한 CLI 툴
+
+
+<summary><strong>문서 및 버전 정보</strong></summary>
+
+| 항목 | 내용 |
+|------|------|
+| 문서 | [ZDM-CLI 문서 바로가기](/zdm/cli/docs_kr) |
+| 현재 버전 | 1.0.0 |
+| 최종 업데이트 | {{ site.time | date: "%Y-%m-%d" }} |
+
+---
+
+### ZDM-API
+
+백업, 복구, 시스템 관리를 위한 API 서버
+
 <summary><strong>문서 및 버전 정보</strong></summary>
 
 | 항목 | 내용 |
@@ -44,7 +62,7 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 
 ---
 
-## Quick Start
+### Quick Start
 
 <details markdown="1" open>
 <summary><strong>시작하기</strong></summary>
