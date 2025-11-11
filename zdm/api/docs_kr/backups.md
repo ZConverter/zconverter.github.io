@@ -1,6 +1,28 @@
 ---
-layout: page
+layout: docs
 title: Backup Management
+section_title: ZDM API Documentation
+sidebar:
+  - title: "API Documentation"
+    links:
+      - title: "Overview & Authentication"
+        url: "/zdm/api/docs_kr/overview"
+      - title: "User Management"
+        url: "/zdm/api/docs_kr/users"
+      - title: "Server Management"
+        url: "/zdm/api/docs_kr/servers"
+      - title: "Schedule Management"
+        url: "/zdm/api/docs_kr/schedules"
+      - title: "Backup Management"
+        url: "/zdm/api/docs_kr/backups"
+      - title: "Recovery Management"
+        url: "/zdm/api/docs_kr/recoveries"
+      - title: "File Management"
+        url: "/zdm/api/docs_kr/files"
+      - title: "License Management"
+        url: "/zdm/api/docs_kr/licenses"
+      - title: "ZDM Center Management"
+        url: "/zdm/api/docs_kr/zdm-centers"
 ---
 
 ## Backup Management
