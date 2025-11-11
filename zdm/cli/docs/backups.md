@@ -6,7 +6,7 @@ sidebar:
   - title: "CLI Documentation"
     links:
       - title: "CLI 소개"
-        url: "/zdm/cli/docs"
+        url: "/zdm/cli/index"
       - title: "Overview"
         url: "/zdm/cli/docs/overview"
       - title: "Authentication"

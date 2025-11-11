@@ -6,7 +6,7 @@ sidebar:
   - title: "API Documentation"
     links:
       - title: "API 소개"
-        url: "/zdm/api/docs"
+        url: "/zdm/api/index"
       - title: "Overview"
         url: "/zdm/api/docs/overview"
       - title: "Authentication"
