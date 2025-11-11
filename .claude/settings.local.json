@@ -21,7 +21,8 @@
       "Bash(done)",
       "Bash(curl:*)",
       "Bash(kill:*)",
-      "Bash(bundle exec jekyll clean:*)"
+      "Bash(bundle exec jekyll clean:*)",
+      "Bash(git ls-tree:*)"
     ],
     "deny": [],
     "ask": []

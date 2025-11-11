@@ -1,6 +1,6 @@
 ---
 layout: docs
-# title: Authentication
+title: Authentication
 section_title: ZDM API Documentation
 sidebar:
   - title: "API Documentation"
@@ -11,6 +11,9 @@ sidebar:
         url: "/zdm/api/docs_kr/overview"
       - title: "Authentication"
         url: "/zdm/api/docs_kr/authentication"
+        sublinks:
+          - title: "토큰 발급"
+            url: "/zdm/api/docs_kr/authentication#token-issue"
       - title: "User Management"
         url: "/zdm/api/docs_kr/users"
       - title: "Server Management"
@@ -29,8 +32,6 @@ sidebar:
         url: "/zdm/api/docs_kr/zdm-centers"
 ---
 
-## Authentication
-
 모든 보호된 엔드포인트는 토큰이 필요합니다:
 
 ```text
@@ -39,7 +40,7 @@ Authorization: Bearer <token>
 
 ## Authentication Endpoints
 
-### POST `/auth/issue`
+### POST `/auth/issue` {#token-issue}
 
 토큰을 발급합니다.
 
