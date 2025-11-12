@@ -25,7 +25,8 @@
       "Bash(git ls-tree:*)",
       "Bash(pkill:*)",
       "Bash(python3:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []
