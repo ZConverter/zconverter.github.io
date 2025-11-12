@@ -2,36 +2,7 @@
 layout: docs
 title: Config Management
 section_title: ZDM CLI Documentation
-sidebar:
-  - title: "CLI Documentation"
-    links:
-      - title: "CLI 소개"
-        url: "/zdm/cli/index"
-      - title: "Overview"
-        url: "/zdm/cli/docs/overview"
-      - title: "Authentication"
-        url: "/zdm/cli/docs/authentication"
-      - title: "Config Management"
-        url: "/zdm/cli/docs/config"
-        sublinks:
-          - title: "설정 조회"
-            url: "/zdm/cli/docs/config#config-show"
-          - title: "설정 변경"
-            url: "/zdm/cli/docs/config#config-set"
-      - title: "ZDM Center Management"
-        url: "/zdm/cli/docs/zdm-centers"
-      - title: "Server Management"
-        url: "/zdm/cli/docs/servers"
-      - title: "License Management"
-        url: "/zdm/cli/docs/licenses"
-      - title: "Backup Management"
-        url: "/zdm/cli/docs/backups"
-      - title: "Recovery Management"
-        url: "/zdm/cli/docs/recoveries"
-      - title: "Schedule Management"
-        url: "/zdm/cli/docs/schedules"
-      - title: "File Management"
-        url: "/zdm/cli/docs/files"
+navigation: cli
 ---
 
 CLI 환경 설정을 관리합니다. 설정된 값은 이후 명령 실행 시 기본값으로 사용됩니다.

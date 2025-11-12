@@ -2,42 +2,7 @@
 layout: docs
 title: License Management
 section_title: ZDM API Documentation
-sidebar:
-  - title: "API Documentation"
-    links:
-      - title: "API 소개"
-        url: "/zdm/api/index"
-      - title: "Overview"
-        url: "/zdm/api/docs/overview"
-      - title: "Authentication"
-        url: "/zdm/api/docs/authentication"
-      - title: "User Management"
-        url: "/zdm/api/docs/users"
-      - title: "Server Management"
-        url: "/zdm/api/docs/servers"
-      - title: "Schedule Management"
-        url: "/zdm/api/docs/schedules"
-      - title: "Backup Management"
-        url: "/zdm/api/docs/backups"
-      - title: "Recovery Management"
-        url: "/zdm/api/docs/recoveries"
-      - title: "File Management"
-        url: "/zdm/api/docs/files"
-      - title: "License Management"
-        url: "/zdm/api/docs/licenses"
-        sublinks:
-          - title: "라이선스 목록 조회"
-            url: "/zdm/api/docs/licenses#get-licenses"
-          - title: "특정 라이선스 조회"
-            url: "/zdm/api/docs/licenses#get-license"
-          - title: "키로 라이선스 조회"
-            url: "/zdm/api/docs/licenses#get-license-by-key"
-          - title: "라이선스 생성"
-            url: "/zdm/api/docs/licenses#create-license"
-          - title: "라이선스 할당"
-            url: "/zdm/api/docs/licenses#assign-license"
-      - title: "ZDM Center Management"
-        url: "/zdm/api/docs/zdm-centers"
+navigation: api
 ---
 
 ### GET `/licenses` {#get-licenses}

@@ -2,31 +2,7 @@
 layout: docs
 title: Overview
 section_title: ZDM CLI Documentation
-sidebar:
-  - title: "CLI Documentation"
-    links:
-      - title: "CLI 소개"
-        url: "/zdm/cli/index"
-      - title: "Overview"
-        url: "/zdm/cli/docs/overview"
-      - title: "Authentication"
-        url: "/zdm/cli/docs/authentication"
-      - title: "Config Management"
-        url: "/zdm/cli/docs/config"
-      - title: "ZDM Center Management"
-        url: "/zdm/cli/docs/zdm-centers"
-      - title: "Server Management"
-        url: "/zdm/cli/docs/servers"
-      - title: "License Management"
-        url: "/zdm/cli/docs/licenses"
-      - title: "Backup Management"
-        url: "/zdm/cli/docs/backups"
-      - title: "Recovery Management"
-        url: "/zdm/cli/docs/recoveries"
-      - title: "Schedule Management"
-        url: "/zdm/cli/docs/schedules"
-      - title: "File Management"
-        url: "/zdm/cli/docs/files"
+navigation: cli
 ---
 
 ## 기본 사용법

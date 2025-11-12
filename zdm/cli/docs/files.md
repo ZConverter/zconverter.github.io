@@ -2,38 +2,7 @@
 layout: docs
 title: File Management
 section_title: ZDM CLI Documentation
-sidebar:
-  - title: "CLI Documentation"
-    links:
-      - title: "CLI 소개"
-        url: "/zdm/cli/index"
-      - title: "Overview"
-        url: "/zdm/cli/docs/overview"
-      - title: "Authentication"
-        url: "/zdm/cli/docs/authentication"
-      - title: "Config Management"
-        url: "/zdm/cli/docs/config"
-      - title: "ZDM Center Management"
-        url: "/zdm/cli/docs/zdm-centers"
-      - title: "Server Management"
-        url: "/zdm/cli/docs/servers"
-      - title: "License Management"
-        url: "/zdm/cli/docs/licenses"
-      - title: "Backup Management"
-        url: "/zdm/cli/docs/backups"
-      - title: "Recovery Management"
-        url: "/zdm/cli/docs/recoveries"
-      - title: "Schedule Management"
-        url: "/zdm/cli/docs/schedules"
-      - title: "File Management"
-        url: "/zdm/cli/docs/files"
-        sublinks:
-          - title: "파일 목록 조회"
-            url: "/zdm/cli/docs/files#file-list"
-          - title: "파일 업로드"
-            url: "/zdm/cli/docs/files#file-upload"
-          - title: "파일 다운로드"
-            url: "/zdm/cli/docs/files#file-download"
+navigation: cli
 ---
 
 파일을 업로드, 다운로드, 조회합니다.

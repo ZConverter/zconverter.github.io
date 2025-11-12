@@ -2,42 +2,7 @@
 layout: docs
 title: Backup Management
 section_title: ZDM CLI Documentation
-sidebar:
-  - title: "CLI Documentation"
-    links:
-      - title: "CLI 소개"
-        url: "/zdm/cli/index"
-      - title: "Overview"
-        url: "/zdm/cli/docs/overview"
-      - title: "Authentication"
-        url: "/zdm/cli/docs/authentication"
-      - title: "Config Management"
-        url: "/zdm/cli/docs/config"
-      - title: "ZDM Center Management"
-        url: "/zdm/cli/docs/zdm-centers"
-      - title: "Server Management"
-        url: "/zdm/cli/docs/servers"
-      - title: "License Management"
-        url: "/zdm/cli/docs/licenses"
-      - title: "Backup Management"
-        url: "/zdm/cli/docs/backups"
-        sublinks:
-          - title: "백업 목록 조회"
-            url: "/zdm/cli/docs/backups#backup-list"
-          - title: "백업 작업 등록"
-            url: "/zdm/cli/docs/backups#backup-regist"
-          - title: "백업 작업 삭제"
-            url: "/zdm/cli/docs/backups#backup-delete"
-          - title: "백업 작업 수정"
-            url: "/zdm/cli/docs/backups#backup-update"
-          - title: "백업 모니터링"
-            url: "/zdm/cli/docs/backups#backup-monit"
-      - title: "Recovery Management"
-        url: "/zdm/cli/docs/recoveries"
-      - title: "Schedule Management"
-        url: "/zdm/cli/docs/schedules"
-      - title: "File Management"
-        url: "/zdm/cli/docs/files"
+navigation: cli
 ---
 
 백업 작업을 등록, 조회, 수정, 삭제하고 모니터링합니다.

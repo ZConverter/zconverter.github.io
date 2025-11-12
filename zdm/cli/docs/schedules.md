@@ -2,40 +2,7 @@
 layout: docs
 title: Schedule Management
 section_title: ZDM CLI Documentation
-sidebar:
-  - title: "CLI Documentation"
-    links:
-      - title: "CLI 소개"
-        url: "/zdm/cli/index"
-      - title: "Overview"
-        url: "/zdm/cli/docs/overview"
-      - title: "Authentication"
-        url: "/zdm/cli/docs/authentication"
-      - title: "Config Management"
-        url: "/zdm/cli/docs/config"
-      - title: "ZDM Center Management"
-        url: "/zdm/cli/docs/zdm-centers"
-      - title: "Server Management"
-        url: "/zdm/cli/docs/servers"
-      - title: "License Management"
-        url: "/zdm/cli/docs/licenses"
-      - title: "Backup Management"
-        url: "/zdm/cli/docs/backups"
-      - title: "Recovery Management"
-        url: "/zdm/cli/docs/recoveries"
-      - title: "Schedule Management"
-        url: "/zdm/cli/docs/schedules"
-        sublinks:
-          - title: "스케줄 조회"
-            url: "/zdm/cli/docs/schedules#schedule-list"
-          - title: "스케줄 등록"
-            url: "/zdm/cli/docs/schedules#schedule-regist"
-          - title: "스케줄 생성"
-            url: "/zdm/cli/docs/schedules#schedule-create"
-          - title: "스케줄 검증"
-            url: "/zdm/cli/docs/schedules#schedule-verify"
-      - title: "File Management"
-        url: "/zdm/cli/docs/files"
+navigation: cli
 ---
 
 스케줄을 생성, 등록, 조회, 검증합니다.

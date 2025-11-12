@@ -2,15 +2,7 @@
 layout: docs
 title: ZDM Documentation
 section_title: ZDM Documentation
-sidebar:
-  - title: "ZDM Services"
-    links:
-      - title: "ZDM 홈"
-        url: "/zdm/"
-      - title: "ZDM-CLI 문서"
-        url: "/zdm/cli/index"
-      - title: "ZDM-API 문서"
-        url: "/zdm/api/index"
+navigation: zdm
 ---
 
 ## ZDM 소개

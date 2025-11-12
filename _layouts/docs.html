@@ -23,8 +23,9 @@
       <nav class="docs-nav">
         <h3>{{ page.section_title | default: "Documentation" }}</h3>
 
-        {% if page.sidebar %}
-          {% for item in page.sidebar %}
+        {% if page.navigation %}
+          {% assign nav_items = site.data.navigation[page.navigation] %}
+          {% for item in nav_items %}
             <div class="nav-section">
               {% if item.title %}
                 <h4>{{ item.title }}</h4>

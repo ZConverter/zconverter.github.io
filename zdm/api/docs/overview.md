@@ -2,31 +2,7 @@
 layout: docs
 title: Overview
 section_title: ZDM API Documentation
-sidebar:
-  - title: "API Documentation"
-    links:
-      - title: "API 소개"
-        url: "/zdm/api/index"
-      - title: "Overview"
-        url: "/zdm/api/docs/overview"
-      - title: "Authentication"
-        url: "/zdm/api/docs/authentication"
-      - title: "User Management"
-        url: "/zdm/api/docs/users"
-      - title: "Server Management"
-        url: "/zdm/api/docs/servers"
-      - title: "Schedule Management"
-        url: "/zdm/api/docs/schedules"
-      - title: "Backup Management"
-        url: "/zdm/api/docs/backups"
-      - title: "Recovery Management"
-        url: "/zdm/api/docs/recoveries"
-      - title: "File Management"
-        url: "/zdm/api/docs/files"
-      - title: "License Management"
-        url: "/zdm/api/docs/licenses"
-      - title: "ZDM Center Management"
-        url: "/zdm/api/docs/zdm-centers"
+navigation: api
 ---
 
 ## 표준 API 응답 형식

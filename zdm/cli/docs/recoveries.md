@@ -2,42 +2,7 @@
 layout: docs
 title: Recovery Management
 section_title: ZDM CLI Documentation
-sidebar:
-  - title: "CLI Documentation"
-    links:
-      - title: "CLI 소개"
-        url: "/zdm/cli/index"
-      - title: "Overview"
-        url: "/zdm/cli/docs/overview"
-      - title: "Authentication"
-        url: "/zdm/cli/docs/authentication"
-      - title: "Config Management"
-        url: "/zdm/cli/docs/config"
-      - title: "ZDM Center Management"
-        url: "/zdm/cli/docs/zdm-centers"
-      - title: "Server Management"
-        url: "/zdm/cli/docs/servers"
-      - title: "License Management"
-        url: "/zdm/cli/docs/licenses"
-      - title: "Backup Management"
-        url: "/zdm/cli/docs/backups"
-      - title: "Recovery Management"
-        url: "/zdm/cli/docs/recoveries"
-        sublinks:
-          - title: "복구 목록 조회"
-            url: "/zdm/cli/docs/recoveries#recovery-list"
-          - title: "복구 작업 등록"
-            url: "/zdm/cli/docs/recoveries#recovery-regist"
-          - title: "복구 작업 삭제"
-            url: "/zdm/cli/docs/recoveries#recovery-delete"
-          - title: "복구 작업 수정"
-            url: "/zdm/cli/docs/recoveries#recovery-update"
-          - title: "복구 모니터링"
-            url: "/zdm/cli/docs/recoveries#recovery-monit"
-      - title: "Schedule Management"
-        url: "/zdm/cli/docs/schedules"
-      - title: "File Management"
-        url: "/zdm/cli/docs/files"
+navigation: cli
 ---
 
 복구 작업을 등록, 조회, 수정, 삭제하고 모니터링합니다.

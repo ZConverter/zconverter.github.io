@@ -2,38 +2,7 @@
 layout: docs
 title: File Management
 section_title: ZDM API Documentation
-sidebar:
-  - title: "API Documentation"
-    links:
-      - title: "API 소개"
-        url: "/zdm/api/index"
-      - title: "Overview"
-        url: "/zdm/api/docs/overview"
-      - title: "Authentication"
-        url: "/zdm/api/docs/authentication"
-      - title: "User Management"
-        url: "/zdm/api/docs/users"
-      - title: "Server Management"
-        url: "/zdm/api/docs/servers"
-      - title: "Schedule Management"
-        url: "/zdm/api/docs/schedules"
-      - title: "Backup Management"
-        url: "/zdm/api/docs/backups"
-      - title: "Recovery Management"
-        url: "/zdm/api/docs/recoveries"
-      - title: "File Management"
-        url: "/zdm/api/docs/files"
-        sublinks:
-          - title: "파일 업로드"
-            url: "/zdm/api/docs/files#upload-file"
-          - title: "파일 다운로드"
-            url: "/zdm/api/docs/files#download-file"
-          - title: "파일 목록 조회"
-            url: "/zdm/api/docs/files#list-files"
-      - title: "License Management"
-        url: "/zdm/api/docs/licenses"
-      - title: "ZDM Center Management"
-        url: "/zdm/api/docs/zdm-centers"
+navigation: api
 ---
 
 ### POST `/files/upload` {#upload-file}

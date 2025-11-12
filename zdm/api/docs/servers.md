@@ -2,40 +2,7 @@
 layout: docs
 title: Server Management
 section_title: ZDM API Documentation
-sidebar:
-  - title: "API Documentation"
-    links:
-      - title: "API 소개"
-        url: "/zdm/api/index"
-      - title: "Overview"
-        url: "/zdm/api/docs/overview"
-      - title: "Authentication"
-        url: "/zdm/api/docs/authentication"
-      - title: "User Management"
-        url: "/zdm/api/docs/users"
-      - title: "Server Management"
-        url: "/zdm/api/docs/servers"
-        sublinks:
-          - title: "서버 목록 조회"
-            url: "/zdm/api/docs/servers#get-servers"
-          - title: "특정 서버 조회"
-            url: "/zdm/api/docs/servers#get-server"
-          - title: "서버 파티션 조회"
-            url: "/zdm/api/docs/servers#get-server-partitions"
-          - title: "전체 파티션 조회"
-            url: "/zdm/api/docs/servers#get-partitions"
-      - title: "Schedule Management"
-        url: "/zdm/api/docs/schedules"
-      - title: "Backup Management"
-        url: "/zdm/api/docs/backups"
-      - title: "Recovery Management"
-        url: "/zdm/api/docs/recoveries"
-      - title: "File Management"
-        url: "/zdm/api/docs/files"
-      - title: "License Management"
-        url: "/zdm/api/docs/licenses"
-      - title: "ZDM Center Management"
-        url: "/zdm/api/docs/zdm-centers"
+navigation: api
 ---
 
 ### GET `/servers` {#get-servers}

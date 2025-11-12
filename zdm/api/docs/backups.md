@@ -2,46 +2,7 @@
 layout: docs
 title: Backup Management
 section_title: ZDM API Documentation
-sidebar:
-  - title: "API Documentation"
-    links:
-      - title: "API 소개"
-        url: "/zdm/api/index"
-      - title: "Overview"
-        url: "/zdm/api/docs/overview"
-      - title: "Authentication"
-        url: "/zdm/api/docs/authentication"
-      - title: "User Management"
-        url: "/zdm/api/docs/users"
-      - title: "Server Management"
-        url: "/zdm/api/docs/servers"
-      - title: "Schedule Management"
-        url: "/zdm/api/docs/schedules"
-      - title: "Backup Management"
-        url: "/zdm/api/docs/backups"
-        sublinks:
-          - title: "백업 목록 조회"
-            url: "/zdm/api/docs/backups#get-backups"
-          - title: "특정 백업 조회"
-            url: "/zdm/api/docs/backups#get-backup"
-          - title: "백업 생성"
-            url: "/zdm/api/docs/backups#create-backup"
-          - title: "백업 수정"
-            url: "/zdm/api/docs/backups#update-backup"
-          - title: "백업 삭제"
-            url: "/zdm/api/docs/backups#delete-backup"
-          - title: "백업 작업 모니터링"
-            url: "/zdm/api/docs/backups#monitor-backup-job"
-          - title: "시스템 모니터링"
-            url: "/zdm/api/docs/backups#monitor-backup-system"
-      - title: "Recovery Management"
-        url: "/zdm/api/docs/recoveries"
-      - title: "File Management"
-        url: "/zdm/api/docs/files"
-      - title: "License Management"
-        url: "/zdm/api/docs/licenses"
-      - title: "ZDM Center Management"
-        url: "/zdm/api/docs/zdm-centers"
+navigation: api
 ---
 
 ### GET `/backups` {#get-backups}
