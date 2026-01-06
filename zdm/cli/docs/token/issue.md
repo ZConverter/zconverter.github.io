@@ -67,7 +67,7 @@ zdm-cli token issue -p password
 
 ## 토큰 저장
 
-발급된 토큰은 자동으로 CLI 설정 파일에 저장됩니다.
+- 발급된 토큰은 자동으로 CLI 설정 파일에 저장됩니다.
 
 <details markdown="1" open>
 <summary><strong>설정 파일 위치</strong></summary>

@@ -47,36 +47,18 @@ bundle exec jekyll serve
 bundle exec jekyll serve --host 0.0.0.0 --port 4000
 ```
 
-### 라이브 리로드 사용
-
-파일 변경 시 브라우저가 자동으로 새로고침됩니다:
-
-```bash
-bundle exec jekyll serve --livereload
-```
-
-### 증분 빌드 (빠른 재빌드)
-
-```bash
-bundle exec jekyll serve --incremental
-```
-
-### 증분, 라이브 리로드 함께 사용 (권장)
+### 증분, 라이브 리로드 함께 사용 (권장, 파일변경시 자동 재빌드)
 ```bash
 bundle exec jekyll serve --livereload --incremental
-```
 
+--incremental: 증분 빌드 (빠른 재빌드)
+--livereload: 라이브 리로드 사용
+```
 
 ### 초안(draft) 포함하여 보기
 
 ```bash
 bundle exec jekyll serve --drafts
-```
-
-### 특정 포트 사용
-
-```bash
-bundle exec jekyll serve --port 4001
 ```
 
 ## 서버 관리
