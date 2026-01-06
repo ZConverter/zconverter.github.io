@@ -28,26 +28,44 @@
           {% for item in nav_items %}
             <div class="nav-section">
               {% if item.title %}
-                <h4>{{ item.title }}</h4>
-              {% endif %}
-              <ul>
+                {% assign is_active_section = false %}
                 {% for link in item.links %}
-                  <li>
-                    <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>
-                      {{ link.title }}
-                    </a>
-                    {% if link.sublinks %}
-                      <ul class="sublinks">
-                        {% for sublink in link.sublinks %}
-                          <li>
-                            <a href="{{ sublink.url }}">{{ sublink.title }}</a>
-                          </li>
-                        {% endfor %}
-                      </ul>
-                    {% endif %}
-                  </li>
+                  {% if page.url == link.url %}
+                    {% assign is_active_section = true %}
+                  {% endif %}
                 {% endfor %}
-              </ul>
+                <details {% if is_active_section %}open{% endif %}>
+                  <summary>{{ item.title }}</summary>
+                  <ul>
+                    {% for link in item.links %}
+                      <li>
+                        <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>
+                          {{ link.title }}
+                        </a>
+                        {% if link.sublinks %}
+                          <ul class="sublinks">
+                            {% for sublink in link.sublinks %}
+                              <li>
+                                <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </details>
+              {% else %}
+                <ul>
+                  {% for link in item.links %}
+                    <li>
+                      <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>
+                        {{ link.title }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
             </div>
           {% endfor %}
         {% endif %}

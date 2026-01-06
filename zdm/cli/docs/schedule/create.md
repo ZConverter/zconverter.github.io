@@ -1,102 +1,15 @@
 ---
 layout: docs
-title: Schedule Management
+title: schedule create
 section_title: ZDM CLI Documentation
 navigation: cli
 ---
 
-스케줄을 생성, 등록, 조회, 검증합니다.
+스케줄 데이터를 생성합니다. (JSON 파일 생성)
 
 ---
 
-## Schedule Commands
-
-### `schedule list` {#schedule-list}
-
-> * 스케줄 목록을 조회합니다.
-
-<details markdown="1" open>
-<summary><strong>명령어 구문</strong></summary>
-
-<div class="command-card">
-  <code>zdm-cli schedule list [options]</code>
-</div>
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>사용 예시</strong></summary>
-
-```bash
-# 전체 스케줄 목록 조회
-zdm-cli schedule list
-
-# 특정 스케줄 조회 (ID)
-zdm-cli schedule list --id 1
-
-# 스케줄 타입으로 필터링
-zdm-cli schedule list --type 3
-
-# 스케줄 상태로 필터링
-zdm-cli schedule list --state active
-
-# 여러 필터 조합
-zdm-cli schedule list --type 3 --state active --output table
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>파라미터</strong></summary>
-
-| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
-|----------|------|------|------|--------|------|--------|
-| `--id` | - | number | Optional | - | 스케줄 ID | - |
-| `--type` | - | number | Optional | - | 스케줄 타입 번호 | 0~11 |
-| `--state` | - | string | Optional | - | 스케줄 상태 | - |
-
-</details>
-
----
-
-### `schedule regist` {#schedule-regist}
-
-> * 새로운 스케줄을 등록합니다.
-
-<details markdown="1" open>
-<summary><strong>명령어 구문</strong></summary>
-
-<div class="command-card">
-  <code>zdm-cli schedule regist --path &lt;path&gt;</code>
-</div>
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>사용 예시</strong></summary>
-
-```bash
-# JSON 파일로 스케줄 등록
-zdm-cli schedule regist --path ./schedules/daily-schedule.json
-
-# 다른 경로의 스케줄 파일 등록
-zdm-cli schedule regist --path /etc/zdm/schedules/backup-schedule.json
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>파라미터</strong></summary>
-
-| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
-|----------|------|------|------|--------|------|--------|
-| `--path` | - | string | Required | - | 스케줄 정의 JSON 파일 경로 | - |
-
-</details>
-
----
-
-### `schedule create` {#schedule-create}
+## `schedule create` {#schedule-create}
 
 > * 스케줄 데이터를 생성합니다. (JSON 파일 생성)
 
@@ -157,43 +70,6 @@ zdm-cli schedule create --type 7 --basic-day 1 --basic-time 02:00 --advanced-day
 | `--advanced-time` | `at` | string | Optional | - | Advanced Schedule - 시간 설정 (Smart Schedule용) | - |
 | `--advanced-interval-hour` | `aih` | string | Optional | - | Advanced Schedule - 간격 시간 (Smart Schedule용) | - |
 | `--advanced-interval-minute` | `aim` | string | Optional | - | Advanced Schedule - 간격 분 (Smart Schedule용) | - |
-
-</details>
-
----
-
-### `schedule verify` {#schedule-verify}
-
-> * 스케줄 JSON 파일을 검증합니다.
-
-<details markdown="1" open>
-<summary><strong>명령어 구문</strong></summary>
-
-<div class="command-card">
-  <code>zdm-cli schedule verify --path &lt;path&gt;</code>
-</div>
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>사용 예시</strong></summary>
-
-```bash
-# 스케줄 파일 검증
-zdm-cli schedule verify --path ./schedules/daily-schedule.json
-
-# 다른 경로의 스케줄 파일 검증
-zdm-cli schedule verify --path /etc/zdm/schedules/backup-schedule.json
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>파라미터</strong></summary>
-
-| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
-|----------|------|------|------|--------|------|--------|
-| `--path` | `-p` | string | Required | - | 검증할 Schedule File Path | - |
 
 </details>
 
@@ -502,51 +378,6 @@ zdm-cli schedule create \
 **사용 예:**
 - 반기 백업
 - 분기 백업
-
-</details>
-
----
-
-## 스케줄 워크플로우
-
-<details markdown="1" open>
-<summary><strong>스케줄 생성 및 등록</strong></summary>
-
-**1단계: 스케줄 생성**
-```bash
-# 매일 오전 2시 실행 스케줄 생성
-zdm-cli schedule create \
-  --type 3 \
-  --basic-time 02:00 \
-  --path ./daily-schedule.json
-```
-
-**2단계: 스케줄 검증**
-```bash
-# 생성된 스케줄 파일 검증
-zdm-cli schedule verify --path ./daily-schedule.json
-```
-
-**3단계: 스케줄 등록**
-```bash
-# 스케줄을 ZDM에 등록
-zdm-cli schedule regist --path ./daily-schedule.json
-```
-
-**4단계: 등록 확인**
-```bash
-# 등록된 스케줄 확인
-zdm-cli schedule list
-```
-
-**5단계: 백업/복구 작업에 적용**
-```bash
-# 백업 작업에 스케줄 적용
-zdm-cli backup regist \
-  --server web-server-01 \
-  --mode full \
-  --schedule daily-schedule
-```
 
 </details>
 

@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Server Management
+title: server list
 section_title: ZDM CLI Documentation
 navigation: cli
 ---
@@ -9,9 +9,7 @@ navigation: cli
 
 ---
 
-## Server Commands
-
-### `server list` {#server-list}
+## `server list` {#server-list}
 
 > * 서버 목록을 조회합니다.
 
@@ -200,7 +198,7 @@ zdm-cli license assign --license 1 --server web-server-01
 zdm-cli server list --name web-server-01
 ```
 
-자세한 내용은 [License Management](/zdm/cli/docs/licenses) 참조
+자세한 내용은 [license assign](/zdm/cli/docs/license/assign) 참조
 
 </details>
 

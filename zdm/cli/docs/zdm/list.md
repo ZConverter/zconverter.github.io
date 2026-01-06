@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: ZDM Center Management
+title: zdm list
 section_title: ZDM CLI Documentation
 navigation: cli
 ---
@@ -9,9 +9,7 @@ ZDM 센터 정보를 조회하고 관리합니다.
 
 ---
 
-## ZDM Commands
-
-### `zdm list` {#zdm-list}
+## `zdm list` {#zdm-list}
 
 > * ZDM 센터 목록을 조회합니다.
 

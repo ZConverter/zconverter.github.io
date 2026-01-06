@@ -172,6 +172,13 @@ th {
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  /* Hide scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.docs-sidebar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .docs-sidebar h3 {
@@ -184,7 +191,68 @@ th {
 }
 
 .docs-nav .nav-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.docs-nav .nav-section:last-child {
+  border-bottom: none;
+}
+
+/* Collapsible nav section */
+.docs-nav .nav-section details {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  border-left: none;
+}
+
+.docs-nav .nav-section details summary {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.6rem 0.5rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.docs-nav .nav-section details summary::-webkit-details-marker {
+  display: none;
+}
+
+.docs-nav .nav-section details summary::after {
+  content: "▶";
+  font-size: 0.7rem;
+  color: #bdc3c7;
+  transition: transform 0.2s;
+}
+
+.docs-nav .nav-section details[open] summary::after {
+  transform: rotate(90deg);
+}
+
+.docs-nav .nav-section details summary:hover {
+  color: #3498db;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.docs-nav .nav-section details[open] {
+  background: transparent;
+  box-shadow: none;
+}
+
+.docs-nav .nav-section details > ul {
+  margin-top: 0;
+  padding-bottom: 0.5rem;
 }
 
 .docs-nav .nav-section h4 {

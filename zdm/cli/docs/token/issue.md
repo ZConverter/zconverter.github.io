@@ -1,17 +1,16 @@
 ---
 layout: docs
-title: Authentication
+title: token issue
 section_title: ZDM CLI Documentation
 navigation: cli
 ---
 
-모든 CLI 명령 실행에는 인증 토큰이 필요합니다. 토큰은 자동으로 설정 파일에 저장되어 이후 모든 API 호출에 사용됩니다.
+API 사용을 위한 인증 토큰을 발급받습니다.
 
 ---
 
-## Token Commands
+## `token issue` {#token-issue}
 
-### `token issue` {#token-issue}
 > * API 사용을 위한 인증 토큰을 발급받습니다.
 
 <details markdown="1" open>
