@@ -5,19 +5,21 @@ section_title: ZDM CLI Documentation
 navigation: cli
 ---
 
-새로운 스케줄을 등록합니다.
+Schedule JSON 파일을 ZDM 서버에 등록합니다.
 
 ---
 
 ## `schedule regist` {#schedule-regist}
 
-> * 새로운 스케줄을 등록합니다.
+> * `schedule create` 명령어로 생성한 JSON 파일을 ZDM 서버에 등록하는 명령어입니다.
+> * JSON 파일 형식만 지원합니다.
+> * Smart Schedule (Type 7~11)의 경우 Basic과 Advanced Schedule이 함께 등록됩니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
 
 <div class="command-card">
-  <code>zdm-cli schedule regist --path &lt;path&gt;</code>
+  <code>zdm-cli schedule regist [options]</code>
 </div>
 
 </details>
@@ -26,11 +28,20 @@ navigation: cli
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
-# JSON 파일로 스케줄 등록
-zdm-cli schedule regist --path ./schedules/daily-schedule.json
+# Schedule 파일 등록
+zdm-cli schedule regist -p /path/to/schedule.json
 
-# 다른 경로의 스케줄 파일 등록
-zdm-cli schedule regist --path /etc/zdm/schedules/backup-schedule.json
+# 절대 경로 사용
+zdm-cli schedule regist --path /home/user/schedules/daily-schedule.json
+
+# 상대 경로 사용
+zdm-cli schedule regist -p ./Basic_schedule-20250106120000.json
+
+# JSON 형식으로 결과 출력
+zdm-cli schedule regist -p /path/to/schedule.json --output json
+
+# 테이블 형식으로 결과 출력
+zdm-cli schedule regist -p /path/to/schedule.json --output table
 ```
 
 </details>
@@ -40,51 +51,165 @@ zdm-cli schedule regist --path /etc/zdm/schedules/backup-schedule.json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `--path` | - | string | Required | - | 스케줄 정의 JSON 파일 경로 | - |
+| --path | -p | string | Required | - | 등록할 Schedule File Path | - |
 
 </details>
 
----
+<details markdown="1" open>
+<summary><strong>입력 파일 형식</strong></summary>
 
-## 스케줄 워크플로우
+**Basic Schedule (Type 0~6):**
+
+```json
+{
+  "center": "zdm-center-id",
+  "type": 3,
+  "basic": {
+    "year": "",
+    "month": "",
+    "week": "",
+    "day": "",
+    "time": "12:00",
+    "interval": {
+      "hour": "",
+      "minute": ""
+    }
+  }
+}
+```
+
+**Smart Schedule (Type 7~11):**
+
+```json
+{
+  "center": "zdm-center-id",
+  "type": 7,
+  "basic": {
+    "year": "",
+    "month": "",
+    "week": "",
+    "day": "wed",
+    "time": "12:00",
+    "interval": {
+      "hour": "",
+      "minute": ""
+    }
+  },
+  "advanced": {
+    "year": "",
+    "month": "",
+    "week": "",
+    "day": "mon,thu,fri",
+    "time": "12:00",
+    "interval": {
+      "hour": "",
+      "minute": ""
+    }
+  }
+}
+```
+
+</details>
 
 <details markdown="1" open>
-<summary><strong>스케줄 생성 및 등록</strong></summary>
+<summary><strong>출력 예시</strong></summary>
 
-**1단계: 스케줄 생성**
-```bash
-# 매일 오전 2시 실행 스케줄 생성
-zdm-cli schedule create \
-  --type 3 \
-  --basic-time 02:00 \
-  --path ./daily-schedule.json
+**Text 형식 (기본) - Basic Schedule 등록 결과:**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* Schedule Registration Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[request info]
+
+status    : success
+message   : Schedule registered successfully
+timestamp : 2025-01-06 12:00:00
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[data]
+
+[Basic Schedule]
+id          : 123
+type        : daily
+state       : enabled
+description : Daily schedule
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**2단계: 스케줄 검증**
-```bash
-# 생성된 스케줄 파일 검증
-zdm-cli schedule verify --path ./daily-schedule.json
+**Text 형식 - Smart Schedule 등록 결과:**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* Schedule Registration Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[request info]
+
+status    : success
+message   : Schedule registered successfully
+timestamp : 2025-01-06 12:00:00
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[data]
+
+[Basic Schedule]
+id          : 124
+type        : smart weekly on specific day
+state       : enabled
+description : Smart weekly basic schedule
+
+[Advanced Schedule]
+id          : 125
+type        : smart weekly on specific day
+state       : enabled
+description : Smart weekly advanced schedule
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**3단계: 스케줄 등록**
-```bash
-# 스케줄을 ZDM에 등록
-zdm-cli schedule regist --path ./daily-schedule.json
+**JSON 형식 - Basic Schedule 등록 결과:**
+
+```json
+{
+  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "message": "Schedule registered successfully",
+  "success": true,
+  "data": {
+    "basic": {
+      "id": 123,
+      "type": "daily",
+      "state": "enabled",
+      "description": "Daily schedule"
+    }
+  },
+  "timestamp": "2025-01-06 12:00:00"
+}
 ```
 
-**4단계: 등록 확인**
-```bash
-# 등록된 스케줄 확인
-zdm-cli schedule list
-```
+**JSON 형식 - Smart Schedule 등록 결과:**
 
-**5단계: 백업/복구 작업에 적용**
-```bash
-# 백업 작업에 스케줄 적용
-zdm-cli backup regist \
-  --server web-server-01 \
-  --mode full \
-  --schedule daily-schedule
+```json
+{
+  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "message": "Schedule registered successfully",
+  "success": true,
+  "data": {
+    "basic": {
+      "id": 124,
+      "type": "smart weekly on specific day",
+      "state": "enabled",
+      "description": "Smart weekly basic schedule"
+    },
+    "advanced": {
+      "id": 125,
+      "type": "smart weekly on specific day",
+      "state": "enabled",
+      "description": "Smart weekly advanced schedule"
+    }
+  },
+  "timestamp": "2025-01-06 12:00:00"
+}
 ```
 
 </details>

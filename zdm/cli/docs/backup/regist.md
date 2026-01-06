@@ -5,19 +5,19 @@ section_title: ZDM CLI Documentation
 navigation: cli
 ---
 
-새로운 백업 작업을 등록합니다.
+Backup 작업을 등록하는 명령어입니다.
 
 ---
 
 ## `backup regist` {#backup-regist}
 
-> * 새로운 백업 작업을 등록합니다.
+> * 새로운 Backup 작업을 등록합니다. 서버의 전체 파티션 또는 특정 파티션에 대한 백업 작업을 설정할 수 있습니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
 
 <div class="command-card">
-  <code>zdm-cli backup regist --server &lt;server&gt; --mode &lt;mode&gt; [options]</code>
+  <code>zdm-cli backup regist [options]</code>
 </div>
 
 </details>
@@ -26,43 +26,35 @@ navigation: cli
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
-# 기본 백업 작업 등록
-zdm-cli backup regist --server web-server-01 --mode full
+# 기본 Backup 등록 (압축 활성화, 암호화 비활성화)
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1
 
-# 특정 파티션만 백업
-zdm-cli backup regist --server web-server-01 --mode full --partition /,/home
+# 압축 없이 Backup 등록
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --no-compression
 
-# 암호화 백업 등록
-zdm-cli backup regist --server web-server-01 --mode full --encryption
+# 암호화 활성화하여 Backup 등록
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --encryption
 
-# 압축 없이 백업
-zdm-cli backup regist --server web-server-01 --mode full --no-compression
+# 특정 파티션만 Backup 등록
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --partition "/,/home"
 
-# 스케줄과 함께 등록
-zdm-cli backup regist --server web-server-01 --mode full --schedule daily-schedule --start
+# 작업 이름 지정하여 등록
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --jobName "daily_backup"
 
-# 스크립트와 함께 등록
-zdm-cli backup regist --server web-server-01 --mode full --scriptPath /scripts/pre-backup.sh --scriptRun before
+# 스케줄 설정과 함께 등록
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --schedule "schedule_id"
 
-# Repository 지정
-zdm-cli backup regist --server web-server-01 --mode full --repository-id 1
+# 제외 폴더 설정
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --excludeDir "/tmp,/var/log"
 
-# 작업 이름 및 설명 추가
-zdm-cli backup regist --server web-server-01 --mode full --jobName daily-backup --description "Daily backup job"
+# 자동 시작 설정
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --start
 
-# 모든 옵션 포함
-zdm-cli backup regist \
-  --server web-server-01 \
-  --mode full \
-  --jobName "production-backup" \
-  --description "Production server full backup" \
-  --partition /,/home,/var \
-  --encryption \
-  --rotation 5 \
-  --networkLimit 1000 \
-  --repository-id 1 \
-  --schedule daily-schedule \
-  --start
+# 스크립트 실행 설정
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --scriptPath "/scripts/pre_backup.sh" --scriptRun before
+
+# 파티션별 개별 설정 (JSON 형태)
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --individual '[{"partition":"/","jobName":"root_backup"}]'
 ```
 
 </details>
@@ -72,141 +64,156 @@ zdm-cli backup regist \
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `--center` | - | string | Optional | - | 작업 등록 Center (config 기본값 사용) | - |
-| `--server` | - | string | Required | - | 작업 대상 Server | - |
-| `--mode` | - | string | Required | - | 작업 모드 | `full`, `increment`, `smart` |
-| `--repository-id` | `ri` | number | Optional | - | Repository ID (config 기본값 사용) | - |
-| `--repository-path` | `rp` | string | Optional | - | Repository Path | - |
-| `--partition` | - | string | Optional | - | 작업 대상 파티션 (쉼표로 구분) | - |
-| `--jobName` | `name` | string | Optional | - | 작업 이름 | - |
-| `--schedule` | `sc` | string | Optional | - | 작업에 사용할 Schedule | - |
-| `--description` | `desc` | string | Optional | - | 작업 설명 | - |
-| `--rotation` | `rot` | number | Optional | 1 | 작업 반복횟수 | - |
-| `--no-compression` | `ncomp` | boolean | Optional | - | 작업 압축 안함 | - |
-| `--encryption` | `enc` | boolean | Optional | - | 작업 암호화 | - |
-| `--excludeDir` | `exd` | string | Optional | - | 작업 제외 폴더 | - |
-| `--excludePartition` | `exp` | string | Optional | - | 작업 제외 partition | - |
-| `--networkLimit` | `nl` | number | Optional | 0 | 작업 Network 제한 속도 | - |
-| `--start` | - | boolean | Optional | - | 작업 자동시작 여부 | - |
-| `--scriptPath` | `sp` | string | Optional | - | 작업시 사용할 script full path | - |
-| `--scriptRun` | `sr` | string | Optional | - | 스크립트 실행 타이밍 | `before`, `after` |
-| `--individual` | `ind` | string | Optional | - | 파티션별 개별 설정 (JSON 문자열) | - |
+| --server | - | string | Required | - | 작업 대상 Server | - |
+| --mode | - | string | Required | - | 작업 모드 | full, increment, smart |
+| --center | - | string | Optional | config 설정값 | 작업 등록 Center | - |
+| --repository-id | -ri | number | Optional | config 설정값 | 작업시 사용할 Repository ID | - |
+| --repository-path | -rp | string | Optional | - | 작업시 사용할 Repository Path | - |
+| --partition | - | string | Optional | 전체 파티션 | 작업 대상 파티션 (콤마로 구분) | - |
+| --jobName | -name | string | Optional | - | 작업 이름 | - |
+| --schedule | -sc | string | Optional | - | 작업에 사용할 Schedule | - |
+| --description | -desc | string | Optional | - | 작업 설명 | - |
+| --rotation | -rot | number | Optional | 1 | 작업 반복횟수 | - |
+| --no-compression | -ncomp | boolean | Optional | false | 작업 압축 안함 | - |
+| --encryption | -enc | boolean | Optional | false | 작업 암호화 | - |
+| --excludeDir | -exd | string | Optional | - | 작업 제외 폴더 | - |
+| --excludePartition | -exp | string | Optional | - | 작업 제외 partition | - |
+| --networkLimit | -nl | number | Optional | 0 | 작업 Network 제한 속도 | - |
+| --start | - | boolean | Optional | false | 작업 자동시작 여부 | - |
+| --scriptPath | -sp | string | Optional | - | 작업시 사용할 script full path | - |
+| --scriptRun | -sr | string | Optional | - | 스크립트 실행 타이밍 | before, after |
+| --individual | -ind | string | Optional | - | 파티션별 개별 설정 (JSON 문자열) | - |
+| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
 
 </details>
 
----
-
-## 백업 옵션
-
 <details markdown="1" open>
-<summary><strong>압축 옵션</strong></summary>
+<summary><strong>Individual JSON format (Full default value)</strong></summary>
 
-```bash
-# 압축 활성화 (기본값)
-zdm-cli backup regist --server web-server-01 --mode full
-
-# 압축 비활성화
-zdm-cli backup regist --server web-server-01 --mode full --no-compression
+```json
+[
+  {
+    "partition": "/",
+    "jobName": "root_backup",
+    "mode": "full",
+    "repository": {
+      "id": 1,
+      "path": "/backup/repo"
+    },
+    "compression": true,
+    "encryption": false,
+    "rotation": 1,
+    "excludeDir": "/tmp,/var/log",
+    "excludePartition": "/dev",
+    "mailEvent": "admin@example.com",
+    "networkLimit": 100,
+    "autoStart": true,
+    "description": "Root partition backup"
+  }
+]
 ```
 
 </details>
 
 <details markdown="1" open>
-<summary><strong>암호화 옵션</strong></summary>
+<summary><strong>출력 예시 (Text format)</strong></summary>
 
-```bash
-# 암호화 백업
-zdm-cli backup regist --server web-server-01 --mode full --encryption
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* Backup Registration Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[request info]
+
+status    : success
+message   : Success
+timestamp : 2025-01-01 12:00:00
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[data]
+
+[Registration Summary]
+total      : 2
+successful : 2
+failed     : 0
+
+[Registration Details]
+
+[Job 1]
+state           : success
+jobName         : root_backup
+partition       : /
+jobMode         : full
+autoStart       : use
+scriptPath      : -
+scriptRunTiming : -
+schedule.basic  : type: daily, description: Daily backup at 2AM
+schedule.advanced: -
+
+[Job 2]
+state           : success
+jobName         : home_backup
+partition       : /home
+jobMode         : full
+autoStart       : use
+scriptPath      : -
+scriptRunTiming : -
+schedule.basic  : -
+schedule.advanced: -
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 </details>
 
 <details markdown="1" open>
-<summary><strong>파티션 선택</strong></summary>
+<summary><strong>출력 예시 (JSON format)</strong></summary>
 
-```bash
-# 특정 파티션만 백업
-zdm-cli backup regist --server web-server-01 --mode full --partition /,/home
-
-# 특정 파티션 제외
-zdm-cli backup regist --server web-server-01 --mode full --excludePartition /tmp,/var/tmp
-
-# 특정 디렉토리 제외
-zdm-cli backup regist --server web-server-01 --mode full --excludeDir /home/user/temp,/var/cache
+```json
+{
+  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "message": "Success",
+  "success": true,
+  "data": {
+    "summary": {
+      "total": 2,
+      "successful": 2,
+      "failed": 0
+    },
+    "results": [
+      {
+        "state": "success",
+        "jobName": "root_backup",
+        "partition": "/",
+        "jobMode": "full",
+        "autoStart": "use",
+        "scriptPath": "-",
+        "scriptRunTiming": "-",
+        "schedule": {
+          "basic": {
+            "type": "daily",
+            "description": "Daily backup at 2AM"
+          },
+          "advanced": "-"
+        }
+      },
+      {
+        "state": "success",
+        "jobName": "home_backup",
+        "partition": "/home",
+        "jobMode": "full",
+        "autoStart": "use",
+        "scriptPath": "-",
+        "scriptRunTiming": "-",
+        "schedule": {
+          "basic": "-",
+          "advanced": "-"
+        }
+      }
+    ]
+  },
+  "timestamp": "2025-01-01 12:00:00"
+}
 ```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>네트워크 제한</strong></summary>
-
-```bash
-# 네트워크 속도 제한 (KB/s)
-zdm-cli backup regist --server web-server-01 --mode full --networkLimit 1000
-
-# 제한 없음 (기본값)
-zdm-cli backup regist --server web-server-01 --mode full --networkLimit 0
-```
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>Rotation (반복횟수)</strong></summary>
-
-```bash
-# Rotation 설정
-zdm-cli backup regist --server web-server-01 --mode full --rotation 5
-```
-
-</details>
-
----
-
-## 스케줄 백업
-
-<details markdown="1" open>
-<summary><strong>스케줄과 함께 등록</strong></summary>
-
-```bash
-# 스케줄 백업 등록
-zdm-cli backup regist \
-  --server web-server-01 \
-  --mode full \
-  --schedule daily-schedule \
-  --start
-```
-
-스케줄 생성 방법은 [schedule create](/zdm/cli/docs/schedule/create) 참조
-
-</details>
-
----
-
-## 스크립트 실행
-
-<details markdown="1" open>
-<summary><strong>백업 전후 스크립트</strong></summary>
-
-```bash
-# 백업 전 스크립트 실행
-zdm-cli backup regist \
-  --server web-server-01 \
-  --mode full \
-  --scriptPath /scripts/pre-backup.sh \
-  --scriptRun before
-
-# 백업 후 스크립트 실행
-zdm-cli backup regist \
-  --server web-server-01 \
-  --mode full \
-  --scriptPath /scripts/post-backup.sh \
-  --scriptRun after
-```
-
-**주의사항:**
-- 스크립트는 서버에 미리 업로드되어 있어야 함
-- 절대 경로 사용
-- 실행 권한 확인
 
 </details>
 

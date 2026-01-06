@@ -11,9 +11,7 @@ navigation: api
 
 ## `POST /auth/issue` {#token-issue}
 
-> * 토큰을 발급합니다.
-
-모든 보호된 엔드포인트는 토큰이 필요합니다:
+> * 엔드포인트 사용시 필요한 인증 토큰을 발급합니다.
 
 ```text
 Authorization: Bearer <token>
@@ -47,8 +45,8 @@ curl -X POST "https://api.example.com/api/v1/auth/issue" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `email` | Body | string | Required | - | 사용자 이메일 | - |
-| `password` | Body | string | Required | - | 사용자 비밀번호 | - |
+| `email` | Body | string | Required | - | 포털 사용자 이메일 | - |
+| `password` | Body | string | Required | - | 포털 사용자 비밀번호 | - |
 
 </details>
 

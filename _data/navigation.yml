@@ -114,24 +114,30 @@ cli:
     links:
       - title: "CLI 소개"
         url: "/zdm/cli/index"
-      - title: "Overview"
-        url: "/zdm/cli/docs/overview"
   - title: "Token"
     links:
+      - title: "개요"
+        url: "/zdm/cli/docs/token/overview"
       - title: "token issue"
         url: "/zdm/cli/docs/token/issue"
   - title: "Config"
     links:
+      - title: "개요"
+        url: "/zdm/cli/docs/config/overview"
       - title: "config show"
         url: "/zdm/cli/docs/config/show"
       - title: "config set"
         url: "/zdm/cli/docs/config/set"
   - title: "Server"
     links:
+      - title: "개요"
+        url: "/zdm/cli/docs/server/overview"
       - title: "server list"
         url: "/zdm/cli/docs/server/list"
   - title: "License"
     links:
+      - title: "개요"
+        url: "/zdm/cli/docs/license/overview"
       - title: "license list"
         url: "/zdm/cli/docs/license/list"
       - title: "license assign"
@@ -140,6 +146,8 @@ cli:
         url: "/zdm/cli/docs/license/regist"
   - title: "File"
     links:
+      - title: "개요"
+        url: "/zdm/cli/docs/file/overview"
       - title: "file list"
         url: "/zdm/cli/docs/file/list"
       - title: "file upload"
@@ -148,6 +156,8 @@ cli:
         url: "/zdm/cli/docs/file/download"
   - title: "Schedule"
     links:
+      - title: "개요"
+        url: "/zdm/cli/docs/schedule/overview"
       - title: "schedule list"
         url: "/zdm/cli/docs/schedule/list"
       - title: "schedule regist"
@@ -158,10 +168,14 @@ cli:
         url: "/zdm/cli/docs/schedule/verify"
   - title: "ZDM Center"
     links:
+      - title: "개요"
+        url: "/zdm/cli/docs/zdm/overview"
       - title: "zdm list"
         url: "/zdm/cli/docs/zdm/list"
   - title: "Backup"
     links:
+      - title: "개요"
+        url: "/zdm/cli/docs/backup/overview"
       - title: "backup list"
         url: "/zdm/cli/docs/backup/list"
       - title: "backup regist"
@@ -174,6 +188,8 @@ cli:
         url: "/zdm/cli/docs/backup/monit"
   - title: "Recovery"
     links:
+      - title: "개요"
+        url: "/zdm/cli/docs/recovery/overview"
       - title: "recovery list"
         url: "/zdm/cli/docs/recovery/list"
       - title: "recovery regist"

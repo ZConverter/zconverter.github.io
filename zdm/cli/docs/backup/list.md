@@ -5,13 +5,13 @@ section_title: ZDM CLI Documentation
 navigation: cli
 ---
 
-백업 작업 목록을 조회합니다.
+Backup 목록 및 정보를 조회하는 명령어입니다.
 
 ---
 
 ## `backup list` {#backup-list}
 
-> * 백업 작업 목록을 조회합니다.
+> * Backup 작업의 목록 또는 특정 작업의 상세 정보를 조회합니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -26,32 +26,32 @@ navigation: cli
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
-# 전체 백업 작업 목록 조회
+# 전체 Backup 목록 조회
 zdm-cli backup list
 
-# 특정 백업 작업 조회 (ID)
-zdm-cli backup list --id 1
+# 특정 서버의 Backup 목록 조회
+zdm-cli backup list --server "web01"
 
-# 특정 백업 작업 조회 (이름)
-zdm-cli backup list --name daily-backup
+# 작업 ID로 특정 Backup 조회
+zdm-cli backup list --id 123
 
-# 특정 서버의 백업 작업 조회
-zdm-cli backup list --server web-server-01
+# 작업 이름으로 특정 Backup 조회
+zdm-cli backup list --name "MyBackup"
 
-# 작업 모드로 필터링
+# 특정 모드의 Backup 목록 조회
 zdm-cli backup list --mode full
 
-# 작업 상태로 필터링
-zdm-cli backup list --status complete
+# 특정 상태의 Backup 목록 조회
+zdm-cli backup list --status run
+
+# 상세 정보 포함 조회
+zdm-cli backup list --id 123 --detail
 
 # Repository 경로로 필터링
-zdm-cli backup list --repository-path /backup/repo01
+zdm-cli backup list --repository-path "/backup/repo"
 
-# 상세 정보 조회
-zdm-cli backup list --detail --output table
-
-# 여러 필터 조합
-zdm-cli backup list --server web-server-01 --mode full --status complete
+# JSON 형식으로 출력
+zdm-cli backup list --output json
 ```
 
 </details>
@@ -61,47 +61,212 @@ zdm-cli backup list --server web-server-01 --mode full --status complete
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `--server` | - | string | Optional | - | 작업 대상 Server | - |
-| `--name` | - | string | Optional | - | 작업 이름 | - |
-| `--id` | - | number | Optional | - | 작업 ID | - |
-| `--mode` | - | string | Optional | - | 작업 모드 | `full`, `increment`, `smart` |
-| `--status` | - | string | Optional | - | 작업 상태 | `run`, `complete`, `start`, `waiting`, `cancel`, `schedule` |
-| `--repository-path` | `rp` | string | Optional | - | 작업에 사용한 repository path | - |
-| `--repository-type` | `rt` | string | Optional | - | 작업에 사용한 repository type | `smb`, `nfs` |
-| `--detail` | - | boolean | Optional | - | 상세 정보 조회 | - |
+| --server | - | string | Optional | - | 작업 대상 Server | - |
+| --name | - | string | Optional | - | 작업 이름 | - |
+| --id | - | number | Optional | - | 작업 ID | - |
+| --mode | - | string | Optional | - | 작업 모드 | full, increment, smart |
+| --status | - | string | Optional | - | 작업 상태 | run, complete, start, waiting, cancel, schedule |
+| --repository-path | -rp | string | Optional | - | 작업에 사용한 repository path | - |
+| --repository-type | -rt | string | Optional | - | 작업에 사용한 repository type | smb, nfs |
+| --detail | - | boolean | Optional | false | 상세 정보 조회 | - |
+| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
 
 </details>
 
----
-
-## 백업 모드
-
 <details markdown="1" open>
-<summary><strong>백업 모드 설명</strong></summary>
+<summary><strong>출력 예시</strong></summary>
 
-| 모드 | 설명 | 동작 방식 |
-|------|------|--------------|
-| `full` | 전체 백업 | 전체 백업 |
-| `increment` | 증분 백업 | 변경된 데이터만 백업 |
-| `smart` | 스마트 백업 | 스케쥴에 따라 전체와 증분 백업 복합적으로 진행 |
+### 기본 출력
 
-</details>
+**Text 형식:**
 
----
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* Backup Info Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[request info]
 
-## 백업 상태
+status    : success
+message   : Success
+timestamp : 2025-01-01 12:00:00
 
-<details markdown="1" open>
-<summary><strong>작업 상태 값</strong></summary>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[data]
 
-| 상태 | 설명 |
-|------|------|
-| `waiting` | 대기 중 |
-| `start` | 시작됨 |
-| `run` | 실행 중 |
-| `complete` | 완료 |
-| `cancel` | 취소됨 |
-| `schedule` | 예약됨 |
+[Backup 1]
+name             : backup_job_01
+id               : 123
+mode             : full
+partition        : /
+status(current)  : complete
+schedule.basic   : id: 1, type: daily, description: Daily backup at 2AM
+schedule.advanced: -
+system.name      : web01
+system.os        : Linux
+repository.path  : /backup/repo
+repository.type  : nfs
+start            : 2025-01-01T10:00:00Z
+elapsed          : 00:30:00
+end              : 2025-01-01T10:30:00Z
+lastUpdated      : 2025-01-01T10:30:00Z
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**JSON 형식:**
+
+```json
+{
+  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "message": "Success",
+  "success": true,
+  "data": [
+    {
+      "job": {
+        "info": {
+          "name": "backup_job_01",
+          "id": "123",
+          "mode": "full",
+          "partition": "/",
+          "status": {
+            "current": "complete",
+            "time": {
+              "start": "2025-01-01T10:00:00Z",
+              "elapsed": "00:30:00",
+              "end": "2025-01-01T10:30:00Z"
+            }
+          },
+          "schedule": {
+            "basic": {
+              "id": "1",
+              "type": "daily",
+              "description": "Daily backup at 2AM"
+            },
+            "advanced": "-"
+          }
+        },
+        "lastUpdated": "2025-01-01T10:30:00Z"
+      },
+      "system": {
+        "name": "web01",
+        "os": "Linux"
+      },
+      "repository": {
+        "path": "/backup/repo",
+        "type": "nfs"
+      }
+    }
+  ],
+  "timestamp": "2025-01-01 12:00:00"
+}
+```
+
+### 상세 출력(detail 옵션 사용)
+
+**Text 형식:**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* Backup Info Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[request info]
+
+status    : success
+message   : Success
+timestamp : 2025-01-01 12:00:00
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[data]
+
+[Backup 1]
+name                  : backup_job_01
+id                    : 123
+mode                  : full
+partition             : /
+status(current)       : complete
+schedule.basic        : id: 1, type: daily, description: Daily backup at 2AM
+schedule.advanced     : -
+system.name           : web01
+system.os             : Linux
+system.agent          : 3.0.1
+system.ip.public      : 1.2.3.4
+system.ip.private     : 10.0.0.1
+repository.id         : 1
+repository.path       : /backup/repo
+repository.type       : nfs
+option.compression    : enabled
+option.encryption     : AES-256
+option.retention      : 30 days
+notification.mail     : admin@example.com
+start                 : 2025-01-01T10:00:00Z
+elapsed               : 00:30:00
+end                   : 2025-01-01T10:30:00Z
+lastUpdated           : 2025-01-01T10:30:00Z
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**JSON 형식:**
+
+```json
+{
+  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "message": "Success",
+  "success": true,
+  "data": [
+    {
+      "job": {
+        "info": {
+          "name": "backup_job_01",
+          "id": "123",
+          "mode": "full",
+          "partition": "/",
+          "status": {
+            "current": "complete",
+            "time": {
+              "start": "2025-01-01T10:00:00Z",
+              "elapsed": "00:30:00",
+              "end": "2025-01-01T10:30:00Z"
+            }
+          },
+          "schedule": {
+            "basic": {
+              "id": "1",
+              "type": "daily",
+              "description": "Daily backup at 2AM"
+            },
+            "advanced": "-"
+          },
+          "option": {
+            "compression": "enabled",
+            "encryption": "AES-256",
+            "retention": "30 days"
+          },
+          "notification": {
+            "mail": "admin@example.com"
+          }
+        },
+        "lastUpdated": "2025-01-01T10:30:00Z"
+      },
+      "system": {
+        "name": "web01",
+        "os": "Linux",
+        "agent": "3.0.1",
+        "ip": {
+          "public": "1.2.3.4",
+          "private": ["10.0.0.1"]
+        }
+      },
+      "repository": {
+        "id": "1",
+        "path": "/backup/repo",
+        "type": "nfs"
+      }
+    }
+  ],
+  "timestamp": "2025-01-01 12:00:00"
+}
+```
 
 </details>
 

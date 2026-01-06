@@ -5,19 +5,20 @@ section_title: ZDM CLI Documentation
 navigation: cli
 ---
 
-업로드된 파일 목록을 조회합니다.
+ZDM 서버에 저장된 파일 목록을 조회합니다.
 
 ---
 
 ## `file list` {#file-list}
 
-> * 업로드된 파일 목록을 조회합니다.
+> * 서버에 업로드된 파일 목록을 조회합니다.
+> * 파일명, 원본 파일명, 크기, 업로드 날짜 정보를 표시합니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
 
 <div class="command-card">
-  <code>zdm-cli file list [--output &lt;format&gt;]</code>
+  <code>zdm-cli file list [options]</code>
 </div>
 
 </details>
@@ -26,14 +27,14 @@ navigation: cli
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
-# 파일 목록 조회 (text 형식)
+# 파일 목록 조회 (기본 텍스트 형식)
 zdm-cli file list
 
-# JSON 형식으로 출력
+# JSON 형식으로 파일 목록 조회
 zdm-cli file list --output json
 
-# Table 형식으로 출력
-zdm-cli file list --output table
+# 테이블 형식으로 파일 목록 조회
+zdm-cli file list -o table
 ```
 
 </details>
@@ -41,91 +42,110 @@ zdm-cli file list --output table
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-별도의 쿼리 파라미터가 없습니다. 전역 옵션(`--output`)만 사용 가능합니다.
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>출력 예시</strong></summary>
 
-**Text 형식:**
+**Text 형식 (기본값)**
 ```text
-Files:
-  File Name: file-1698500000000-123456789-example.txt
-  Original Name: example.txt
-  Size: 1.5 KB
-  Upload Date: 2025-10-28 08:30:00
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* File List Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[request info]
 
-  File Name: file-1698500000001-987654321-test.pdf
-  Original Name: test.pdf
-  Size: 2.3 MB
-  Upload Date: 2025-10-28 09:15:00
+status    : success
+message   : File list retrieved successfully
+timestamp : 2025-01-01 10:00:00
 
-Total: 2 files
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[data]
+
+[Total Files: 3]
+
+[1]
+  File Name     : backup_20250101.tar.gz
+  Original Name : backup.tar.gz
+  Size          : 52428800
+  Upload Date   : 2025-01-01T10:00:00Z
+
+[2]
+  File Name     : config_20250102.json
+  Original Name : config.json
+  Size          : 1024
+  Upload Date   : 2025-01-02T14:30:00Z
+
+[3]
+  File Name     : data_20250103.csv
+  Original Name : data.csv
+  Size          : 2048576
+  Upload Date   : 2025-01-03T09:15:00Z
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**Table 형식:**
-```text
-+------------------------------------------+---------------+---------+---------------------+
-| File Name                                | Original Name | Size    | Upload Date         |
-+------------------------------------------+---------------+---------+---------------------+
-| file-1698500000000-123456789-example.txt | example.txt   | 1.5 KB  | 2025-10-28 08:30:00 |
-| file-1698500000001-987654321-test.pdf    | test.pdf      | 2.3 MB  | 2025-10-28 09:15:00 |
-+------------------------------------------+---------------+---------+---------------------+
-Total: 2 files
-```
-
-**JSON 형식:**
+**JSON 형식**
 ```json
 {
-  "requestID": "req-abc123",
+  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
   "message": "File list retrieved successfully",
   "success": true,
   "data": {
+    "totalCount": 3,
     "files": [
       {
-        "fileName": "file-1698500000000-123456789-example.txt",
-        "fileOriginName": "example.txt",
-        "size": "1.5 KB",
-        "uploadDate": "2025-10-28 08:30:00"
+        "fileName": "backup_20250101.tar.gz",
+        "fileOriginName": "backup.tar.gz",
+        "size": 52428800,
+        "uploadDate": "2025-01-01T10:00:00Z"
       },
       {
-        "fileName": "file-1698500000001-987654321-test.pdf",
-        "fileOriginName": "test.pdf",
-        "size": "2.3 MB",
-        "uploadDate": "2025-10-28 09:15:00"
+        "fileName": "config_20250102.json",
+        "fileOriginName": "config.json",
+        "size": 1024,
+        "uploadDate": "2025-01-02T14:30:00Z"
+      },
+      {
+        "fileName": "data_20250103.csv",
+        "fileOriginName": "data.csv",
+        "size": 2048576,
+        "uploadDate": "2025-01-03T09:15:00Z"
       }
-    ],
-    "totalCount": 2
+    ]
   },
-  "timestamp": "2025-10-28 08:30:00"
+  "timestamp": "2025-01-01 10:00:00"
 }
 ```
 
-</details>
+**Table 형식**
+```text
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* File List Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: table]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[request info]
 
----
+status    : success
+message   : File list retrieved successfully
+timestamp : 2025-01-01 10:00:00
 
-## 파일 이름 형식
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[data]
 
-<details markdown="1" open>
-<summary><strong>저장된 파일 이름 구조</strong></summary>
+[Total Files: 3]
 
-서버에 저장된 파일은 다음 형식을 따릅니다:
-
+┌─────────┬─────────────────────────┬──────────────────┬──────────┬──────────────────────┐
+│ (index) │ File Name               │ Original Name    │ Size     │ Upload Date          │
+├─────────┼─────────────────────────┼──────────────────┼──────────┼──────────────────────┤
+│ 0       │ backup_20250101.tar.gz  │ backup.tar.gz    │ 52428800 │ 2025-01-01T10:00:00Z │
+│ 1       │ config_20250102.json    │ config.json      │ 1024     │ 2025-01-02T14:30:00Z │
+│ 2       │ data_20250103.csv       │ data.csv         │ 2048576  │ 2025-01-03T09:15:00Z │
+└─────────┴─────────────────────────┴──────────────────┴──────────┴──────────────────────┘
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-file-{timestamp}-{random}-{original-name}
-```
-
-**예시:**
-- 원본: `backup.tar.gz`
-- 저장: `file-1698500000000-123456789-backup.tar.gz`
-
-**구성 요소:**
-- `file`: 고정 접두사
-- `1698500000000`: 업로드 시간 (타임스탬프)
-- `123456789`: 랜덤 숫자
-- `backup.tar.gz`: 원본 파일명
 
 </details>
 

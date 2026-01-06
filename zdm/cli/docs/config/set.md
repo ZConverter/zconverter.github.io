@@ -5,13 +5,13 @@ section_title: ZDM CLI Documentation
 navigation: cli
 ---
 
-CLI 설정 값을 변경합니다.
+Config 파일의 설정 값을 수정합니다.
 
 ---
 
 ## `config set` {#config-set}
 
-> * CLI 설정 값을 변경합니다.
+> * Config 파일에 저장된 설정 정보를 수정합니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -26,20 +26,26 @@ CLI 설정 값을 변경합니다.
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
-# ZDM IP 주소 설정
+# ZDM 서버 IP 설정
 zdm-cli config set --zdm-ip 192.168.1.100
 
-# ZDM ID 설정
-zdm-cli config set --zdm-id zdm-center-01
+# ZDM 서버 포트 설정
+zdm-cli config set --zdm-port 53307
 
-# Repository ID 설정
-zdm-cli config set --zdm-repo-id 1
+# 사용자 이메일 설정
+zdm-cli config set --user-mail admin@example.com
 
-# API 포트 설정
-zdm-cli config set --zdm-api-port 53307
+# Linux 환경에서 ZConverter 디렉토리 경로 설정
+zdm-cli config set --zcon-dir-path /ZConverterManager
 
-# 여러 값 동시 설정
-zdm-cli config set --zdm-ip 192.168.1.100 --zdm-id zdm-center-01 --zdm-repo-id 1
+# Windows 환경에서 ZConverter 디렉토리 경로 설정
+zdm-cli config set --zcon-dir-path "C:\Program Files (x86)\ZConverter_CloudAgent"
+
+# 여러 설정 동시 변경
+zdm-cli config set --zdm-ip 192.168.1.100 --zdm-port 53307 --zdm-id 1
+
+# Repository 설정
+zdm-cli config set --zdm-repo-id 1 --zdm-repo-path /backup
 ```
 
 </details>
@@ -49,66 +55,42 @@ zdm-cli config set --zdm-ip 192.168.1.100 --zdm-id zdm-center-01 --zdm-repo-id 1
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `--zdm-ip` | - | string | Optional | - | ZDM 서버 IP 주소 | - |
-| `--zdm-id` | - | string | Optional | - | ZDM Center ID | - |
-| `--zdm-repo-id` | - | number | Optional | - | 기본 Repository ID | - |
-| `--zdm-api-port` | - | number | Optional | - | ZDM API 포트 번호 | - |
+| `--user-mail` | `-mail` | string | Optional | - | 포털 로그인 ID (유효한 이메일 형식 필요) | - |
+| `--token` | - | string | Optional | - | API Server 인증 토큰 | - |
+| `--zdm-repo-id` | `-zri` | number | Optional | - | 기본으로 사용할 ZDM Repository ID (숫자만 입력 가능) | - |
+| `--zdm-repo-path` | `-zrp` | string | Optional | - | 기본으로 사용할 ZDM Repository 경로 | - |
+| `--zdm-ip` | `-ip` | string | Optional | - | Portal IP 주소 | - |
+| `--zdm-port` | `-port` | number | Optional | - | API Server 포트 번호 (숫자만 입력 가능) | - |
+| `--zdm-id` | `-zi` | number | Optional | - | Portal ID (숫자만 입력 가능) | - |
+| `--zcon-dir-path` | `-zdp` | string | Optional | - | ZConverter 설치 디렉토리 경로 (Linux: /ZConverterManager, Windows: C:\Program Files (x86)\ZConverter_CloudAgent) | - |
+| `--output` | `-o` | string | Optional | `text` | 출력 형식 지정 | `text`, `json`, `table` |
 
 </details>
 
----
-
-## 설정 우선순위
-
-CLI 명령 실행 시 설정 값의 우선순위는 다음과 같습니다:
-
 <details markdown="1" open>
-<summary><strong>우선순위 순서</strong></summary>
+<summary><strong>출력 예시</strong></summary>
 
-1. **명령줄 파라미터** - 가장 높은 우선순위
-2. **설정 파일** - 두 번째 우선순위
-3. **기본값** - 가장 낮은 우선순위
+**변경 성공 시:**
+```
+----- result -----
+업데이트된 항목: zdm-ip, zdm-port
+------------------
+```
 
-**예시:**
-```bash
-# 설정 파일에 zdm-repo-id: 1 이 저장되어 있지만
-# 명령줄에서 다른 값을 지정하면 명령줄 값이 사용됨
-zdm-cli backup regist --server web-01 --mode full --repository-id 2
+**변경 사항 없음:**
+```
+----- result -----
+변경된 항목이 없습니다 (모든 값이 기존과 동일합니다)
+------------------
+```
+
+**JSON 형식 출력:**
+```json
+{
+  "updated_keys": ["zdm-ip", "zdm-port"]
+}
 ```
 
 </details>
-
----
-
-## 설정 관리 팁
-
-<details markdown="1" open>
-<summary><strong>권장 설정 방법</strong></summary>
-
-**초기 설정:**
-```bash
-# 1. 토큰 발급
-zdm-cli token issue -m admin@example.com -p password
-
-# 2. ZDM 서버 정보 설정
-zdm-cli config set --zdm-ip 192.168.1.100
-
-# 3. ZDM Center ID 설정
-zdm-cli config set --zdm-id zdm-center-01
-
-# 4. 기본 Repository 설정
-zdm-cli config set --zdm-repo-id 1
-
-# 5. 설정 확인
-zdm-cli config show
-```
-
-</details>
-
----
-
-## 참고사항
-
-- CLI를 처음 실행하면 자동으로 설정 디렉토리와 파일이 생성됩니다.
 
 ---

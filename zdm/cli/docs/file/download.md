@@ -5,19 +5,20 @@ section_title: ZDM CLI Documentation
 navigation: cli
 ---
 
-서버에서 파일을 다운로드합니다.
+ZDM 서버에서 파일을 다운로드합니다.
 
 ---
 
 ## `file download` {#file-download}
 
-> * 서버에서 파일을 다운로드합니다.
+> * 서버에 저장된 파일을 로컬로 다운로드합니다.
+> * 다운로드 진행률을 실시간으로 표시합니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
 
 <div class="command-card">
-  <code>zdm-cli file download --file-name &lt;name&gt; [--save-path &lt;path&gt;]</code>
+  <code>zdm-cli file download [options]</code>
 </div>
 
 </details>
@@ -26,17 +27,14 @@ navigation: cli
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
-# 현재 디렉토리에 다운로드
-zdm-cli file download --file-name backup.tar.gz
+# 현재 디렉토리에 파일 다운로드
+zdm-cli file download --file-name "backup.tar.gz"
 
-# 특정 디렉토리에 다운로드
-zdm-cli file download --file-name backup.tar.gz --save-path /downloads
+# 특정 디렉토리에 파일 다운로드
+zdm-cli file download -f "backup.tar.gz" -s "/downloads"
 
-# 다른 이름으로 저장
-zdm-cli file download --file-name backup.tar.gz --save-path /downloads/my-backup.tar.gz
-
-# 전체 파일명으로 다운로드
-zdm-cli file download --file-name file-1698500000000-123456789-backup.tar.gz
+# 별칭을 사용한 다운로드
+zdm-cli file download -f "config.json" -s "./backup"
 ```
 
 </details>
@@ -46,39 +44,28 @@ zdm-cli file download --file-name file-1698500000000-123456789-backup.tar.gz
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `--file-name` | `-f` | string | Required | - | 다운로드할 파일명 | - |
-| `--save-path` | `-s` | string | Optional | 현재 디렉토리 | 저장할 경로 | - |
+| --file-name | -f | string | Required | - | 다운로드할 파일 이름 | - |
+| --save-path | -s | string | Optional | 현재 디렉토리 | 파일 저장 경로 | - |
+| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
 
 </details>
 
 <details markdown="1" open>
-<summary><strong>진행률 표시</strong></summary>
+<summary><strong>출력 예시</strong></summary>
 
-다운로드 중에는 실시간으로 진행률이 표시됩니다:
-
+**Text 형식 (기본값)**
 ```text
-Downloading: backup.tar.gz
-Progress: 45% | 4.50MB / 10.00MB | Elapsed: 00:00:12
-Download completed: /downloads/backup.tar.gz
+Downloading file: backup.tar.gz
+Save to: /home/user/backup.tar.gz
+
+Progress: 100% | 50.00MB / 50.00MB | Elapsed: 00:00:05
+
+
+[Download Success]
+File saved to: /home/user/backup.tar.gz
 ```
 
-</details>
-
-<details markdown="1" open>
-<summary><strong>파일 이름 검색</strong></summary>
-
-다운로드 시 원본 파일명 또는 전체 파일명 모두 사용 가능합니다:
-
-```bash
-# 원본 파일명으로 검색
-zdm-cli file download --file-name backup.tar.gz
-
-# 전체 파일명으로 검색
-zdm-cli file download --file-name file-1698500000000-123456789-backup.tar.gz
-
-# 파일 목록에서 확인
-zdm-cli file list
-```
+> **Note**: 다운로드 명령어는 진행률 표시와 함께 결과를 출력합니다. 일반적인 API 응답 형식과 다르게 표시됩니다.
 
 </details>
 

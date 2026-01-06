@@ -5,19 +5,19 @@ section_title: ZDM CLI Documentation
 navigation: cli
 ---
 
-현재 설정된 CLI 설정 정보를 조회합니다.
+Config 파일의 현재 설정 내용을 조회합니다.
 
 ---
 
 ## `config show` {#config-show}
 
-> * 현재 설정된 CLI 설정 정보를 조회합니다.
+> * Config 파일에 저장된 설정 정보를 조회합니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
 
 <div class="command-card">
-  <code>zdm-cli config show</code>
+  <code>zdm-cli config show [options]</code>
 </div>
 
 </details>
@@ -26,75 +26,79 @@ navigation: cli
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
+# 기본 사용 (text 형식 출력)
 zdm-cli config show
+
+# JSON 형식으로 출력
+zdm-cli config show --output json
+
+# Table 형식으로 출력
+zdm-cli config show --output table
 ```
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>파라미터</strong></summary>
+
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--output` | `-o` | string | Optional | `text` | 출력 형식 지정 | `text`, `json`, `table` |
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>출력 예시</strong></summary>
 
-```text
-ZDM Configuration:
-  ZDM IP Address: 192.168.1.100
-  ZDM API Port: 53307
-  ZDM ID: zdm-center-01
-  ZDM Repository ID: 1
-  Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+**Text 형식 출력:**
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* Config File Contents [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[info]
+
+config path  : /path/to/.zdm-cli.json
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[data]
+
+zconverter_dir_path    : /ZConverterManager
+user.mail              : admin@example.com
+token                  : eyJhbGciOiJIUzI1NiIs...
+zdm.ip                 : 192.168.1.100
+zdm.port               : 53307
+zdm.id                 : 1
+zdm.repository.id      : 1
+zdm.repository.path    : /backup
+zdm.zos_repository.id  : -
+zdm.zos_repository.platform : -
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-</details>
-
----
-
-## 설정 파일
-
-<details markdown="1" open>
-<summary><strong>설정 파일 위치</strong></summary>
-
-| 운영체제 | 경로 |
-|---------|------|
-| Linux/macOS | `~/.zdm-cli/config.json` |
-| Windows | `%USERPROFILE%\.zdm-cli\config.json` |
-
-</details>
-
-<details markdown="1" open>
-<summary><strong>설정 파일 구조</strong></summary>
-
+**JSON 형식 출력:**
 ```json
 {
-  "type": "",
-  "zconverter_dir_path": "",
-  "token": "abcdefg...",
+  "zconverter_dir_path": "/ZConverterManager",
   "user": {
-    "mail": "user@zconverter.com"
+    "mail": "admin@example.com"
   },
+  "token": "eyJhbGciOiJIUzI1NiIs...",
   "zdm": {
-    "ip": "127.0.0.1",
+    "ip": "192.168.1.100",
     "port": 53307,
     "id": 1,
     "repository": {
-      "id": 2,
-      "path": ""
+      "id": 1,
+      "path": "/backup"
     },
     "zos_repository": {
       "id": null,
-      "platform": ""
+      "platform": null
     }
   }
 }
 ```
-
-**필드 설명:**
-- `zdm.ip`: ZDM 서버의 IP 주소
-- `zdm.port`: ZDM API 서버 포트 (기본값: 53307)
-- `zdm.id`: 기본으로 사용할 ZDM Center ID
-- `zdm.repository.id`: 기본으로 사용할 Repository ID
-- `zdm.repository.path`: 기본으로 사용할 Repository Path
-- `zdm.zos_repository.id`: 기본으로 사용할 Repository ID
-- `zdm.zos_repository.platform`: 기본으로 사용할 Object Storage 제공 Platform
-- `token`: 인증 토큰 (자동 저장)
 
 </details>
 
