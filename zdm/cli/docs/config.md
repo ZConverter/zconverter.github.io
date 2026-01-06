@@ -13,7 +13,16 @@ CLI 환경 설정을 관리합니다. 설정된 값은 이후 명령 실행 시 
 
 ### `config show` {#config-show}
 
-현재 설정된 CLI 설정 정보를 조회합니다.
+> * 현재 설정된 CLI 설정 정보를 조회합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli config show</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -42,7 +51,16 @@ ZDM Configuration:
 
 ### `config set` {#config-set}
 
-CLI 설정 값을 변경합니다.
+> * CLI 설정 값을 변경합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli config set [options]</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -69,12 +87,12 @@ zdm-cli config set --zdm-ip 192.168.1.100 --zdm-id zdm-center-01 --zdm-repo-id 1
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 |
-|----------|------|------|------|------|
-| `--zdm-ip` | | string | Optional | ZDM 서버 IP 주소 |
-| `--zdm-id` | | string | Optional | ZDM Center ID |
-| `--zdm-repo-id` | | number | Optional | 기본 Repository ID |
-| `--zdm-api-port` | | number | Optional | ZDM API 포트 번호 |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--zdm-ip` | - | string | Optional | - | ZDM 서버 IP 주소 | - |
+| `--zdm-id` | - | string | Optional | - | ZDM Center ID | - |
+| `--zdm-repo-id` | - | number | Optional | - | 기본 Repository ID | - |
+| `--zdm-api-port` | - | number | Optional | - | ZDM API 포트 번호 | - |
 
 </details>
 
@@ -179,6 +197,7 @@ zdm-cli config show
 ```
 
 </details>
+
 ---
 
 ## 참고사항

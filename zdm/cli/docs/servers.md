@@ -13,7 +13,16 @@ navigation: cli
 
 ### `server list` {#server-list}
 
-서버 목록을 조회합니다.
+> * 서버 목록을 조회합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli server list [options]</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -64,18 +73,18 @@ zdm-cli server list --os lin --mode source --license-assign-only --partition
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 | 선택값 |
-|----------|------|------|------|------|--------|
-| `--name` | | string | Optional | 조회할 Server 이름 (단일 조회) | |
-| `--id` | | number | Optional | 조회할 Server ID (단일 조회) | |
-| `--os` | | string | Optional | 조회할 Server OS | `win`, `lin` |
-| `--mode` | | string | Optional | 조회할 Server 모드 | `source`, `target` |
-| `--license` | | number | Optional | Server에 할당된 License ID | |
-| `--license-assign-only` | `lao` | boolean | Optional | 라이센스가 할당된 Server만 조회 | |
-| `--license-un-assign-only` | `luao` | boolean | Optional | 라이센스가 할당되지 않은 Server만 조회 | |
-| `--partition` | | boolean | Optional | Partition 정보 추가조회 | |
-| `--partition-only` | `po` | boolean | Optional | 대상 Server의 Partition정보만 조회 | |
-| `--detail` | | boolean | Optional | 상세 정보 조회 | |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--name` | - | string | Optional | - | 조회할 Server 이름 (단일 조회) | - |
+| `--id` | - | number | Optional | - | 조회할 Server ID (단일 조회) | - |
+| `--os` | - | string | Optional | - | 조회할 Server OS | `win`, `lin` |
+| `--mode` | - | string | Optional | - | 조회할 Server 모드 | `source`, `target` |
+| `--license` | - | number | Optional | - | Server에 할당된 License ID | - |
+| `--license-assign-only` | `lao` | boolean | Optional | - | 라이센스가 할당된 Server만 조회 | - |
+| `--license-un-assign-only` | `luao` | boolean | Optional | - | 라이센스가 할당되지 않은 Server만 조회 | - |
+| `--partition` | - | boolean | Optional | - | Partition 정보 추가조회 | - |
+| `--partition-only` | `po` | boolean | Optional | - | 대상 Server의 Partition정보만 조회 | - |
+| `--detail` | - | boolean | Optional | - | 상세 정보 조회 | - |
 
 </details>
 

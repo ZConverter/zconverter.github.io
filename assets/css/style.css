@@ -319,6 +319,34 @@ th {
   margin-top: 1rem;
 }
 
+/* Command Card - CLI 명령어 카드 스타일 */
+/* .command-card {
+  background: linear-gradient(135deg, #f6f8fa 0%, #ffffff 100%);
+  border: 1px solid #e1e4e8;
+  border-left: 4px solid #3498db;
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 16px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+} */
+
+.command-card code {
+  background: #1e293b;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  display: block;
+  font-size: 0.95rem;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  overflow-x: auto;
+}
+
+/* Required Note - 필수 파라미터 표시 */
+.required-note {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
   .docs-layout {

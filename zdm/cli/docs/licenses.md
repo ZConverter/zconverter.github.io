@@ -13,7 +13,16 @@ navigation: cli
 
 ### `license list` {#license-list}
 
-라이센스 목록을 조회합니다.
+> * 라이센스 목록을 조회합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli license list [options]</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -43,12 +52,12 @@ zdm-cli license list --type backup --expiration-date 2025-12-31 --output table
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 |
-|----------|------|------|------|------|
-| `--license-id` | | number | Optional | 라이센스 ID |
-| `--type` | | string | Optional | 라이센스 타입 |
-| `--expiration-date` | | string | Optional | 만료 날짜 (YYYY-MM-DD) |
-| `--create-date` | | string | Optional | 생성 날짜 (YYYY-MM-DD) |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--license-id` | - | number | Optional | - | 라이센스 ID | - |
+| `--type` | - | string | Optional | - | 라이센스 타입 | - |
+| `--expiration-date` | - | string | Optional | - | 만료 날짜 (YYYY-MM-DD) | - |
+| `--create-date` | - | string | Optional | - | 생성 날짜 (YYYY-MM-DD) | - |
 
 </details>
 
@@ -83,7 +92,16 @@ Licenses:
 
 ### `license assign` {#license-assign}
 
-서버에 라이센스를 할당합니다.
+> * 서버에 라이센스를 할당합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli license assign --license &lt;id&gt; --server &lt;server&gt;</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -106,15 +124,15 @@ zdm-cli license assign --license 3 --server app-server-01
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 |
-|----------|------|------|------|------|
-| `--license` | | number | Required | 할당할 라이센스 ID |
-| `--server` | | string | Required | 대상 서버 이름 또는 ID |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--license` | - | number | Required | - | 할당할 라이센스 ID | - |
+| `--server` | - | string | Required | - | 대상 서버 이름 또는 ID | - |
 
 </details>
 
 <details markdown="1" open>
-<summary><strong>응답 예시</strong></summary>
+<summary><strong>출력 예시</strong></summary>
 
 ```json
 {
@@ -137,7 +155,16 @@ zdm-cli license assign --license 3 --server app-server-01
 
 ### `license regist` {#license-regist}
 
-라이센스를 등록합니다.
+> * 라이센스를 등록합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli license regist --center &lt;center&gt; --key &lt;key&gt; [options]</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -166,18 +193,18 @@ zdm-cli license regist \
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 |
-|----------|------|------|------|------|
-| `--center` | `-c` | string | Required | License를 등록할 센터 ID 또는 Name |
-| `--key` | `-k` | string | Required | 등록할 License Key |
-| `--user` | `-u` | string | Optional | 요청 사용자 ID 또는 메일 |
-| `--name` | `-n` | string | Optional | 등록할 License Name |
-| `--description` | `-d` | string | Optional | 등록할 License 설명 |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--center` | `-c` | string | Required | - | License를 등록할 센터 ID 또는 Name | - |
+| `--key` | `-k` | string | Required | - | 등록할 License Key | - |
+| `--user` | `-u` | string | Optional | - | 요청 사용자 ID 또는 메일 | - |
+| `--name` | `-n` | string | Optional | - | 등록할 License Name | - |
+| `--description` | `-d` | string | Optional | - | 등록할 License 설명 | - |
 
 </details>
 
 <details markdown="1" open>
-<summary><strong>응답 예시</strong></summary>
+<summary><strong>출력 예시</strong></summary>
 
 ```json
 {

@@ -13,7 +13,16 @@ navigation: cli
 
 ### `backup list` {#backup-list}
 
-백업 작업 목록을 조회합니다.
+> * 백업 작업 목록을 조회합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli backup list [options]</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -52,16 +61,16 @@ zdm-cli backup list --server web-server-01 --mode full --status complete
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 | 선택값 |
-|----------|------|------|------|------|--------|
-| `--server` | | string | Optional | 작업 대상 Server | |
-| `--name` | | string | Optional | 작업 이름 | |
-| `--id` | | number | Optional | 작업 ID | |
-| `--mode` | | string | Optional | 작업 모드 | `full`, `increment`, `smart` |
-| `--status` | | string | Optional | 작업 상태 | `run`, `complete`, `start`, `waiting`, `cancel`, `schedule` |
-| `--repository-path` | `rp` | string | Optional | 작업에 사용한 repository path | |
-| `--repository-type` | `rt` | string | Optional | 작업에 사용한 repository type | `smb`, `nfs` |
-| `--detail` | | boolean | Optional | 상세 정보 조회 | |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--server` | - | string | Optional | - | 작업 대상 Server | - |
+| `--name` | - | string | Optional | - | 작업 이름 | - |
+| `--id` | - | number | Optional | - | 작업 ID | - |
+| `--mode` | - | string | Optional | - | 작업 모드 | `full`, `increment`, `smart` |
+| `--status` | - | string | Optional | - | 작업 상태 | `run`, `complete`, `start`, `waiting`, `cancel`, `schedule` |
+| `--repository-path` | `rp` | string | Optional | - | 작업에 사용한 repository path | - |
+| `--repository-type` | `rt` | string | Optional | - | 작업에 사용한 repository type | `smb`, `nfs` |
+| `--detail` | - | boolean | Optional | - | 상세 정보 조회 | - |
 
 </details>
 
@@ -69,7 +78,16 @@ zdm-cli backup list --server web-server-01 --mode full --status complete
 
 ### `backup regist` {#backup-regist}
 
-새로운 백업 작업을 등록합니다.
+> * 새로운 백업 작업을 등록합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli backup regist --server &lt;server&gt; --mode &lt;mode&gt; [options]</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -121,25 +139,25 @@ zdm-cli backup regist \
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `--center` | | string | Optional | | 작업 등록 Center (config 기본값 사용) | |
-| `--server` | | string | Required | | 작업 대상 Server | |
-| `--mode` | | string | Required | | 작업 모드 | `full`, `increment`, `smart` |
-| `--repository-id` | `ri` | number | Optional | | Repository ID (config 기본값 사용) | |
-| `--repository-path` | `rp` | string | Optional | | Repository Path | |
-| `--partition` | | string | Optional | | 작업 대상 파티션 (쉼표로 구분) | |
-| `--jobName` | `name` | string | Optional | | 작업 이름 | |
-| `--schedule` | `sc` | string | Optional | | 작업에 사용할 Schedule | |
-| `--description` | `desc` | string | Optional | | 작업 설명 | |
-| `--rotation` | `rot` | number | Optional | 1 | 작업 반복횟수 | |
-| `--no-compression` | `ncomp` | boolean | Optional | | 작업 압축 안함 | |
-| `--encryption` | `enc` | boolean | Optional | | 작업 암호화 | |
-| `--excludeDir` | `exd` | string | Optional | | 작업 제외 폴더 | |
-| `--excludePartition` | `exp` | string | Optional | | 작업 제외 partition | |
-| `--networkLimit` | `nl` | number | Optional | 0 | 작업 Network 제한 속도 | |
-| `--start` | | boolean | Optional | | 작업 자동시작 여부 | |
-| `--scriptPath` | `sp` | string | Optional | | 작업시 사용할 script full path | |
-| `--scriptRun` | `sr` | string | Optional | | 스크립트 실행 타이밍 | `before`, `after` |
-| `--individual` | `ind` | string | Optional | | 파티션별 개별 설정 (JSON 문자열) | |
+| `--center` | - | string | Optional | - | 작업 등록 Center (config 기본값 사용) | - |
+| `--server` | - | string | Required | - | 작업 대상 Server | - |
+| `--mode` | - | string | Required | - | 작업 모드 | `full`, `increment`, `smart` |
+| `--repository-id` | `ri` | number | Optional | - | Repository ID (config 기본값 사용) | - |
+| `--repository-path` | `rp` | string | Optional | - | Repository Path | - |
+| `--partition` | - | string | Optional | - | 작업 대상 파티션 (쉼표로 구분) | - |
+| `--jobName` | `name` | string | Optional | - | 작업 이름 | - |
+| `--schedule` | `sc` | string | Optional | - | 작업에 사용할 Schedule | - |
+| `--description` | `desc` | string | Optional | - | 작업 설명 | - |
+| `--rotation` | `rot` | number | Optional | 1 | 작업 반복횟수 | - |
+| `--no-compression` | `ncomp` | boolean | Optional | - | 작업 압축 안함 | - |
+| `--encryption` | `enc` | boolean | Optional | - | 작업 암호화 | - |
+| `--excludeDir` | `exd` | string | Optional | - | 작업 제외 폴더 | - |
+| `--excludePartition` | `exp` | string | Optional | - | 작업 제외 partition | - |
+| `--networkLimit` | `nl` | number | Optional | 0 | 작업 Network 제한 속도 | - |
+| `--start` | - | boolean | Optional | - | 작업 자동시작 여부 | - |
+| `--scriptPath` | `sp` | string | Optional | - | 작업시 사용할 script full path | - |
+| `--scriptRun` | `sr` | string | Optional | - | 스크립트 실행 타이밍 | `before`, `after` |
+| `--individual` | `ind` | string | Optional | - | 파티션별 개별 설정 (JSON 문자열) | - |
 
 </details>
 
@@ -147,7 +165,16 @@ zdm-cli backup regist \
 
 ### `backup delete` {#backup-delete}
 
-백업 작업을 삭제합니다.
+> * 백업 작업을 삭제합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli backup delete --id &lt;id&gt; | --name &lt;name&gt;</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -165,12 +192,12 @@ zdm-cli backup delete --name daily-backup
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 |
-|----------|------|------|------|------|
-| `--name` | | string | Optional* | 작업 이름 |
-| `--id` | | number | Optional* | 작업 ID |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--name` | - | string | Optional<span class="required-note">*</span> | - | 작업 이름 | - |
+| `--id` | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 
-> *둘 중 하나는 필수이며, 동시에 사용할 수 없습니다.
+> <span class="required-note">*</span> 둘 중 하나는 필수이며, 동시에 사용할 수 없습니다.
 
 </details>
 
@@ -178,7 +205,16 @@ zdm-cli backup delete --name daily-backup
 
 ### `backup update` {#backup-update}
 
-백업 작업 정보를 수정합니다.
+> * 백업 작업 정보를 수정합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli backup update --id &lt;id&gt; | --name &lt;name&gt; [options]</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -221,24 +257,24 @@ zdm-cli backup update \
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `--id` | | number | Optional* | | 작업 ID | |
-| `--name` | | string | Optional* | | 작업 Name | |
-| `--mode` | | string | Optional | | 작업 모드 | `full`, `increment`, `smart` |
-| `--status` | | string | Optional | | 작업 상태 | |
-| `--repository-id` | `ri` | number | Optional | | Repository ID | |
-| `--repository-path` | `rp` | string | Optional | | Repository Path | |
-| `--changeName` | `chn` | string | Optional | | 변경할 작업 이름 | |
-| `--schedule` | `sc` | string | Optional | | 작업에 사용할 Schedule | |
-| `--description` | `desc` | string | Optional | | 작업 설명 | |
-| `--rotation` | `rot` | number | Optional | 1 | 작업 반복횟수 | |
-| `--compression` | `comp` | boolean | Optional | | 작업 압축 | |
-| `--encryption` | `enc` | boolean | Optional | | 작업 암호화 | |
-| `--excludeDir` | `exd` | string | Optional | | 작업 제외 폴더 | |
-| `--scriptPath` | `sp` | string | Optional | | 작업시 사용할 script full path | |
-| `--scriptRun` | `sr` | string | Optional | | 스크립트 실행 타이밍 | `before`, `after` |
-| `--networkLimit` | `nl` | number | Optional | 0 | 작업 Network 제한 속도 | |
+| `--id` | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
+| `--name` | - | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
+| `--mode` | - | string | Optional | - | 작업 모드 | `full`, `increment`, `smart` |
+| `--status` | - | string | Optional | - | 작업 상태 | - |
+| `--repository-id` | `ri` | number | Optional | - | Repository ID | - |
+| `--repository-path` | `rp` | string | Optional | - | Repository Path | - |
+| `--changeName` | `chn` | string | Optional | - | 변경할 작업 이름 | - |
+| `--schedule` | `sc` | string | Optional | - | 작업에 사용할 Schedule | - |
+| `--description` | `desc` | string | Optional | - | 작업 설명 | - |
+| `--rotation` | `rot` | number | Optional | 1 | 작업 반복횟수 | - |
+| `--compression` | `comp` | boolean | Optional | - | 작업 압축 | - |
+| `--encryption` | `enc` | boolean | Optional | - | 작업 암호화 | - |
+| `--excludeDir` | `exd` | string | Optional | - | 작업 제외 폴더 | - |
+| `--scriptPath` | `sp` | string | Optional | - | 작업시 사용할 script full path | - |
+| `--scriptRun` | `sr` | string | Optional | - | 스크립트 실행 타이밍 | `before`, `after` |
+| `--networkLimit` | `nl` | number | Optional | 0 | 작업 Network 제한 속도 | - |
 
-> *둘 중 하나는 필수이며, 동시에 사용할 수 없습니다.
+> <span class="required-note">*</span> 둘 중 하나는 필수이며, 동시에 사용할 수 없습니다.
 
 </details>
 
@@ -246,7 +282,16 @@ zdm-cli backup update \
 
 ### `backup monit` {#backup-monit}
 
-백업 작업 진행 상황을 모니터링합니다.
+> * 백업 작업 진행 상황을 모니터링합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli backup monit --job-id &lt;id&gt; | --job-name &lt;name&gt; | --server-id &lt;id&gt; | --server-name &lt;name&gt; [options]</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -276,18 +321,18 @@ zdm-cli backup monit --server-name "DB-Server" --repository-path "/backup/db"
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 | 선택값 |
-|----------|------|------|------|------|--------|
-| `--job-id` | `ji` | number | Optional* | 작업 ID | |
-| `--job-name` | `jn` | string | Optional* | 작업 Name | |
-| `--server-id` | `si` | number | Optional* | 작업 대상 Server ID | |
-| `--server-name` | `sn` | string | Optional* | 작업 대상 Server Name | |
-| `--mode` | | string | Optional | 작업 모드 | `full`, `increment`, `smart` |
-| `--status` | | string | Optional | 작업 상태 | |
-| `--repository-path` | `rp` | string | Optional | Repository Path | |
-| `--detail` | | boolean | Optional | 상세 정보 조회 | |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--job-id` | `ji` | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
+| `--job-name` | `jn` | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
+| `--server-id` | `si` | number | Optional<span class="required-note">*</span> | - | 작업 대상 Server ID | - |
+| `--server-name` | `sn` | string | Optional<span class="required-note">*</span> | - | 작업 대상 Server Name | - |
+| `--mode` | - | string | Optional | - | 작업 모드 | `full`, `increment`, `smart` |
+| `--status` | - | string | Optional | - | 작업 상태 | - |
+| `--repository-path` | `rp` | string | Optional | - | Repository Path | - |
+| `--detail` | - | boolean | Optional | - | 상세 정보 조회 | - |
 
-> *job-id/job-name 또는 server-id/server-name 중 하나는 필수이며, job과 server는 동시에 사용할 수 없습니다.
+> <span class="required-note">*</span> job-id/job-name 또는 server-id/server-name 중 하나는 필수이며, job과 server는 동시에 사용할 수 없습니다.
 
 </details>
 

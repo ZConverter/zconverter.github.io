@@ -12,8 +12,16 @@ navigation: cli
 ## Token Commands
 
 ### `token issue` {#token-issue}
+> * API 사용을 위한 인증 토큰을 발급받습니다.
 
-API 접근을 위한 인증 토큰을 발급받습니다.
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli token issue -m &lt;email&gt; -p &lt;password&gt;</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -22,7 +30,7 @@ API 접근을 위한 인증 토큰을 발급받습니다.
 # 기본 사용
 zdm-cli token issue -m admin@example.com -p password
 
-# 이메일 입력 없이 (config.json 파일입력값 자동으로 가져감)
+# 이메일 입력 없이 (config.json 파일 입력값을 자동으로 가져갑니다.)
 zdm-cli token issue -p password
 ```
 
@@ -31,15 +39,15 @@ zdm-cli token issue -p password
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 |
-|----------|------|------|------|------|
-| `--user-mail` | `-m` | string | Optional | 포털 로그인 ID (이메일) |
-| `--user-pwd` | `-p` | string | Required | 포털 로그인 비밀번호 |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--user-mail` | `-m` | string | Optional | - | 포털 로그인 ID (이메일) | - |
+| `--user-pwd` | `-p` | string | Required | - | 포털 로그인 비밀번호 | - |
 
 </details>
 
 <details markdown="1" open>
-<summary><strong>응답 예시</strong></summary>
+<summary><strong>출력 예시</strong></summary>
 
 ```json
 {

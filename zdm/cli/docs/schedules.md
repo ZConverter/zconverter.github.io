@@ -13,7 +13,16 @@ navigation: cli
 
 ### `schedule list` {#schedule-list}
 
-스케줄 목록을 조회합니다.
+> * 스케줄 목록을 조회합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli schedule list [options]</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -40,11 +49,11 @@ zdm-cli schedule list --type 3 --state active --output table
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 | 선택값 |
-|----------|------|------|------|------|--------|
-| `--id` | | number | Optional | 스케줄 ID | |
-| `--type` | | number | Optional | 스케줄 타입 번호 | 0~11 |
-| `--state` | | string | Optional | 스케줄 상태 | |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--id` | - | number | Optional | - | 스케줄 ID | - |
+| `--type` | - | number | Optional | - | 스케줄 타입 번호 | 0~11 |
+| `--state` | - | string | Optional | - | 스케줄 상태 | - |
 
 </details>
 
@@ -52,7 +61,16 @@ zdm-cli schedule list --type 3 --state active --output table
 
 ### `schedule regist` {#schedule-regist}
 
-새로운 스케줄을 등록합니다.
+> * 새로운 스케줄을 등록합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli schedule regist --path &lt;path&gt;</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -70,9 +88,9 @@ zdm-cli schedule regist --path /etc/zdm/schedules/backup-schedule.json
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 |
-|----------|------|------|------|------|
-| `--path` | | string | Required | 스케줄 정의 JSON 파일 경로 |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--path` | - | string | Required | - | 스케줄 정의 JSON 파일 경로 | - |
 
 </details>
 
@@ -80,7 +98,16 @@ zdm-cli schedule regist --path /etc/zdm/schedules/backup-schedule.json
 
 ### `schedule create` {#schedule-create}
 
-스케줄 데이터를 생성합니다. (JSON 파일 생성)
+> * 스케줄 데이터를 생성합니다. (JSON 파일 생성)
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli schedule create --type &lt;type&gt; [options]</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -110,26 +137,26 @@ zdm-cli schedule create --type 7 --basic-day 1 --basic-time 02:00 --advanced-day
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 |
-|----------|------|------|------|------|
-| `--type` | `-t` | number | Required | Schedule Type (0~11, 아래 스케줄 타입 참조) |
-| `--path` | `-p` | string | Optional | 생성된 Schedule File 저장 Path |
-| `--center` | `-c` | string | Optional | Schedule 등록 Center |
-| `--user` | `-u` | string | Optional | Schedule 등록 User |
-| `--basic-year` | `by` | string | Optional | Basic Schedule - 년도 설정 |
-| `--basic-month` | `bm` | string | Optional | Basic Schedule - 월 설정 |
-| `--basic-week` | `bw` | string | Optional | Basic Schedule - 주 설정 |
-| `--basic-day` | `bd` | string | Optional | Basic Schedule - 일 설정 |
-| `--basic-time` | `bt` | string | Optional | Basic Schedule - 시간 설정 |
-| `--basic-interval-hour` | `bih` | string | Optional | Basic Schedule - 간격 시간 |
-| `--basic-interval-minute` | `bim` | string | Optional | Basic Schedule - 간격 분 |
-| `--advanced-year` | `ay` | string | Optional | Advanced Schedule - 년도 설정 (Smart Schedule용) |
-| `--advanced-month` | `am` | string | Optional | Advanced Schedule - 월 설정 (Smart Schedule용) |
-| `--advanced-week` | `aw` | string | Optional | Advanced Schedule - 주 설정 (Smart Schedule용) |
-| `--advanced-day` | `ad` | string | Optional | Advanced Schedule - 일 설정 (Smart Schedule용) |
-| `--advanced-time` | `at` | string | Optional | Advanced Schedule - 시간 설정 (Smart Schedule용) |
-| `--advanced-interval-hour` | `aih` | string | Optional | Advanced Schedule - 간격 시간 (Smart Schedule용) |
-| `--advanced-interval-minute` | `aim` | string | Optional | Advanced Schedule - 간격 분 (Smart Schedule용) |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--type` | `-t` | number | Required | - | Schedule Type (0~11, 아래 스케줄 타입 참조) | - |
+| `--path` | `-p` | string | Optional | - | 생성된 Schedule File 저장 Path | - |
+| `--center` | `-c` | string | Optional | - | Schedule 등록 Center | - |
+| `--user` | `-u` | string | Optional | - | Schedule 등록 User | - |
+| `--basic-year` | `by` | string | Optional | - | Basic Schedule - 년도 설정 | - |
+| `--basic-month` | `bm` | string | Optional | - | Basic Schedule - 월 설정 | - |
+| `--basic-week` | `bw` | string | Optional | - | Basic Schedule - 주 설정 | - |
+| `--basic-day` | `bd` | string | Optional | - | Basic Schedule - 일 설정 | - |
+| `--basic-time` | `bt` | string | Optional | - | Basic Schedule - 시간 설정 | - |
+| `--basic-interval-hour` | `bih` | string | Optional | - | Basic Schedule - 간격 시간 | - |
+| `--basic-interval-minute` | `bim` | string | Optional | - | Basic Schedule - 간격 분 | - |
+| `--advanced-year` | `ay` | string | Optional | - | Advanced Schedule - 년도 설정 (Smart Schedule용) | - |
+| `--advanced-month` | `am` | string | Optional | - | Advanced Schedule - 월 설정 (Smart Schedule용) | - |
+| `--advanced-week` | `aw` | string | Optional | - | Advanced Schedule - 주 설정 (Smart Schedule용) | - |
+| `--advanced-day` | `ad` | string | Optional | - | Advanced Schedule - 일 설정 (Smart Schedule용) | - |
+| `--advanced-time` | `at` | string | Optional | - | Advanced Schedule - 시간 설정 (Smart Schedule용) | - |
+| `--advanced-interval-hour` | `aih` | string | Optional | - | Advanced Schedule - 간격 시간 (Smart Schedule용) | - |
+| `--advanced-interval-minute` | `aim` | string | Optional | - | Advanced Schedule - 간격 분 (Smart Schedule용) | - |
 
 </details>
 
@@ -137,7 +164,16 @@ zdm-cli schedule create --type 7 --basic-day 1 --basic-time 02:00 --advanced-day
 
 ### `schedule verify` {#schedule-verify}
 
-스케줄 JSON 파일을 검증합니다.
+> * 스케줄 JSON 파일을 검증합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli schedule verify --path &lt;path&gt;</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -155,9 +191,9 @@ zdm-cli schedule verify --path /etc/zdm/schedules/backup-schedule.json
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 |
-|----------|------|------|------|------|
-| `--path` | `-p` | string | Required | 검증할 Schedule File Path |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--path` | `-p` | string | Required | - | 검증할 Schedule File Path | - |
 
 </details>
 

@@ -13,7 +13,16 @@ ZDM 센터 정보를 조회하고 관리합니다.
 
 ### `zdm list` {#zdm-list}
 
-ZDM 센터 목록을 조회합니다.
+> * ZDM 센터 목록을 조회합니다.
+
+<details markdown="1" open>
+<summary><strong>명령어 구문</strong></summary>
+
+<div class="command-card">
+  <code>zdm-cli zdm list [options]</code>
+</div>
+
+</details>
 
 <details markdown="1" open>
 <summary><strong>사용 예시</strong></summary>
@@ -46,15 +55,15 @@ zdm-cli zdm list --connection connect --activation ok --repository --output tabl
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-| 파라미터 | 별칭 | 타입 | 필수 | 설명 | 선택값 |
-|----------|------|------|------|------|--------|
-| `--name` | | string | Optional | 조회할 ZDM 이름 (단일 조회) | |
-| `--id` | | number | Optional | 조회할 ZDM ID (단일 조회) | |
-| `--connection` | `conn` | string | Optional | ZDM 연결 상태 | `connect`, `disconnect` |
-| `--activation` | `active` | string | Optional | ZDM 활성화 상태 | `ok`, `fail` |
-| `--repository` | `repo` | boolean | Optional | Repository 정보 추가조회 | |
-| `--repository-only` | `ro` | boolean | Optional | Repository 정보만 조회 | |
-| `--detail` | | boolean | Optional | 상세 정보 조회 | |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| `--name` | - | string | Optional | - | 조회할 ZDM 이름 (단일 조회) | - |
+| `--id` | - | number | Optional | - | 조회할 ZDM ID (단일 조회) | - |
+| `--connection` | `conn` | string | Optional | - | ZDM 연결 상태 | `connect`, `disconnect` |
+| `--activation` | `active` | string | Optional | - | ZDM 활성화 상태 | `ok`, `fail` |
+| `--repository` | `repo` | boolean | Optional | - | Repository 정보 추가조회 | - |
+| `--repository-only` | `ro` | boolean | Optional | - | Repository 정보만 조회 | - |
+| `--detail` | - | boolean | Optional | - | 상세 정보 조회 | - |
 
 </details>
 
