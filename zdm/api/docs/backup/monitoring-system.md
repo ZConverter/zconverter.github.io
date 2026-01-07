@@ -44,9 +44,9 @@ curl -X GET "https://api.example.com/api/v1/backups/monitoring/system/server-01"
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 서버 ID (숫자) 또는 서버 이름 | - |
-| `mode` | Query | string | Optional | - | 작업 모드 필터 | `full`, `increment`, `smart` |
+| `mode` | Query | string | Optional | - | 작업 모드 필터 | {% include zdm/job-modes.md backup=true %} |
 | `partition` | Query | string | Optional | - | 작업 대상 파티션 필터 | - |
-| `repositoryType` | Query | string | Optional | - | 레포지토리 타입 필터 | `smb`, `nfs` |
+| `repositoryType` | Query | string | Optional | - | 레포지토리 타입 필터 | {% include zdm/repository-types.md %} |
 | `repositoryPath` | Query | string | Optional | - | 레포지토리 경로 필터 | - |
 | `status` | Query | string | Optional | - | 작업 상태 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |

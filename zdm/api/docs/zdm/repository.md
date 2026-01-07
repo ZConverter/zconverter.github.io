@@ -48,7 +48,7 @@ curl -X GET "https://api.example.com/api/v1/zdms/1/repositories?type=nfs" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | ZDM ID (숫자) 또는 ZDM 이름 | - |
-| `type` | Query | string | Optional | - | 레포지토리 타입 필터 | `smb`, `nfs` |
+| `type` | Query | string | Optional | - | 레포지토리 타입 필터 | {% include zdm/repository-types.md %} |
 | `os` | Query | string | Optional | - | OS 필터 | - |
 | `path` | Query | string | Optional | - | 경로 필터 | - |
 

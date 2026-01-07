@@ -61,7 +61,7 @@ zdm-cli schedule list --output table
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --id | - | number | Optional | - | 조회할 Schedule ID (해당 옵션 사용시 단일 조회) | - |
-| --type | - | number | Optional | - | 조회할 Schedule Type | 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 |
+| --type | - | number | Optional | - | 조회할 Schedule Type | {% include zdm/schedule-types.md inline=true %} |
 | --state | - | string | Optional | - | 조회할 Schedule 상태 | {% include zdm/schedule-state.md %} |
 
 </details>

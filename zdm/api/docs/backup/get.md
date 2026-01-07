@@ -51,11 +51,11 @@ curl -X GET "https://api.example.com/api/v1/backups/1?detail=true" \
 | `jobId` | Query | number | Optional | - | 작업 ID 필터 | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `serverName` | Query | string | Optional | - | 작업 대상 서버 이름 필터 | - |
-| `mode` | Query | string | Optional | - | 작업 모드 필터 | `full`, `increment`, `smart` |
+| `mode` | Query | string | Optional | - | 작업 모드 필터 | {% include zdm/job-modes.md backup=true %} |
 | `partition` | Query | string | Optional | - | 작업 대상 파티션 필터 | - |
-| `status` | Query | string | Optional | - | 작업 상태 필터 | `run`, `complete`, `start`, `waiting`, `cancel`, `schedule` |
+| `status` | Query | string | Optional | - | 작업 상태 필터 | {% include zdm/job-status.md %} |
 | `repositoryID` | Query | number | Optional | - | 레포지토리 ID 필터 | - |
-| `repositoryType` | Query | string | Optional | - | 레포지토리 타입 필터 | `smb`, `nfs` |
+| `repositoryType` | Query | string | Optional | - | 레포지토리 타입 필터 | {% include zdm/repository-types.md %} |
 | `repositoryPath` | Query | string | Optional | - | 레포지토리 경로 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
 

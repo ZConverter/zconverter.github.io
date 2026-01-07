@@ -62,7 +62,7 @@ curl -X POST "https://api.example.com/api/v1/zdms/repositories" \
 | 필드 | 타입 | 필수 | 설명 | 선택값 |
 |------|------|------|------|--------|
 | `center` | string | Required | 센터 ID (숫자) 또는 센터 이름 | - |
-| `type` | string | Required | 레포지토리 타입 | `smb`, `nfs` |
+| `type` | string | Required | 레포지토리 타입 | {% include zdm/repository-types.md %} |
 | `remotePath` | string | Required | 원격 경로 | - |
 | `localPath` | string | Required | 로컬 경로 (SMB: 드라이브, NFS: 마운트 경로) | - |
 | `ip` | string | Required | 레포지토리 서버 IP | - |

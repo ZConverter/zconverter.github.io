@@ -44,11 +44,11 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 서버 ID (숫자) 또는 서버 이름 | - |
-| `mode` | Query | string | Optional | - | 작업 모드 필터 | `full`, `increment` |
+| `mode` | Query | string | Optional | - | 작업 모드 필터 | {% include zdm/job-modes.md %} |
 | `partition` | Query | string | Optional | - | 파티션 필터 (Linux) | - |
 | `drive` | Query | string | Optional | - | 드라이브 필터 (Windows) | - |
 | `serverName` | Query | string | Optional | - | 서버 이름 필터 | - |
-| `serverType` | Query | string | Optional | - | 서버 타입 필터 | `source`, `target` |
+| `serverType` | Query | string | Optional | - | 서버 타입 필터 | {% include zdm/server-modes.md %} |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
 

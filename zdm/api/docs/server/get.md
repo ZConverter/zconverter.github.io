@@ -48,10 +48,10 @@ curl -X GET "https://api.example.com/api/v1/servers/1?detail=true&disk=true" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 서버 ID (숫자) 또는 서버 이름 | - |
-| `mode` | Query | string | Optional | - | 서버 모드 필터 | `source`, `target` |
-| `os` | Query | string | Optional | - | 운영체제 타입 필터 | `win`, `lin`, `cloud` |
-| `connection` | Query | string | Optional | - | 연결 상태 필터 | `connect`, `disconnect` |
-| `license` | Query | string | Optional | - | 라이선스 할당 상태 필터 | `assign`, `unassign` |
+| `mode` | Query | string | Optional | - | 서버 모드 필터 | {% include zdm/server-modes.md %} |
+| `os` | Query | string | Optional | - | 운영체제 타입 필터 | {% include zdm/os-types.md cloud=true %} |
+| `connection` | Query | string | Optional | - | 연결 상태 필터 | {% include zdm/connection-status.md %} |
+| `license` | Query | string | Optional | - | 라이선스 할당 상태 필터 | {% include zdm/license-assign-status.md %} |
 | `disk` | Query | boolean | Optional | `false` | 디스크 정보 포함 여부 | `true`, `false` |
 | `network` | Query | boolean | Optional | `false` | 네트워크 정보 포함 여부 | `true`, `false` |
 | `partition` | Query | boolean | Optional | `false` | 파티션 정보 포함 여부 | `true`, `false` |

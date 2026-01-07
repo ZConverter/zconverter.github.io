@@ -75,7 +75,7 @@ zdm-cli schedule create -t 3 --basic-time 12:00 -p /custom/path/schedule.json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --type | -t | number | Required | - | Schedule Type | 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 |
+| --type | -t | number | Required | - | Schedule Type | {% include zdm/schedule-types.md inline=true %} |
 | --path | -p | string | Optional | - | 생성된 Schedule File 저장 Path | - |
 | --center | -c | string | Optional | - | Schedule 등록 Center | - |
 | --user | -u | string | Optional | - | Schedule 등록 User | - |
