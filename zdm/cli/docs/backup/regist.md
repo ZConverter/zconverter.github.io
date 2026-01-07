@@ -65,7 +65,7 @@ zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --individ
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --server | - | string | Required | - | 작업 대상 Server | - |
-| --mode | - | string | Required | - | 작업 모드 | full, increment, smart |
+| --mode | - | string | Required | - | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
 | --center | - | string | Optional | config 설정값 | 작업 등록 Center | - |
 | --repository-id | -ri | number | Optional | config 설정값 | 작업시 사용할 Repository ID | - |
 | --repository-path | -rp | string | Optional | - | 작업시 사용할 Repository Path | - |
@@ -81,9 +81,9 @@ zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --individ
 | --networkLimit | -nl | number | Optional | 0 | 작업 Network 제한 속도 | - |
 | --start | - | boolean | Optional | false | 작업 자동시작 여부 | - |
 | --scriptPath | -sp | string | Optional | - | 작업시 사용할 script full path | - |
-| --scriptRun | -sr | string | Optional | - | 스크립트 실행 타이밍 | before, after |
+| --scriptRun | -sr | string | Optional | - | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 | --individual | -ind | string | Optional | - | 파티션별 개별 설정 (JSON 문자열) | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

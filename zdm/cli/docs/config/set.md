@@ -68,7 +68,9 @@ zdm-cli config set --zdm-repo-id 1 --zdm-repo-path /backup
 </details>
 
 <details markdown="1" open>
-<summary><strong>출력 예시</strong></summary>
+<summary><strong>출력 예시 (Text format)</strong></summary>
+
+**Text 형식:**
 
 **변경 성공 시:**
 ```
@@ -84,7 +86,13 @@ zdm-cli config set --zdm-repo-id 1 --zdm-repo-path /backup
 ------------------
 ```
 
-**JSON 형식 출력:**
+</details>
+
+<details markdown="1" open>
+<summary><strong>출력 예시 (JSON format)</strong></summary>
+
+**JSON 형식:**
+
 ```json
 {
   "updated_keys": ["zdm-ip", "zdm-port"]

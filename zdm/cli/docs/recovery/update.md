@@ -74,17 +74,17 @@ zdm-cli recovery update --id 123 --changeName "MyRecovery" --platform aws --afte
 | --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --name | - | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
 | --changeName | -chn | string | Optional | - | 변경할 작업 이름 | - |
-| --platform | -pf | string | Optional | - | 변경할 플랫폼 | oci, ncp, gcp, aws, azure, vmware, scp, openstack, cloudstack, kt, nhn, nutanix, proxmox, kvm, hyperv, xenserver, baremetal |
+| --platform | -pf | string | Optional | - | 변경할 플랫폼 | {% include zdm/platforms.md inline=true baremetal=true %} |
 | --schedule | -sc | string | Optional | - | 작업에 사용할 Schedule (JSON 파일 경로 또는 JSON 문자열) | - |
-| --mode | - | string | Optional | - | 작업 모드 | full, inc |
-| --afterReboot | -ar | string | Optional | - | 작업 완료 후 부팅 모드 | reboot, shutdown, maintain |
+| --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md %} |
+| --afterReboot | -ar | string | Optional | - | 작업 완료 후 부팅 모드 | {% include zdm/after-reboot.md %} |
 | --mailEvent | -me | string | Optional | - | 작업 이벤트 수신 메일 | - |
 | --networkLimit | -nl | number | Optional | 0 | 작업 Network 제한 속도 (Mbps) | - |
 | --scriptPath | -sp | string | Optional | - | 작업 스크립트 경로 | - |
-| --scriptRun | -sr | string | Optional | - | 작업 스크립트 실행 타이밍 | before, after |
-| --status | - | string | Optional | - | 작업 상태 | run, complete, start, waiting, cancel, schedule |
+| --scriptRun | -sr | string | Optional | - | 작업 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
+| --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status.md %} |
 | --partition | -pt | string | Optional | - | 변경할 작업 대상 파티션 | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

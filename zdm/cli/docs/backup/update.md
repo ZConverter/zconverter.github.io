@@ -66,7 +66,7 @@ zdm-cli backup update --id 123 --mode increment --output json
 |----------|------|------|------|--------|------|--------|
 | --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --name | - | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
-| --mode | - | string | Optional | - | 작업 모드 | full, increment, smart |
+| --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
 | --status | - | string | Optional | - | 작업 상태 | - |
 | --repository-id | -ri | number | Optional | - | Repository ID | - |
 | --repository-path | -rp | string | Optional | - | Repository Path | - |
@@ -78,9 +78,9 @@ zdm-cli backup update --id 123 --mode increment --output json
 | --encryption | -enc | boolean | Optional | - | 작업 암호화 | - |
 | --excludeDir | -exd | string | Optional | - | 작업 제외 폴더 | - |
 | --scriptPath | -sp | string | Optional | - | 작업시 사용할 script full path | - |
-| --scriptRun | -sr | string | Optional | - | 스크립트 실행 타이밍 | before, after |
+| --scriptRun | -sr | string | Optional | - | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 | --networkLimit | -nl | number | Optional | 0 | 작업 Network 제한 속도 | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 > <span class="required-note">*</span> --id 또는 --name 중 최소 하나는 필수로 입력해야 합니다.
 

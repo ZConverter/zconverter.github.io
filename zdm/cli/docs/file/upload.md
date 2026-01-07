@@ -45,7 +45,7 @@ zdm-cli file upload --file "/path/to/file.txt" --output json
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --file | -f | string | Required | - | 업로드할 파일 경로 | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

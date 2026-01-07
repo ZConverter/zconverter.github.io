@@ -68,21 +68,21 @@ zdm-cli recovery list --output table
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --status | | string | Optional | | 작업 상태 | run, complete, start, waiting, cancel, schedule |
-| --mode | | string | Optional | | 작업 모드 | full, inc |
+| --status | | string | Optional | | 작업 상태 | {% include zdm/job-status.md %} |
+| --mode | | string | Optional | | 작업 모드 | {% include zdm/job-modes.md %} |
 | --name | | string | Optional | | 작업 이름 | |
 | --id | | number | Optional | | 작업 ID | |
 | --partition | | string | Optional | | 작업 대상 partition (Linux) | |
 | --drive | | string | Optional | | 작업 대상 drive (Windows) | |
-| --platform | | string | Optional | | 작업 대상 플랫폼 | oci, ncp, gcp, aws, azure, vmware, scp, openstack, cloudstack, kt, nhn, nutanix, proxmox, kvm, hyperv, xenserver |
+| --platform | | string | Optional | | 작업 대상 플랫폼 | {% include zdm/platforms.md inline=true %} |
 | --backup-name | -bn | string | Optional | | Recovery 작업시 사용한 Backup 작업 이름 | |
 | --server | | string | Optional | | 작업 대상 Server | |
-| --server-type | | string | Optional | | 작업 대상 Server Type | source, target |
+| --server-type | | string | Optional | | 작업 대상 Server Type | {% include zdm/server-modes.md %} |
 | --repository-id | -ri | string | Optional | | 작업에 사용한 Repository ID | |
 | --repository-path | -rp | string | Optional | | 작업에 사용한 Repository 경로 | |
-| --repository-type | -rt | string | Optional | | 작업에 사용한 Repository 타입 | smb, nfs |
+| --repository-type | -rt | string | Optional | | 작업에 사용한 Repository 타입 | {% include zdm/repository-types.md %} |
 | --detail | | boolean | Optional | | 상세 정보 조회 여부 | |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

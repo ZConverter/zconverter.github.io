@@ -5,13 +5,13 @@ section_title: ZDM API Documentation
 navigation: api
 ---
 
-특정 스케줄 정보를 조회합니다.
+특정 스케줄의 상세 정보를 조회합니다.
 
 ---
 
-## `GET /schedules/:identifier` {#get-schedule}
+## `GET /schedules/:identifier` {#get-schedules-identifier}
 
-> * 특정 스케줄 정보를 조회합니다.
+> * 스케줄 ID로 특정 스케줄의 정보를 조회합니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -26,12 +26,8 @@ navigation: api
 <summary><strong>요청 예시</strong></summary>
 
 ```bash
-# ID로 조회
+# 스케줄 ID로 조회
 curl -X GET "https://api.example.com/api/v1/schedules/1" \
-  -H "Authorization: Bearer <token>"
-
-# 작업명으로 조회
-curl -X GET "https://api.example.com/api/v1/schedules/daily-backup-job" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -42,35 +38,68 @@ curl -X GET "https://api.example.com/api/v1/schedules/daily-backup-job" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `identifier` | Path | string | Required | - | 스케줄 ID 또는 작업명 | - |
-| `id` | Query | string | Optional | - | 스케줄 ID 필터 | - |
-| `type` | Query | string | Optional | - | 스케줄 타입 필터 | `backup`, `recovery` |
-| `state` | Query | string | Optional | - | 활성 상태 필터 | `active`, `inactive` |
-| `jobName` | Query | string | Optional | - | 작업명 필터 | - |
+| `identifier` | Path | string | Required | - | 스케줄 ID | - |
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
+**성공 응답 (200 OK)**
+
 ```json
 {
   "success": true,
-  "requestID": "req-schedule-detail",
+  "requestID": "req-abc123",
   "data": {
     "id": "1",
     "center": {
-      "id": "CENTER-001",
+      "id": "1",
       "name": "Main Center"
     },
-    "type": "backup",
-    "state": "active",
-    "jobName": "daily-backup-job",
-    "lastRunTime": "2024-01-31T02:00:00.000Z",
-    "description": "Daily backup schedule"
+    "type": "daily",
+    "state": "enabled",
+    "jobName": "daily-backup",
+    "lastRunTime": "2025-01-15T10:00:00Z",
+    "description": "Every day at 10:00"
   },
-  "message": "스케줄 정보를 성공적으로 조회했습니다",
-  "timestamp": "2024-01-31T10:30:45.123Z"
+  "message": "Schedule information retrieved",
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>응답 필드</strong></summary>
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `id` | string | 스케줄 ID |
+| `center.id` | string | 센터 ID |
+| `center.name` | string | 센터 이름 |
+| `type` | string | 스케줄 타입 |
+| `state` | string | 활성화 상태 |
+| `jobName` | string | 작업 이름 |
+| `lastRunTime` | string | 마지막 실행 시간 |
+| `description` | string | 스케줄 설명 |
+
+</details>
+
+<details markdown="1">
+<summary><strong>에러 응답</strong></summary>
+
+**스케줄을 찾을 수 없음 (404 Not Found)**
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": {
+    "code": "SCHEDULE_NOT_FOUND",
+    "message": "ID가 '999'인 Schedule를 찾을 수 없습니다"
+  },
+  "timestamp": "2025-01-15T10:30:00Z"
 }
 ```
 

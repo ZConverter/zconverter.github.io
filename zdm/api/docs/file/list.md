@@ -9,9 +9,9 @@ navigation: api
 
 ---
 
-## `GET /files/list` {#list-files}
+## `GET /files/list` {#get-files-list}
 
-> * 업로드된 파일 목록을 조회합니다.
+> * ZDM에 업로드된 파일 목록을 조회합니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -26,6 +26,7 @@ navigation: api
 <summary><strong>요청 예시</strong></summary>
 
 ```bash
+# 파일 목록 조회
 curl -X GET "https://api.example.com/api/v1/files/list" \
   -H "Authorization: Bearer <token>"
 ```
@@ -33,49 +34,56 @@ curl -X GET "https://api.example.com/api/v1/files/list" \
 </details>
 
 <details markdown="1" open>
-<summary><strong>파라미터</strong></summary>
-
-| 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
-|----------|------|------|------|--------|------|--------|
-| - | - | - | - | - | 파라미터 없음 | - |
-
-</details>
-
-<details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
+
+**성공 응답 (200 OK)**
 
 ```json
 {
   "success": true,
-  "requestID": "req-file-list",
+  "requestID": "req-abc123",
   "data": {
     "files": [
       {
-        "fileName": "file-1706688645123-987654321-document.pdf",
-        "fileOriginName": "document.pdf",
-        "size": "1.5 MB",
-        "uploadDate": "2024-01-31 10:30:45"
+        "fileName": "file-1705312200000-123456789-document.txt",
+        "fileOriginName": "document.txt",
+        "size": {
+          "raw": 1024,
+          "formatted": "1.0 KB"
+        },
+        "uploadDate": "2025-01-15 10:30:00"
       },
       {
-        "fileName": "file-1706602245456-123456789-report.xlsx",
-        "fileOriginName": "report.xlsx",
-        "size": "512.3 KB",
-        "uploadDate": "2024-01-30 14:15:22"
+        "fileName": "file-1705312300000-987654321-image.png",
+        "fileOriginName": "image.png",
+        "size": {
+          "raw": 204800,
+          "formatted": "200.0 KB"
+        },
+        "uploadDate": "2025-01-15 10:35:00"
       }
     ],
     "totalCount": 2
   },
-  "message": "File list retrieved successfully",
-  "timestamp": "2024-01-31T10:30:45.123Z"
+  "message": "File list retrieved",
+  "timestamp": "2025-01-15T10:40:00Z"
 }
 ```
 
-**응답 필드 설명:**
-- `fileName`: 서버에 저장된 실제 파일명 (타임스탬프 포함)
-- `fileOriginName`: 원본 파일명
-- `size`: 파일 크기 (MB/KB 단위로 변환)
-- `uploadDate`: 업로드 일시
-- `totalCount`: 총 파일 개수
+</details>
+
+<details markdown="1" open>
+<summary><strong>응답 필드</strong></summary>
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `files` | array | 파일 목록 |
+| `files[].fileName` | string | 저장된 파일 이름 |
+| `files[].fileOriginName` | string | 원본 파일 이름 |
+| `files[].size.raw` | number | 파일 크기 (bytes) |
+| `files[].size.formatted` | string | 파일 크기 (포맷) |
+| `files[].uploadDate` | string | 업로드 시간 |
+| `totalCount` | number | 전체 파일 수 |
 
 </details>
 

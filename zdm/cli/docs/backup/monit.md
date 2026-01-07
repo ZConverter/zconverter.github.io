@@ -62,11 +62,11 @@ zdm-cli backup monit --server-id 456 --output table
 | --job-name | -jn | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
 | --server-id | -si | number | Optional<span class="required-note">*</span> | - | 작업 대상 Server ID | - |
 | --server-name | -sn | string | Optional<span class="required-note">*</span> | - | 작업 대상 Server Name | - |
-| --mode | - | string | Optional | - | 작업 모드 | full, increment, smart |
+| --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
 | --status | - | string | Optional | - | 작업 상태 | - |
 | --repository-path | -rp | string | Optional | - | Repository Path | - |
 | --detail | - | boolean | Optional | false | 상세 정보 조회 | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 > <span class="required-note">*</span> `job-id/job-name` 또는 `server-id/server-name` 중 하나는 필수로 입력해야 합니다.<br>
 > <span class="required-note">*</span> ID와 Name은 동시에 입력할 수 없습니다.<br>

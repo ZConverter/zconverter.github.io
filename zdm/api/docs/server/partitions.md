@@ -1,23 +1,24 @@
 ---
 layout: docs
-title: GET /servers/:identifier/partitions
+title: GET /servers/partitions
 section_title: ZDM API Documentation
 navigation: api
 ---
 
-특정 서버의 파티션 정보를 조회합니다.
+전체 서버의 파티션 정보를 조회합니다.
 
 ---
 
-## `GET /servers/:identifier/partitions` {#get-server-partitions}
+## `GET /servers/partitions` {#get-servers-partitions}
 
-> * 특정 서버의 파티션 정보를 조회합니다.
+> * 시스템에 등록된 모든 서버의 파티션 정보를 조회합니다.
+> * 필터 옵션을 통해 특정 조건의 파티션만 조회할 수 있습니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/servers/:identifier/partitions</code>
+  <code>GET /api/v1/servers/partitions</code>
 </div>
 
 </details>
@@ -26,16 +27,20 @@ navigation: api
 <summary><strong>요청 예시</strong></summary>
 
 ```bash
-# ID로 조회
-curl -X GET "https://api.example.com/api/v1/servers/1/partitions" \
+# 전체 파티션 정보 조회
+curl -X GET "https://api.example.com/api/v1/servers/partitions" \
   -H "Authorization: Bearer <token>"
 
-# 서버명으로 조회
-curl -X GET "https://api.example.com/api/v1/servers/web-server-01/partitions" \
+# 필터 적용 조회
+curl -X GET "https://api.example.com/api/v1/servers/partitions?fileSystem=ext4" \
   -H "Authorization: Bearer <token>"
 
-# 상세 정보 포함 조회
-curl -X GET "https://api.example.com/api/v1/servers/1/partitions?detail=true" \
+# Linux 마운트 포인트로 필터
+curl -X GET "https://api.example.com/api/v1/servers/partitions?partition=/home" \
+  -H "Authorization: Bearer <token>"
+
+# Windows 드라이브로 필터
+curl -X GET "https://api.example.com/api/v1/servers/partitions?drive=C:" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -46,48 +51,89 @@ curl -X GET "https://api.example.com/api/v1/servers/1/partitions?detail=true" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `identifier` | Path | string | Required | - | 서버 ID 또는 서버명 | - |
-| `detail` | Query | boolean | Optional | - | 상세 정보 포함 여부 | - |
+| `partition` | Query | string | Optional | - | 마운트 포인트 필터 (Linux) | - |
+| `drive` | Query | string | Optional | - | 드라이브 문자 필터 (Windows) | - |
+| `device` | Query | string | Optional | - | 디바이스 경로 필터 | - |
+| `fileSystem` | Query | string | Optional | - | 파일 시스템 타입 필터 | - |
+| `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
+**성공 응답 (200 OK)**
+
 ```json
 {
   "success": true,
-  "requestID": "req-server-partitions",
-  "data": {
-    "server": {
-      "id": "1",
-      "name": "web-server-01"
-    },
-    "partitions": [
-      {
-        "device": "/dev/sda1",
-        "mountPoint": "/",
-        "fileSystem": "ext4",
-        "size": "100GB",
-        "used": "45GB",
-        "available": "55GB",
-        "usedPercent": "45%"
+  "requestID": "req-abc123",
+  "data": [
+    {
+      "system": "server-01",
+      "letter": "/",
+      "device": "/dev/sda1",
+      "size": {
+        "raw": 107374182400,
+        "formatted": "100.0 GB"
       },
-      {
-        "device": "/dev/sda2",
-        "mountPoint": "/home",
-        "fileSystem": "ext4",
-        "size": "200GB",
-        "used": "80GB",
-        "available": "120GB",
-        "usedPercent": "40%"
-      }
-    ]
-  },
-  "message": "서버 파티션 정보를 성공적으로 조회했습니다",
-  "timestamp": "2024-01-31T10:30:45.123Z"
+      "used": {
+        "raw": 21474836480,
+        "formatted": "20.0 GB"
+      },
+      "free": {
+        "raw": 85899345920,
+        "formatted": "80.0 GB"
+      },
+      "usage": 20,
+      "fileSystem": "ext4",
+      "lastUpdated": "2025-01-15T10:30:00Z"
+    },
+    {
+      "system": "server-02",
+      "letter": "C:",
+      "device": "\\Device\\HarddiskVolume1",
+      "size": {
+        "raw": 214748364800,
+        "formatted": "200.0 GB"
+      },
+      "used": {
+        "raw": 107374182400,
+        "formatted": "100.0 GB"
+      },
+      "free": {
+        "raw": 107374182400,
+        "formatted": "100.0 GB"
+      },
+      "usage": 50,
+      "fileSystem": "NTFS",
+      "lastUpdated": "2025-01-15T10:30:00Z"
+    }
+  ],
+  "message": "Partition information list",
+  "timestamp": "2025-01-15T10:30:00Z"
 }
 ```
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>응답 필드</strong></summary>
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `system` | string | 서버 이름 |
+| `letter` | string | 마운트 포인트 (Linux) 또는 드라이브 문자 (Windows) |
+| `device` | string | 디바이스 경로 |
+| `size.raw` | number | 전체 크기 (bytes) |
+| `size.formatted` | string | 전체 크기 (포맷) |
+| `used.raw` | number | 사용 중인 용량 (bytes) |
+| `used.formatted` | string | 사용 중인 용량 (포맷) |
+| `free.raw` | number | 남은 용량 (bytes) |
+| `free.formatted` | string | 남은 용량 (포맷) |
+| `usage` | number | 사용률 (0-100) |
+| `fileSystem` | string | 파일 시스템 타입 (ext4, NTFS 등) |
+| `lastUpdated` | string | 마지막 업데이트 시간 |
 
 </details>
 

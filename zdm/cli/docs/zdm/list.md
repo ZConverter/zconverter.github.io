@@ -70,12 +70,12 @@ zdm-cli zdm list --output table
 |----------|------|------|------|--------|------|--------|
 | --name | - | string | Optional | - | 조회할 ZDM 이름 (해당 옵션 사용시 단일 조회) | - |
 | --id | - | number | Optional | - | 조회할 ZDM ID (해당 옵션 사용시 단일 조회) | - |
-| --connection | -conn | string | Optional | - | ZDM 연결 상태 | connect, disconnect |
-| --activation | -active | string | Optional | - | ZDM 활성화 상태 | ok, fail |
+| --connection | -conn | string | Optional | - | ZDM 연결 상태 | {% include zdm/connection-status.md %} |
+| --activation | -active | string | Optional | - | ZDM 활성화 상태 | {% include zdm/zdm-activation.md %} |
 | --repository | -repo | boolean | Optional | false | Repository 정보 추가조회 | - |
 | --repository-only | -ro | boolean | Optional | false | 대상 ZDM의 Repository 정보만 조회 | - |
 | --detail | - | boolean | Optional | false | 상세 정보 조회 | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

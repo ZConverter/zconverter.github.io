@@ -64,12 +64,12 @@ zdm-cli backup list --output json
 | --server | - | string | Optional | - | 작업 대상 Server | - |
 | --name | - | string | Optional | - | 작업 이름 | - |
 | --id | - | number | Optional | - | 작업 ID | - |
-| --mode | - | string | Optional | - | 작업 모드 | full, increment, smart |
-| --status | - | string | Optional | - | 작업 상태 | run, complete, start, waiting, cancel, schedule |
+| --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
+| --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status.md %} |
 | --repository-path | -rp | string | Optional | - | 작업에 사용한 repository path | - |
-| --repository-type | -rt | string | Optional | - | 작업에 사용한 repository type | smb, nfs |
+| --repository-type | -rt | string | Optional | - | 작업에 사용한 repository type | {% include zdm/repository-types.md %} |
 | --detail | - | boolean | Optional | false | 상세 정보 조회 | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

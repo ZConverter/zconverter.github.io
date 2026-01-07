@@ -46,7 +46,7 @@ zdm-cli file download -f "config.json" -s "./backup"
 |----------|------|------|------|--------|------|--------|
 | --file-name | -f | string | Required | - | 다운로드할 파일 이름 | - |
 | --save-path | -s | string | Optional | 현재 디렉토리 | 파일 저장 경로 | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

@@ -62,27 +62,14 @@ zdm-cli schedule list --output table
 |----------|------|------|------|--------|------|--------|
 | --id | - | number | Optional | - | 조회할 Schedule ID (해당 옵션 사용시 단일 조회) | - |
 | --type | - | number | Optional | - | 조회할 Schedule Type | 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 |
-| --state | - | string | Optional | - | 조회할 Schedule 상태 | disabled, enabled |
+| --state | - | string | Optional | - | 조회할 Schedule 상태 | {% include zdm/schedule-state.md %} |
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>Schedule Types</strong></summary>
 
-| Type | 이름 | 설명 |
-|------|------|------|
-| 0 | once | 한 번 실행 |
-| 1 | every minute | 매분 실행 |
-| 2 | hourly | 매시간 실행 |
-| 3 | daily | 매일 실행 |
-| 4 | weekly | 매주 실행 |
-| 5 | monthly on specific week | 매월 특정 주 |
-| 6 | monthly on specific day | 매월 특정 일 |
-| 7 | smart weekly on specific day | 스마트 주간 특정 요일 |
-| 8 | smart monthly on specific week and day | 스마트 월간 특정 주+요일 |
-| 9 | smart monthly on specific date | 스마트 월간 특정 날짜 |
-| 10 | smart custom monthly on specific month, week and day | 스마트 커스텀 월간 (월+주+요일) |
-| 11 | smart custom monthly on specific month and date | 스마트 커스텀 월간 (월+날짜) |
+{% include zdm/schedule-types.md number=true %}
 
 </details>
 

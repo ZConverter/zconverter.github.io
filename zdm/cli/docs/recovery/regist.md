@@ -74,8 +74,8 @@ zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --
 | --center | - | string | Optional | config 설정값 | 작업 등록 Center | - |
 | --source | - | string | Required | - | 작업 대상 Source 서버 | - |
 | --target | - | string | Required | - | 작업 대상 Target 서버 | - |
-| --platform | - | string | Required | - | Target 서버 플랫폼 | oci, ncp, gcp, aws, azure, vmware, scp, openstack, cloudstack, kt, nhn, nutanix, proxmox, kvm, hyperv, xenserver, baremetal |
-| --mode | - | string | Required | - | 작업 모드 | full, inc |
+| --platform | - | string | Required | - | Target 서버 플랫폼 | {% include zdm/platforms.md inline=true baremetal=true %} |
+| --mode | - | string | Required | - | 작업 모드 | {% include zdm/job-modes.md %} |
 | --repository-id | -ri | number | Optional | config 설정값 | 작업시 사용할 Repository ID | - |
 | --repository-path | -rp | string | Optional | - | 작업시 사용할 Repository 경로 | - |
 | --jobName | -name | string | Optional | - | 작업 이름 | - |
@@ -87,13 +87,13 @@ zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --
 | --networkLimit | -nl | number | Optional | 0 | 작업 Network 제한 속도 (Mbps) | - |
 | --start | - | boolean | Optional | - | 작업 자동시작 여부 | - |
 | --scriptPath | -sp | string | Optional | - | 실행할 스크립트 파일 경로 (사전에 ZDM에 업로드 필요) | - |
-| --scriptRun | -sr | string | Optional | - | 스크립트 실행 타이밍 | before, after |
-| --overwrite | - | string | Optional | - | 파티션 오버라이트 허용 여부 (Linux 전용) | allow, notAllow |
-| --afterReboot | - | string | Optional | reboot | 복구 완료 후 동작 | reboot, shutdown, maintain |
+| --scriptRun | -sr | string | Optional | - | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
+| --overwrite | - | string | Optional | - | 파티션 오버라이트 허용 여부 (Linux 전용) | {% include zdm/overwrite-options.md cli=true %} |
+| --afterReboot | - | string | Optional | reboot | 복구 완료 후 동작 | {% include zdm/after-reboot.md %} |
 | --cloudAuth | - | string | Optional | - | 클라우드 인증정보 ID 또는 Name | - |
 | --listOnly | - | boolean | Optional | - | jobList에 지정된 파티션만 작업 등록 | - |
 | --jobList | - | string | Optional | - | 사용자 커스텀 작업 등록 (JSON 문자열 형태) | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

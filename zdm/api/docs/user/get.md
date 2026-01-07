@@ -5,13 +5,14 @@ section_title: ZDM API Documentation
 navigation: api
 ---
 
-특정 사용자 정보를 조회합니다.
+특정 사용자의 상세 정보를 조회합니다.
 
 ---
 
-## `GET /users/:identifier` {#get-user}
+## `GET /users/:identifier` {#get-users-identifier}
 
-> * 특정 사용자 정보를 조회합니다.
+> * 사용자 ID 또는 이메일로 특정 사용자의 정보를 조회합니다.
+> * identifier가 숫자인 경우 사용자 ID로, 그 외에는 이메일로 조회합니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -26,7 +27,7 @@ navigation: api
 <summary><strong>요청 예시</strong></summary>
 
 ```bash
-# ID로 조회
+# 사용자 ID로 조회
 curl -X GET "https://api.example.com/api/v1/users/1" \
   -H "Authorization: Bearer <token>"
 
@@ -42,31 +43,48 @@ curl -X GET "https://api.example.com/api/v1/users/user@example.com" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `identifier` | Path | string | Required | - | 사용자 ID 또는 이메일 | - |
-| `userName` | Query | string | Optional | - | 사용자명 필터 | - |
-| `position` | Query | string | Optional | - | 직책 필터 | - |
-| `company` | Query | string | Optional | - | 회사명 필터 | - |
-| `country` | Query | string | Optional | - | 국가 필터 | - |
+| `identifier` | Path | string | Required | - | 사용자 ID (숫자) 또는 이메일 | - |
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
+**성공 응답 (200 OK)**
+
 ```json
 {
   "success": true,
-  "requestID": "req-789",
+  "requestID": "req-abc123",
   "data": {
     "id": "1",
     "email": "user@example.com",
     "userName": "홍길동",
-    "company": "ZDM Corp",
+    "company": "Acme Corp",
     "country": "KR",
-    "position": "개발자"
+    "position": "Manager"
   },
-  "message": "사용자 정보를 성공적으로 조회했습니다",
-  "timestamp": "2024-01-31T10:30:45.123Z"
+  "message": "User information retrieved",
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary><strong>에러 응답</strong></summary>
+
+**사용자를 찾을 수 없음 (404 Not Found)**
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": {
+    "code": "USER_NOT_FOUND",
+    "message": "ID가 '999'인 User를 찾을 수 없습니다"
+  },
+  "timestamp": "2025-01-15T10:30:00Z"
 }
 ```
 

@@ -9,9 +9,9 @@ navigation: api
 
 ---
 
-## `GET /files/download/:fileName` {#download-file}
+## `GET /files/download/:fileName` {#get-files-download}
 
-> * 파일을 다운로드합니다.
+> * 파일 이름으로 특정 파일을 다운로드합니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -26,23 +26,10 @@ navigation: api
 <summary><strong>요청 예시</strong></summary>
 
 ```bash
-# 기본 다운로드
-curl -X GET "https://api.example.com/api/v1/files/download/document.pdf" \
+# 파일 다운로드
+curl -X GET "https://api.example.com/api/v1/files/download/file-1705312200000-123456789-document.txt" \
   -H "Authorization: Bearer <token>" \
-  -O
-
-# 강제 다운로드 모드
-curl -X GET "https://api.example.com/api/v1/files/download/document.pdf?download=true" \
-  -H "Authorization: Bearer <token>" \
-  -O
-
-# 미리보기 모드
-curl -X GET "https://api.example.com/api/v1/files/download/document.pdf?preview=true" \
-  -H "Authorization: Bearer <token>"
-
-# 부분 다운로드 (Range 요청)
-curl -X GET "https://api.example.com/api/v1/files/download/document.pdf?range=bytes=0-1023" \
-  -H "Authorization: Bearer <token>"
+  -o downloaded-file.txt
 ```
 
 </details>
@@ -52,30 +39,48 @@ curl -X GET "https://api.example.com/api/v1/files/download/document.pdf?range=by
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `fileName` | Path | string | Required | - | 다운로드할 파일명 | - |
-| `download` | Query | boolean | Optional | - | 강제 다운로드 모드 | - |
-| `preview` | Query | boolean | Optional | - | 미리보기 모드 | - |
-| `range` | Query | string | Optional | - | 부분 다운로드 범위 | - |
+| `fileName` | Path | string | Required | - | 다운로드할 파일 이름 | - |
 
 </details>
 
 <details markdown="1" open>
-<summary><strong>응답 예시</strong></summary>
+<summary><strong>응답</strong></summary>
 
-**성공 시:** 파일이 직접 다운로드됩니다.
+**성공 응답 (200 OK)**
 
-**실패 시 (파일 없음):**
+- 요청한 파일이 바이너리로 반환됩니다.
+- Content-Disposition 헤더에 파일 이름이 포함됩니다.
+
+</details>
+
+<details markdown="1">
+<summary><strong>에러 응답</strong></summary>
+
+**파일을 찾을 수 없음 (404 Not Found)**
 
 ```json
 {
   "success": false,
-  "requestID": "req-file-download",
-  "error": "FILE_NOT_FOUND",
-  "timestamp": "2024-01-31T10:30:45.123Z",
-  "detail": {
-    "fileName": "nonexistent.pdf",
+  "requestID": "req-abc123",
+  "error": {
+    "code": "FILE_NOT_FOUND",
     "message": "요청한 파일을 찾을 수 없습니다"
-  }
+  },
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+**유효성 검사 실패 (400 Bad Request)**
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "fileName이 누락 되었습니다"
+  },
+  "timestamp": "2025-01-15T10:30:00Z"
 }
 ```
 

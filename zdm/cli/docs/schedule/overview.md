@@ -14,20 +14,7 @@ navigation: cli
 <details markdown="1" open>
 <summary><strong>스케줄 타입 목록</strong></summary>
 
-| 번호 | 타입 | 설명 | 카테고리 |
-|------|------|------|----------|
-| 0 | once | 한 번 실행 | Basic |
-| 1 | every minute | 매분 실행 | Basic |
-| 2 | hourly | 매시간 실행 | Basic |
-| 3 | daily | 매일 실행 | Basic |
-| 4 | weekly | 매주 실행 | Basic |
-| 5 | monthly on specific week | 매월 특정 주 | Basic |
-| 6 | monthly on specific day | 매월 특정 일 | Basic |
-| 7 | smart weekly on specific day | 스마트 주간 특정 요일 | Smart |
-| 8 | smart monthly on specific week and day | 스마트 월간 특정 주+요일 | Smart |
-| 9 | smart monthly on specific date | 스마트 월간 특정 날짜 | Smart |
-| 10 | smart custom monthly on specific month, week and day | 스마트 커스텀 월간 (월+주+요일) | Smart |
-| 11 | smart custom monthly on specific month and date | 스마트 커스텀 월간 (월+날짜) | Smart |
+{% include zdm/schedule-types.md number=true category=true %}
 
 </details>
 
@@ -268,8 +255,8 @@ navigation: cli
 <details markdown="1">
 <summary><strong>(8) Smart Monthly By Week And Weekday</strong></summary>
 
-- **basic:** 매달 2째주 월요일 12:00 실행 (주 복수선택 불가 | 요일 복수선택 불가)
-- **advanced:** 매달 1,3째주 화,목 12:00 실행 (주 복수선택 가능 | 요일 복수선택 가능)
+- **basic:** 매달 2째주 월요일 12:00 실행 (주 복수선택 불가, 요일 복수선택 불가)
+- **advanced:** 매달 1,3째주 화,목 12:00 실행 (주 복수선택 가능, 요일 복수선택 가능)
 
 ```json
 {
@@ -342,8 +329,8 @@ navigation: cli
 <details markdown="1">
 <summary><strong>(10) Smart Custom Monthly By Week And Day</strong></summary>
 
-- **basic:** 매년 5월 2째주 토요일 12:00 실행 (월 복수선택 불가 | 주 복수선택 불가 | 요일 복수선택 불가)
-- **advanced:** 매년 1,6월 2,4째주 수, 일요일 12:00 실행 (월 복수선택 가능 | 주 복수선택 가능 | 요일 복수선택 가능)
+- **basic:** 매년 5월 2째주 토요일 12:00 실행 (월 복수선택 불가, 주 복수선택 불가,요일 복수선택 불가)
+- **advanced:** 매년 1,6월 2,4째주 수, 일요일 12:00 실행 (월 복수선택 가능, 주 복수선택 가능,요일 복수선택 가능)
 
 ```json
 {
@@ -379,8 +366,8 @@ navigation: cli
 <details markdown="1">
 <summary><strong>(11) Smart Custom Monthly By Date</strong></summary>
 
-- **basic:** 매년 4월 19일 12:00 실행 (월 복수선택 불가 | 일 복수선택 불가)
-- **advanced:** 매년 10, 11월 25, 28일 12:00 실행 (월 복수선택 가능 | 일 복수선택 가능)
+- **basic:** 매년 4월 19일 12:00 실행 (월 복수선택 불가, 일 복수선택 불가)
+- **advanced:** 매년 10, 11월 25, 28일 12:00 실행 (월 복수선택 가능, 일 복수선택 가능)
 
 ```json
 {

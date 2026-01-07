@@ -115,8 +115,41 @@ API 문서 작성 가이드
    - 기본 열림: <details markdown="1" open>
    - 기본 닫힘: <details markdown="1">
 
-9. 사이드바 네비게이션 추가
-   - 파일 생성 후 _data/navigation.yml에 링크 추가 필요
+9. 중첩 Collapsible 규칙
+   - 응답 예시: 2개 이상인 경우에만 중첩 collapsible 적용
+     - 1개: **성공 응답 (200 OK)** (볼드 텍스트)
+     - 2개 이상: <details><summary>기본 응답</summary>...</details>
+   - 응답 필드: 필드 카테고리가 2개 이상인 경우 중첩 collapsible 적용
+     - 예: 기본 필드, 상세 필드(detail=true), 디스크 필드(disk=true) 등
+   - base/detail 응답이 다른 경우:
+     - <details><summary>기본 응답 (detail=false)</summary>...</details>
+     - <details><summary>상세 응답 (detail=true)</summary>...</details>
+
+10. 조건부 응답 필드 테이블 형식
+    - 조건부 필드가 있을 경우 "조건" 컬럼 추가
+    - 형식: | 필드 | 타입 | 설명 | 조건 |
+    - 조건 값 예시: 기본, detail=true, disk=true, partition=true
+    - 무조건 포함 필드: "기본" 또는 "-"
+
+11. 코드 검증 필수 규칙
+    - 문서 작성 전 반드시 실제 코드와 일치 여부 확인
+    - 응답 필드: src/domain/{도메인}/dto/response/*.dto.ts
+    - 요청 파라미터: src/domain/{도메인}/schemas/**/*.schema.ts
+    - 확인 항목:
+      - 필드명 대소문자 정확히 일치 (camelCase vs lowercase)
+      - 타입 정확히 일치 (number vs string, 특히 포맷된 값 주의)
+      - 중첩 객체 구조 일치 (예: file.filename vs filename)
+      - 선택값(enum) 일치
+
+12. 엔드포인트 분리 규칙
+    - 동일 리소스에 대해 서로 다른 path parameter를 사용하는 경우 별도 파일로 분리
+    - 예시:
+      - GET /monitoring/job/:identifier → monitoring-job.md
+      - GET /monitoring/system/:identifier → monitoring-system.md
+    - 파일명 규칙: {action}-{구분자}.md
+
+마지막. 사이드바 네비게이션 추가
+    - 파일 생성 후 _data/navigation.yml에 링크 추가 필요
 
 ================================================================================
 -->

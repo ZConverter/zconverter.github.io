@@ -54,7 +54,7 @@ zdm-cli license regist -c "zdm-center-01" -k "XXXX-XXXX-XXXX-XXXX" --output json
 | --user | -u | string | Optional | - | 요청 사용자 ID 또는 메일 | - |
 | --name | -n | string | Optional | - | 등록할 License Name | - |
 | --description | -d | string | Optional | - | 등록할 License 설명 | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

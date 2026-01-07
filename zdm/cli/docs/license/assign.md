@@ -45,7 +45,7 @@ zdm-cli license assign --license "my-license" --server "server-01" --output json
 |----------|------|------|------|--------|------|--------|
 | --license | -l | string | Required | - | 할당할 라이센스 | - |
 | --server | -s | string | Required | - | 라이센스 할당할 서버 | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

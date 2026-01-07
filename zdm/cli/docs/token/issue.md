@@ -49,7 +49,7 @@ zdm-cli token issue -m "user@example.com" -p "mypassword" --output json
 |----------|------|------|------|--------|------|--------|
 | --user-mail | -m | string | Optional | 설정 파일의 기본값 | 포털 로그인 ID (이메일) | - |
 | --user-pwd | -p | string | Required | - | 포털 로그인 비밀번호 | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

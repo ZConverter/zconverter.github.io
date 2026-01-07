@@ -84,10 +84,12 @@ zdm-cli schedule verify -p ./Basic_schedule-20250106120000.json
 </details>
 
 <details markdown="1" open>
-<summary><strong>출력 예시</strong></summary>
+<summary><strong>출력 예시 (Text format)</strong></summary>
 
 > **참고:** `schedule verify`는 로컬 파일 검증 명령어로, API 호출 없이 단순 메시지만 출력합니다.
 > `--output` 옵션은 지원되지 않습니다.
+
+**Text 형식:**
 
 **검증 성공:**
 

@@ -28,7 +28,8 @@
       "Bash(grep:*)",
       "Bash(tree:*)",
       "Bash(tar:*)",
-      "Bash(zip:*)"
+      "Bash(zip:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []

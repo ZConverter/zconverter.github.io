@@ -57,10 +57,10 @@ zdm-cli license list --output table
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --type | - | string | Optional | - | 조회할 License Type | zdm(backup), zdm(dr), zdm(migration) |
+| --type | - | string | Optional | - | 조회할 License Type | {% include zdm/license-categories.md %} |
 | --expiration-date | --exp | string | Optional | - | 라이센스 만료 날짜 (format: YYYY-MM-DD) | - |
 | --create-date | --cre | string | Optional | - | 라이센스 생성 일자 (format: YYYY-MM-DD) | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 
