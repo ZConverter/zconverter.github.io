@@ -2,7 +2,7 @@
 layout: docs
 title: server list
 section_title: ZDM CLI Documentation
-navigation: cli-0.2.0
+navigation: cli
 ---
 
 Server 목록 및 상세 정보를 조회합니다.
@@ -70,15 +70,15 @@ zdm-cli server list --output table
 |----------|------|------|------|--------|------|--------|
 | --name | - | string | Optional | - | 조회할 Server 이름 (해당 옵션 사용시 단일 조회) | - |
 | --id | - | number | Optional | - | 조회할 Server ID (해당 옵션 사용시 단일 조회) | - |
-| --os | - | string | Optional | - | 조회할 Server OS | {% include zdm/os-types.md %} |
-| --mode | - | string | Optional | - | 조회할 Server 모드 | {% include zdm/server-modes.md %} |
+| --os | - | string | Optional | - | 조회할 Server OS | win, lin |
+| --mode | - | string | Optional | - | 조회할 Server 모드 | source, target |
 | --license | - | number | Optional | - | Server에 할당된 License ID | - |
 | --license-assign-only | -lao | boolean | Optional | false | 라이센스가 할당된 Server만 조회 | - |
 | --license-un-assign-only | -luao | boolean | Optional | false | 라이센스가 할당되지 않은 Server만 조회 | - |
 | --partition | - | boolean | Optional | false | Partition 정보 추가조회 | - |
 | --partition-only | -po | boolean | Optional | false | 대상 Server의 Partition 정보만 조회 | - |
 | --detail | - | boolean | Optional | false | 상세 정보 조회 | - |
-| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
+| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
 
 </details>
 
@@ -227,6 +227,126 @@ lastUpdated            : 2025-01-06T10:30:00Z
         "cpuCount": 4,
         "memory": "16GB"
       },
+      "lastUpdated": "2025-01-06T10:30:00Z"
+    }
+  ],
+  "timestamp": "2025-01-06 10:30:00"
+}
+```
+
+### Partition 정보 포함 출력(partition 옵션 사용)
+
+**Text 형식:**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* Server Info Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[request info]
+
+status    : success
+message   : Success
+timestamp : 2025-01-06 10:30:00
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[data]
+
+[Server 1]
+name           : server-01
+id             : 1
+agent.mode     : source
+os.version     : Ubuntu 22.04
+ip.public      : 203.0.113.1
+ip.private     : 192.168.1.10
+license.id     : 100
+status.connect : connected
+lastUpdated    : 2025-01-06T10:30:00Z
+
+[Partition Information]
+  [Partition 1]
+    device      : /dev/sda1
+    size        : 100.0 GB, used: 45.0 GB, free: 55.0 GB (45%)
+    fileSystem  : ext4
+    lastUpdated : 2025-01-06T10:30:00Z
+
+  [Partition 2]
+    device      : /dev/sda2
+    size        : 500.0 GB, used: 200.0 GB, free: 300.0 GB (40%)
+    fileSystem  : ext4
+    lastUpdated : 2025-01-06T10:30:00Z
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**JSON 형식:**
+
+```json
+{
+  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "message": "Success",
+  "success": true,
+  "data": [
+    {
+      "name": "server-01",
+      "id": 1,
+      "agent": {
+        "mode": "source"
+      },
+      "os": {
+        "version": "Ubuntu 22.04"
+      },
+      "ip": {
+        "public": "203.0.113.1",
+        "private": ["192.168.1.10"]
+      },
+      "license": {
+        "id": 100
+      },
+      "status": {
+        "connect": "connected"
+      },
+      "partition": [
+        {
+          "system": "server-01",
+          "device": "/dev/sda1",
+          "letter": "/",
+          "size": {
+            "raw": 107374182400,
+            "formatted": "100.0 GB"
+          },
+          "used": {
+            "raw": 48318382080,
+            "formatted": "45.0 GB"
+          },
+          "free": {
+            "raw": 59055800320,
+            "formatted": "55.0 GB"
+          },
+          "usage": 45,
+          "fileSystem": "ext4",
+          "lastUpdated": "2025-01-06T10:30:00Z"
+        },
+        {
+          "system": "server-01",
+          "device": "/dev/sda2",
+          "letter": "/home",
+          "size": {
+            "raw": 536870912000,
+            "formatted": "500.0 GB"
+          },
+          "used": {
+            "raw": 214748364800,
+            "formatted": "200.0 GB"
+          },
+          "free": {
+            "raw": 322122547200,
+            "formatted": "300.0 GB"
+          },
+          "usage": 40,
+          "fileSystem": "ext4",
+          "lastUpdated": "2025-01-06T10:30:00Z"
+        }
+      ],
       "lastUpdated": "2025-01-06T10:30:00Z"
     }
   ],
