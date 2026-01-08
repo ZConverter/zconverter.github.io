@@ -7,6 +7,14 @@ navigation: cli-0.2.0
 
 토큰 관리 기능에 대한 개요입니다.
 
+<details markdown="1" open>
+<summary><strong>목차</strong></summary>
+
+- [토큰 저장](#토큰-저장)
+- [토큰 만료](#토큰-만료)
+
+</details>
+
 ---
 
 ## 토큰 저장

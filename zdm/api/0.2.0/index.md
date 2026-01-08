@@ -5,6 +5,21 @@ section_title: ZDM API Documentation
 navigation: api-0.2.0
 ---
 
+<details markdown="1" open>
+<summary><strong>목차</strong></summary>
+
+- [ZDM API 소개](#zdm-api-소개)
+- [주요 기능](#주요-기능)
+- [Quick Start](#quick-start)
+- [Base URL](#base-url)
+- [인증 헤더](#인증-헤더)
+- [표준 API 응답 형식](#표준-api-응답-형식)
+- [공통 패턴](#공통-패턴)
+
+</details>
+
+---
+
 ## ZDM API 소개
 
 ZDM-API는 백업, 복구, 시스템 관리를 위한 **API 서버**입니다.

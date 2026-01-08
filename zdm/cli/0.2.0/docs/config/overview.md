@@ -7,6 +7,15 @@ navigation: cli-0.2.0
 
 CLI 설정 파일 및 설정 관리에 대한 개요입니다.
 
+<details markdown="1" open>
+<summary><strong>목차</strong></summary>
+
+- [설정 파일](#설정-파일)
+- [설정 우선순위](#설정-우선순위)
+- [참고사항](#참고사항)
+
+</details>
+
 ---
 
 ## 설정 파일
@@ -78,32 +87,6 @@ CLI 명령 실행 시 설정 값의 우선순위는 다음과 같습니다:
 # 설정 파일에 zdm-repo-id: 1 이 저장되어 있지만
 # 명령줄에서 다른 값을 지정하면 명령줄 값이 사용됨
 zdm-cli backup regist --server web-01 --mode full --repository-id 2
-```
-
-</details>
-
----
-
-## 설정 관리 팁
-
-<details markdown="1" open>
-<summary><strong>권장 초기 설정</strong></summary>
-
-```bash
-# 1. 토큰 발급
-zdm-cli token issue -m admin@example.com -p password
-
-# 2. ZDM 서버 정보 설정
-zdm-cli config set --zdm-ip 192.168.1.100
-
-# 3. ZDM Center ID 설정
-zdm-cli config set --zdm-id zdm-center-01
-
-# 4. 기본 Repository 설정
-zdm-cli config set --zdm-repo-id 1
-
-# 5. 설정 확인
-zdm-cli config show
 ```
 
 </details>

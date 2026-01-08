@@ -7,6 +7,15 @@ navigation: cli-0.2.0
 
 ZDM 센터 관리 기능에 대한 개요입니다.
 
+<details markdown="1" open>
+<summary><strong>목차</strong></summary>
+
+- [연결 상태](#연결-상태)
+- [활성화 상태](#활성화-상태)
+- [Repository 타입](#repository-타입)
+
+</details>
+
 ---
 
 ## 연결 상태

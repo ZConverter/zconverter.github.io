@@ -133,6 +133,8 @@ cli-0.2.0:
     links:
       - title: "개요"
         url: "/zdm/cli/0.2.0/docs/config/overview"
+      - title: "튜토리얼"
+        url: "/zdm/cli/0.2.0/docs/config/tutorial"
       - title: "config show"
         url: "/zdm/cli/0.2.0/docs/config/show"
       - title: "config set"
@@ -147,6 +149,8 @@ cli-0.2.0:
     links:
       - title: "개요"
         url: "/zdm/cli/0.2.0/docs/license/overview"
+      - title: "튜토리얼"
+        url: "/zdm/cli/0.2.0/docs/license/tutorial"
       - title: "license list"
         url: "/zdm/cli/0.2.0/docs/license/list"
       - title: "license assign"
@@ -167,12 +171,16 @@ cli-0.2.0:
     links:
       - title: "개요"
         url: "/zdm/cli/0.2.0/docs/schedule/overview"
-      - title: "schedule list"
-        url: "/zdm/cli/0.2.0/docs/schedule/list"
-      - title: "schedule regist"
-        url: "/zdm/cli/0.2.0/docs/schedule/regist"
+      - title: "튜토리얼"
+        url: "/zdm/cli/0.2.0/docs/schedule/tutorial"
+      - title: "schedule create"
+        url: "/zdm/cli/0.2.0/docs/schedule/create"
       - title: "schedule verify"
         url: "/zdm/cli/0.2.0/docs/schedule/verify"
+      - title: "schedule regist"
+        url: "/zdm/cli/0.2.0/docs/schedule/regist"
+      - title: "schedule list"
+        url: "/zdm/cli/0.2.0/docs/schedule/list"
   - title: "ZDM Center"
     links:
       - title: "개요"

@@ -7,6 +7,15 @@ navigation: cli-0.2.0
 
 서버 관리 기능에 대한 개요입니다.
 
+<details markdown="1" open>
+<summary><strong>목차</strong></summary>
+
+- [서버 OS 타입](#서버-os-타입)
+- [서버 모드](#서버-모드)
+- [라이센스 할당](#라이센스-할당)
+
+</details>
+
 ---
 
 ## 서버 OS 타입

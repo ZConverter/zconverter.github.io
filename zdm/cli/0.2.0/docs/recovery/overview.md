@@ -7,6 +7,15 @@ navigation: cli-0.2.0
 
 복구 기능에 대한 개요입니다.
 
+<details markdown="1" open>
+<summary><strong>목차</strong></summary>
+
+- [복구 모드](#복구-모드)
+- [복구 상태](#복구-상태)
+- [지원 플랫폼](#지원-플랫폼)
+
+</details>
+
 ---
 
 ## 복구 모드

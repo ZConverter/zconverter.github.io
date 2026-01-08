@@ -7,6 +7,15 @@ navigation: cli-0.2.0
 
 스케줄 기능에 대한 개요입니다.
 
+<details markdown="1" open>
+<summary><strong>목차</strong></summary>
+
+- [스케줄 타입](#스케줄-타입)
+- [스케줄 구조](#스케줄-구조)
+- [스케줄 JSON 예시](#스케줄-json-예시)
+
+</details>
+
 ---
 
 ## 스케줄 타입

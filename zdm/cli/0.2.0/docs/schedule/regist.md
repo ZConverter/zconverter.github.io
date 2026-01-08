@@ -1,25 +1,25 @@
 ---
 layout: docs
-title: schedule create
+title: schedule regist
 section_title: ZDM CLI Documentation
 navigation: cli-0.2.0
 ---
 
-Schedule Data를 생성하여 JSON 파일로 저장합니다.
+Schedule JSON 파일을 ZDM 서버에 등록합니다.
 
 ---
 
-## `schedule create` {#schedule-create}
+## `schedule regist` {#schedule-regist}
 
-> * Schedule 정보를 생성하고 JSON 파일로 저장하는 명령어입니다.
-> * 생성된 파일은 `schedule regist` 명령어를 통해 ZDM 서버에 등록할 수 있습니다.
-> * Schedule Type에 따라 Basic Schedule 또는 Basic + Advanced Schedule을 생성합니다.
+> * `schedule create` 명령어로 생성한 JSON 파일을 ZDM 서버에 등록하는 명령어입니다.
+> * JSON 파일 형식만 지원합니다.
+> * Smart Schedule (Type 7~11)의 경우 Basic과 Advanced Schedule이 함께 등록됩니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
 
 <div class="command-card">
-  <code>zdm-cli schedule create [options]</code>
+  <code>zdm-cli schedule regist [options]</code>
 </div>
 
 </details>
@@ -28,44 +28,20 @@ Schedule Data를 생성하여 JSON 파일로 저장합니다.
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
-# [Type 0]: Once - 2025/04/29 12:00 한번 실행
-zdm-cli schedule create -t 0 --basic-year 2025 --basic-month 4 --basic-day 29 --basic-time 12:00
+# Schedule 파일 등록
+zdm-cli schedule regist -p /path/to/schedule.json
 
-# [Type 1]: Every Minute - 12:00부터 5분마다 실행
-zdm-cli schedule create -t 1 --basic-time 12:00 --basic-interval-minute 5
+# 절대 경로 사용
+zdm-cli schedule regist --path /home/user/schedules/daily-schedule.json
 
-# [Type 2]: Hourly - 12:00부터 1시간마다 실행
-zdm-cli schedule create -t 2 --basic-time 12:00 --basic-interval-hour 1
+# 상대 경로 사용
+zdm-cli schedule regist -p ./Basic_schedule-20250106120000.json
 
-# [Type 3]: Daily - 매일 12:00 실행
-zdm-cli schedule create -t 3 --basic-time 12:00
+# JSON 형식으로 결과 출력
+zdm-cli schedule regist -p /path/to/schedule.json --output json
 
-# [Type 4]: Weekly - 매주 화요일 12:00 실행
-zdm-cli schedule create -t 4 --basic-day tue --basic-time 12:00
-
-# [Type 5]: Monthly Week - 매달 1,3주 수요일 12:00 실행
-zdm-cli schedule create -t 5 --basic-week "1,3" --basic-day wed --basic-time 12:00
-
-# [Type 6]: Monthly Day - 매달 10,20일 12:00 실행
-zdm-cli schedule create -t 6 --basic-day "10,20" --basic-time 12:00
-
-# [Type 7]: Smart Weekly - Basic: 매주 수요일, Advanced: 매주 월,목,금요일
-zdm-cli schedule create -t 7 --basic-day wed --basic-time 12:00 --advanced-day "mon,thu,fri" --advanced-time 12:00
-
-# [Type 8]: Smart Monthly Week - Basic: 매달 2째주 월요일, Advanced: 매달 1,3째주 화,목요일
-zdm-cli schedule create -t 8 --basic-week 2 --basic-day mon --basic-time 12:00 --advanced-week "1,3" --advanced-day "tue,thu" --advanced-time 12:00
-
-# [Type 9]: Smart Monthly Date - Basic: 매달 15일, Advanced: 매달 2,25일
-zdm-cli schedule create -t 9 --basic-day 15 --basic-time 12:00 --advanced-day "2,25" --advanced-time 12:00
-
-# [Type 10]: Smart Custom Monthly Week - Basic: 매년 5월 2째주 토요일, Advanced: 매년 1,6월 2,4째주 수,일요일
-zdm-cli schedule create -t 10 --basic-month 5 --basic-week 2 --basic-day sat --basic-time 12:00 --advanced-month "1,6" --advanced-week "2,4" --advanced-day "wed,sun" --advanced-time 12:00
-
-# [Type 11]: Smart Custom Monthly Date - Basic: 매년 4월 19일, Advanced: 매년 10,11월 25,28일
-zdm-cli schedule create -t 11 --basic-month 4 --basic-day 19 --basic-time 12:00 --advanced-month "10,11" --advanced-day "25,28" --advanced-time 12:00
-
-# 사용자 지정 경로에 저장
-zdm-cli schedule create -t 3 --basic-time 12:00 -p /custom/path/schedule.json
+# 테이블 형식으로 결과 출력
+zdm-cli schedule regist -p /path/to/schedule.json --output table
 ```
 
 </details>
@@ -75,68 +51,17 @@ zdm-cli schedule create -t 3 --basic-time 12:00 -p /custom/path/schedule.json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --type | -t | number | Required | - | Schedule Type | {% include zdm/schedule-types.md inline=true %} |
-| --path | -p | string | Optional | - | 생성된 Schedule File 저장 Path | - |
-| --center | -c | string | Optional | - | Schedule 등록 Center | - |
-| --user | -u | string | Optional | - | Schedule 등록 User | - |
-| --basic-year | -by | string | Optional | - | Basic Schedule - 년도 설정 | - |
-| --basic-month | -bm | string | Optional | - | Basic Schedule - 월 설정 | - |
-| --basic-week | -bw | string | Optional | - | Basic Schedule - 주 설정 | - |
-| --basic-day | -bd | string | Optional | - | Basic Schedule - 일 설정 | - |
-| --basic-time | -bt | string | Optional | - | Basic Schedule - 시간 설정 (HH:MM) | - |
-| --basic-interval-hour | -bih | string | Optional | - | Basic Schedule - 간격 시간 | - |
-| --basic-interval-minute | -bim | string | Optional | - | Basic Schedule - 간격 분 | - |
-| --advanced-year | -ay | string | Optional | - | Advanced Schedule - 년도 설정 (Smart Schedule용, Type 7~11) | - |
-| --advanced-month | -am | string | Optional | - | Advanced Schedule - 월 설정 (Smart Schedule용) | - |
-| --advanced-week | -aw | string | Optional | - | Advanced Schedule - 주 설정 (Smart Schedule용) | - |
-| --advanced-day | -ad | string | Optional | - | Advanced Schedule - 일 설정 (Smart Schedule용) | - |
-| --advanced-time | -at | string | Optional | - | Advanced Schedule - 시간 설정 (Smart Schedule용, HH:MM) | - |
-| --advanced-interval-hour | -aih | string | Optional | - | Advanced Schedule - 간격 시간 (Smart Schedule용) | - |
-| --advanced-interval-minute | -aim | string | Optional | - | Advanced Schedule - 간격 분 (Smart Schedule용) | - |
+| --path | -p | string | Required | - | 등록할 Schedule File Path | - |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 
 <details markdown="1" open>
-<summary><strong>Schedule Types</strong></summary>
+<summary><strong>입력 파일 형식</strong></summary>
 
-{% include zdm/schedule-types.md number=true %}
+**Basic Schedule (Type 0~6):**
 
-</details>
-
-<details markdown="1" open>
-<summary><strong>출력 예시</strong></summary>
-
-**Text 형식 (기본):**
-
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Schedule Creation Result [output: text]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[info]
-
-saved to  : /home/user/.zconverter/zdm-cli/schedule/Basic_schedule-20250106120000.json
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[data]
-
-center                  : zdm-center-id
-type                    : 3
-basic.year              : -
-basic.month             : -
-basic.week              : -
-basic.day               : -
-basic.time              : 12:00
-basic.interval.hour     : -
-basic.interval.minute   : -
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-**JSON 형식:**
-
-```
-saved to  : /home/user/.zconverter/zdm-cli/schedule/Basic_schedule-20250106120000.json
-
+```json
 {
   "center": "zdm-center-id",
   "type": 3,
@@ -154,44 +79,9 @@ saved to  : /home/user/.zconverter/zdm-cli/schedule/Basic_schedule-2025010612000
 }
 ```
 
-**Smart Schedule (Type 7~11) Text 형식 출력 예시:**
+**Smart Schedule (Type 7~11):**
 
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Schedule Creation Result [output: text]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[info]
-
-saved to  : /home/user/.zconverter/zdm-cli/schedule/Advanced_schedule-20250106120000.json
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[data]
-
-center                  : zdm-center-id
-type                    : 7
-basic.year              : -
-basic.month             : -
-basic.week              : -
-basic.day               : wed
-basic.time              : 12:00
-basic.interval.hour     : -
-basic.interval.minute   : -
-advanced.year           : -
-advanced.month          : -
-advanced.week           : -
-advanced.day            : mon,thu,fri
-advanced.time           : 12:00
-advanced.interval.hour  : -
-advanced.interval.minute: -
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-**Smart Schedule (Type 7~11) JSON 형식 출력 예시:**
-
-```
-saved to  : /home/user/.zconverter/zdm-cli/schedule/Advanced_schedule-20250106120000.json
-
+```json
 {
   "center": "zdm-center-id",
   "type": 7,
@@ -217,6 +107,109 @@ saved to  : /home/user/.zconverter/zdm-cli/schedule/Advanced_schedule-2025010612
       "minute": ""
     }
   }
+}
+```
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>출력 예시</strong></summary>
+
+**Text 형식 (기본) - Basic Schedule 등록 결과:**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* Schedule Registration Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[request info]
+
+status    : success
+message   : Schedule registered successfully
+timestamp : 2025-01-06 12:00:00
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[data]
+
+[Basic Schedule]
+id          : 123
+type        : daily
+state       : enabled
+description : Daily schedule
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**Text 형식 - Smart Schedule 등록 결과:**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* Schedule Registration Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[request info]
+
+status    : success
+message   : Schedule registered successfully
+timestamp : 2025-01-06 12:00:00
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[data]
+
+[Basic Schedule]
+id          : 124
+type        : smart weekly on specific day
+state       : enabled
+description : Smart weekly basic schedule
+
+[Advanced Schedule]
+id          : 125
+type        : smart weekly on specific day
+state       : enabled
+description : Smart weekly advanced schedule
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**JSON 형식 - Basic Schedule 등록 결과:**
+
+```json
+{
+  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "message": "Schedule registered successfully",
+  "success": true,
+  "data": {
+    "basic": {
+      "id": 123,
+      "type": "daily",
+      "state": "enabled",
+      "description": "Daily schedule"
+    }
+  },
+  "timestamp": "2025-01-06 12:00:00"
+}
+```
+
+**JSON 형식 - Smart Schedule 등록 결과:**
+
+```json
+{
+  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "message": "Schedule registered successfully",
+  "success": true,
+  "data": {
+    "basic": {
+      "id": 124,
+      "type": "smart weekly on specific day",
+      "state": "enabled",
+      "description": "Smart weekly basic schedule"
+    },
+    "advanced": {
+      "id": 125,
+      "type": "smart weekly on specific day",
+      "state": "enabled",
+      "description": "Smart weekly advanced schedule"
+    }
+  },
+  "timestamp": "2025-01-06 12:00:00"
 }
 ```
 

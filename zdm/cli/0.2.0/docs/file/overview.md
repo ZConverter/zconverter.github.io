@@ -7,6 +7,13 @@ navigation: cli-0.2.0
 
 파일 관리 기능에 대한 개요입니다.
 
+<details markdown="1" open>
+<summary><strong>목차</strong></summary>
+
+- [파일 이름 형식](#파일-이름-형식)
+
+</details>
+
 ---
 
 ## 파일 이름 형식
