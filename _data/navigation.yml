@@ -41,6 +41,8 @@ api-1.0.3:
         url: "/zdm/api/1.0.3/docs/server/delete"
   - title: "Schedule"
     links:
+      - title: "개요"
+        url: "/zdm/api/1.0.3/docs/schedule/overview"
       - title: "GET /schedules"
         url: "/zdm/api/1.0.3/docs/schedule/list"
       - title: "GET /schedules/:identifier"
@@ -248,6 +250,8 @@ api:
         url: "/zdm/api/docs/server/delete"
   - title: "Schedule"
     links:
+      - title: "개요"
+        url: "/zdm/api/docs/schedule/overview"
       - title: "GET /schedules"
         url: "/zdm/api/docs/schedule/list"
       - title: "GET /schedules/:identifier"
