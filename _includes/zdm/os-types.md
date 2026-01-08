@@ -7,7 +7,7 @@ OS Types Include (Wrapper)
   {%- assign type = "cli" -%}
 {%- endif -%}
 {%- if include.desc -%}
-{%- include zdm/enum.html name="os-types" type=type version="0.2.0" format="table" show_desc=true -%}
+{%- include zdm/enum.html name="os-types" type=type version="1.0.3" format="table" show_desc=true -%}
 {%- else -%}
-{%- include zdm/enum.html name="os-types" type=type version="0.2.0" format="inline" -%}
+{%- include zdm/enum.html name="os-types" type=type version="1.0.3" format="inline" -%}
 {%- endif -%}

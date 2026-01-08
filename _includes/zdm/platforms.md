@@ -7,9 +7,9 @@ Platforms Include (Wrapper)
   {%- assign type = "api" -%}
 {%- endif -%}
 {%- if include.desc -%}
-{%- include zdm/enum.html name="platforms" type=type version="0.2.0" format="table" show_desc=true -%}
+{%- include zdm/enum.html name="platforms" type=type version="1.0.3" format="table" show_desc=true -%}
 {%- elsif include.inline -%}
-{%- include zdm/enum.html name="platforms" type=type version="0.2.0" format="inline" -%}
+{%- include zdm/enum.html name="platforms" type=type version="1.0.3" format="inline" -%}
 {%- else -%}
-{%- include zdm/enum.html name="platforms" type=type version="0.2.0" format="table" show_desc=false -%}
+{%- include zdm/enum.html name="platforms" type=type version="1.0.3" format="table" show_desc=false -%}
 {%- endif -%}

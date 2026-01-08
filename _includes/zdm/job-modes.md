@@ -16,7 +16,7 @@ Job Modes Include (Wrapper)
   {%- assign context = "recovery" -%}
 {%- endif -%}
 {%- if include.desc -%}
-{%- include zdm/enum.html name="job-modes" type="api" version="0.2.0" context=context format="table" show_desc=true -%}
+{%- include zdm/enum.html name="job-modes" type="api" version="1.0.3" context=context format="table" show_desc=true -%}
 {%- else -%}
-{%- include zdm/enum.html name="job-modes" type="api" version="0.2.0" context=context format="inline" -%}
+{%- include zdm/enum.html name="job-modes" type="api" version="1.0.3" context=context format="inline" -%}
 {%- endif -%}

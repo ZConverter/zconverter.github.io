@@ -15,10 +15,10 @@ zconverter.github.io/
 │       │   ├── versions.yml        # 버전 메타정보
 │       │   └── enums.yml           # 공통 enum 데이터
 │       ├── api/
-│       │   └── 0.2.0/
+│       │   └── 1.0.3/
 │       │       └── enums.yml       # API 버전별 enum 데이터
 │       └── cli/
-│           └── 0.2.0/
+│           └── 1.0.3/
 │               └── enums.yml       # CLI 버전별 enum 데이터
 ├── _includes/
 │   └── zdm/
@@ -27,20 +27,20 @@ zconverter.github.io/
 │       └── ...                     # 기타 래퍼 파일들
 ├── downloads/
 │   ├── zdm-api/
-│   │   ├── 0.2.0/                  # API 다운로드 파일
-│   │   └── 0.3.0/
+│   │   ├── 1.0.3/                  # API 다운로드 파일
+│   │   └── 1.0.4/
 │   └── zdm-cli/
-│       └── 0.2.0/                  # CLI 다운로드 파일
+│       └── 1.0.3/                  # CLI 다운로드 파일
 └── zdm/
     ├── api/
     │   ├── index.md                # 리다이렉트 페이지
-    │   ├── 0.2.0/                  # 버전별 문서
+    │   ├── 1.0.3/                  # 버전별 문서
     │   │   ├── index.md
     │   │   └── docs/
-    │   └── 0.3.0/
+    │   └── 1.0.4/
     └── cli/
         ├── index.md                # 리다이렉트 페이지
-        └── 0.2.0/
+        └── 1.0.3/
             ├── index.md
             └── docs/
 ```
@@ -55,11 +55,11 @@ zconverter.github.io/
 
 ```yaml
 api:
-  - version: "0.2.0"
+  - version: "1.0.3"
     status: current
     released: 2024-01-01
     description: "현재 안정 버전"
-  - version: "0.3.0"
+  - version: "1.0.4"
     status: beta          # 신규 버전 추가
     released: 2025-01-01
     description: "베타 버전"
@@ -76,7 +76,7 @@ api:
 
 ```bash
 # 이전 버전 복사
-cp -r zdm/api/0.2.0 zdm/api/0.3.0
+cp -r zdm/api/1.0.3 zdm/api/1.0.4
 ```
 
 ---
@@ -87,31 +87,31 @@ cp -r zdm/api/0.2.0 zdm/api/0.3.0
 
 ```bash
 # 일괄 변경
-find zdm/api/0.3.0 -name "*.md" -exec sed -i 's/navigation: api-0.2.0/navigation: api-0.3.0/' {} \;
+find zdm/api/1.0.4 -name "*.md" -exec sed -i 's/navigation: api-1.0.3/navigation: api-1.0.4/' {} \;
 ```
 
 또는 각 파일에서 수동으로 변경:
 
 ```yaml
 # 변경 전
-navigation: api-0.2.0
+navigation: api-1.0.3
 
 # 변경 후
-navigation: api-0.3.0
+navigation: api-1.0.4
 ```
 
 ---
 
 ### Step 4: index.md 제목 업데이트
 
-`zdm/api/0.3.0/index.md` 파일 수정:
+`zdm/api/1.0.4/index.md` 파일 수정:
 
 ```yaml
 ---
 layout: docs
-title: ZDM API Documentation v0.3.0
+title: ZDM API Documentation v1.0.4
 section_title: ZDM API Documentation
-navigation: api-0.3.0
+navigation: api-1.0.4
 ---
 ```
 
@@ -122,16 +122,16 @@ navigation: api-0.3.0
 `_data/navigation.yml` 파일에 신규 버전 네비게이션 추가:
 
 ```yaml
-# API v0.3.0 Navigation
-api-0.3.0:
+# API v1.0.4 Navigation
+api-1.0.4:
   - title: "API Documentation"
     links:
       - title: "API 소개"
-        url: "/zdm/api/0.3.0/index"
+        url: "/zdm/api/1.0.4/index"
   - title: "Authentication"
     links:
       - title: "POST /auth/issue"
-        url: "/zdm/api/0.3.0/docs/auth/issue"
+        url: "/zdm/api/1.0.4/docs/auth/issue"
   # ... 나머지 엔드포인트
 ```
 
@@ -140,7 +140,7 @@ api-0.3.0:
 ### Step 6: 다운로드 파일 추가
 
 ```bash
-mkdir -p downloads/zdm-api/0.3.0
+mkdir -p downloads/zdm-api/1.0.4
 # 다운로드 파일 배치
 # - zdm-api-linux.tar.gz
 ```
@@ -153,11 +153,11 @@ mkdir -p downloads/zdm-api/0.3.0
 
 ```markdown
 ---
-redirect_to: /zdm/api/0.3.0/index
+redirect_to: /zdm/api/1.0.4/index
 ---
 
 <script>
-  window.location.href = "{{ '/zdm/api/0.3.0/index' | relative_url }}";
+  window.location.href = "{{ '/zdm/api/1.0.4/index' | relative_url }}";
 </script>
 ```
 
@@ -171,11 +171,11 @@ redirect_to: /zdm/api/0.3.0/index
 
 ```yaml
 cli:
-  - version: "0.2.0"
+  - version: "1.0.3"
     status: current
     released: 2024-01-01
     description: "현재 안정 버전"
-  - version: "0.3.0"
+  - version: "1.0.4"
     status: beta          # 신규 버전 추가
     released: 2025-01-01
     description: "베타 버전"
@@ -187,7 +187,7 @@ cli:
 
 ```bash
 # 이전 버전 복사
-cp -r zdm/cli/0.2.0 zdm/cli/0.3.0
+cp -r zdm/cli/1.0.3 zdm/cli/1.0.4
 ```
 
 ---
@@ -196,21 +196,21 @@ cp -r zdm/cli/0.2.0 zdm/cli/0.3.0
 
 ```bash
 # 일괄 변경
-find zdm/cli/0.3.0 -name "*.md" -exec sed -i 's/navigation: cli-0.2.0/navigation: cli-0.3.0/' {} \;
+find zdm/cli/1.0.4 -name "*.md" -exec sed -i 's/navigation: cli-1.0.3/navigation: cli-1.0.4/' {} \;
 ```
 
 ---
 
 ### Step 4: index.md 제목 업데이트
 
-`zdm/cli/0.3.0/index.md` 파일 수정:
+`zdm/cli/1.0.4/index.md` 파일 수정:
 
 ```yaml
 ---
 layout: docs
-title: ZDM CLI Documentation v0.3.0
+title: ZDM CLI Documentation v1.0.4
 section_title: ZDM CLI Documentation
-navigation: cli-0.3.0
+navigation: cli-1.0.4
 ---
 ```
 
@@ -221,18 +221,18 @@ navigation: cli-0.3.0
 `_data/navigation.yml` 파일에 신규 버전 네비게이션 추가:
 
 ```yaml
-# CLI v0.3.0 Navigation
-cli-0.3.0:
+# CLI v1.0.4 Navigation
+cli-1.0.4:
   - title: "CLI Documentation"
     links:
       - title: "CLI 소개"
-        url: "/zdm/cli/0.3.0/index"
+        url: "/zdm/cli/1.0.4/index"
   - title: "Token"
     links:
       - title: "개요"
-        url: "/zdm/cli/0.3.0/docs/token/overview"
+        url: "/zdm/cli/1.0.4/docs/token/overview"
       - title: "token issue"
-        url: "/zdm/cli/0.3.0/docs/token/issue"
+        url: "/zdm/cli/1.0.4/docs/token/issue"
   # ... 나머지 커맨드
 ```
 
@@ -241,7 +241,7 @@ cli-0.3.0:
 ### Step 6: 다운로드 파일 추가
 
 ```bash
-mkdir -p downloads/zdm-cli/0.3.0
+mkdir -p downloads/zdm-cli/1.0.4
 # 다운로드 파일 배치
 # - zdm-cli-windows.zip
 # - zdm-cli-linux.tar.gz
@@ -255,11 +255,11 @@ mkdir -p downloads/zdm-cli/0.3.0
 
 ```markdown
 ---
-redirect_to: /zdm/cli/0.3.0/index
+redirect_to: /zdm/cli/1.0.4/index
 ---
 
 <script>
-  window.location.href = "{{ '/zdm/cli/0.3.0/index' | relative_url }}";
+  window.location.href = "{{ '/zdm/cli/1.0.4/index' | relative_url }}";
 </script>
 ```
 
@@ -276,15 +276,15 @@ _data/zdm/
 ├── common/
 │   └── enums.yml           # 공통 enum (버전 무관)
 ├── api/
-│   ├── 0.2.0/
-│   │   └── enums.yml       # API 0.2.0 전용 enum
-│   └── 0.3.0/
-│       └── enums.yml       # API 0.3.0 전용 enum
+│   ├── 1.0.3/
+│   │   └── enums.yml       # API 1.0.3 전용 enum
+│   └── 1.0.4/
+│       └── enums.yml       # API 1.0.4 전용 enum
 └── cli/
-    ├── 0.2.0/
-    │   └── enums.yml       # CLI 0.2.0 전용 enum
-    └── 0.3.0/
-        └── enums.yml       # CLI 0.3.0 전용 enum
+    ├── 1.0.3/
+    │   └── enums.yml       # CLI 1.0.3 전용 enum
+    └── 1.0.4/
+        └── enums.yml       # CLI 1.0.4 전용 enum
 ```
 
 ### 공통 vs 버전별 enum
@@ -303,8 +303,8 @@ _data/zdm/
 
 ```bash
 # 이전 버전에서 복사
-cp _data/zdm/api/0.2.0/enums.yml _data/zdm/api/0.3.0/enums.yml
-cp _data/zdm/cli/0.2.0/enums.yml _data/zdm/cli/0.3.0/enums.yml
+cp _data/zdm/api/1.0.3/enums.yml _data/zdm/api/1.0.4/enums.yml
+cp _data/zdm/cli/1.0.3/enums.yml _data/zdm/cli/1.0.4/enums.yml
 ```
 
 #### Step 2: 변경 사항 반영
@@ -312,7 +312,7 @@ cp _data/zdm/cli/0.2.0/enums.yml _data/zdm/cli/0.3.0/enums.yml
 신규 버전에서 변경된 enum 값을 수정합니다.
 
 ```yaml
-# _data/zdm/api/0.3.0/enums.yml 예시
+# _data/zdm/api/1.0.4/enums.yml 예시
 job-modes:
   backup:
     - value: "full"
@@ -334,9 +334,9 @@ job-modes:
 New Enum Include (Wrapper)
 {%- endcomment -%}
 {%- if include.desc -%}
-{%- include zdm/enum.html name="new-enum" type="api" version="0.3.0" format="table" show_desc=true -%}
+{%- include zdm/enum.html name="new-enum" type="api" version="1.0.4" format="table" show_desc=true -%}
 {%- else -%}
-{%- include zdm/enum.html name="new-enum" type="api" version="0.3.0" format="inline" -%}
+{%- include zdm/enum.html name="new-enum" type="api" version="1.0.4" format="inline" -%}
 {%- endif -%}
 ```
 
@@ -347,8 +347,8 @@ New Enum Include (Wrapper)
 #### 새 템플릿 직접 사용
 
 ```liquid
-{% include zdm/enum.html name="job-modes" type="api" version="0.2.0" context="backup" %}
-{% include zdm/enum.html name="platforms" type="cli" version="0.2.0" format="inline" %}
+{% include zdm/enum.html name="job-modes" type="api" version="1.0.3" context="backup" %}
+{% include zdm/enum.html name="platforms" type="cli" version="1.0.3" format="inline" %}
 {% include zdm/enum.html name="schedule-types" show_number=true show_category=true %}
 ```
 
@@ -368,7 +368,7 @@ New Enum Include (Wrapper)
 |----------|------|------|
 | `name` | string | (필수) enum 이름 |
 | `type` | string | `api` 또는 `cli` |
-| `version` | string | 버전 (예: `0.2.0`) |
+| `version` | string | 버전 (예: `1.0.3`) |
 | `context` | string | 컨텍스트 (예: `backup`, `recovery`) |
 | `format` | string | `table` (기본값) 또는 `inline` |
 | `show_desc` | boolean | 설명 컬럼 표시 (기본값: `true`) |
@@ -407,7 +407,7 @@ New Enum Include (Wrapper)
 
 ## 주의사항
 
-1. **버전 형식**: 반드시 Semantic Versioning (예: 0.2.0, 1.0.0) 사용
+1. **버전 형식**: 반드시 Semantic Versioning (예: 1.0.3, 1.0.0) 사용
 2. **navigation 키**: `api-{version}` 또는 `cli-{version}` 형식 사용
 3. **URL 패턴**: `/zdm/api/{version}/docs/...` 또는 `/zdm/cli/{version}/docs/...`
 4. **리다이렉트**: 기존 URL 호환성을 위해 index.md 리다이렉트 페이지 유지

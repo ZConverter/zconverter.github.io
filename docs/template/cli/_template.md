@@ -72,13 +72,13 @@ CLI 문서 작성 가이드
 
 1. 파일 위치 (버전별 관리)
    - 경로: /zdm/cli/{version}/docs/{command}/{subcommand}.md
-   - 예시: /zdm/cli/0.2.0/docs/backup/list.md
+   - 예시: /zdm/cli/1.0.3/docs/backup/list.md
 
 2. Front Matter (필수)
    - layout: docs (고정)
    - title: {command} {subcommand}
    - section_title: ZDM CLI Documentation (고정)
-   - navigation: cli-{version} (예: cli-0.2.0)
+   - navigation: cli-{version} (예: cli-1.0.3)
 
 3. 필수 섹션
    - 명령어 구문: <div class="command-card"> 사용
@@ -103,7 +103,7 @@ CLI 문서 작성 가이드
      {% include zdm/platforms.md baremetal=true %}
      {% include zdm/output-formats.md %}
    - 새 템플릿 (버전 지정):
-     {% include zdm/enum.html name="job-modes" type="cli" version="0.2.0" context="backup" format="inline" %}
+     {% include zdm/enum.html name="job-modes" type="cli" version="1.0.3" context="backup" format="inline" %}
    - 주요 enum 목록:
      - job-modes (backup/recovery)
      - server-modes
@@ -134,7 +134,7 @@ CLI 문서 작성 가이드
 
 마지막. 사이드바 네비게이션 추가
     - 파일 생성 후 _data/navigation.yml에 링크 추가 필요
-    - 버전별 네비게이션 키: cli-{version} (예: cli-0.2.0)
+    - 버전별 네비게이션 키: cli-{version} (예: cli-1.0.3)
 
 ================================================================================
 -->

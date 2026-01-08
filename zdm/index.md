@@ -21,9 +21,9 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 
 | 항목 | 내용 |
 |------|------|
-| 문서 | [ZDM-CLI 문서 바로가기](/zdm/cli/0.2.0/index) |
-| 다운로드 | [Windows](/downloads/zdm-cli/0.2.0/zdm-cli-windows.zip) · [Linux](/downloads/zdm-cli/0.2.0/zdm-cli-linux.tar.gz) |
-| 현재 버전 | 0.2.0 |
+| 문서 | [ZDM-CLI 문서 바로가기](/zdm/cli/1.0.3/index) |
+| 다운로드 | [Windows](/downloads/zdm-cli/1.0.3/zdm-cli-windows.zip) · [Linux](/downloads/zdm-cli/1.0.3/zdm-cli-linux.tar.gz) |
+| 현재 버전 | 1.0.3 |
 | 최종 업데이트 | {{ site.time | date: "%Y-%m-%d" }} |
 
 <details markdown="1">
@@ -49,9 +49,9 @@ Ubuntu 22.04 이상 권장
 
 | 항목 | 내용 |
 |------|------|
-| 문서 | [ZDM-API 문서 바로가기](/zdm/api/0.2.0/index) |
-| 다운로드 | [Linux](/downloads/zdm-api/0.2.0/zdm-api-linux.tar.gz) |
-| 현재 버전 | 0.2.0 |
+| 문서 | [ZDM-API 문서 바로가기](/zdm/api/1.0.3/index) |
+| 다운로드 | [Linux](/downloads/zdm-api/1.0.3/zdm-api-linux.tar.gz) |
+| 현재 버전 | 1.0.3 |
 | 최종 업데이트 | {{ site.time | date: "%Y-%m-%d" }} |
 
 <details markdown="1">

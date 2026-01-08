@@ -75,13 +75,13 @@ API 문서 작성 가이드
 
 1. 파일 위치 (버전별 관리)
    - 경로: /zdm/api/{version}/docs/{resource}/{action}.md
-   - 예시: /zdm/api/0.2.0/docs/backup/list.md
+   - 예시: /zdm/api/1.0.3/docs/backup/list.md
 
 2. Front Matter (필수)
    - layout: docs (고정)
    - title: {METHOD} /{endpoint}
    - section_title: ZDM API Documentation (고정)
-   - navigation: api-{version} (예: api-0.2.0)
+   - navigation: api-{version} (예: api-1.0.3)
 
 3. 필수 섹션
    - 엔드포인트: <div class="command-card"> 사용
@@ -107,7 +107,7 @@ API 문서 작성 가이드
      {% include zdm/server-modes.md %}
      {% include zdm/platforms.md %}
    - 새 템플릿 (버전 지정):
-     {% include zdm/enum.html name="job-modes" type="api" version="0.2.0" context="backup" format="inline" %}
+     {% include zdm/enum.html name="job-modes" type="api" version="1.0.3" context="backup" format="inline" %}
    - 주요 enum 목록:
      - job-modes (backup/recovery)
      - server-modes
@@ -173,7 +173,7 @@ API 문서 작성 가이드
 
 마지막. 사이드바 네비게이션 추가
     - 파일 생성 후 _data/navigation.yml에 링크 추가 필요
-    - 버전별 네비게이션 키: api-{version} (예: api-0.2.0)
+    - 버전별 네비게이션 키: api-{version} (예: api-1.0.3)
 
 ================================================================================
 -->
