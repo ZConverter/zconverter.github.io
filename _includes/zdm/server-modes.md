@@ -1,8 +1,8 @@
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `source` | 소스 서버 (백업 대상) |
-| `target` | 타겟 서버 (복구 대상) |
+{%- comment -%}
+Server Modes Include (Wrapper)
+{%- endcomment -%}
+{%- if include.desc -%}
+{%- include zdm/enum.html name="server-modes" format="table" show_desc=true -%}
 {%- else -%}
-`source`, `target`
+{%- include zdm/enum.html name="server-modes" format="inline" -%}
 {%- endif -%}

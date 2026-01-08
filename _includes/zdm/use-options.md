@@ -1,8 +1,8 @@
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `use` | 사용 |
-| `not use` | 사용 안함 |
+{%- comment -%}
+Use Options Include (Wrapper)
+{%- endcomment -%}
+{%- if include.desc -%}
+{%- include zdm/enum.html name="use-options" format="table" show_desc=true -%}
 {%- else -%}
-`use`, `not use`
+{%- include zdm/enum.html name="use-options" format="inline" -%}
 {%- endif -%}

@@ -427,4 +427,14 @@ th {
     max-height: none;
     margin-bottom: 2rem;
   }
+
+  .version-dropdown {
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .version-dropdown-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
 }

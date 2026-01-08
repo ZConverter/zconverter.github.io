@@ -1,0 +1,167 @@
+# ZDM Common Enums
+# API/CLI 공통으로 사용되는 열거형 값들 (버전 무관)
+# 버전별 차이가 있는 항목은 api/cli 버전별 enums.yml 에서 정의
+
+# 서버 모드
+server-modes:
+  - value: "source"
+    description: "소스 서버 (백업 대상)"
+  - value: "target"
+    description: "타겟 서버 (복구 대상)"
+
+# 작업 상태
+job-status:
+  - value: "run"
+    description: "실행 중"
+  - value: "complete"
+    description: "완료"
+  - value: "start"
+    description: "시작"
+  - value: "waiting"
+    description: "대기 중"
+  - value: "cancel"
+    description: "취소됨"
+  - value: "schedule"
+    description: "스케줄 대기"
+
+# 저장소 유형
+repository-types:
+  - value: "smb"
+    description: "SMB/CIFS 프로토콜"
+  - value: "nfs"
+    description: "NFS 프로토콜"
+
+# 연결 상태
+connection-status:
+  - value: "connect"
+    description: "연결됨"
+  - value: "disconnect"
+    description: "연결 끊김"
+
+# 라이선스 카테고리
+license-categories:
+  - value: "zdm(backup)"
+    description: "백업 라이선스"
+  - value: "zdm(dr)"
+    description: "DR(재해복구) 라이선스"
+  - value: "zdm(migration)"
+    description: "마이그레이션 라이선스"
+
+# 라이선스 할당 상태
+license-assign-status:
+  - value: "assign"
+    description: "라이선스 할당됨"
+  - value: "unassign"
+    description: "라이선스 미할당"
+
+# 사용 여부
+use-options:
+  - value: "use"
+    description: "사용"
+  - value: "not use"
+    description: "사용 안함"
+
+# 스크립트 실행 시점
+script-timing:
+  - value: "before"
+    description: "작업 전 실행"
+  - value: "after"
+    description: "작업 후 실행"
+
+# 작업 후 동작
+after-reboot:
+  - value: "reboot"
+    description: "재부팅"
+  - value: "shutdown"
+    description: "종료"
+  - value: "maintain"
+    description: "현재 상태 유지"
+
+# 스케줄 상태
+schedule-state:
+  - value: "enabled"
+    description: "활성화"
+  - value: "disabled"
+    description: "비활성화"
+
+# 요일
+weekdays:
+  - value: "sun"
+    number: 0
+    description: "일요일"
+  - value: "mon"
+    number: 1
+    description: "월요일"
+  - value: "tue"
+    number: 2
+    description: "화요일"
+  - value: "wed"
+    number: 3
+    description: "수요일"
+  - value: "thu"
+    number: 4
+    description: "목요일"
+  - value: "fri"
+    number: 5
+    description: "금요일"
+  - value: "sat"
+    number: 6
+    description: "토요일"
+
+# ZDM 활성화 상태
+zdm-activation:
+  - value: "ok"
+    description: "활성화됨"
+  - value: "fail"
+    description: "활성화 실패"
+
+# 스케줄 타입
+schedule-types:
+  - number: 0
+    value: "once"
+    description: "한 번 실행"
+    category: "Basic"
+  - number: 1
+    value: "every minute"
+    description: "매분 실행"
+    category: "Basic"
+  - number: 2
+    value: "hourly"
+    description: "매시간 실행"
+    category: "Basic"
+  - number: 3
+    value: "daily"
+    description: "매일 실행"
+    category: "Basic"
+  - number: 4
+    value: "weekly"
+    description: "매주 특정 요일 (요일 복수선택 가능)"
+    category: "Basic"
+  - number: 5
+    value: "monthly on specific week"
+    description: "매월 특정 주/요일 (주 복수선택 가능)"
+    category: "Basic"
+  - number: 6
+    value: "monthly on specific day"
+    description: "매월 특정 일 (날짜 복수선택 가능)"
+    category: "Basic"
+  - number: 7
+    value: "smart weekly on specific day"
+    description: "매주 특정 요일 (increment: 요일 복수선택)"
+    category: "Smart"
+  - number: 8
+    value: "smart monthly on specific week and day"
+    description: "매월 특정 주/요일 (increment: 주, 요일 복수선택)"
+    category: "Smart"
+  - number: 9
+    value: "smart monthly on specific date"
+    description: "매월 특정 일 (increment: 일 복수선택)"
+    category: "Smart"
+  - number: 10
+    value: "smart custom monthly on specific month, week and day"
+    description: "매년 특정 월/주/요일 (increment: 월, 주, 요일 복수선택)"
+    category: "Smart"
+  - number: 11
+    value: "smart custom monthly on specific month and date"
+    description: "매년 특정 월/일 (increment: 월, 일 복수선택)"
+    category: "Smart"

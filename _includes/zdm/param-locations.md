@@ -1,10 +1,8 @@
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `Query` | URL 쿼리 파라미터 |
-| `Path` | URL 경로 파라미터 |
-| `Body` | 요청 본문 |
-| `Header` | 요청 헤더 |
+{%- comment -%}
+Param Locations Include (Wrapper) - API Only
+{%- endcomment -%}
+{%- if include.desc -%}
+{%- include zdm/enum.html name="param-locations" type="api" version="0.2.0" format="table" show_desc=true -%}
 {%- else -%}
-`Query`, `Path`, `Body`, `Header`
+{%- include zdm/enum.html name="param-locations" type="api" version="0.2.0" format="inline" -%}
 {%- endif -%}

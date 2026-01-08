@@ -1,8 +1,8 @@
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `connect` | 연결됨 |
-| `disconnect` | 연결 끊김 |
+{%- comment -%}
+Connection Status Include (Wrapper)
+{%- endcomment -%}
+{%- if include.desc -%}
+{%- include zdm/enum.html name="connection-status" format="table" show_desc=true -%}
 {%- else -%}
-`connect`, `disconnect`
+{%- include zdm/enum.html name="connection-status" format="inline" -%}
 {%- endif -%}

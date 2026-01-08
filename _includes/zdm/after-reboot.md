@@ -1,9 +1,8 @@
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `reboot` | 재부팅 |
-| `shutdown` | 종료 |
-| `maintain` | 현재 상태 유지 |
+{%- comment -%}
+After Reboot Include (Wrapper)
+{%- endcomment -%}
+{%- if include.desc -%}
+{%- include zdm/enum.html name="after-reboot" format="table" show_desc=true -%}
 {%- else -%}
-`reboot`, `shutdown`, `maintain`
+{%- include zdm/enum.html name="after-reboot" format="inline" -%}
 {%- endif -%}

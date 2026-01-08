@@ -1,9 +1,13 @@
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `win` | Windows |
-| `lin` | Linux |
-| `cloud` | Cloud (API only) |
+{%- comment -%}
+OS Types Include (Wrapper)
+{%- endcomment -%}
+{%- if include.cloud -%}
+  {%- assign type = "api" -%}
 {%- else -%}
-`win`, `lin`{% if include.cloud %}, `cloud`{% endif %}
+  {%- assign type = "cli" -%}
+{%- endif -%}
+{%- if include.desc -%}
+{%- include zdm/enum.html name="os-types" type=type version="0.2.0" format="table" show_desc=true -%}
+{%- else -%}
+{%- include zdm/enum.html name="os-types" type=type version="0.2.0" format="inline" -%}
 {%- endif -%}

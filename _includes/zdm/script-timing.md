@@ -1,8 +1,8 @@
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `before` | 작업 전 실행 |
-| `after` | 작업 후 실행 |
+{%- comment -%}
+Script Timing Include (Wrapper)
+{%- endcomment -%}
+{%- if include.desc -%}
+{%- include zdm/enum.html name="script-timing" format="table" show_desc=true -%}
 {%- else -%}
-`before`, `after`
+{%- include zdm/enum.html name="script-timing" format="inline" -%}
 {%- endif -%}

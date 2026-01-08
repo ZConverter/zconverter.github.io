@@ -29,7 +29,9 @@
       "Bash(tree:*)",
       "Bash(tar:*)",
       "Bash(zip:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

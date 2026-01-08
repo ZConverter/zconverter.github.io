@@ -9,18 +9,6 @@ navigation: zdm
 
 ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 
-<summary><strong>주요 기능</strong></summary>
-
-- **토큰 기반 인증** - 안전한 API 접근 제어
-- **사용자 관리** - 사용자 계정 및 권한 관리
-- **서버 관리** - 시스템 리소스 통합 관리
-- **백업/복구** - 자동화된 데이터 보호 및 복원
-- **스케줄링** - 정기적인 백업 작업 예약
-- **파일 관리** - 백업 파일 업로드/다운로드
-- **라이선스 관리** - 라이선스 발급 및 할당
-- **ZDM 센터** - 멀티 센터 환경 관리
-
-
 ---
 
 ## 제공 서비스
@@ -29,43 +17,50 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 
 백업, 복구, 시스템 관리를 위한 CLI 툴
 
-
 <summary><strong>문서 및 버전 정보</strong></summary>
 
 | 항목 | 내용 |
 |------|------|
-| 문서 | [ZDM-CLI 문서 바로가기](/zdm/cli/index) |
-| 다운로드 | [Windows](/downloads/zdm-cli/zdm-cli-windows.zip) · [Linux](/downloads/zdm-cli/zdm-cli-linux.tar.gz) |
+| 문서 | [ZDM-CLI 문서 바로가기](/zdm/cli/0.2.0/index) |
+| 다운로드 | [Windows](/downloads/zdm-cli/0.2.0/zdm-cli-windows.zip) · [Linux](/downloads/zdm-cli/0.2.0/zdm-cli-linux.tar.gz) |
 | 현재 버전 | 0.2.0 |
 | 최종 업데이트 | {{ site.time | date: "%Y-%m-%d" }} |
+
+<details markdown="1">
+<summary><strong>버전별 문서</strong></summary>
+
+| 버전 | 상태 | 문서 | 다운로드 |
+|------|------|------|----------|
+{% for ver in site.data.zdm.common.versions.cli -%}
+| {{ ver.version }} | {{ ver.status }} | [바로가기](/zdm/cli/{{ ver.version }}/index) | [Windows](/downloads/zdm-cli/{{ ver.version }}/zdm-cli-windows.zip) · [Linux](/downloads/zdm-cli/{{ ver.version }}/zdm-cli-linux.tar.gz) |
+{% endfor %}
+
+</details>
 
 ---
 
 ### ZDM-API
 
-백업, 복구, 시스템 관리를 위한 API 서버
+백업, 복구, 시스템 관리를 위한 API 서버 .<br>
+API 서버는 Linux만 지원합니다.<br>
+Ubuntu 22.04 이상 권장
 
 <summary><strong>문서 및 버전 정보</strong></summary>
 
 | 항목 | 내용 |
 |------|------|
-| 문서 | [ZDM-API 문서 바로가기](/zdm/api/index) |
-| 현재 버전 | 1.0.0 |
+| 문서 | [ZDM-API 문서 바로가기](/zdm/api/0.2.0/index) |
+| 다운로드 | [Linux](/downloads/zdm-api/0.2.0/zdm-api-linux.tar.gz) |
+| 현재 버전 | 0.2.0 |
 | 최종 업데이트 | {{ site.time | date: "%Y-%m-%d" }} |
 
----
+<details markdown="1">
+<summary><strong>버전별 문서</strong></summary>
 
-### Quick Start
-
-<details markdown="1" open>
-<summary><strong>시작하기</strong></summary>
-
-1. **토큰 발급**: API 사용을 위한 인증 토큰을 발급받습니다
-2. **API 호출**: Authorization 헤더에 토큰을 포함하여 API를 호출합니다
-3. **리소스 관리**: 서버, 백업, 스케줄 등을 관리합니다
-
-자세한 내용은 [API 문서](/zdm/api/)를 참조하세요.
+| 버전 | 상태 | 문서 | 다운로드 |
+|------|------|------|----------|
+{% for ver in site.data.zdm.common.versions.api -%}
+| {{ ver.version }} | {{ ver.status }} | [바로가기](/zdm/api/{{ ver.version }}/index) | [Linux](/downloads/zdm-api/{{ ver.version }}/zdm-api-linux.tar.gz) |
+{% endfor %}
 
 </details>
-
----

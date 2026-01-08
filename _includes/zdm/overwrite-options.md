@@ -1,28 +1,15 @@
+{%- comment -%}
+Overwrite Options Include (Wrapper)
+{%- endcomment -%}
 {%- if include.api -%}
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `allow` | 덮어쓰기 허용 |
-| `not allow` | 덮어쓰기 불허 |
-{%- else -%}
-`allow`, `not allow`
-{%- endif -%}
+  {%- assign type = "api" -%}
 {%- elsif include.cli -%}
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `allow` | 덮어쓰기 허용 |
-| `notAllow` | 덮어쓰기 불허 |
+  {%- assign type = "cli" -%}
 {%- else -%}
-`allow`, `notAllow`
+  {%- assign type = "api" -%}
 {%- endif -%}
+{%- if include.desc -%}
+{%- include zdm/enum.html name="overwrite-options" type=type version="0.2.0" format="table" show_desc=true -%}
 {%- else -%}
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `allow` | 덮어쓰기 허용 |
-| `not allow` / `notAllow` | 덮어쓰기 불허 |
-{%- else -%}
-`allow`, `not allow`
-{%- endif -%}
+{%- include zdm/enum.html name="overwrite-options" type=type version="0.2.0" format="inline" -%}
 {%- endif -%}

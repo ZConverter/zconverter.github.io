@@ -1,8 +1,8 @@
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `enabled` | 활성화 |
-| `disabled` | 비활성화 |
+{%- comment -%}
+Schedule State Include (Wrapper)
+{%- endcomment -%}
+{%- if include.desc -%}
+{%- include zdm/enum.html name="schedule-state" format="table" show_desc=true -%}
 {%- else -%}
-`disabled`, `enabled`
+{%- include zdm/enum.html name="schedule-state" format="inline" -%}
 {%- endif -%}

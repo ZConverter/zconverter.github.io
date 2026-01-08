@@ -1,8 +1,8 @@
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `ok` | 활성화됨 |
-| `fail` | 활성화 실패 |
+{%- comment -%}
+ZDM Activation Include (Wrapper)
+{%- endcomment -%}
+{%- if include.desc -%}
+{%- include zdm/enum.html name="zdm-activation" format="table" show_desc=true -%}
 {%- else -%}
-`ok`, `fail`
+{%- include zdm/enum.html name="zdm-activation" format="inline" -%}
 {%- endif -%}

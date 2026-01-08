@@ -1,0 +1,65 @@
+{%- comment -%}
+ZDM Enum Include Template
+데이터 기반으로 enum 값들을 다양한 형식으로 렌더링
+
+사용법:
+  {% include zdm/enum.html name="job-modes" type="api" version="0.2.0" %}
+  {% include zdm/enum.html name="job-modes" type="api" version="0.2.0" context="backup" %}
+  {% include zdm/enum.html name="server-modes" format="inline" %}
+  {% include zdm/enum.html name="schedule-types" show_number=true show_category=true %}
+  {% include zdm/enum.html name="weekdays" show_number=true %}
+
+파라미터:
+  name      : (필수) enum 이름 (예: job-modes, server-modes)
+  type      : api 또는 cli (버전별 데이터 사용 시)
+  version   : 버전 (예: 0.2.0)
+  context   : 컨텍스트 (예: backup, recovery - job-modes 등에서 사용)
+  format    : 출력 형식 - table (기본값), inline
+  show_desc : 설명 컬럼 표시 여부 (기본값: true)
+  show_number : 번호 컬럼 표시 여부 (기본값: false)
+  show_category : 카테고리 컬럼 표시 여부 (기본값: false)
+{%- endcomment -%}
+
+{%- comment -%} 데이터 소스 결정 {%- endcomment -%}
+{%- if include.type and include.version -%}
+  {%- assign version_enums = site.data.zdm[include.type][include.version].enums -%}
+  {%- if version_enums[include.name] -%}
+    {%- assign enum_data = version_enums[include.name] -%}
+  {%- else -%}
+    {%- assign enum_data = site.data.zdm.common.enums[include.name] -%}
+  {%- endif -%}
+{%- else -%}
+  {%- assign enum_data = site.data.zdm.common.enums[include.name] -%}
+{%- endif -%}
+
+{%- comment -%} 컨텍스트가 있으면 해당 컨텍스트의 데이터 사용 {%- endcomment -%}
+{%- if include.context and enum_data[include.context] -%}
+  {%- assign items = enum_data[include.context] -%}
+{%- else -%}
+  {%- assign items = enum_data -%}
+{%- endif -%}
+
+{%- comment -%} 기본값 설정 {%- endcomment -%}
+{%- assign format = include.format | default: "table" -%}
+{%- assign show_desc = include.show_desc | default: true -%}
+{%- assign show_number = include.show_number | default: false -%}
+{%- assign show_category = include.show_category | default: false -%}
+
+{%- comment -%} 인라인 형식 출력 {%- endcomment -%}
+{%- if format == "inline" -%}
+{%- for item in items -%}
+`{{ item.value }}`{%- unless forloop.last -%}, {% endunless -%}
+{%- endfor -%}
+
+{%- comment -%} 테이블 형식 출력 {%- endcomment -%}
+{%- else -%}
+{%- comment -%} 헤더 생성 {%- endcomment -%}
+| {% if show_number %}번호 | {% endif %}값 |{% if show_desc %} 설명 |{% endif %}{% if show_category %} 카테고리 |{% endif %}
+
+|{% if show_number %}------|{% endif %}------|{% if show_desc %}------|{% endif %}{% if show_category %}------|{% endif %}
+
+{%- for item in items %}
+| {% if show_number %}{{ item.number }} | {% endif %}`{{ item.value }}` |{% if show_desc %} {{ item.description }} |{% endif %}{% if show_category %} {{ item.category }} |{% endif %}
+
+{%- endfor -%}
+{%- endif -%}

@@ -1,8 +1,8 @@
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `smb` | SMB/CIFS 프로토콜 |
-| `nfs` | NFS 프로토콜 |
+{%- comment -%}
+Repository Types Include (Wrapper)
+{%- endcomment -%}
+{%- if include.desc -%}
+{%- include zdm/enum.html name="repository-types" format="table" show_desc=true -%}
 {%- else -%}
-`smb`, `nfs`
+{%- include zdm/enum.html name="repository-types" format="inline" -%}
 {%- endif -%}

@@ -1,0 +1,77 @@
+# ZDM CLI v0.2.0 Enums
+# CLI 버전별 enum 정의 (공통 enums.yml 을 오버라이드하거나 확장)
+
+# 작업 모드 - CLI 버전
+job-modes:
+  backup:
+    - value: "full"
+      description: "전체 백업"
+    - value: "increment"
+      description: "증분 백업"
+    - value: "smart"
+      description: "스마트 백업 (Full + Increment 조합)"
+  recovery:
+    - value: "full"
+      description: "전체 복구"
+    - value: "increment"
+      description: "증분 복구"
+
+# 덮어쓰기 옵션 - CLI 버전
+overwrite-options:
+  - value: "allow"
+    description: "덮어쓰기 허용"
+  - value: "notAllow"
+    description: "덮어쓰기 불허"
+
+# OS 유형 - CLI 버전 (cloud 미포함)
+os-types:
+  - value: "win"
+    description: "Windows"
+  - value: "lin"
+    description: "Linux"
+
+# 플랫폼 - CLI 버전 (baremetal 포함)
+platforms:
+  - value: "oci"
+    description: "Oracle Cloud Infrastructure"
+  - value: "ncp"
+    description: "Naver Cloud Platform"
+  - value: "gcp"
+    description: "Google Cloud Platform"
+  - value: "aws"
+    description: "Amazon Web Services"
+  - value: "azure"
+    description: "Microsoft Azure"
+  - value: "vmware"
+    description: "VMware vSphere"
+  - value: "scp"
+    description: "Samsung Cloud Platform"
+  - value: "openstack"
+    description: "OpenStack"
+  - value: "cloudstack"
+    description: "Apache CloudStack"
+  - value: "kt"
+    description: "KT Cloud"
+  - value: "nhn"
+    description: "NHN Cloud"
+  - value: "nutanix"
+    description: "Nutanix"
+  - value: "proxmox"
+    description: "Proxmox VE"
+  - value: "kvm"
+    description: "KVM"
+  - value: "hyperv"
+    description: "Microsoft Hyper-V"
+  - value: "xenserver"
+    description: "Citrix XenServer"
+  - value: "baremetal"
+    description: "베어메탈"
+
+# 출력 형식 - CLI 전용
+output-formats:
+  - value: "text"
+    description: "텍스트 형식 (기본값)"
+  - value: "json"
+    description: "JSON 형식"
+  - value: "table"
+    description: "테이블 형식"

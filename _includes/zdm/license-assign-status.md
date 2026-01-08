@@ -1,8 +1,8 @@
-{%- if include.desc %}
-| 값 | 설명 |
-|------|------|
-| `assign` | 라이선스 할당됨 |
-| `unassign` | 라이선스 미할당 |
+{%- comment -%}
+License Assign Status Include (Wrapper)
+{%- endcomment -%}
+{%- if include.desc -%}
+{%- include zdm/enum.html name="license-assign-status" format="table" show_desc=true -%}
 {%- else -%}
-`assign`, `unassign`
+{%- include zdm/enum.html name="license-assign-status" format="inline" -%}
 {%- endif -%}
