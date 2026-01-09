@@ -2,7 +2,7 @@
 layout: docs
 title: server list
 section_title: ZDM CLI Documentation
-navigation: cli
+navigation: cli-1.0.3
 ---
 
 Server 목록 및 상세 정보를 조회합니다.
@@ -70,15 +70,15 @@ zdm-cli server list --output table
 |----------|------|------|------|--------|------|--------|
 | --name | - | string | Optional | - | 조회할 Server 이름 (해당 옵션 사용시 단일 조회) | - |
 | --id | - | number | Optional | - | 조회할 Server ID (해당 옵션 사용시 단일 조회) | - |
-| --os | - | string | Optional | - | 조회할 Server OS | win, lin |
-| --mode | - | string | Optional | - | 조회할 Server 모드 | source, target |
+| --os | - | string | Optional | - | 조회할 Server OS | {% include zdm/os-types.md %} |
+| --mode | - | string | Optional | - | 조회할 Server 모드 | {% include zdm/server-modes.md %} |
 | --license | - | number | Optional | - | Server에 할당된 License ID | - |
 | --license-assign-only | -lao | boolean | Optional | false | 라이센스가 할당된 Server만 조회 | - |
 | --license-un-assign-only | -luao | boolean | Optional | false | 라이센스가 할당되지 않은 Server만 조회 | - |
 | --partition | - | boolean | Optional | false | Partition 정보 추가조회 | - |
 | --partition-only | -po | boolean | Optional | false | 대상 Server의 Partition 정보만 조회 | - |
 | --detail | - | boolean | Optional | false | 상세 정보 조회 | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 
@@ -353,6 +353,31 @@ lastUpdated    : 2025-01-06T10:30:00Z
   "timestamp": "2025-01-06 10:30:00"
 }
 ```
+
+</details>
+
+---
+
+## 참조
+
+<details markdown="1">
+<summary><strong>OS 타입</strong></summary>
+
+{% include zdm/os-types.md desc=true %}
+
+</details>
+
+<details markdown="1">
+<summary><strong>서버 모드</strong></summary>
+
+{% include zdm/server-modes.md desc=true %}
+
+</details>
+
+<details markdown="1">
+<summary><strong>출력 형식</strong></summary>
+
+{% include zdm/output-formats.md desc=true %}
 
 </details>
 

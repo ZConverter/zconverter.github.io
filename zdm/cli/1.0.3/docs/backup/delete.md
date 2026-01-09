@@ -49,7 +49,7 @@ zdm-cli backup delete --name "OldBackup" --output table
 |----------|------|------|------|--------|------|--------|
 | --name | - | string | Optional<span class="required-note">*</span> | - | 작업 이름 | - |
 | --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
-| --output | -o | string | Optional | text | 출력 형식 | text, json, table |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 > <span class="required-note">*</span> --id 또는 --name 중 하나만 필수로 입력해야 합니다. 두 옵션을 동시에 사용할 수 없습니다.
 
@@ -143,6 +143,17 @@ logData deleted    : Yes
   "timestamp": "2025-01-01 12:00:00"
 }
 ```
+
+</details>
+
+---
+
+## 참조
+
+<details markdown="1">
+<summary><strong>출력 형식</strong></summary>
+
+{% include zdm/output-formats.md desc=true %}
 
 </details>
 

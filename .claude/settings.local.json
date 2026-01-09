@@ -31,7 +31,10 @@
       "Bash(zip:*)",
       "Bash(git checkout:*)",
       "Bash(ls:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(bundle exec jekyll:*)",
+      "Bash(bundle exec ruby:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

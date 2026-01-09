@@ -9,7 +9,7 @@ Overwrite Options Include (Wrapper)
   {%- assign type = "api" -%}
 {%- endif -%}
 {%- if include.desc -%}
-{%- include zdm/enum.html name="overwrite-options" type=type version="1.0.3" format="table" show_desc=true -%}
+{%- include zdm/enum.html name="overwrite-options" type=type version="v1_0_3" format="table" show_desc=true -%}
 {%- else -%}
-{%- include zdm/enum.html name="overwrite-options" type=type version="1.0.3" format="inline" -%}
+{%- include zdm/enum.html name="overwrite-options" type=type version="v1_0_3" format="inline" -%}
 {%- endif -%}
