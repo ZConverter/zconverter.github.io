@@ -29,7 +29,7 @@ zdm-cli token issue -m admin@example.com -p password
 zdm-cli config set --zdm-ip 192.168.1.100
 
 # 3. ZDM Center ID 설정
-zdm-cli config set --zdm-id zdm-center-01
+zdm-cli config set --zdm-id 6
 
 # 4. 기본 Repository 설정
 zdm-cli config set --zdm-repo-id 1
