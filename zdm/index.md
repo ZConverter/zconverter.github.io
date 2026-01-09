@@ -23,6 +23,7 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 |------|------|
 | 문서 | [ZDM-CLI 문서 바로가기](/zdm/cli/1.0.3/index) |
 | 다운로드 | [Windows](/downloads/zdm-cli/1.0.3/zdm-cli-windows.zip) · [Linux](/downloads/zdm-cli/1.0.3/zdm-cli-linux.tar.gz) |
+| 호환성 | [OS 호환성 정보](/zdm/compatibility) |
 | 현재 버전 | 1.0.3 |
 | 최종 업데이트 | {{ site.time | date: "%Y-%m-%d" }} |
 
