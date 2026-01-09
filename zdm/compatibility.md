@@ -41,20 +41,24 @@ ZDM CLI 바이너리의 운영체제 호환성 정보입니다.
 <details markdown="1" open>
 <summary><strong>세부 정보</strong></summary>
 
-**요구사항:** Windows 10 이상
+**요구사항:** Windows 10 이상 (공식), Windows Server 2012 R2 이상 (비공식)
 
 | 버전 | 지원 여부 | 비고 |
 |------|-----------|------|
 | Windows 11 | O | 권장 |
-| Windows 10 (1809+) | O | 지원 |
-| Windows Server 2022 | O | 지원 |
-| Windows Server 2019 | O | 지원 |
-| Windows Server 2016 | O | 지원 |
-| Windows 8.1 | X | 미지원 |
-| Windows 7 | X | 미지원 |
+| Windows 10 (1809+) | O | 공식 지원 |
+| Windows Server 2025 | O | 공식 지원 |
+| Windows Server 2022 | O | 공식 지원 |
+| Windows Server 2019 | O | 공식 지원 |
+| Windows Server 2016 | O | 공식 지원 |
+| Windows Server 2012 R2 | △ | 지원 (부분) |
+| Windows Server 2012 | △ | 지원 (부분) |
+| Windows Server 2008 R2 | △ | 지원 (부분) |
+| Windows 8.1 | △ | 지원 (부분) |
+| Windows 7 | △ | 지원 (부분) |
 
 **빌드 정보:**
-- Node.js: v18.20.5
+- Node.js: v22.13.0
 - 빌드 방식: Node.js SEA (Single Executable Application)
 
 </details>
