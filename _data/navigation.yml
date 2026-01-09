@@ -61,6 +61,8 @@ api-1.0.3:
         url: "/zdm/api/1.0.3/docs/backup/update"
       - title: "DELETE /backups/:identifier"
         url: "/zdm/api/1.0.3/docs/backup/delete"
+      - title: "GET /backups/images/server/:serverName"
+        url: "/zdm/api/1.0.3/docs/backup/images"
       - title: "GET /backups/monitoring/job/:identifier"
         url: "/zdm/api/1.0.3/docs/backup/monitoring-job"
       - title: "GET /backups/monitoring/system/:identifier"
