@@ -37,6 +37,8 @@
 ### Added
 - OS 호환성 정보 문서 (compatibility.md)
 - Config 튜토리얼 문서
+- License list 신규 옵션추가
+  - id, name
 
 ### Changed
 - 파라미터 테이블 include 모듈화
