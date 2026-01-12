@@ -3,15 +3,9 @@ layout: docs
 title: ZDM API Documentation
 section_title: ZDM API Documentation
 navigation: api
-redirect_to: /zdm/api/1.0.3/index
 ---
 
-<script>
-  window.location.href = "{{ '/zdm/api/1.0.3/index' | relative_url }}";
-</script>
+<script>window.location.href = "/zdm/ko/api/1.0.3/index";</script>
+<noscript><meta http-equiv="refresh" content="0; url=/zdm/ko/api/1.0.3/index"></noscript>
 
-<noscript>
-  <meta http-equiv="refresh" content="0; url={{ '/zdm/api/1.0.3/index' | relative_url }}">
-</noscript>
-
-이 페이지는 [최신 API 문서](/zdm/api/1.0.3/index)로 리다이렉트됩니다.
+[한국어 API 문서로 이동](/zdm/ko/api/1.0.3/index)
