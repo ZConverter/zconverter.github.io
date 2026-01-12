@@ -30,6 +30,13 @@ License 목록 및 정보를 조회하는 명령어입니다.
 # 전체 라이센스 목록 조회
 zdm-cli license list
 
+# 특정 ID의 라이센스 조회
+zdm-cli license list --id 123
+
+# 특정 이름의 라이센스 조회
+zdm-cli license list --name "Production License"
+zdm-cli license list -n "Production License"
+
 # 특정 타입의 라이센스 조회
 zdm-cli license list --type "zdm(backup)"
 
@@ -58,6 +65,8 @@ zdm-cli license list --output table
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --id | - | number | Optional | - | 조회할 License ID | - |
+| --name | -n | string | Optional | - | 조회할 License 이름 | - |
 | --type | - | string | Optional | - | 조회할 License Type | {% include zdm/license-categories.md %} |
 | --expiration-date | --exp | string | Optional | - | 라이센스 만료 날짜 (format: YYYY-MM-DD) | - |
 | --create-date | --cre | string | Optional | - | 라이센스 생성 일자 (format: YYYY-MM-DD) | - |
