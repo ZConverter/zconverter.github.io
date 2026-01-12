@@ -35,6 +35,10 @@ curl -X GET "https://api.example.com/api/v1/zdms/repositories" \
 # 필터 적용 조회
 curl -X GET "https://api.example.com/api/v1/zdms/repositories?type=nfs" \
   -H "Authorization: Bearer <token>"
+
+# 페이지네이션 적용 조회
+curl -X GET "https://api.example.com/api/v1/zdms/repositories?page=1&limit=10" \
+  -H "Authorization: Bearer <token>"
 ```
 
 </details>
@@ -48,13 +52,16 @@ curl -X GET "https://api.example.com/api/v1/zdms/repositories?type=nfs" \
 | `type` | Query | string | Optional | - | 레포지토리 타입 필터 | {% include zdm/repository-types.md %} |
 | `os` | Query | string | Optional | - | OS 필터 | - |
 | `path` | Query | string | Optional | - | 경로 필터 | - |
+| `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
+| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
-**성공 응답 (200 OK)**
+<details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 미적용</summary>
 
 ```json
 {
@@ -94,6 +101,56 @@ curl -X GET "https://api.example.com/api/v1/zdms/repositories?type=nfs" \
 </details>
 
 <details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 적용 (page, limit 파라미터 사용 시)</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": [
+    {
+      "id": "1",
+      "center": "Main-Center",
+      "os": "Linux",
+      "type": "NFS",
+      "size": {
+        "raw": 1099511627776,
+        "formatted": "1.0 TB"
+      },
+      "used": {
+        "raw": 549755813888,
+        "formatted": "512.0 GB"
+      },
+      "free": {
+        "raw": 549755813888,
+        "formatted": "512.0 GB"
+      },
+      "usage": 50,
+      "remotePath": "/backup",
+      "localPath": "/mnt/backup",
+      "ipAddress": ["192.168.1.200"],
+      "port": "2049",
+      "lastUpdated": "2025-01-15T10:30:00Z"
+    }
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 5,
+    "totalItems": 50,
+    "itemsPerPage": 10,
+    "hasNextPage": true,
+    "hasPreviousPage": false
+  },
+  "message": "Repository list retrieved",
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+</details>
+
+</details>
+
+<details markdown="1" open>
 <summary><strong>응답 필드</strong></summary>
 
 | 필드 | 타입 | 설명 |
@@ -114,6 +171,12 @@ curl -X GET "https://api.example.com/api/v1/zdms/repositories?type=nfs" \
 | `ipAddress` | string[] | 접속 IP 목록 |
 | `port` | string | 포트 번호 |
 | `lastUpdated` | string | 마지막 업데이트 시간 |
+| `pagination.currentPage` | number | 현재 페이지 번호 (페이지네이션 적용 시) |
+| `pagination.totalPages` | number | 전체 페이지 수 (페이지네이션 적용 시) |
+| `pagination.totalItems` | number | 전체 항목 수 (페이지네이션 적용 시) |
+| `pagination.itemsPerPage` | number | 페이지당 항목 수 (페이지네이션 적용 시) |
+| `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 (페이지네이션 적용 시) |
+| `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 (페이지네이션 적용 시) |
 
 </details>
 

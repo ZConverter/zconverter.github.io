@@ -39,6 +39,10 @@ curl -X GET "https://api.example.com/api/v1/servers/server-01/partitions" \
 # 필터 적용 조회
 curl -X GET "https://api.example.com/api/v1/servers/1/partitions?fileSystem=ext4" \
   -H "Authorization: Bearer <token>"
+
+# 페이지네이션 적용 조회
+curl -X GET "https://api.example.com/api/v1/servers/1/partitions?page=1&limit=10" \
+  -H "Authorization: Bearer <token>"
 ```
 
 </details>
@@ -54,13 +58,16 @@ curl -X GET "https://api.example.com/api/v1/servers/1/partitions?fileSystem=ext4
 | `device` | Query | string | Optional | - | 디바이스 경로 필터 | - |
 | `fileSystem` | Query | string | Optional | - | 파일 시스템 타입 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
+| `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
+| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
-**성공 응답 (200 OK)**
+<details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 미적용</summary>
 
 ```json
 {
@@ -116,6 +123,52 @@ curl -X GET "https://api.example.com/api/v1/servers/1/partitions?fileSystem=ext4
 </details>
 
 <details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 적용 (page, limit 파라미터 사용 시)</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": [
+    {
+      "system": "server-01",
+      "letter": "/",
+      "device": "/dev/sda1",
+      "size": {
+        "raw": 107374182400,
+        "formatted": "100.0 GB"
+      },
+      "used": {
+        "raw": 21474836480,
+        "formatted": "20.0 GB"
+      },
+      "free": {
+        "raw": 85899345920,
+        "formatted": "80.0 GB"
+      },
+      "usage": 20,
+      "fileSystem": "ext4",
+      "lastUpdated": "2025-01-15T10:30:00Z"
+    }
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 3,
+    "totalItems": 25,
+    "itemsPerPage": 10,
+    "hasNextPage": true,
+    "hasPreviousPage": false
+  },
+  "message": "Partition information retrieved",
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+</details>
+
+</details>
+
+<details markdown="1" open>
 <summary><strong>응답 필드</strong></summary>
 
 | 필드 | 타입 | 설명 |
@@ -132,6 +185,12 @@ curl -X GET "https://api.example.com/api/v1/servers/1/partitions?fileSystem=ext4
 | `usage` | number | 사용률 (0-100) |
 | `fileSystem` | string | 파일 시스템 타입 (ext4, NTFS 등) |
 | `lastUpdated` | string | 마지막 업데이트 시간 |
+| `pagination.currentPage` | number | 현재 페이지 번호 (페이지네이션 적용 시) |
+| `pagination.totalPages` | number | 전체 페이지 수 (페이지네이션 적용 시) |
+| `pagination.totalItems` | number | 전체 항목 수 (페이지네이션 적용 시) |
+| `pagination.itemsPerPage` | number | 페이지당 항목 수 (페이지네이션 적용 시) |
+| `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 (페이지네이션 적용 시) |
+| `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 (페이지네이션 적용 시) |
 
 </details>
 
