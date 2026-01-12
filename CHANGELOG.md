@@ -42,6 +42,8 @@
 - 파라미터 테이블 include 모듈화
   - job-modes, platforms, output-formats 등
 - 참조 섹션 추가 (enum 상세 설명)
+- cli 실행시 자동으로 생성되는 디렉토리 이름 변경
+  - zdm-cli -> zdm-cli-data
 
 ### Fixed
 - navigation 값 오류 수정 (cli → cli-1.0.3)
@@ -58,11 +60,3 @@
 - README.md 공개용으로 간소화
 - 데이터 폴더 네이밍 규칙 변경 (`1.0.3` → `v1_0_3`)
   - Jekyll의 점(.) 제거 문제 해결
-
----
-
-## 버전 형식
-
-- **API vX.Y.Z**: REST API 문서 변경
-- **CLI vX.Y.Z**: CLI 문서 변경
-- **Documentation**: 문서 구조/인프라 변경
