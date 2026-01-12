@@ -34,6 +34,10 @@ curl -X GET "https://api.example.com/api/v1/users" \
 # 필터 적용 조회
 curl -X GET "https://api.example.com/api/v1/users?company=Acme&country=KR" \
   -H "Authorization: Bearer <token>"
+
+# 페이지네이션 적용 조회
+curl -X GET "https://api.example.com/api/v1/users?page=1&limit=10" \
+  -H "Authorization: Bearer <token>"
 ```
 
 </details>
@@ -47,13 +51,16 @@ curl -X GET "https://api.example.com/api/v1/users?company=Acme&country=KR" \
 | `position` | Query | string | Optional | - | 직책 필터 | - |
 | `company` | Query | string | Optional | - | 회사 필터 | - |
 | `country` | Query | string | Optional | - | 국가 필터 | - |
+| `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
+| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
-**성공 응답 (200 OK)**
+<details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 미적용</summary>
 
 ```json
 {
@@ -77,6 +84,40 @@ curl -X GET "https://api.example.com/api/v1/users?company=Acme&country=KR" \
 </details>
 
 <details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 적용 (page, limit 파라미터 사용 시)</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": [
+    {
+      "id": "1",
+      "email": "user@example.com",
+      "userName": "홍길동",
+      "company": "Acme Corp",
+      "country": "KR",
+      "position": "Manager"
+    }
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 5,
+    "totalItems": 50,
+    "itemsPerPage": 10,
+    "hasNextPage": true,
+    "hasPreviousPage": false
+  },
+  "message": "User information list",
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+</details>
+
+</details>
+
+<details markdown="1" open>
 <summary><strong>응답 필드</strong></summary>
 
 | 필드 | 타입 | 설명 |
@@ -87,6 +128,12 @@ curl -X GET "https://api.example.com/api/v1/users?company=Acme&country=KR" \
 | `company` | string | 회사명 |
 | `country` | string | 국가 |
 | `position` | string | 직책 |
+| `pagination.currentPage` | number | 현재 페이지 번호 (page/limit 사용 시) |
+| `pagination.totalPages` | number | 전체 페이지 수 (page/limit 사용 시) |
+| `pagination.totalItems` | number | 전체 항목 수 (page/limit 사용 시) |
+| `pagination.itemsPerPage` | number | 페이지당 항목 수 (page/limit 사용 시) |
+| `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 (page/limit 사용 시) |
+| `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 (page/limit 사용 시) |
 
 </details>
 

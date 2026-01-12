@@ -39,6 +39,10 @@ curl -X GET "https://api.example.com/api/v1/servers?mode=source&os=lin&connectio
 # 추가 정보 포함 조회
 curl -X GET "https://api.example.com/api/v1/servers?disk=true&network=true&detail=true" \
   -H "Authorization: Bearer <token>"
+
+# 페이지네이션 적용 조회
+curl -X GET "https://api.example.com/api/v1/servers?page=1&limit=10" \
+  -H "Authorization: Bearer <token>"
 ```
 
 </details>
@@ -57,6 +61,8 @@ curl -X GET "https://api.example.com/api/v1/servers?disk=true&network=true&detai
 | `partition` | Query | boolean | Optional | `false` | 파티션 정보 포함 여부 | `true`, `false` |
 | `repository` | Query | boolean | Optional | `false` | 레포지토리 정보 포함 여부 | `true`, `false` |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보(리소스 등) 포함 여부 | `true`, `false` |
+| `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
+| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 
 </details>
 
@@ -64,7 +70,7 @@ curl -X GET "https://api.example.com/api/v1/servers?disk=true&network=true&detai
 <summary><strong>응답 예시</strong></summary>
 
 <details markdown="1" open>
-<summary>기본 응답 (200 OK)</summary>
+<summary>기본 응답 (200 OK) - 페이지네이션 미적용</summary>
 
 ```json
 {
@@ -93,6 +99,51 @@ curl -X GET "https://api.example.com/api/v1/servers?disk=true&network=true&detai
       "lastUpdated": "2025-01-15T10:30:00Z"
     }
   ],
+  "message": "Server information list",
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+</details>
+
+<details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 적용 (page, limit 파라미터 사용 시)</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": [
+    {
+      "id": "1",
+      "name": "server-01",
+      "agent": {
+        "mode": "Source"
+      },
+      "os": {
+        "version": "Ubuntu 22.04 LTS"
+      },
+      "ip": {
+        "public": "192.168.1.100",
+        "private": ["10.0.0.1", "10.0.0.2"]
+      },
+      "license": {
+        "id": "5"
+      },
+      "status": {
+        "connect": "connect"
+      },
+      "lastUpdated": "2025-01-15T10:30:00Z"
+    }
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 5,
+    "totalItems": 50,
+    "itemsPerPage": 10,
+    "hasNextPage": true,
+    "hasPreviousPage": false
+  },
   "message": "Server information list",
   "timestamp": "2025-01-15T10:30:00Z"
 }
@@ -472,6 +523,20 @@ curl -X GET "https://api.example.com/api/v1/servers?disk=true&network=true&detai
 | `repository[].ipAddress` | string[] | 접속 IP 목록 |
 | `repository[].port` | string | 포트 번호 |
 | `repository[].lastUpdated` | string | 마지막 업데이트 시간 |
+
+</details>
+
+<details markdown="1">
+<summary>페이지네이션 필드 (page, limit 파라미터 사용 시)</summary>
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `pagination.currentPage` | number | 현재 페이지 번호 |
+| `pagination.totalPages` | number | 전체 페이지 수 |
+| `pagination.totalItems` | number | 전체 항목 수 |
+| `pagination.itemsPerPage` | number | 페이지당 항목 수 |
+| `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 |
+| `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 |
 
 </details>
 

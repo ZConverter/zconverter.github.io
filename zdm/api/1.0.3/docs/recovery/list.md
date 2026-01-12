@@ -38,6 +38,10 @@ curl -X GET "https://api.example.com/api/v1/recoveries?mode=full&status=complete
 # 상세 정보 포함 조회
 curl -X GET "https://api.example.com/api/v1/recoveries?detail=true" \
   -H "Authorization: Bearer <token>"
+
+# 페이지네이션 적용 조회
+curl -X GET "https://api.example.com/api/v1/recoveries?page=1&limit=10" \
+  -H "Authorization: Bearer <token>"
 ```
 
 </details>
@@ -61,6 +65,8 @@ curl -X GET "https://api.example.com/api/v1/recoveries?detail=true" \
 | `platform` | Query | string | Optional | - | 플랫폼 필터 | {% include zdm/platforms.md inline=true %} |
 | `backupName` | Query | string | Optional | - | 백업 작업 이름 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
+| `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
+| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 
 </details>
 
@@ -68,9 +74,7 @@ curl -X GET "https://api.example.com/api/v1/recoveries?detail=true" \
 <summary><strong>응답 예시</strong></summary>
 
 <details markdown="1" open>
-<summary>기본 응답 (detail=false)</summary>
-
-**성공 응답 (200 OK)**
+<summary>기본 응답 (200 OK) - 페이지네이션 미적용</summary>
 
 ```json
 {
@@ -139,10 +143,86 @@ curl -X GET "https://api.example.com/api/v1/recoveries?detail=true" \
 
 </details>
 
+<details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 적용 (page, limit 파라미터 사용 시)</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": [
+    {
+      "system": {
+        "source": {
+          "id": "1",
+          "name": "source-server",
+          "os": "Ubuntu 22.04"
+        },
+        "target": {
+          "id": "2",
+          "name": "target-server",
+          "os": "Ubuntu 22.04"
+        }
+      },
+      "job": {
+        "info": {
+          "id": "1",
+          "name": "daily-recovery",
+          "schedule": {
+            "basic": {
+              "id": "1",
+              "type": "daily",
+              "description": "Every day at 10:00"
+            }
+          },
+          "status": {
+            "current": "complete",
+            "time": {
+              "start": "2025-01-15T10:00:00Z",
+              "elapsed": "00:30:00",
+              "end": "2025-01-15T10:30:00Z"
+            }
+          },
+          "lastUpdated": "2025-01-15T10:30:00Z"
+        },
+        "detail": [
+          {
+            "partition": "/",
+            "device": "/dev/sda1",
+            "mode": "full",
+            "backup": {
+              "jobName": "daily-backup",
+              "fileName": "backup-2025-01-15.img",
+              "latest": "true"
+            },
+            "repository": {
+              "id": "1",
+              "path": "/backup",
+              "type": "nfs"
+            },
+            "lastUpdated": "2025-01-15T10:30:00Z"
+          }
+        ]
+      }
+    }
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 5,
+    "totalItems": 50,
+    "itemsPerPage": 10,
+    "hasNextPage": true,
+    "hasPreviousPage": false
+  },
+  "message": "Recovery job list",
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+</details>
+
 <details markdown="1">
 <summary>상세 응답 (detail=true)</summary>
-
-**성공 응답 (200 OK)**
 
 ```json
 {
@@ -287,6 +367,12 @@ curl -X GET "https://api.example.com/api/v1/recoveries?detail=true" \
 | `job.detail[].lastUpdated` | string | - | 상세 정보 업데이트 시간 |
 | `job.detail[].option.overwrite` | string | detail | 덮어쓰기 상태 |
 | `job.detail[].option.fileSystem` | string | detail | 파일시스템 (Linux) |
+| `pagination.currentPage` | number | page/limit | 현재 페이지 번호 |
+| `pagination.totalPages` | number | page/limit | 전체 페이지 수 |
+| `pagination.totalItems` | number | page/limit | 전체 항목 수 |
+| `pagination.itemsPerPage` | number | page/limit | 페이지당 항목 수 |
+| `pagination.hasNextPage` | boolean | page/limit | 다음 페이지 존재 여부 |
+| `pagination.hasPreviousPage` | boolean | page/limit | 이전 페이지 존재 여부 |
 
 </details>
 

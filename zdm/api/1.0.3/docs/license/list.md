@@ -38,6 +38,10 @@ curl -X GET "https://api.example.com/api/v1/licenses?category=zdm(backup)" \
 # 만료일 기준 조회
 curl -X GET "https://api.example.com/api/v1/licenses?exp=2025-12-31" \
   -H "Authorization: Bearer <token>"
+
+# 페이지네이션 적용 조회
+curl -X GET "https://api.example.com/api/v1/licenses?page=1&limit=10" \
+  -H "Authorization: Bearer <token>"
 ```
 
 </details>
@@ -50,13 +54,16 @@ curl -X GET "https://api.example.com/api/v1/licenses?exp=2025-12-31" \
 | `category` | Query | string | Optional | - | 라이선스 카테고리 필터 | {% include zdm/license-categories.md %} |
 | `exp` | Query | string | Optional | - | 만료일 필터 (YYYY-MM-DD) | - |
 | `created` | Query | string | Optional | - | 생성일 필터 (YYYY-MM-DD) | - |
+| `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
+| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
-**성공 응답 (200 OK)**
+<details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 미적용</summary>
 
 ```json
 {
@@ -89,6 +96,49 @@ curl -X GET "https://api.example.com/api/v1/licenses?exp=2025-12-31" \
 </details>
 
 <details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 적용 (page, limit 파라미터 사용 시)</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": [
+    {
+      "name": "Enterprise License",
+      "key": "XXXX-XXXX-XXXX-XXXX",
+      "category": "zdm(backup)",
+      "copies": {
+        "total": 100,
+        "used": 25,
+        "available": 75,
+        "usage": 25
+      },
+      "description": "Enterprise backup license",
+      "dates": {
+        "created": "2025-01-01",
+        "expires": "2026-01-01",
+        "daysRemaining": 365
+      }
+    }
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 5,
+    "totalItems": 50,
+    "itemsPerPage": 10,
+    "hasNextPage": true,
+    "hasPreviousPage": false
+  },
+  "message": "License information list",
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+</details>
+
+</details>
+
+<details markdown="1" open>
 <summary><strong>응답 필드</strong></summary>
 
 | 필드 | 타입 | 설명 |
@@ -104,6 +154,12 @@ curl -X GET "https://api.example.com/api/v1/licenses?exp=2025-12-31" \
 | `dates.created` | string | 생성일 |
 | `dates.expires` | string | 만료일 |
 | `dates.daysRemaining` | number | 만료까지 남은 일수 |
+| `pagination.currentPage` | number | 현재 페이지 번호 (page/limit 사용 시) |
+| `pagination.totalPages` | number | 전체 페이지 수 (page/limit 사용 시) |
+| `pagination.totalItems` | number | 전체 항목 수 (page/limit 사용 시) |
+| `pagination.itemsPerPage` | number | 페이지당 항목 수 (page/limit 사용 시) |
+| `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 (page/limit 사용 시) |
+| `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 (page/limit 사용 시) |
 
 </details>
 
