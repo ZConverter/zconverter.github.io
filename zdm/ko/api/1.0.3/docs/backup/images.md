@@ -35,6 +35,10 @@ curl -X GET "https://api.example.com/api/v1/backups/images/server/source-centos7
 # 서버 이름 + 작업 이름으로 조회
 curl -X GET "https://api.example.com/api/v1/backups/images/server/source-centos7-bios (192.168.2.104)?jobName=source-centos7-bios_ROOT" \
   -H "Authorization: Bearer <token>"
+
+# 페이지네이션 적용 조회
+curl -X GET "https://api.example.com/api/v1/backups/images/server/source-centos7-bios (192.168.2.104)?page=1&limit=10" \
+  -H "Authorization: Bearer <token>"
 ```
 
 </details>
@@ -46,13 +50,16 @@ curl -X GET "https://api.example.com/api/v1/backups/images/server/source-centos7
 |----------|------|------|------|--------|------|
 | `serverName` | Path | string | Required | - | zdm에 등록된 서버 전체 이름 |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 |
+| `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) |
+| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 |
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
-**성공 응답 (200 OK)**
+<details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 미적용</summary>
 
 ```json
 {
@@ -123,6 +130,61 @@ curl -X GET "https://api.example.com/api/v1/backups/images/server/source-centos7
 </details>
 
 <details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 적용 (page, limit 파라미터 사용 시)</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "images": [
+      {
+        "name": "source-centos7-bios_ROOT_[2026-01-07_08_44].ZIA",
+        "time": "2026-01-07 08:43:48",
+        "type": "full",
+        "compressed": true,
+        "size": {
+          "partition": {
+            "raw": 2328637440,
+            "formatted": "2.17 GB"
+          },
+          "image": {
+            "raw": 831622708,
+            "formatted": "793.17 MB"
+          },
+          "compressionRatio": "35.72%"
+        },
+        "server": "source-centos7-bios (192.168.2.104)",
+        "os": "CentOS Linux release 7.9.2009 (Core), 3.10.0-1160.el7.x86_64",
+        "partition": {
+          "mountPoint": "/",
+          "device": "/dev/mapper/centos-root",
+          "filesystem": "xfs",
+          "diskNumber": 0,
+          "partitionNumber": 1
+        }
+      }
+    ],
+    "total": 1,
+    "pagination": {
+      "currentPage": 1,
+      "totalPages": 2,
+      "totalItems": 15,
+      "itemsPerPage": 10,
+      "hasNextPage": true,
+      "hasPreviousPage": false
+    }
+  },
+  "message": "Backup images retrieved successfully",
+  "timestamp": "2026-01-09T10:30:00Z"
+}
+```
+
+</details>
+
+</details>
+
+<details markdown="1" open>
 <summary><strong>응답 필드</strong></summary>
 
 | 필드 | 타입 | 설명 |
@@ -149,6 +211,12 @@ curl -X GET "https://api.example.com/api/v1/backups/images/server/source-centos7
 | `images[].partition.diskNumber` | number | 디스크 번호 |
 | `images[].partition.partitionNumber` | number | 파티션 번호 |
 | `total` | number | 조회된 이미지 총 개수 |
+| `pagination.currentPage` | number | 현재 페이지 번호 (페이지네이션 적용 시) |
+| `pagination.totalPages` | number | 전체 페이지 수 (페이지네이션 적용 시) |
+| `pagination.totalItems` | number | 전체 항목 수 (페이지네이션 적용 시) |
+| `pagination.itemsPerPage` | number | 페이지당 항목 수 (페이지네이션 적용 시) |
+| `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 (페이지네이션 적용 시) |
+| `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 (페이지네이션 적용 시) |
 
 </details>
 

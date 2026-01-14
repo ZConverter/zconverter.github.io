@@ -35,6 +35,10 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/1" \
 # 서버 이름으로 모니터링 조회
 curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-server" \
   -H "Authorization: Bearer <token>"
+
+# 페이지네이션 적용 조회
+curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-server?page=1&limit=10" \
+  -H "Authorization: Bearer <token>"
 ```
 
 </details>
@@ -52,13 +56,16 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-
 | `serverType` | Query | string | Optional | - | 서버 타입 필터 | {% include zdm/server-modes.md %} |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
+| `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
+| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
-**성공 응답 (200 OK)**
+<details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 미적용</summary>
 
 ```json
 {
@@ -123,6 +130,70 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-
 </details>
 
 <details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 적용 (page, limit 파라미터 사용 시)</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "system": {
+      "source": {
+        "name": "source-server"
+      },
+      "target": {
+        "name": "target-server"
+      }
+    },
+    "summary": {
+      "total": 3,
+      "completed": 1,
+      "inProgress": 1,
+      "failed": 0,
+      "pending": 1,
+      "overallProgress": "45%"
+    },
+    "job": {
+      "info": {
+        "name": "daily-recovery"
+      },
+      "log": [
+        "Starting recovery...",
+        "Transferring data..."
+      ],
+      "details": [
+        {
+          "partition": "/",
+          "progressInfo": {
+            "status": "complete",
+            "percent": "100%",
+            "message": "Recovery completed",
+            "start": "2025-01-15T10:00:00Z",
+            "elapsed": "00:30:00",
+            "end": "2025-01-15T10:30:00Z"
+          }
+        }
+      ]
+    },
+    "pagination": {
+      "currentPage": 1,
+      "totalPages": 2,
+      "totalItems": 2,
+      "itemsPerPage": 1,
+      "hasNextPage": true,
+      "hasPreviousPage": false
+    }
+  },
+  "message": "Server recovery monitoring info",
+  "timestamp": "2025-01-15T10:45:00Z"
+}
+```
+
+</details>
+
+</details>
+
+<details markdown="1" open>
 <summary><strong>응답 필드</strong></summary>
 
 | 필드 | 타입 | 설명 |
@@ -145,6 +216,12 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-
 | `job.details[].progressInfo.start` | string | 시작 시간 |
 | `job.details[].progressInfo.elapsed` | string | 경과 시간 |
 | `job.details[].progressInfo.end` | string | 종료 시간 |
+| `pagination.currentPage` | number | 현재 페이지 번호 (페이지네이션 적용 시) |
+| `pagination.totalPages` | number | 전체 페이지 수 (페이지네이션 적용 시) |
+| `pagination.totalItems` | number | 전체 항목 수 (페이지네이션 적용 시) |
+| `pagination.itemsPerPage` | number | 페이지당 항목 수 (페이지네이션 적용 시) |
+| `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 (페이지네이션 적용 시) |
+| `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 (페이지네이션 적용 시) |
 
 </details>
 

@@ -70,7 +70,7 @@ zdm-cli recovery list --output table
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --status | | string | Optional | | 작업 상태 | {% include zdm/job-status.md %} |
-| --mode | | string | Optional | | 작업 모드 | {% include zdm/job-modes.md %} |
+| --mode | | string | Optional | | 작업 모드 | {% include zdm/job-modes.md recovery=true %} |
 | --name | | string | Optional | | 작업 이름 | |
 | --id | | number | Optional | | 작업 ID | |
 | --partition | | string | Optional | | 작업 대상 partition (Linux) | |
