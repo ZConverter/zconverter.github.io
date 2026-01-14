@@ -243,6 +243,115 @@ lastUpdated            : 2025-01-06T10:30:00Z
 }
 ```
 
+### Repository 정보 포함 출력(repository 옵션 사용)
+
+**Text 형식:**
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* ZDM Info Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[request info]
+
+status    : success
+message   : Success
+timestamp : 2025-01-06 10:30:00
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[data]
+
+[ZDM 1]
+name.center     : zdm-center-01
+name.host       : zdm-host-01
+id.center       : 1
+id.install      : install-001
+os.version      : Ubuntu 22.04
+ip.public       : 203.0.113.1
+ip.private      : 192.168.1.10
+status.connect  : connected
+status.activate : ok
+path.logFile    : /var/log/zdm
+path.install    : /opt/zdm
+lastUpdated     : 2025-01-06T10:30:00Z
+repository      :
+  [Repository 1]
+    id          : 1
+    os.version  : Linux Ubuntu 24.04 LTS
+    type        : nfs
+    size        : 500.0 GB, used: 100.0 GB, free: 400.0 GB (20%)
+    remotePath  : /mnt/backup
+    localPath   : /backup
+    ipAddress   : 192.168.1.100
+    port        : 2049
+    lastUpdated : 2025-01-06T10:30:00Z
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**JSON 형식:**
+```json
+{
+  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "message": "Success",
+  "success": true,
+  "data": [
+    {
+      "name": {
+        "center": "zdm-center-01",
+        "host": "zdm-host-01"
+      },
+      "id": {
+        "center": 1,
+        "install": "install-001"
+      },
+      "os": {
+        "version": "Ubuntu 22.04"
+      },
+      "ip": {
+        "public": "203.0.113.1",
+        "private": ["192.168.1.10"]
+      },
+      "status": {
+        "connect": "connected",
+        "activate": "ok"
+      },
+      "path": {
+        "logFile": "/var/log/zdm",
+        "install": "/opt/zdm"
+      },
+      "repository": [
+        {
+          "id": "1",
+          "os": {
+            "version": "Linux Ubuntu 24.04 LTS"
+          },
+          "type": "nfs",
+          "size": {
+            "raw": 536870912000,
+            "formatted": "500.0 GB"
+          },
+          "used": {
+            "raw": 107374182400,
+            "formatted": "100.0 GB"
+          },
+          "free": {
+            "raw": 429496729600,
+            "formatted": "400.0 GB"
+          },
+          "usage": 20,
+          "remotePath": "/mnt/backup",
+          "localPath": "/backup",
+          "ipAddress": ["192.168.1.100"],
+          "port": "2049",
+          "lastUpdated": "2025-01-06T10:30:00Z"
+        }
+      ],
+      "lastUpdated": "2025-01-06T10:30:00Z"
+    }
+  ],
+  "timestamp": "2025-01-06 10:30:00"
+}
+```
+
 </details>
 
 ---

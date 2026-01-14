@@ -237,7 +237,11 @@ lastUpdated            : 2025-01-06T10:30:00Z
 
 ### Partition 정보 포함 출력(partition 옵션 사용)
 
-**Text 형식:**
+> **참고**: 파티션 정보의 첫 번째 필드는 OS에 따라 다르게 표시됩니다.
+> - **Linux/Unix**: `mountPoint` (마운트 포인트, 예: `/`, `/home`)
+> - **Windows**: `drive` (드라이브 문자, 예: `C:`, `D:`)
+
+**Text 형식 (Linux):**
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -265,12 +269,14 @@ lastUpdated    : 2025-01-06T10:30:00Z
 
 [Partition Information]
   [Partition 1]
+    mountPoint  : /
     device      : /dev/sda1
     size        : 100.0 GB, used: 45.0 GB, free: 55.0 GB (45%)
     fileSystem  : ext4
     lastUpdated : 2025-01-06T10:30:00Z
 
   [Partition 2]
+    mountPoint  : /home
     device      : /dev/sda2
     size        : 500.0 GB, used: 200.0 GB, free: 300.0 GB (40%)
     fileSystem  : ext4
@@ -353,6 +359,50 @@ lastUpdated    : 2025-01-06T10:30:00Z
   ],
   "timestamp": "2025-01-06 10:30:00"
 }
+```
+
+**Text 형식 (Windows):**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* Server Info Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[request info]
+
+status    : success
+message   : Success
+timestamp : 2025-01-06 10:30:00
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[data]
+
+[Server 1]
+name           : win-server-01
+id             : 2
+agent.mode     : source
+os.version     : Windows Server 2022
+ip.public      : 203.0.113.2
+ip.private     : 192.168.1.20
+license.id     : 101
+status.connect : connected
+lastUpdated    : 2025-01-06T10:30:00Z
+
+[Partition Information]
+  [Partition 1]
+    drive       : C:
+    device      : \\.\PhysicalDrive0
+    size        : 500.0 GB, used: 200.0 GB, free: 300.0 GB (40%)
+    fileSystem  : NTFS
+    lastUpdated : 2025-01-06T10:30:00Z
+
+  [Partition 2]
+    drive       : D:
+    device      : \\.\PhysicalDrive1
+    size        : 1000.0 GB, used: 400.0 GB, free: 600.0 GB (40%)
+    fileSystem  : NTFS
+    lastUpdated : 2025-01-06T10:30:00Z
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 </details>
