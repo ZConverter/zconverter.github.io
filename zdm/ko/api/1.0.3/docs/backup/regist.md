@@ -76,15 +76,15 @@ curl -X POST "https://api.example.com/api/v1/backups" \
 
 | 필드 | 타입 | 필수 | 설명 | 선택값 |
 |------|------|------|------|--------|
-| `center` | string | Required | 센터 ID (숫자) 또는 센터 이름 | - |
-| `server` | string | Required | 서버 ID (숫자) 또는 서버 이름 | - |
+| `center` | string \| number | Required | 센터 ID (숫자) 또는 센터 이름 | - |
+| `server` | string \| number | Required | 서버 ID (숫자) 또는 서버 이름 | - |
 | `type` | string | Required | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
 | `partition` | array | Required | 작업 대상 파티션 배열 (전체 작업시 빈 배열 `[]`) | - |
 | `repository` | object | Required | 레포지토리 정보 | - |
 | `repository.type` | string | Required | 레포지토리 타입 | {% include zdm/repository-types.md %} |
 | `repository.path` | string | Required | 레포지토리 경로 | - |
 | `jobName` | string | Optional | 작업 이름 | - |
-| `user` | string | Optional | 사용자 ID (숫자) 또는 이메일 | - |
+| `user` | string \| number | Optional | 사용자 ID (숫자) 또는 이메일 | - |
 | `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
 | `description` | string | Optional | 작업 설명 | - |
 | `rotation` | number | Optional | 작업 반복 횟수 (1~30) | - |
@@ -98,6 +98,64 @@ curl -X POST "https://api.example.com/api/v1/backups" \
 | `scriptPath` | string | Optional | 실행할 스크립트 경로 | - |
 | `scriptRun` | string | Optional | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 | `individual` | array | Optional | 개별 작업 설정 배열 | - |
+
+</details>
+
+<details markdown="1">
+<summary><strong>individual 객체 구조</strong></summary>
+
+> 파티션별로 개별 설정을 적용할 수 있습니다. 지정하지 않은 필드는 상위 요청의 기본값을 사용합니다.
+
+| 필드 | 타입 | 필수 | 설명 | 선택값 |
+|------|------|------|------|--------|
+| `partition` | string | Required | 작업 대상 파티션 | - |
+| `center` | string \| number | Optional | 센터 ID 또는 이름 (미입력시 기본 center 사용) | - |
+| `server` | string \| number | Optional | 서버 ID 또는 이름 (미입력시 기본 server 사용) | - |
+| `type` | string | Optional | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
+| `repository` | object | Optional | 레포지토리 정보 | - |
+| `jobName` | string | Optional | 작업 이름 | - |
+| `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
+| `description` | string | Optional | 작업 설명 | - |
+| `rotation` | number | Optional | 작업 반복 횟수 (1~30) | - |
+| `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
+| `encryption` | string | Optional | 암호화 사용 여부 | {% include zdm/use-options.md %} |
+| `excludeDir` | string/array | Optional | 제외 디렉토리 | - |
+| `excludePartition` | string/array | Optional | 제외 파티션 | - |
+| `mailEvent` | string | Optional | 이벤트 알림 이메일 | - |
+| `networkLimit` | number | Optional | 네트워크 제한 속도 | - |
+| `autoStart` | string | Optional | 자동 시작 여부 | {% include zdm/use-options.md %} |
+| `scriptPath` | string | Optional | 실행할 스크립트 경로 | - |
+| `scriptRun` | string | Optional | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
+
+**사용 예시:**
+
+```json
+{
+  "center": "1",
+  "server": "main-server",
+  "type": "full",
+  "partition": ["/", "/data", "/var"],
+  "repository": { "type": "nfs", "path": "/backup" },
+  "individual": [
+    {
+      "partition": "/data",
+      "center": "2",
+      "server": "backup-server",
+      "rotation": 14
+    },
+    {
+      "partition": "/var",
+      "compression": "use",
+      "encryption": "use"
+    }
+  ]
+}
+```
+
+위 예시에서:
+- `/` 파티션: 기본 설정 사용 (center=1, server=main-server)
+- `/data` 파티션: center=2, server=backup-server, rotation=14 적용
+- `/var` 파티션: 압축/암호화만 개별 적용, 나머지는 기본값 사용
 
 </details>
 
