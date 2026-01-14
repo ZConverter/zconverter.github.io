@@ -146,7 +146,8 @@ curl -X POST "https://api.example.com/api/v1/recoveries" \
     },
     "partitions": [
       {
-        "partition": "/",
+        "sourcePartition": "/",
+        "targetPartition": "/dev/sda1",
         "jobMode": "full",
         "overwrite": "allow",
         "fileSystem": "ext4",
@@ -162,7 +163,8 @@ curl -X POST "https://api.example.com/api/v1/recoveries" \
         }
       },
       {
-        "partition": "/home",
+        "sourcePartition": "/home",
+        "targetPartition": "/dev/sdb1",
         "jobMode": "increment",
         "overwrite": "allow",
         "fileSystem": "ext4",
@@ -205,7 +207,8 @@ curl -X POST "https://api.example.com/api/v1/recoveries" \
 | `common.scriptPath` | string | 스크립트 경로 (설정시에만 포함) |
 | `common.scriptRunTiming` | string | 스크립트 실행 타이밍 (`before job` / `after job`, 설정시에만 포함) |
 | `common.errorMessage` | string | 실패 시 오류 메시지 |
-| `partitions[].partition` | string | 파티션/드라이브 명 |
+| `partitions[].sourcePartition` | string | 소스 파티션/드라이브 명 |
+| `partitions[].targetPartition` | string | 타겟 파티션/드라이브 명 |
 | `partitions[].jobMode` | string | 파티션별 작업 모드 |
 | `partitions[].overwrite` | string | 덮어쓰기 상태 |
 | `partitions[].fileSystem` | string | 파일시스템 |
