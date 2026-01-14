@@ -8,19 +8,19 @@
 </head>
 <body>
   <header>
-    <div class="container">
+    <div class="container header-container">
       <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
       <nav>
         {% for link in site.nav_links %}
         <a href="{{ link.url | relative_url }}">{{ link.title }}</a>
         {% endfor %}
       </nav>
+      {% include language-selector.html %}
     </div>
   </header>
 
   <div class="docs-layout">
     <aside class="docs-sidebar">
-      {% include language-selector.html %}
       <nav class="docs-nav">
         <h3>{{ page.section_title | default: "Documentation" }}</h3>
 

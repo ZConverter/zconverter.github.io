@@ -6,6 +6,54 @@
 
 ---
 
+## [Documentation] - 2025-01-14
+
+### Added
+- 다국어 지원 (i18n) 폴더 기반 구조 적용
+  - `/zdm/ko/` 한국어 문서
+  - `/zdm/en/` 영어 문서 (준비중)
+- 언어 선택 UI 컴포넌트 (`_includes/language-selector.html`)
+- 404 페이지 추가 (3초 후 홈으로 리다이렉트)
+
+### Changed
+- URL 구조 변경
+  - `/zdm/api/1.0.3/` → `/zdm/ko/api/1.0.3/`
+  - `/zdm/cli/1.0.3/` → `/zdm/ko/cli/1.0.3/`
+- navigation.yml 언어별 구조로 변경 (`ko-api-1.0.3`, `ko-cli-1.0.3`)
+- 메인 페이지 링크 경로 업데이트
+
+### Removed
+- `/zdm/api/`, `/zdm/cli/` 레거시 폴더 삭제 (404 페이지로 대체)
+
+---
+
+## [API v1.0.3] - 2025-01-14
+
+### Added
+- 페이지네이션 정보 추가
+  - GET /backups/images/server/:serverName
+  - GET /backups/monitoring/system/:identifier
+  - GET /recoveries/monitoring/system/:identifier
+
+### Changed
+- POST /schedules 필드 타입 변경
+  - `center`: number → string (identifier 패턴 지원)
+  - `user`: number → string (identifier 패턴 지원)
+
+---
+
+## [CLI v1.0.3] - 2025-01-14
+
+### Added
+- `license list` 명령어 신규 옵션
+  - `--id`: License ID로 조회
+  - `--name`, `-n`: License 이름으로 조회
+
+### Changed
+- `recovery list` 문서 업데이트
+
+---
+
 ## [API v1.0.4] - 개발 중
 
 ### Added
