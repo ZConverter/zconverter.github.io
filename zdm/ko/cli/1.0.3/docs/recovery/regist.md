@@ -196,7 +196,8 @@ schedule.basic    : type: once, description: One-time execution
 [Partition Details]
 
 [Partition 1]
-partition         : /
+sourcePartition   : /
+targetPartition   : /dev/sda1
 jobMode           : full
 overwrite         : allow
 fileSystem        : ext4
@@ -208,7 +209,8 @@ repository.path   : /mnt/backup
 repository.type   : nfs
 
 [Partition 2]
-partition         : /boot
+sourcePartition   : /boot
+targetPartition   : /dev/sda2
 jobMode           : full
 overwrite         : allow
 fileSystem        : ext4
@@ -252,7 +254,8 @@ repository.type   : nfs
     },
     "partitions": [
       {
-        "partition": "/",
+        "sourcePartition": "/",
+        "targetPartition": "/dev/sda1",
         "jobMode": "full",
         "overwrite": "allow",
         "fileSystem": "ext4",
@@ -268,7 +271,8 @@ repository.type   : nfs
         }
       },
       {
-        "partition": "/boot",
+        "sourcePartition": "/boot",
+        "targetPartition": "/dev/sda2",
         "jobMode": "full",
         "overwrite": "allow",
         "fileSystem": "ext4",
