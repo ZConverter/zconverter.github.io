@@ -45,33 +45,34 @@ function changeLanguage(lang) {
 
 <style>
 .header-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
   position: relative;
 }
 
 .language-selector {
   position: absolute;
-  right: 0;
-  bottom: 8px;
+  right: 20px;
+  bottom: 0;
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
 }
 
 .language-selector select {
   padding: 4px 8px;
-  border: 1px solid #ddd;
+  border: 1px solid #4a6785;
   border-radius: 4px;
-  background: white;
+  background: #3d566e;
+  color: #ecf0f1;
   cursor: pointer;
   font-size: 13px;
 }
 
 .language-selector select:hover {
-  border-color: #999;
+  border-color: #3498db;
+  background: #4a6785;
+}
+
+.language-selector select:focus {
+  outline: none;
+  border-color: #3498db;
 }
 </style>
