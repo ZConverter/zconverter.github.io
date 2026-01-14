@@ -71,20 +71,39 @@ zdm-cli config set --zdm-repo-id 1 --zdm-repo-path /backup
 <details markdown="1" open>
 <summary><strong>출력 예시 (Text format)</strong></summary>
 
-**Text 형식:**
-
 **변경 성공 시:**
 ```
------ result -----
-업데이트된 항목: zdm-ip, zdm-port
-------------------
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* Config Update Result [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[Update Summary]
+state : success
+
+[Changed Fields]
+[Change 1]
+field : zdm-ip
+value : 192.168.1.1 -> 192.168.1.100
+
+[Change 2]
+field : zdm-port
+value : 8080 -> 53307
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 **변경 사항 없음:**
 ```
------ result -----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* Config Update Result [output: text]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[Update Summary]
+state : no_change
+
 변경된 항목이 없습니다 (모든 값이 기존과 동일합니다)
-------------------
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 </details>
@@ -92,11 +111,31 @@ zdm-cli config set --zdm-repo-id 1 --zdm-repo-path /backup
 <details markdown="1" open>
 <summary><strong>출력 예시 (JSON format)</strong></summary>
 
-**JSON 형식:**
-
+**변경 성공 시:**
 ```json
 {
-  "updated_keys": ["zdm-ip", "zdm-port"]
+  "state": "success",
+  "changedFields": [
+    {
+      "field": "zdm-ip",
+      "previous": "192.168.1.1",
+      "new": "192.168.1.100"
+    },
+    {
+      "field": "zdm-port",
+      "previous": 8080,
+      "new": 53307
+    }
+  ]
+}
+```
+
+**변경 사항 없음:**
+```json
+{
+  "state": "no_change",
+  "message": "변경된 항목이 없습니다",
+  "changedFields": []
 }
 ```
 
