@@ -107,8 +107,14 @@ bundle exec jekyll serve --incremental
 # 모든 네트워크 인터페이스에서 접근
 bundle exec jekyll serve --host 0.0.0.0 --port 4040
 
+# 실시간 변경점 적용
+bundle exec jekyll serve --livereload
+
 # 초안(draft) 포함
 bundle exec jekyll serve --drafts
+
+# 실 베포 사용 커맨드
+bundle exec jekyll serve --host 0.0.0.0 --port 4040 --livereload --incremental
 ```
 
 사이트는 http://localhost:4040 에서 접근 가능합니다.
