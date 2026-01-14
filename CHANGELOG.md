@@ -62,6 +62,8 @@
 - `recovery list` 문서 업데이트
 - `recovery regist` 출력 예시 업데이트
   - `partition` → `sourcePartition`, `targetPartition` 필드 분리 반영
+- `config set` 출력 형식 업데이트
+  - 변경된 필드별 이전값/신규값 상세 표시
 - `server list` 문서 내용 보강 (응답 필드 상세화)
 - `zdm list` 문서 내용 보강 (응답 필드 상세화)
 - 파라미터 네이밍 kebab-case로 통일
