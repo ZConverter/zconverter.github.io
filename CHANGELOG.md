@@ -21,6 +21,7 @@
   - `/zdm/cli/1.0.3/` → `/zdm/ko/cli/1.0.3/`
 - navigation.yml 언어별 구조로 변경 (`ko-api-1.0.3`, `ko-cli-1.0.3`)
 - 메인 페이지 링크 경로 업데이트
+- 언어 선택 UI 위치 변경 (사이드바 → 헤더 우측 하단)
 
 ### Removed
 - `/zdm/api/`, `/zdm/cli/` 레거시 폴더 삭제 (404 페이지로 대체)
@@ -34,11 +35,19 @@
   - GET /backups/images/server/:serverName
   - GET /backups/monitoring/system/:identifier
   - GET /recoveries/monitoring/system/:identifier
+  - GET /servers/:identifier/partition
+  - GET /servers/:identifier/partitions
+  - GET /zdm-centers/:identifier/repository
+  - GET /zdm-centers/:identifier/repositories
 
 ### Changed
 - POST /schedules 필드 타입 변경
   - `center`: number → string (identifier 패턴 지원)
   - `user`: number → string (identifier 패턴 지원)
+- POST /backups 문서 업데이트
+  - `individual` 객체 구조 상세화
+- POST /recoveries 응답 필드 변경
+  - `partitions[].partition` → `partitions[].sourcePartition`, `partitions[].targetPartition`
 
 ---
 
@@ -51,6 +60,18 @@
 
 ### Changed
 - `recovery list` 문서 업데이트
+- `recovery regist` 출력 예시 업데이트
+  - `partition` → `sourcePartition`, `targetPartition` 필드 분리 반영
+- `server list` 문서 내용 보강 (응답 필드 상세화)
+- `zdm list` 문서 내용 보강 (응답 필드 상세화)
+- 파라미터 네이밍 kebab-case로 통일
+  - `--jobName` → `--job-name`
+  - `--excludeDir` → `--exclude-dir`
+  - `--excludePartition` → `--exclude-partition`
+  - `--networkLimit` → `--network-limit`
+  - `--scriptPath` → `--script-path`
+  - `--scriptRun` → `--script-run`
+  - 적용 파일: backup/regist, backup/update, recovery/regist, recovery/update
 
 ---
 
