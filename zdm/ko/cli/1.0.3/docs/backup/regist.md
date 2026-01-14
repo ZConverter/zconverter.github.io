@@ -106,7 +106,6 @@ zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --individ
     "rotation": 1,
     "excludeDir": "/tmp,/var/log",
     "excludePartition": "/dev",
-    "mailEvent": "admin@example.com",
     "networkLimit": 100,
     "autoStart": true,
     "description": "Root partition backup"
