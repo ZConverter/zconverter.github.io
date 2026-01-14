@@ -275,7 +275,7 @@ lastUpdated     : 2025-01-06T10:30:00Z
 repository      :
   [Repository 1]
     id          : 1
-    os.version  : Linux Ubuntu 24.04 LTS
+    os          : Linux
     type        : nfs
     size        : 500.0 GB, used: 100.0 GB, free: 400.0 GB (20%)
     remotePath  : /mnt/backup
@@ -321,9 +321,7 @@ repository      :
       "repository": [
         {
           "id": "1",
-          "os": {
-            "version": "Linux Ubuntu 24.04 LTS"
-          },
+          "os": "Linux",
           "type": "nfs",
           "size": {
             "raw": 536870912000,

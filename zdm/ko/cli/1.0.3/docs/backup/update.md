@@ -31,13 +31,13 @@ Backup 작업 정보를 수정하는 명령어입니다.
 zdm-cli backup update --id 123 --mode full
 
 # 작업 이름과 설명 변경
-zdm-cli backup update --name "backup" --changeName "MyBackup" --description "새 설명"
+zdm-cli backup update --name "backup" --change-name "MyBackup" --description "새 설명"
 
 # 압축 및 암호화 활성화
 zdm-cli backup update --id 456 --compression --encryption
 
 # 반복횟수 및 네트워크 제한 설정
-zdm-cli backup update --name "OldJob" --rotation 5 --networkLimit 1000
+zdm-cli backup update --name "OldJob" --rotation 5 --network-limit 1000
 
 # Repository 변경
 zdm-cli backup update --id 123 --repository-id 2
@@ -49,10 +49,10 @@ zdm-cli backup update --id 123 --schedule "/path/to/schedule.json"
 zdm-cli backup update --id 123 --schedule '{"type":"daily","time":"02:00"}'
 
 # 스크립트 설정 변경
-zdm-cli backup update --id 123 --scriptPath "/scripts/new_script.sh" --scriptRun after
+zdm-cli backup update --id 123 --script-path "/scripts/new_script.sh" --script-run after
 
 # 제외 폴더 변경
-zdm-cli backup update --id 123 --excludeDir "/tmp,/var/cache"
+zdm-cli backup update --id 123 --exclude-dir "/tmp,/var/cache"
 
 # JSON 형식으로 출력
 zdm-cli backup update --id 123 --mode increment --output json
@@ -71,16 +71,16 @@ zdm-cli backup update --id 123 --mode increment --output json
 | --status | - | string | Optional | - | 작업 상태 | - |
 | --repository-id | -ri | number | Optional | - | Repository ID | - |
 | --repository-path | -rp | string | Optional | - | Repository Path | - |
-| --changeName | -chn | string | Optional | - | 변경할 작업 이름 | - |
+| --change-name | -chn | string | Optional | - | 변경할 작업 이름 | - |
 | --schedule | -sc | string | Optional | - | 작업에 사용할 Schedule (JSON 파일 경로 또는 JSON 문자열) | - |
 | --description | -desc | string | Optional | - | 작업 설명 | - |
 | --rotation | -rot | number | Optional | 1 | 작업 반복횟수 | - |
 | --compression | -comp | boolean | Optional | - | 작업 압축 | - |
 | --encryption | -enc | boolean | Optional | - | 작업 암호화 | - |
-| --excludeDir | -exd | string | Optional | - | 작업 제외 폴더 | - |
-| --scriptPath | -sp | string | Optional | - | 작업시 사용할 script full path | - |
-| --scriptRun | -sr | string | Optional | - | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
-| --networkLimit | -nl | number | Optional | 0 | 작업 Network 제한 속도 | - |
+| --exclude-dir | -exd | string | Optional | - | 작업 제외 폴더 | - |
+| --script-path | -sp | string | Optional | - | 작업시 사용할 script full path | - |
+| --script-run | -sr | string | Optional | - | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
+| --network-limit | -nl | number | Optional | 0 | 작업 Network 제한 속도 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 > <span class="required-note">*</span> --id 또는 --name 중 최소 하나는 필수로 입력해야 합니다.

@@ -32,19 +32,19 @@ lang: ko
 zdm-cli recovery update --id 123 --mode full
 
 # 작업 이름으로 검색하여 이름 변경
-zdm-cli recovery update --name "old-recovery" --changeName "new-recovery"
+zdm-cli recovery update --name "old-recovery" --change-name "new-recovery"
 
 # 플랫폼 변경
 zdm-cli recovery update --id 123 --platform aws
 
 # 복구 완료 후 동작 변경
-zdm-cli recovery update --id 123 --afterReboot reboot
+zdm-cli recovery update --id 123 --after-reboot reboot
 
 # 네트워크 제한 설정
-zdm-cli recovery update --id 123 --networkLimit 1000
+zdm-cli recovery update --id 123 --network-limit 1000
 
 # 스크립트 설정 변경
-zdm-cli recovery update --name "my-recovery" --scriptPath "/path/to/script.sh" --scriptRun before
+zdm-cli recovery update --name "my-recovery" --script-path "/path/to/script.sh" --script-run before
 
 # 스케줄 변경 (JSON 파일 사용)
 zdm-cli recovery update --id 123 --schedule "schedule.json"
@@ -53,7 +53,7 @@ zdm-cli recovery update --id 123 --schedule "schedule.json"
 zdm-cli recovery update --id 123 --schedule '{"type":"daily","time":"02:00"}'
 
 # 메일 알림 수신자 변경
-zdm-cli recovery update --id 123 --mailEvent "admin@example.com"
+zdm-cli recovery update --id 123 --mail-event "admin@example.com"
 
 # 작업 상태 변경
 zdm-cli recovery update --id 123 --status stopped
@@ -62,7 +62,7 @@ zdm-cli recovery update --id 123 --status stopped
 zdm-cli recovery update --id 123 --partition "/" --mode inc
 
 # 복합 설정 변경
-zdm-cli recovery update --id 123 --changeName "MyRecovery" --platform aws --afterReboot reboot --networkLimit 500
+zdm-cli recovery update --id 123 --change-name "MyRecovery" --platform aws --after-reboot reboot --network-limit 500
 ```
 
 </details>
@@ -74,15 +74,15 @@ zdm-cli recovery update --id 123 --changeName "MyRecovery" --platform aws --afte
 |----------|------|------|------|--------|------|--------|
 | --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --name | - | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
-| --changeName | -chn | string | Optional | - | 변경할 작업 이름 | - |
+| --change-name | -chn | string | Optional | - | 변경할 작업 이름 | - |
 | --platform | -pf | string | Optional | - | 변경할 플랫폼 | {% include zdm/platforms.md inline=true baremetal=true %} |
 | --schedule | -sc | string | Optional | - | 작업에 사용할 Schedule (JSON 파일 경로 또는 JSON 문자열) | - |
 | --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md %} |
-| --afterReboot | -ar | string | Optional | - | 작업 완료 후 부팅 모드 | {% include zdm/after-reboot.md %} |
-| --mailEvent | -me | string | Optional | - | 작업 이벤트 수신 메일 | - |
-| --networkLimit | -nl | number | Optional | 0 | 작업 Network 제한 속도 (Mbps) | - |
-| --scriptPath | -sp | string | Optional | - | 작업 스크립트 경로 | - |
-| --scriptRun | -sr | string | Optional | - | 작업 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
+| --after-reboot | -ar | string | Optional | - | 작업 완료 후 부팅 모드 | {% include zdm/after-reboot.md %} |
+| --mail-event | -me | string | Optional | - | 작업 이벤트 수신 메일 | - |
+| --network-limit | -nl | number | Optional | 0 | 작업 Network 제한 속도 (Mbps) | - |
+| --script-path | -sp | string | Optional | - | 작업 스크립트 경로 | - |
+| --script-run | -sr | string | Optional | - | 작업 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 | --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status.md %} |
 | --partition | -pt | string | Optional | - | 변경할 작업 대상 파티션 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |

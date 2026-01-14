@@ -40,19 +40,19 @@ zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --encrypt
 zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --partition "/,/home"
 
 # 작업 이름 지정하여 등록
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --jobName "daily_backup"
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --job-name "daily_backup"
 
 # 스케줄 설정과 함께 등록
 zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --schedule "schedule_id"
 
 # 제외 폴더 설정
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --excludeDir "/tmp,/var/log"
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --exclude-dir "/tmp,/var/log"
 
 # 자동 시작 설정
 zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --start
 
 # 스크립트 실행 설정
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --scriptPath "/scripts/pre_backup.sh" --scriptRun before
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --script-path "/scripts/pre_backup.sh" --script-run before
 
 # 파티션별 개별 설정 (JSON 형태)
 zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --individual '[{"partition":"/","jobName":"root_backup"}]'
@@ -71,18 +71,18 @@ zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --individ
 | --repository-id | -ri | number | Optional | config 설정값 | 작업시 사용할 Repository ID | - |
 | --repository-path | -rp | string | Optional | - | 작업시 사용할 Repository Path | - |
 | --partition | - | string | Optional | 전체 파티션 | 작업 대상 파티션 (콤마로 구분) | - |
-| --jobName | -name | string | Optional | - | 작업 이름 | - |
+| --job-name | -name | string | Optional | - | 작업 이름 | - |
 | --schedule | -sc | string | Optional | - | 작업에 사용할 Schedule | - |
 | --description | -desc | string | Optional | - | 작업 설명 | - |
 | --rotation | -rot | number | Optional | 1 | 작업 반복횟수 | - |
 | --no-compression | -ncomp | boolean | Optional | false | 작업 압축 안함 | - |
 | --encryption | -enc | boolean | Optional | false | 작업 암호화 | - |
-| --excludeDir | -exd | string | Optional | - | 작업 제외 폴더 | - |
-| --excludePartition | -exp | string | Optional | - | 작업 제외 partition | - |
-| --networkLimit | -nl | number | Optional | 0 | 작업 Network 제한 속도 | - |
+| --exclude-dir | -exd | string | Optional | - | 작업 제외 폴더 | - |
+| --exclude-partition | -exp | string | Optional | - | 작업 제외 partition | - |
+| --network-limit | -nl | number | Optional | 0 | 작업 Network 제한 속도 | - |
 | --start | - | boolean | Optional | false | 작업 자동시작 여부 | - |
-| --scriptPath | -sp | string | Optional | - | 작업시 사용할 script full path | - |
-| --scriptRun | -sr | string | Optional | - | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
+| --script-path | -sp | string | Optional | - | 작업시 사용할 script full path | - |
+| --script-run | -sr | string | Optional | - | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 | --individual | -ind | string | Optional | - | 파티션별 개별 설정 (JSON 문자열) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
