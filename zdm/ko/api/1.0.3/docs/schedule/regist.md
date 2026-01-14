@@ -30,7 +30,7 @@ lang: ko
 <summary><strong>요청 예시</strong></summary>
 
 ```bash
-# 일반 Daily 스케줄 등록
+# 일반 Daily 스케줄 등록 (center를 문자열로 전달)
 curl -X POST "https://api.example.com/api/v1/schedules" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
@@ -43,12 +43,26 @@ curl -X POST "https://api.example.com/api/v1/schedules" \
     }
   }'
 
+# 일반 Daily 스케줄 등록 (center를 숫자로 전달)
+curl -X POST "https://api.example.com/api/v1/schedules" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "center": 1,
+    "user": 5,
+    "jobName": "daily-backup",
+    "type": 3,
+    "basic": {
+      "time": "10:00"
+    }
+  }'
+
 # Smart Weekly 스케줄 등록 (type 7)
 curl -X POST "https://api.example.com/api/v1/schedules" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
-    "center": "1",
+    "center": 1,
     "jobName": "smart-weekly-backup",
     "type": 7,
     "basic": {
@@ -69,8 +83,8 @@ curl -X POST "https://api.example.com/api/v1/schedules" \
 
 | 필드 | 타입 | 필수 | 설명 |
 |------|------|------|------|
-| `center` | string | Required | 센터 ID (숫자) 또는 센터 이름 |
-| `user` | string | Optional | 사용자 이메일 또는 사용자 등록 ID (숫자만) |
+| `center` | string \| number | Required | 센터 ID (숫자) 또는 센터 이름 |
+| `user` | string \| number | Optional | 사용자 이메일 또는 사용자 등록 ID (숫자만) |
 | `jobName` | string | Optional | 작업 이름 |
 | `type` | number | Required | 스케줄 타입 (0 ~ 11) |
 | `basic` | object | Optional | 기본 스케줄 구조 |
