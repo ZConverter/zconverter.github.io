@@ -36,7 +36,8 @@
       "Bash(bundle exec jekyll:*)",
       "Bash(bundle exec ruby:*)",
       "Bash(cat:*)",
-      "Bash(git lfs ls-files:*)"
+      "Bash(git lfs ls-files:*)",
+      "Bash(xargs:*)"
     ],
     "deny": [],
     "ask": []
