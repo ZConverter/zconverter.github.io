@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>PUT /api/v1/backups/:identifier</code>
+  <code>PUT /api/backups/:identifier</code>
 </div>
 
 </details>
@@ -29,7 +29,7 @@ lang: ko
 
 ```bash
 # 백업 작업 수정
-curl -X PUT "https://api.example.com/api/v1/backups/1" \
+curl -X PUT "https://api.example.com/api/backups/1" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -40,7 +40,7 @@ curl -X PUT "https://api.example.com/api/v1/backups/1" \
   }'
 
 # 스케줄 변경
-curl -X PUT "https://api.example.com/api/v1/backups/daily-backup" \
+curl -X PUT "https://api.example.com/api/backups/daily-backup" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -73,7 +73,6 @@ curl -X PUT "https://api.example.com/api/v1/backups/daily-backup" \
 | `changeName` | string | Optional | 변경할 작업 이름 | - |
 | `mode` | string | Optional | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
 | `status` | string | Optional | 작업 상태 | {% include zdm/job-status.md %} |
-| `description` | string | Optional | 작업 설명 | - |
 | `rotation` | number | Optional | 작업 반복 횟수 | - |
 | `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
 | `encryption` | string | Optional | 암호화 사용 여부 | {% include zdm/use-options.md %} |
@@ -158,7 +157,7 @@ curl -X PUT "https://api.example.com/api/v1/backups/daily-backup" \
     }
   },
   "message": "Backup job updated",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -189,11 +188,8 @@ curl -X PUT "https://api.example.com/api/v1/backups/daily-backup" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "BACKUP_NOT_FOUND",
-    "message": "ID가 '999'인 Backup을 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 Backup을 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

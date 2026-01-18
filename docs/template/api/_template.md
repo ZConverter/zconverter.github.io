@@ -17,7 +17,7 @@ navigation: api-{version}
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>{METHOD} /api/v1/{endpoint}</code>
+  <code>{METHOD} /api/{endpoint}</code>
 </div>
 
 </details>
@@ -27,12 +27,12 @@ navigation: api-{version}
 
 ```bash
 # 기본 요청
-curl -X {METHOD} "https://api.example.com/api/v1/{endpoint}" \
+curl -X {METHOD} "https://api.example.com/api/{endpoint}" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json"
 
 # 파라미터 포함 요청
-curl -X {METHOD} "https://api.example.com/api/v1/{endpoint}?param=value" \
+curl -X {METHOD} "https://api.example.com/api/{endpoint}?param=value" \
   -H "Authorization: Bearer <token>"
 ```
 

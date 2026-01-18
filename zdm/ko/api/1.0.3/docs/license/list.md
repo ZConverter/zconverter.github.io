@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/licenses</code>
+  <code>GET /api/licenses</code>
 </div>
 
 </details>
@@ -29,19 +29,19 @@ lang: ko
 
 ```bash
 # 전체 라이선스 목록 조회
-curl -X GET "https://api.example.com/api/v1/licenses" \
+curl -X GET "https://api.example.com/api/licenses" \
   -H "Authorization: Bearer <token>"
 
 # 카테고리별 조회
-curl -X GET "https://api.example.com/api/v1/licenses?category=zdm(backup)" \
+curl -X GET "https://api.example.com/api/licenses?category=zdm(backup)" \
   -H "Authorization: Bearer <token>"
 
 # 만료일 기준 조회
-curl -X GET "https://api.example.com/api/v1/licenses?exp=2025-12-31" \
+curl -X GET "https://api.example.com/api/licenses?exp=2025-12-31" \
   -H "Authorization: Bearer <token>"
 
 # 페이지네이션 적용 조회
-curl -X GET "https://api.example.com/api/v1/licenses?page=1&limit=10" \
+curl -X GET "https://api.example.com/api/licenses?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -52,6 +52,8 @@ curl -X GET "https://api.example.com/api/v1/licenses?page=1&limit=10" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| `id` | Query | number | Optional | - | 라이선스 ID 필터 | - |
+| `name` | Query | string | Optional | - | 라이선스 이름 필터 | - |
 | `category` | Query | string | Optional | - | 라이선스 카테고리 필터 | {% include zdm/license-categories.md %} |
 | `exp` | Query | string | Optional | - | 만료일 필터 (YYYY-MM-DD) | - |
 | `created` | Query | string | Optional | - | 생성일 필터 (YYYY-MM-DD) | - |
@@ -90,7 +92,7 @@ curl -X GET "https://api.example.com/api/v1/licenses?page=1&limit=10" \
     }
   ],
   "message": "License information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -131,7 +133,7 @@ curl -X GET "https://api.example.com/api/v1/licenses?page=1&limit=10" \
     "hasPreviousPage": false
   },
   "message": "License information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -161,6 +163,37 @@ curl -X GET "https://api.example.com/api/v1/licenses?page=1&limit=10" \
 | `pagination.itemsPerPage` | number | 페이지당 항목 수 (page/limit 사용 시) |
 | `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 (page/limit 사용 시) |
 | `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 (page/limit 사용 시) |
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 응답</strong></summary>
+
+**인증 실패 (401 Unauthorized)**
+
+유효하지 않은 토큰이거나 토큰이 만료된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "토큰이 만료되었습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**잘못된 요청 파라미터 (400 Bad Request)**
+
+유효하지 않은 필터 값이 전달된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "유효하지 않은 'category' 값입니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
 
 </details>
 

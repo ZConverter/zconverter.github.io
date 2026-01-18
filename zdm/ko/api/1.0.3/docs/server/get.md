@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/servers/:identifier</code>
+  <code>GET /api/servers/:identifier</code>
 </div>
 
 </details>
@@ -29,15 +29,15 @@ lang: ko
 
 ```bash
 # 서버 ID로 조회
-curl -X GET "https://api.example.com/api/v1/servers/1" \
+curl -X GET "https://api.example.com/api/servers/1" \
   -H "Authorization: Bearer <token>"
 
 # 서버 이름으로 조회
-curl -X GET "https://api.example.com/api/v1/servers/server-01" \
+curl -X GET "https://api.example.com/api/servers/server-01" \
   -H "Authorization: Bearer <token>"
 
 # 상세 정보 포함 조회
-curl -X GET "https://api.example.com/api/v1/servers/1?detail=true&disk=true" \
+curl -X GET "https://api.example.com/api/servers/1?detail=true&disk=true" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -90,10 +90,10 @@ curl -X GET "https://api.example.com/api/v1/servers/1?detail=true&disk=true" \
     "status": {
       "connect": "connect"
     },
-    "lastUpdated": "2025-01-15T10:30:00Z"
+    "lastUpdated": "2025-01-15 10:30:00"
   },
   "message": "Server information retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -135,10 +135,10 @@ curl -X GET "https://api.example.com/api/v1/servers/1?detail=true&disk=true" \
       "cpuCount": "40",
       "memory": "68719476736 (64 GB)"
     },
-    "lastUpdated": "2025-01-15T10:30:00Z"
+    "lastUpdated": "2025-01-15 10:30:00"
   },
   "message": "Server information retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -179,13 +179,13 @@ curl -X GET "https://api.example.com/api/v1/servers/1?detail=true&disk=true" \
           "raw": 512110190592,
           "formatted": "477.0 GB"
         },
-        "lastUpdated": "2025-01-15T10:30:00Z"
+        "lastUpdated": "2025-01-15 10:30:00"
       }
     ],
-    "lastUpdated": "2025-01-15T10:30:00Z"
+    "lastUpdated": "2025-01-15 10:30:00"
   },
   "message": "Server information retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -224,13 +224,13 @@ curl -X GET "https://api.example.com/api/v1/servers/1?detail=true&disk=true" \
         "subNet": "255.255.255.0",
         "gateWay": "192.168.1.1",
         "macAddress": "00:1A:2B:3C:4D:5E",
-        "lastUpdated": "2025-01-15T10:30:00Z"
+        "lastUpdated": "2025-01-15 10:30:00"
       }
     ],
-    "lastUpdated": "2025-01-15T10:30:00Z"
+    "lastUpdated": "2025-01-15 10:30:00"
   },
   "message": "Server information retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -281,13 +281,13 @@ curl -X GET "https://api.example.com/api/v1/servers/1?detail=true&disk=true" \
         },
         "usage": 50,
         "fileSystem": "ext4",
-        "lastUpdated": "2025-01-15T10:30:00Z"
+        "lastUpdated": "2025-01-15 10:30:00"
       }
     ],
-    "lastUpdated": "2025-01-15T10:30:00Z"
+    "lastUpdated": "2025-01-15 10:30:00"
   },
   "message": "Server information retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -342,13 +342,13 @@ curl -X GET "https://api.example.com/api/v1/servers/1?detail=true&disk=true" \
         "remoteUser": "admin",
         "ipAddress": ["192.168.1.200"],
         "port": "2049",
-        "lastUpdated": "2025-01-15T10:30:00Z"
+        "lastUpdated": "2025-01-15 10:30:00"
       }
     ],
-    "lastUpdated": "2025-01-15T10:30:00Z"
+    "lastUpdated": "2025-01-15 10:30:00"
   },
   "message": "Server information retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -473,13 +473,10 @@ curl -X GET "https://api.example.com/api/v1/servers/1?detail=true&disk=true" \
 
 ```json
 {
-  "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "SERVER_NOT_FOUND",
-    "message": "ID가 '999'인 Server를 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "success": false,
+  "error": "ID가 '999'인 Server를 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

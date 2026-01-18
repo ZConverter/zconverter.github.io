@@ -21,7 +21,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>POST /api/v1/schedules</code>
+  <code>POST /api/schedules</code>
 </div>
 
 </details>
@@ -31,7 +31,7 @@ lang: ko
 
 ```bash
 # 일반 Daily 스케줄 등록 (center를 문자열로 전달)
-curl -X POST "https://api.example.com/api/v1/schedules" \
+curl -X POST "https://api.example.com/api/schedules" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -44,7 +44,7 @@ curl -X POST "https://api.example.com/api/v1/schedules" \
   }'
 
 # 일반 Daily 스케줄 등록 (center를 숫자로 전달)
-curl -X POST "https://api.example.com/api/v1/schedules" \
+curl -X POST "https://api.example.com/api/schedules" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -58,7 +58,8 @@ curl -X POST "https://api.example.com/api/v1/schedules" \
   }'
 
 # Smart Weekly 스케줄 등록 (type 7)
-curl -X POST "https://api.example.com/api/v1/schedules" \
+# basic.day는 단일 요일만 허용 (복수 선택 불가)
+curl -X POST "https://api.example.com/api/schedules" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -66,11 +67,11 @@ curl -X POST "https://api.example.com/api/v1/schedules" \
     "jobName": "smart-weekly-backup",
     "type": 7,
     "basic": {
-      "day": "1",
+      "day": "mon",
       "time": "10:00"
     },
     "advanced": {
-      "day": "2,3,4,5",
+      "day": "tue, wed, thu, fri",
       "time": "12:00"
     }
   }'
@@ -85,10 +86,10 @@ curl -X POST "https://api.example.com/api/v1/schedules" \
 |------|------|------|------|
 | `center` | string \| number | Required | 센터 ID (숫자) 또는 센터 이름 |
 | `user` | string \| number | Optional | 사용자 이메일 또는 사용자 등록 ID (숫자만) |
-| `jobName` | string | Optional | 작업 이름 |
+| `jobName` | string | Optional | 스케줄을 할당할 작업 이름 |
 | `type` | number | Required | 스케줄 타입 (0 ~ 11) |
 | `basic` | object | Optional | 기본 스케줄 구조 |
-| `advanced` | object | Optional | 고급 스케줄 구조 (Smart 스케줄용) |
+| `advanced` | object | Optional | 고급 스케줄 구조 (Smart 스케줄용, backup 작업 전용) |
 
 > 스케줄 타입별 `basic`/`advanced` 구조는 [스케줄 개요](overview.md#스케줄-타입별-구조)를 참조하세요.
 
@@ -112,7 +113,7 @@ curl -X POST "https://api.example.com/api/v1/schedules" \
     }
   },
   "message": "Schedule registered successfully",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -125,19 +126,19 @@ curl -X POST "https://api.example.com/api/v1/schedules" \
   "data": {
     "basic": {
       "id": "1",
-      "type": "smart weekly on specific day",
+      "type": "Smart Weekly (Specific Day of the Week)",
       "state": "enabled",
       "description": "Every Monday at 10:00 (Full)"
     },
     "advanced": {
       "id": "2",
-      "type": "smart weekly on specific day",
+      "type": "Smart Weekly (Specific Day of the Week)",
       "state": "enabled",
       "description": "Every Tuesday, Wednesday, Thursday, Friday at 12:00 (Increment)"
     }
   },
   "message": "Schedule registered successfully",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -168,11 +169,8 @@ curl -X POST "https://api.example.com/api/v1/schedules" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "유효한 스케줄 타입이 아닙니다. (0 ~ 11 만 가능)"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "유효한 스케줄 타입이 아닙니다. (0 ~ 11 만 가능)",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -182,11 +180,30 @@ curl -X POST "https://api.example.com/api/v1/schedules" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "CENTER_NOT_FOUND",
-    "message": "ID가 '999'인 Center를 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 Center를 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**Smart 스케줄 basic 필드 복수 선택 오류 (400 Bad Request)**
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "Smart Weekly (Specific Day of the Week) 타입의 스케줄은 basic 부분에서 여러 요일을 선택할 수 없습니다. ( 현재 선택된 요일: mon, tue )",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**시간 형식 오류 (400 Bad Request)**
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "time은 'HH:mm' (00:00 ~ 23:59)이어야 합니다.",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

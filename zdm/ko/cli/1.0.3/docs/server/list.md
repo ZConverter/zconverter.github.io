@@ -74,10 +74,9 @@ zdm-cli server list --output table
 | --os | - | string | Optional | - | 조회할 Server OS | {% include zdm/os-types.md %} |
 | --mode | - | string | Optional | - | 조회할 Server 모드 | {% include zdm/server-modes.md %} |
 | --license | - | number | Optional | - | Server에 할당된 License ID | - |
-| --license-assign-only | -lao | boolean | Optional | false | 라이센스가 할당된 Server만 조회 | - |
-| --license-un-assign-only | -luao | boolean | Optional | false | 라이센스가 할당되지 않은 Server만 조회 | - |
+| --license-assign-only | -assigned | boolean | Optional | false | 라이센스가 할당된 Server만 조회 | - |
+| --license-un-assign-only | -unassigned | boolean | Optional | false | 라이센스가 할당되지 않은 Server만 조회 | - |
 | --partition | - | boolean | Optional | false | Partition 정보 추가조회 | - |
-| --partition-only | -po | boolean | Optional | false | 대상 Server의 Partition 정보만 조회 | - |
 | --detail | - | boolean | Optional | false | 상세 정보 조회 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 

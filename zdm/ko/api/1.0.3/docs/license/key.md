@@ -1,25 +1,24 @@
 ---
 layout: docs
-title: GET /licenses/:identifier
+title: GET /licenses/key/:key
 section_title: ZDM API Documentation
 navigation: ko-api-1.0.3
 lang: ko
 ---
 
-특정 라이선스의 상세 정보를 조회합니다.
+라이선스 키로 특정 라이선스의 상세 정보를 조회합니다.
 
 ---
 
-## `GET /licenses/:identifier` {#get-licenses-identifier}
+## `GET /licenses/key/:key` {#get-licenses-key}
 
-> * 라이선스 ID 또는 라이선스 이름으로 특정 라이선스의 정보를 조회합니다.
-> * identifier가 숫자인 경우 라이선스 ID로, 그 외에는 라이선스 이름으로 조회합니다.
+> * 라이선스 키로 특정 라이선스의 정보를 조회합니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/licenses/:identifier</code>
+  <code>GET /api/licenses/key/:key</code>
 </div>
 
 </details>
@@ -28,12 +27,7 @@ lang: ko
 <summary><strong>요청 예시</strong></summary>
 
 ```bash
-# 라이선스 ID로 조회
-curl -X GET "https://api.example.com/api/licenses/1" \
-  -H "Authorization: Bearer <token>"
-
-# 라이선스 이름으로 조회
-curl -X GET "https://api.example.com/api/licenses/Enterprise-License" \
+curl -X GET "https://api.example.com/api/licenses/key/XXXX-XXXX-XXXX-XXXX" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -44,7 +38,7 @@ curl -X GET "https://api.example.com/api/licenses/Enterprise-License" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `identifier` | Path | string | Required | - | 라이선스 ID (숫자) 또는 라이선스 이름 | - |
+| `key` | Path | string | Required | - | 라이선스 키 | - |
 | `category` | Query | string | Optional | - | 라이선스 카테고리 필터 | {% include zdm/license-categories.md %} |
 | `exp` | Query | string | Optional | - | 만료일 필터 (YYYY-MM-DD) | - |
 | `created` | Query | string | Optional | - | 생성일 필터 (YYYY-MM-DD) | - |
@@ -112,7 +106,7 @@ curl -X GET "https://api.example.com/api/licenses/Enterprise-License" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": "ID가 '999'인 License를 찾을 수 없습니다",
+  "error": "Key가 'XXXX-XXXX-XXXX-XXXX'인 License를 찾을 수 없습니다",
   "timestamp": "2025-01-15 10:30:00"
 }
 ```

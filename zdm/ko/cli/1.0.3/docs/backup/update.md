@@ -30,11 +30,11 @@ Backup 작업 정보를 수정하는 명령어입니다.
 # ID로 작업 모드 변경
 zdm-cli backup update --id 123 --mode full
 
-# 작업 이름과 설명 변경
-zdm-cli backup update --name "backup" --change-name "MyBackup" --description "새 설명"
+# 작업 이름 변경
+zdm-cli backup update --name "backup" --change-name "MyBackup"
 
-# 압축 및 암호화 활성화
-zdm-cli backup update --id 456 --compression --encryption
+# 압축 및 암호화 설정
+zdm-cli backup update --id 456 --compression "use" --encryption "use"
 
 # 반복횟수 및 네트워크 제한 설정
 zdm-cli backup update --name "OldJob" --rotation 5 --network-limit 1000
@@ -71,16 +71,15 @@ zdm-cli backup update --id 123 --mode increment --output json
 | --status | - | string | Optional | - | 작업 상태 | - |
 | --repository-id | -ri | number | Optional | - | Repository ID | - |
 | --repository-path | -rp | string | Optional | - | Repository Path | - |
-| --change-name | -chn | string | Optional | - | 변경할 작업 이름 | - |
+| --change-name | -cn | string | Optional | - | 변경할 작업 이름 | - |
 | --schedule | -sc | string | Optional | - | 작업에 사용할 Schedule (JSON 파일 경로 또는 JSON 문자열) | - |
-| --description | -desc | string | Optional | - | 작업 설명 | - |
-| --rotation | -rot | number | Optional | 1 | 작업 반복횟수 | - |
-| --compression | -comp | boolean | Optional | - | 작업 압축 | - |
-| --encryption | -enc | boolean | Optional | - | 작업 암호화 | - |
+| --rotation | -rot | number | Optional | - | 작업 반복횟수 | - |
+| --compression | -comp | string | Optional | - | 작업 압축 사용 여부 | `use`, `not use` |
+| --encryption | -enc | string | Optional | - | 작업 암호화 사용 여부 | `use`, `not use` |
 | --exclude-dir | -exd | string | Optional | - | 작업 제외 폴더 | - |
 | --script-path | -sp | string | Optional | - | 작업시 사용할 script full path | - |
 | --script-run | -sr | string | Optional | - | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
-| --network-limit | -nl | number | Optional | 0 | 작업 Network 제한 속도 | - |
+| --network-limit | -nl | number | Optional | - | 작업 Network 제한 속도 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 > <span class="required-note">*</span> --id 또는 --name 중 최소 하나는 필수로 입력해야 합니다.
@@ -113,7 +112,7 @@ value : increment -> full
 
 [Change 2]
 field : compression
-value : false -> true
+value : not use -> use
 
 [Change 3]
 field : networkLimit
@@ -143,8 +142,8 @@ value : 0 -> 1000
         },
         {
           "field": "compression",
-          "previous": false,
-          "new": true
+          "previous": "not use",
+          "new": "use"
         },
         {
           "field": "networkLimit",

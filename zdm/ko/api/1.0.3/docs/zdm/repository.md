@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/zdms/:identifier/repositories</code>
+  <code>GET /api/zdms/:identifier/repositories</code>
 </div>
 
 </details>
@@ -29,19 +29,19 @@ lang: ko
 
 ```bash
 # ZDM ID로 레포지토리 조회
-curl -X GET "https://api.example.com/api/v1/zdms/1/repositories" \
+curl -X GET "https://api.example.com/api/zdms/1/repositories" \
   -H "Authorization: Bearer <token>"
 
 # ZDM 이름으로 레포지토리 조회
-curl -X GET "https://api.example.com/api/v1/zdms/Main-Center/repositories" \
+curl -X GET "https://api.example.com/api/zdms/Main-Center/repositories" \
   -H "Authorization: Bearer <token>"
 
 # 필터 적용 조회
-curl -X GET "https://api.example.com/api/v1/zdms/1/repositories?type=nfs" \
+curl -X GET "https://api.example.com/api/zdms/1/repositories?type=nfs" \
   -H "Authorization: Bearer <token>"
 
 # 페이지네이션 적용 조회
-curl -X GET "https://api.example.com/api/v1/zdms/1/repositories?page=1&limit=10" \
+curl -X GET "https://api.example.com/api/zdms/1/repositories?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -94,7 +94,7 @@ curl -X GET "https://api.example.com/api/v1/zdms/1/repositories?page=1&limit=10"
       "localPath": "/mnt/backup",
       "ipAddress": ["192.168.1.200"],
       "port": "2049",
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     },
     {
       "id": "2",
@@ -118,11 +118,11 @@ curl -X GET "https://api.example.com/api/v1/zdms/1/repositories?page=1&limit=10"
       "localPath": "B:",
       "ipAddress": ["192.168.1.201"],
       "port": "445",
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "Repository information retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -158,7 +158,7 @@ curl -X GET "https://api.example.com/api/v1/zdms/1/repositories?page=1&limit=10"
       "localPath": "/mnt/backup",
       "ipAddress": ["192.168.1.200"],
       "port": "2049",
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "pagination": {
@@ -170,7 +170,7 @@ curl -X GET "https://api.example.com/api/v1/zdms/1/repositories?page=1&limit=10"
     "hasPreviousPage": false
   },
   "message": "Repository information retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -217,11 +217,8 @@ curl -X GET "https://api.example.com/api/v1/zdms/1/repositories?page=1&limit=10"
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "ZDM_NOT_FOUND",
-    "message": "ID가 '999'인 ZDM을 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 ZDM을 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

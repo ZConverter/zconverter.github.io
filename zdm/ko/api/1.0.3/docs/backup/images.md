@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/backups/images/server/:serverName</code>
+  <code>GET /api/backups/images/server/:serverName</code>
 </div>
 
 </details>
@@ -29,15 +29,15 @@ lang: ko
 
 ```bash
 # 서버 이름으로 조회
-curl -X GET "https://api.example.com/api/v1/backups/images/server/source-centos7-bios (192.168.2.104)" \
+curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)" \
   -H "Authorization: Bearer <token>"
 
 # 서버 이름 + 작업 이름으로 조회
-curl -X GET "https://api.example.com/api/v1/backups/images/server/source-centos7-bios (192.168.2.104)?jobName=source-centos7-bios_ROOT" \
+curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)?jobName=source-centos7-bios_ROOT" \
   -H "Authorization: Bearer <token>"
 
 # 페이지네이션 적용 조회
-curl -X GET "https://api.example.com/api/v1/backups/images/server/source-centos7-bios (192.168.2.104)?page=1&limit=10" \
+curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -123,7 +123,7 @@ curl -X GET "https://api.example.com/api/v1/backups/images/server/source-centos7
     "total": 2
   },
   "message": "Backup images retrieved successfully",
-  "timestamp": "2026-01-09T10:30:00Z"
+  "timestamp": "2026-01-09 10:30:00"
 }
 ```
 
@@ -176,7 +176,7 @@ curl -X GET "https://api.example.com/api/v1/backups/images/server/source-centos7
     }
   },
   "message": "Backup images retrieved successfully",
-  "timestamp": "2026-01-09T10:30:00Z"
+  "timestamp": "2026-01-09 10:30:00"
 }
 ```
 
@@ -229,11 +229,8 @@ curl -X GET "https://api.example.com/api/v1/backups/images/server/source-centos7
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "INTERNAL_SERVER_ERROR",
-    "message": "백업 이미지 조회 실패: Command failed..."
-  },
-  "timestamp": "2026-01-09T10:30:00Z"
+  "error": "백업 이미지 조회 실패: Command failed...",
+  "timestamp": "2026-01-09 10:30:00"
 }
 ```
 
@@ -243,11 +240,8 @@ curl -X GET "https://api.example.com/api/v1/backups/images/server/source-centos7
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "서버 이름(serverName)이 필요합니다."
-  },
-  "timestamp": "2026-01-09T10:30:00Z"
+  "error": "서버 이름(serverName)이 필요합니다.",
+  "timestamp": "2026-01-09 10:30:00"
 }
 ```
 

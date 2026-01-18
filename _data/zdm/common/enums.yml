@@ -118,50 +118,50 @@ zdm-activation:
 # 스케줄 타입
 schedule-types:
   - number: 0
-    value: "once"
+    value: "Once"
     description: "한 번 실행"
     category: "Basic"
   - number: 1
-    value: "every minute"
+    value: "Every Minute"
     description: "매분 실행"
     category: "Basic"
   - number: 2
-    value: "hourly"
+    value: "Hourly"
     description: "매시간 실행"
     category: "Basic"
   - number: 3
-    value: "daily"
+    value: "Daily"
     description: "매일 실행"
     category: "Basic"
   - number: 4
-    value: "weekly"
+    value: "Weekly"
     description: "매주 특정 요일 (요일 복수선택 가능)"
     category: "Basic"
   - number: 5
-    value: "monthly on specific week"
-    description: "매월 특정 주/요일 (주 복수선택 가능)"
+    value: "Monthly (Specific Week and Day of the Week)"
+    description: "매월 특정 주/요일 (복수선택 가능)"
     category: "Basic"
   - number: 6
-    value: "monthly on specific day"
+    value: "Monthly on Specific Date"
     description: "매월 특정 일 (날짜 복수선택 가능)"
     category: "Basic"
   - number: 7
-    value: "smart weekly on specific day"
-    description: "매주 특정 요일 (increment: 요일 복수선택)"
+    value: "Smart Weekly (Specific Day of the Week)"
+    description: "매주 특정 요일 (basic: 단일 요일, advanced: 복수 요일)"
     category: "Smart"
   - number: 8
-    value: "smart monthly on specific week and day"
-    description: "매월 특정 주/요일 (increment: 주, 요일 복수선택)"
+    value: "Smart Monthly (Specific Week and Day of the Week)"
+    description: "매월 특정 주/요일 (basic: 단일 주/요일, advanced: 복수 주/요일)"
     category: "Smart"
   - number: 9
-    value: "smart monthly on specific date"
-    description: "매월 특정 일 (increment: 일 복수선택)"
+    value: "Smart Monthly (Specific Date)"
+    description: "매월 특정 일 (basic: 단일 날짜, advanced: 복수 날짜)"
     category: "Smart"
   - number: 10
-    value: "smart custom monthly on specific month, week and day"
-    description: "매년 특정 월/주/요일 (increment: 월, 주, 요일 복수선택)"
+    value: "Smart Custom (Specific Month, Week and Day of the Week)"
+    description: "매년 특정 월/주/요일 (basic: 단일 월/주/요일, advanced: 복수 월/주/요일)"
     category: "Smart"
   - number: 11
-    value: "smart custom monthly on specific month and date"
-    description: "매년 특정 월/일 (increment: 월, 일 복수선택)"
+    value: "Smart Custom (Specific Month and Date)"
+    description: "매년 특정 월/일 (basic: 단일 월/날짜, advanced: 복수 월/날짜)"
     category: "Smart"

@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>DELETE /api/v1/backups/:identifier</code>
+  <code>DELETE /api/backups/:identifier</code>
 </div>
 
 </details>
@@ -29,11 +29,11 @@ lang: ko
 
 ```bash
 # 백업 ID로 삭제
-curl -X DELETE "https://api.example.com/api/v1/backups/1" \
+curl -X DELETE "https://api.example.com/api/backups/1" \
   -H "Authorization: Bearer <token>"
 
 # 백업 이름으로 삭제
-curl -X DELETE "https://api.example.com/api/v1/backups/daily-backup" \
+curl -X DELETE "https://api.example.com/api/backups/daily-backup" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -45,6 +45,7 @@ curl -X DELETE "https://api.example.com/api/v1/backups/daily-backup" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 백업 ID (숫자) 또는 백업 이름 | - |
+| `partition` | Query | string | Optional | - | 삭제할 작업 대상 파티션 필터 | - |
 
 </details>
 
@@ -81,7 +82,7 @@ curl -X DELETE "https://api.example.com/api/v1/backups/daily-backup" \
     }
   },
   "message": "Backup job deleted",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -116,11 +117,8 @@ curl -X DELETE "https://api.example.com/api/v1/backups/daily-backup" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "BACKUP_NOT_FOUND",
-    "message": "ID가 '999'인 Backup을 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 Backup을 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

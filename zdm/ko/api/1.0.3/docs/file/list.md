@@ -18,7 +18,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/files/list</code>
+  <code>GET /api/files/list</code>
 </div>
 
 </details>
@@ -28,11 +28,11 @@ lang: ko
 
 ```bash
 # 파일 목록 조회
-curl -X GET "https://api.example.com/api/v1/files/list" \
+curl -X GET "https://api.example.com/api/files/list" \
   -H "Authorization: Bearer <token>"
 
 # 페이지네이션 적용 조회
-curl -X GET "https://api.example.com/api/v1/files/list?page=1&limit=10" \
+curl -X GET "https://api.example.com/api/files/list?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -82,7 +82,7 @@ curl -X GET "https://api.example.com/api/v1/files/list?page=1&limit=10" \
     "totalCount": 2
   },
   "message": "File list retrieved",
-  "timestamp": "2025-01-15T10:40:00Z"
+  "timestamp": "2025-01-15 10:40:00"
 }
 ```
 
@@ -118,7 +118,7 @@ curl -X GET "https://api.example.com/api/v1/files/list?page=1&limit=10" \
     "hasPreviousPage": false
   },
   "message": "File list retrieved",
-  "timestamp": "2025-01-15T10:40:00Z"
+  "timestamp": "2025-01-15 10:40:00"
 }
 ```
 
@@ -144,6 +144,24 @@ curl -X GET "https://api.example.com/api/v1/files/list?page=1&limit=10" \
 | `pagination.itemsPerPage` | number | 페이지당 항목 수 (page/limit 사용 시) |
 | `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 (page/limit 사용 시) |
 | `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 (page/limit 사용 시) |
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 응답</strong></summary>
+
+**인증 실패 (401 Unauthorized)**
+
+유효하지 않은 토큰이거나 토큰이 만료된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "토큰이 만료되었습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
 
 </details>
 

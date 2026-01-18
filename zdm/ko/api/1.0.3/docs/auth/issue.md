@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>POST /api/v1/auth/issue</code>
+  <code>POST /api/auth/issue</code>
 </div>
 
 </details>
@@ -29,7 +29,7 @@ lang: ko
 
 ```bash
 # 토큰 발급 요청
-curl -X POST "https://api.example.com/api/v1/auth/issue" \
+curl -X POST "https://api.example.com/api/auth/issue" \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
@@ -72,10 +72,10 @@ curl -X POST "https://api.example.com/api/v1/auth/issue" \
   "requestID": "req-abc123",
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "expiresAt": "2025-01-16T10:30:00Z"
+    "expiresAt": "2026-01-17 16:14:09"
   },
   "message": "Token issued successfully.",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2026-01-17 15:14:09"
 }
 ```
 
@@ -87,7 +87,7 @@ curl -X POST "https://api.example.com/api/v1/auth/issue" \
 | 필드 | 타입 | 설명 |
 |------|------|------|
 | `token` | string | 발급된 JWT 토큰 |
-| `expiresAt` | string | 토큰 만료 시간 (ISO 8601 형식) |
+| `expiresAt` | string | 토큰 만료 시간 (YYYY-MM-DD HH:mm:ss 형식) |
 
 </details>
 
@@ -100,11 +100,8 @@ curl -X POST "https://api.example.com/api/v1/auth/issue" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "USER_NOT_FOUND",
-    "message": "등록되지 않은 사용자이거나 비밀번호가 일치하지 않습니다."
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "등록되지 않은 사용자이거나 비밀번호가 일치하지 않습니다.",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -114,11 +111,8 @@ curl -X POST "https://api.example.com/api/v1/auth/issue" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "유효한 이메일 형식이 아닙니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "유효한 이메일 형식이 아닙니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -128,11 +122,8 @@ curl -X POST "https://api.example.com/api/v1/auth/issue" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "TIMEOUT_ERROR",
-    "message": "사용자 조회 시간이 초과되었습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "사용자 조회 시간이 초과되었습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

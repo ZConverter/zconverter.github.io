@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/recoveries/monitoring/job/:identifier</code>
+  <code>GET /api/recoveries/monitoring/job/:identifier</code>
 </div>
 
 </details>
@@ -29,11 +29,11 @@ lang: ko
 
 ```bash
 # 복구 ID로 모니터링 조회
-curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/job/1" \
+curl -X GET "https://api.example.com/api/recoveries/monitoring/job/1" \
   -H "Authorization: Bearer <token>"
 
 # 복구 이름으로 모니터링 조회
-curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/job/daily-recovery" \
+curl -X GET "https://api.example.com/api/recoveries/monitoring/job/daily-recovery" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -48,7 +48,7 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/job/daily-reco
 | `mode` | Query | string | Optional | - | 작업 모드 필터 | {% include zdm/job-modes.md %} |
 | `partition` | Query | string | Optional | - | 파티션 필터 (Linux) | - |
 | `drive` | Query | string | Optional | - | 드라이브 필터 (Windows) | - |
-| `serverName` | Query | string | Optional | - | 서버 이름 필터 | - |
+| `server` | Query | string | Optional | - | 서버 이름 또는 ID 필터 | - |
 | `serverType` | Query | string | Optional | - | 서버 타입 필터 | {% include zdm/server-modes.md %} |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
@@ -58,7 +58,8 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/job/daily-reco
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
-**성공 응답 (200 OK)**
+<details markdown="1" open>
+<summary>Linux 서버 (200 OK)</summary>
 
 ```json
 {
@@ -88,7 +89,7 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/job/daily-reco
             "status": "run",
             "percent": "45%",
             "message": "Transferring data...",
-            "start": "2025-01-15T10:00:00Z",
+            "start": "2025-01-15 10:00:00",
             "elapsed": "00:15:00",
             "end": "-"
           }
@@ -108,9 +109,68 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/job/daily-reco
     }
   },
   "message": "Recovery monitoring info",
-  "timestamp": "2025-01-15T10:15:00Z"
+  "timestamp": "2025-01-15 10:15:00"
 }
 ```
+
+</details>
+
+<details markdown="1">
+<summary>Windows 서버 (200 OK)</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "system": {
+      "source": {
+        "name": "source-win-server"
+      },
+      "target": {
+        "name": "target-win-server"
+      }
+    },
+    "job": {
+      "info": {
+        "name": "daily-recovery-win"
+      },
+      "log": [
+        "Starting recovery...",
+        "Transferring data..."
+      ],
+      "details": [
+        {
+          "drive": "C:",
+          "progressInfo": {
+            "status": "run",
+            "percent": "60%",
+            "message": "Transferring data...",
+            "start": "2025-01-15 10:00:00",
+            "elapsed": "00:20:00",
+            "end": "-"
+          }
+        },
+        {
+          "drive": "D:",
+          "progressInfo": {
+            "status": "pending",
+            "percent": "0%",
+            "message": "Waiting...",
+            "start": "-",
+            "elapsed": "-",
+            "end": "-"
+          }
+        }
+      ]
+    }
+  },
+  "message": "Recovery monitoring info",
+  "timestamp": "2025-01-15 10:20:00"
+}
+```
+
+</details>
 
 </details>
 
@@ -131,6 +191,37 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/job/daily-reco
 | `job.details[].progressInfo.start` | string | 시작 시간 |
 | `job.details[].progressInfo.elapsed` | string | 경과 시간 |
 | `job.details[].progressInfo.end` | string | 종료 시간 |
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 응답</strong></summary>
+
+**작업을 찾을 수 없음 (404 Not Found)**
+
+조건에 맞는 복구 작업이 존재하지 않는 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "Name이 'daily-recovery'인 조건에 맞는 Recovery 작업을 찾을 수 없습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**작업 데이터 불완전 (400 Bad Request)**
+
+복구 작업 데이터가 불완전한 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "작업 데이터가 불완전합니다. recovery 정보가 누락되었습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
 
 </details>
 

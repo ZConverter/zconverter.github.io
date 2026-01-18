@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>POST /api/v1/licenses</code>
+  <code>POST /api/licenses</code>
 </div>
 
 </details>
@@ -28,7 +28,7 @@ lang: ko
 <summary><strong>요청 예시</strong></summary>
 
 ```bash
-curl -X POST "https://api.example.com/api/v1/licenses" \
+curl -X POST "https://api.example.com/api/licenses" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -90,7 +90,7 @@ curl -X POST "https://api.example.com/api/v1/licenses" \
     }
   },
   "message": "License registered successfully",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -124,11 +124,8 @@ curl -X POST "https://api.example.com/api/v1/licenses" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "key가 누락되었습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "key가 누락되었습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -138,11 +135,8 @@ curl -X POST "https://api.example.com/api/v1/licenses" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "LICENSE_ALREADY_EXISTS",
-    "message": "이미 등록된 라이선스 키입니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "이미 등록된 라이선스 키입니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/users</code>
+  <code>GET /api/users</code>
 </div>
 
 </details>
@@ -29,15 +29,15 @@ lang: ko
 
 ```bash
 # 전체 사용자 목록 조회
-curl -X GET "https://api.example.com/api/v1/users" \
+curl -X GET "https://api.example.com/api/users" \
   -H "Authorization: Bearer <token>"
 
 # 필터 적용 조회
-curl -X GET "https://api.example.com/api/v1/users?company=Acme&country=KR" \
+curl -X GET "https://api.example.com/api/users?company=Acme&country=KR" \
   -H "Authorization: Bearer <token>"
 
 # 페이지네이션 적용 조회
-curl -X GET "https://api.example.com/api/v1/users?page=1&limit=10" \
+curl -X GET "https://api.example.com/api/users?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -48,7 +48,7 @@ curl -X GET "https://api.example.com/api/v1/users?page=1&limit=10" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `user_name` | Query | string | Optional | - | 사용자 이름 필터 | - |
+| `userName` | Query | string | Optional | - | 사용자 이름 필터 | - |
 | `position` | Query | string | Optional | - | 직책 필터 | - |
 | `company` | Query | string | Optional | - | 회사 필터 | - |
 | `country` | Query | string | Optional | - | 국가 필터 | - |
@@ -78,7 +78,7 @@ curl -X GET "https://api.example.com/api/v1/users?page=1&limit=10" \
     }
   ],
   "message": "User information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -110,7 +110,7 @@ curl -X GET "https://api.example.com/api/v1/users?page=1&limit=10" \
     "hasPreviousPage": false
   },
   "message": "User information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -135,6 +135,24 @@ curl -X GET "https://api.example.com/api/v1/users?page=1&limit=10" \
 | `pagination.itemsPerPage` | number | 페이지당 항목 수 (page/limit 사용 시) |
 | `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 (page/limit 사용 시) |
 | `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 (page/limit 사용 시) |
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 응답</strong></summary>
+
+**인증 실패 (401 Unauthorized)**
+
+유효하지 않은 토큰이거나 토큰이 만료된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "토큰이 만료되었습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
 
 </details>
 

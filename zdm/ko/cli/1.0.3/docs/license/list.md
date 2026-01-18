@@ -42,14 +42,14 @@ zdm-cli license list --type "zdm(backup)"
 
 # 특정 만료일의 라이센스 조회
 zdm-cli license list --expiration-date 2025-12-31
-zdm-cli license list --exp 2025-12-31
+zdm-cli license list -expd 2025-12-31
 
 # 특정 생성일의 라이센스 조회
 zdm-cli license list --create-date 2024-01-01
 zdm-cli license list --cre 2024-01-01
 
 # 여러 조건으로 조회
-zdm-cli license list --type "zdm(dr)" --exp 2025-12-31
+zdm-cli license list --type "zdm(dr)" -expd 2025-12-31
 
 # JSON 형식으로 출력
 zdm-cli license list --output json
@@ -68,8 +68,8 @@ zdm-cli license list --output table
 | --id | - | number | Optional | - | 조회할 License ID | - |
 | --name | -n | string | Optional | - | 조회할 License 이름 | - |
 | --type | - | string | Optional | - | 조회할 License Type | {% include zdm/license-categories.md %} |
-| --expiration-date | --exp | string | Optional | - | 라이센스 만료 날짜 (format: YYYY-MM-DD) | - |
-| --create-date | --cre | string | Optional | - | 라이센스 생성 일자 (format: YYYY-MM-DD) | - |
+| --expiration-date | -expd | string | Optional | - | 라이센스 만료 날짜 (format: YYYY-MM-DD) | - |
+| --create-date | -cre | string | Optional | - | 라이센스 생성 일자 (format: YYYY-MM-DD) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>

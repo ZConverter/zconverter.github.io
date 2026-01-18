@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/recoveries/monitoring/system/:identifier</code>
+  <code>GET /api/recoveries/monitoring/system/:identifier</code>
 </div>
 
 </details>
@@ -29,15 +29,15 @@ lang: ko
 
 ```bash
 # 서버 ID로 모니터링 조회
-curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/1" \
+curl -X GET "https://api.example.com/api/recoveries/monitoring/system/1" \
   -H "Authorization: Bearer <token>"
 
 # 서버 이름으로 모니터링 조회
-curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-server" \
+curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-server" \
   -H "Authorization: Bearer <token>"
 
 # 페이지네이션 적용 조회
-curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-server?page=1&limit=10" \
+curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-server?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -52,7 +52,7 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-
 | `mode` | Query | string | Optional | - | 작업 모드 필터 | {% include zdm/job-modes.md %} |
 | `partition` | Query | string | Optional | - | 파티션 필터 (Linux) | - |
 | `drive` | Query | string | Optional | - | 드라이브 필터 (Windows) | - |
-| `serverName` | Query | string | Optional | - | 서버 이름 필터 | - |
+| `server` | Query | string | Optional | - | 서버 이름 또는 ID 필터 | - |
 | `serverType` | Query | string | Optional | - | 서버 타입 필터 | {% include zdm/server-modes.md %} |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
@@ -65,7 +65,7 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-
 <summary><strong>응답 예시</strong></summary>
 
 <details markdown="1" open>
-<summary>기본 응답 (200 OK) - 페이지네이션 미적용</summary>
+<summary>Linux 서버 (200 OK) - 페이지네이션 미적용</summary>
 
 ```json
 {
@@ -103,9 +103,9 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-
             "status": "complete",
             "percent": "100%",
             "message": "Recovery completed",
-            "start": "2025-01-15T10:00:00Z",
+            "start": "2025-01-15 10:00:00",
             "elapsed": "00:30:00",
-            "end": "2025-01-15T10:30:00Z"
+            "end": "2025-01-15 10:30:00"
           }
         },
         {
@@ -114,7 +114,7 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-
             "status": "run",
             "percent": "45%",
             "message": "Transferring data...",
-            "start": "2025-01-15T10:30:00Z",
+            "start": "2025-01-15 10:30:00",
             "elapsed": "00:15:00",
             "end": "-"
           }
@@ -123,14 +123,79 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-
     }
   },
   "message": "Server recovery monitoring info",
-  "timestamp": "2025-01-15T10:45:00Z"
+  "timestamp": "2025-01-15 10:45:00"
 }
 ```
 
 </details>
 
-<details markdown="1" open>
-<summary>기본 응답 (200 OK) - 페이지네이션 적용 (page, limit 파라미터 사용 시)</summary>
+<details markdown="1">
+<summary>Windows 서버 (200 OK) - 페이지네이션 미적용</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "system": {
+      "source": {
+        "name": "source-win-server"
+      },
+      "target": {
+        "name": "target-win-server"
+      }
+    },
+    "summary": {
+      "total": 2,
+      "completed": 1,
+      "inProgress": 1,
+      "failed": 0,
+      "pending": 0,
+      "overallProgress": "75%"
+    },
+    "job": {
+      "info": {
+        "name": "daily-recovery-win"
+      },
+      "log": [
+        "Starting recovery...",
+        "Transferring data..."
+      ],
+      "details": [
+        {
+          "drive": "C:",
+          "progressInfo": {
+            "status": "complete",
+            "percent": "100%",
+            "message": "Recovery completed",
+            "start": "2025-01-15 10:00:00",
+            "elapsed": "00:30:00",
+            "end": "2025-01-15 10:30:00"
+          }
+        },
+        {
+          "drive": "D:",
+          "progressInfo": {
+            "status": "run",
+            "percent": "50%",
+            "message": "Transferring data...",
+            "start": "2025-01-15 10:30:00",
+            "elapsed": "00:15:00",
+            "end": "-"
+          }
+        }
+      ]
+    }
+  },
+  "message": "Server recovery monitoring info",
+  "timestamp": "2025-01-15 10:45:00"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary>페이지네이션 적용 (200 OK) - page, limit 파라미터 사용 시</summary>
 
 ```json
 {
@@ -168,9 +233,9 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-
             "status": "complete",
             "percent": "100%",
             "message": "Recovery completed",
-            "start": "2025-01-15T10:00:00Z",
+            "start": "2025-01-15 10:00:00",
             "elapsed": "00:30:00",
-            "end": "2025-01-15T10:30:00Z"
+            "end": "2025-01-15 10:30:00"
           }
         }
       ]
@@ -185,7 +250,7 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-
     }
   },
   "message": "Server recovery monitoring info",
-  "timestamp": "2025-01-15T10:45:00Z"
+  "timestamp": "2025-01-15 10:45:00"
 }
 ```
 
@@ -222,6 +287,48 @@ curl -X GET "https://api.example.com/api/v1/recoveries/monitoring/system/target-
 | `pagination.itemsPerPage` | number | 페이지당 항목 수 (페이지네이션 적용 시) |
 | `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 (페이지네이션 적용 시) |
 | `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 (페이지네이션 적용 시) |
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 응답</strong></summary>
+
+**작업을 찾을 수 없음 (404 Not Found)**
+
+서버에 등록된 복구 작업이 없거나, 조건에 맞는 작업이 존재하지 않는 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "서버 'target-server'에 파티션 '/data'에 해당하는 Recovery 작업을 찾을 수 없습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+파티션 필터 없이 서버에 복구 작업이 없는 경우:
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "서버 'target-server'에 등록된 Recovery 작업을 찾을 수 없습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**작업 데이터 불완전 (400 Bad Request)**
+
+복구 작업 데이터가 불완전한 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "작업 데이터가 불완전합니다. 파티션 '/' 에 대한 recovery 또는 recoveryInfo 작업 정보를 찾을 수 없습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
 
 </details>
 

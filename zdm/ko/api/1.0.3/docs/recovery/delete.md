@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>DELETE /api/v1/recoveries/:identifier</code>
+  <code>DELETE /api/recoveries/:identifier</code>
 </div>
 
 </details>
@@ -29,11 +29,11 @@ lang: ko
 
 ```bash
 # 복구 ID로 삭제
-curl -X DELETE "https://api.example.com/api/v1/recoveries/1" \
+curl -X DELETE "https://api.example.com/api/recoveries/1" \
   -H "Authorization: Bearer <token>"
 
 # 복구 이름으로 삭제
-curl -X DELETE "https://api.example.com/api/v1/recoveries/daily-recovery" \
+curl -X DELETE "https://api.example.com/api/recoveries/daily-recovery" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -83,7 +83,7 @@ curl -X DELETE "https://api.example.com/api/v1/recoveries/daily-recovery" \
     }
   },
   "message": "Recovery job deleted",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -120,11 +120,8 @@ curl -X DELETE "https://api.example.com/api/v1/recoveries/daily-recovery" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "RECOVERY_NOT_FOUND",
-    "message": "ID가 '999'인 Recovery를 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 Recovery를 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

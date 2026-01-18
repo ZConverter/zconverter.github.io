@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/zdms/repositories</code>
+  <code>GET /api/zdms/repositories</code>
 </div>
 
 </details>
@@ -29,15 +29,15 @@ lang: ko
 
 ```bash
 # 전체 레포지토리 조회
-curl -X GET "https://api.example.com/api/v1/zdms/repositories" \
+curl -X GET "https://api.example.com/api/zdms/repositories" \
   -H "Authorization: Bearer <token>"
 
 # 필터 적용 조회
-curl -X GET "https://api.example.com/api/v1/zdms/repositories?type=nfs" \
+curl -X GET "https://api.example.com/api/zdms/repositories?type=nfs" \
   -H "Authorization: Bearer <token>"
 
 # 페이지네이션 적용 조회
-curl -X GET "https://api.example.com/api/v1/zdms/repositories?page=1&limit=10" \
+curl -X GET "https://api.example.com/api/zdms/repositories?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -90,11 +90,11 @@ curl -X GET "https://api.example.com/api/v1/zdms/repositories?page=1&limit=10" \
       "localPath": "/mnt/backup",
       "ipAddress": ["192.168.1.200"],
       "port": "2049",
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "Repository list retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -130,7 +130,7 @@ curl -X GET "https://api.example.com/api/v1/zdms/repositories?page=1&limit=10" \
       "localPath": "/mnt/backup",
       "ipAddress": ["192.168.1.200"],
       "port": "2049",
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "pagination": {
@@ -142,7 +142,7 @@ curl -X GET "https://api.example.com/api/v1/zdms/repositories?page=1&limit=10" \
     "hasPreviousPage": false
   },
   "message": "Repository list retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -177,6 +177,37 @@ curl -X GET "https://api.example.com/api/v1/zdms/repositories?page=1&limit=10" \
 | `pagination.itemsPerPage` | number | 페이지당 항목 수 (페이지네이션 적용 시) |
 | `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 (페이지네이션 적용 시) |
 | `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 (페이지네이션 적용 시) |
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 응답</strong></summary>
+
+**인증 실패 (401 Unauthorized)**
+
+유효하지 않은 토큰이거나 토큰이 만료된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "토큰이 만료되었습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**잘못된 요청 파라미터 (400 Bad Request)**
+
+유효하지 않은 필터 값이 전달된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "유효하지 않은 'type' 값입니다. 허용된 값: nfs, smb",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
 
 </details>
 

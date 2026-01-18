@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>PUT /api/v1/recoveries/:identifier</code>
+  <code>PUT /api/recoveries/:identifier</code>
 </div>
 
 </details>
@@ -28,8 +28,8 @@ lang: ko
 <summary><strong>요청 예시</strong></summary>
 
 ```bash
-# 복구 작업 수정
-curl -X PUT "https://api.example.com/api/v1/recoveries/1" \
+# 공통 필드 수정 (모든 파티션에 동일하게 적용)
+curl -X PUT "https://api.example.com/api/recoveries/1" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -38,14 +38,43 @@ curl -X PUT "https://api.example.com/api/v1/recoveries/1" \
     "afterReboot": "shutdown"
   }'
 
-# 개별 파티션 모드 변경
-curl -X PUT "https://api.example.com/api/v1/recoveries/daily-recovery" \
+# 개별 파티션 모드만 변경 (jobList만 사용)
+curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "jobList": [
       {
         "partition": "/",
+        "mode": "increment"
+      }
+    ]
+  }'
+
+# 전체 모드 + 개별 파티션 예외 설정 (Linux)
+# mode: 모든 파티션에 increment 적용 후, jobList로 "/" 파티션만 full로 재변경
+curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "mode": "increment",
+    "afterReboot": "reboot",
+    "jobList": [
+      {
+        "partition": "/",
+        "mode": "full"
+      }
+    ]
+  }'
+
+# Windows 드라이브 개별 모드 변경
+curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jobList": [
+      {
+        "drive": "C:",
         "mode": "increment"
       }
     ]
@@ -84,15 +113,23 @@ curl -X PUT "https://api.example.com/api/v1/recoveries/daily-recovery" \
 
 | 필드 | 타입 | 필수 | 설명 |
 |------|------|------|------|
-| `partition` | string | Required | 대상 파티션 (식별용) |
+| `partition` | string | Conditional | 대상 파티션 - Linux (partition 또는 drive 중 하나 필수) |
+| `drive` | string | Conditional | 대상 드라이브 - Windows (partition 또는 drive 중 하나 필수) |
 | `mode` | string | Optional | 변경할 작업 모드 |
+
+> **mode와 jobList 동시 사용 시 처리 순서:**
+> 1. `mode` 필드가 먼저 적용되어 **모든 파티션**의 모드가 변경됩니다.
+> 2. 이후 `jobList`가 적용되어 **지정된 파티션만** 개별적으로 재변경됩니다.
+>
+> 예: `mode: "increment"` + `jobList["/"].mode: "full"` → `/`는 `full`, 나머지는 `increment`
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
-**성공 응답 (200 OK)**
+<details markdown="1" open>
+<summary>공통 필드만 변경 (200 OK)</summary>
 
 ```json
 {
@@ -117,6 +154,31 @@ curl -X PUT "https://api.example.com/api/v1/recoveries/daily-recovery" \
           "new": "shutdown"
         }
       ],
+      "eachUpdatedFields": []
+    }
+  },
+  "message": "Recovery job Update completed",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary>개별 파티션만 변경 - jobList만 사용 - Linux (200 OK)</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "jobInfo": {
+      "id": "1",
+      "name": "daily-recovery"
+    },
+    "summary": {
+      "state": "success",
+      "commonUpdatedFields": [],
       "eachUpdatedFields": [
         {
           "partition": "/",
@@ -124,7 +186,7 @@ curl -X PUT "https://api.example.com/api/v1/recoveries/daily-recovery" \
             "state": "success",
             "commonUpdatedFields": [
               {
-                "field": "mode",
+                "field": "Recovery Mode",
                 "previous": "full",
                 "new": "increment"
               }
@@ -135,10 +197,108 @@ curl -X PUT "https://api.example.com/api/v1/recoveries/daily-recovery" \
       ]
     }
   },
-  "message": "Recovery job updated",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "message": "Recovery job Update completed",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
+
+</details>
+
+<details markdown="1">
+<summary>개별 드라이브만 변경 - jobList만 사용 - Windows (200 OK)</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "jobInfo": {
+      "id": "2",
+      "name": "daily-recovery-win"
+    },
+    "summary": {
+      "state": "success",
+      "commonUpdatedFields": [],
+      "eachUpdatedFields": [
+        {
+          "drive": "C:",
+          "summary": {
+            "state": "success",
+            "commonUpdatedFields": [
+              {
+                "field": "Recovery Mode",
+                "previous": "full",
+                "new": "increment"
+              }
+            ],
+            "eachUpdatedFields": []
+          }
+        }
+      ]
+    }
+  },
+  "message": "Recovery job Update completed",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary>전체 모드 + 개별 파티션 예외 설정 (200 OK)</summary>
+
+요청: `mode: "increment"` (전체) + `jobList["/"].mode: "full"` (예외)
+
+- 처리 순서: `mode` 먼저 적용 → `jobList` 나중 적용
+- 결과: `/` 파티션은 `full`, 나머지 파티션은 `increment`
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "jobInfo": {
+      "id": "1",
+      "name": "daily-recovery"
+    },
+    "summary": {
+      "state": "success",
+      "commonUpdatedFields": [
+        {
+          "field": "Recovery Mode",
+          "previous": "full",
+          "new": "increment"
+        },
+        {
+          "field": "After Reboot",
+          "previous": "shutdown",
+          "new": "reboot"
+        }
+      ],
+      "eachUpdatedFields": [
+        {
+          "partition": "/",
+          "summary": {
+            "state": "success",
+            "commonUpdatedFields": [
+              {
+                "field": "Recovery Mode",
+                "previous": "increment",
+                "new": "full"
+              }
+            ],
+            "eachUpdatedFields": []
+          }
+        }
+      ]
+    }
+  },
+  "message": "Recovery job Update completed",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+</details>
 
 </details>
 
@@ -169,11 +329,8 @@ curl -X PUT "https://api.example.com/api/v1/recoveries/daily-recovery" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "RECOVERY_NOT_FOUND",
-    "message": "ID가 '999'인 Recovery를 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 Recovery를 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

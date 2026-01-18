@@ -29,16 +29,16 @@ API 인증을 위한 토큰을 발급합니다.
 
 ```bash
 # 이메일과 비밀번호로 토큰 발급
-zdm-cli token issue -m "user@example.com" -p "mypassword"
+zdm-cli token issue -mail "user@example.com" -p "mypassword"
 
 # 설정된 기본 이메일을 사용하여 토큰 발급
 zdm-cli token issue -p "mypassword"
 
 # 별칭 사용
-zdm-cli token i -m "user@example.com" -p "mypassword"
+zdm-cli token i -mail "user@example.com" -p "mypassword"
 
 # JSON 형식으로 출력
-zdm-cli token issue -m "user@example.com" -p "mypassword" --output json
+zdm-cli token issue -mail "user@example.com" -p "mypassword" --output json
 ```
 
 </details>
@@ -48,7 +48,7 @@ zdm-cli token issue -m "user@example.com" -p "mypassword" --output json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --user-mail | -m | string | Optional | 설정 파일의 기본값 | 포털 로그인 ID (이메일) | - |
+| --user-mail | -mail | string | Optional | 설정 파일의 기본값 | 포털 로그인 ID (이메일) | - |
 | --user-pwd | -p | string | Required | - | 포털 로그인 비밀번호 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 

@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>POST /api/v1/backups</code>
+  <code>POST /api/backups</code>
 </div>
 
 </details>
@@ -29,7 +29,7 @@ lang: ko
 
 ```bash
 # 기본 백업 작업 등록
-curl -X POST "https://api.example.com/api/v1/backups" \
+curl -X POST "https://api.example.com/api/backups" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -46,7 +46,7 @@ curl -X POST "https://api.example.com/api/v1/backups" \
   }'
 
 # 스케줄 포함 백업 작업 등록
-curl -X POST "https://api.example.com/api/v1/backups" \
+curl -X POST "https://api.example.com/api/backups" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -86,14 +86,13 @@ curl -X POST "https://api.example.com/api/v1/backups" \
 | `jobName` | string | Optional | 작업 이름 | - |
 | `user` | string \| number | Optional | 사용자 ID (숫자) 또는 이메일 | - |
 | `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
-| `description` | string | Optional | 작업 설명 | - |
-| `rotation` | number | Optional | 작업 반복 횟수 (1~30) | - |
+| `rotation` | number | Optional | `1` | 작업 반복 횟수 (1~30) | - |
 | `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
 | `encryption` | string | Optional | 암호화 사용 여부 | {% include zdm/use-options.md %} |
-| `excludeDir` | string | Optional | 제외 디렉토리 | - |
-| `excludePartition` | string | Optional | 제외 파티션 | - |
+| `excludeDir` | string | Optional | 작업에서 제외힐 디렉토리 목록 | - |
+| `excludePartition` | string | Optional | 작업에서 제외할 파티션 목록 | - |
 | `mailEvent` | string | Optional | 이벤트 알림 이메일 | - |
-| `networkLimit` | number | Optional | 네트워크 제한 속도 (0 이상) | - |
+| `networkLimit` | number | Optional | 네트워크 제한 속도 (0: 무제한, 그외: 해당 속도로 제한) | - |
 | `autoStart` | string | Optional | 자동 시작 여부 | {% include zdm/use-options.md %} |
 | `scriptPath` | string | Optional | 실행할 스크립트 경로 | - |
 | `scriptRun` | string | Optional | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
@@ -193,39 +192,45 @@ curl -X POST "https://api.example.com/api/v1/backups" \
 
 ```json
 {
+  "requestID": "46f53c9a-86f7-4c8f-9947-1e3ac642e27f",
+  "message": "Backup job registration completed",
   "success": true,
-  "requestID": "req-abc123",
   "data": {
+    "summary": {
+      "total": 2,
+      "successful": 2,
+      "failed": 0
+    },
     "results": [
       {
         "state": "success",
-        "jobName": "daily-backup-root",
+        "jobName": "backupTest_ROOT",
         "partition": "/",
-        "jobMode": "full",
+        "jobMode": "Full Backup",
         "autoStart": "not use",
         "schedule": {
           "basic": {
-            "type": "daily",
-            "description": "Every day at 02:00"
+            "type": "Monthly on Specific Date",
+            "description": "[Basic] Start working at 12:00 25, 28 every month."
           }
         }
       },
       {
         "state": "success",
-        "jobName": "daily-backup-home",
-        "partition": "/home",
-        "jobMode": "full",
-        "autoStart": "not use"
+        "jobName": "backupTest_boot_efi",
+        "partition": "/boot/efi",
+        "jobMode": "Full Backup",
+        "autoStart": "not use",
+        "schedule": {
+          "basic": {
+            "type": "Monthly on Specific Date",
+            "description": "[Basic] Start working at 12:00 25, 28 every month."
+          }
+        }
       }
-    ],
-    "summary": {
-      "total": 2,
-      "successful": 2,
-      "failed": 0
-    }
+    ]
   },
-  "message": "Backup jobs registered",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2026-01-17 21:03:52"
 }
 ```
 
@@ -236,18 +241,24 @@ curl -X POST "https://api.example.com/api/v1/backups" \
 
 | 필드 | 타입 | 설명 |
 |------|------|------|
-| `results[].state` | string | 등록 결과 (`success` / `fail`) |
-| `results[].jobName` | string | 작업 이름 |
-| `results[].partition` | string | 대상 파티션 |
-| `results[].jobMode` | string | 작업 모드 |
-| `results[].autoStart` | string | 자동 시작 여부 |
-| `results[].schedule` | object | 스케줄 정보 (설정시에만 포함) |
-| `results[].scriptPath` | string | 스크립트 경로 (설정시에만 포함) |
-| `results[].scriptRunTiming` | string | 스크립트 실행 타이밍 (`before job` / `after job`, 설정시에만 포함) |
-| `results[].errorMessage` | string | 실패 시 오류 메시지 |
 | `summary.total` | number | 총 작업 수 |
 | `summary.successful` | number | 성공한 작업 수 |
 | `summary.failed` | number | 실패한 작업 수 |
+| `results[].state` | string | 등록 결과 (`success` / `fail`) |
+| `results[].jobName` | string | 작업 이름 |
+| `results[].partition` | string | 대상 파티션 |
+| `results[].jobMode` | string | 작업 모드 (`Full Backup`, `Incremental Backup`, `Smart Backup`) |
+| `results[].autoStart` | string | 자동 시작 여부 (`use` / `not use`) |
+| `results[].schedule` | object | 스케줄 정보 (설정시에만 포함) |
+| `results[].schedule.basic` | object | 기본 스케줄 정보 |
+| `results[].schedule.basic.type` | string | 스케줄 타입 이름 (예: `Daily`, `Monthly on Specific Date`) |
+| `results[].schedule.basic.description` | string | 스케줄 설명 (예: `[Basic] Start working at 12:00 25, 28 every month.`) |
+| `results[].schedule.advanced` | object | 고급 스케줄 정보 (Smart 스케줄 type 7~11 설정시에만 포함) |
+| `results[].schedule.advanced.type` | string | 고급 스케줄 타입 이름 |
+| `results[].schedule.advanced.description` | string | 고급 스케줄 설명 |
+| `results[].scriptPath` | string | 스크립트 경로 (설정시에만 포함) |
+| `results[].scriptRunTiming` | string | 스크립트 실행 타이밍 (`before job` / `after job`, 설정시에만 포함) |
+| `results[].errorMessage` | string | 실패 시 오류 메시지 |
 
 </details>
 
@@ -260,11 +271,8 @@ curl -X POST "https://api.example.com/api/v1/backups" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "type은 full, increment, smart중 하나여야 합니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "type은 full, increment, smart중 하나여야 합니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

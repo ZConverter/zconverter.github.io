@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/servers/partitions</code>
+  <code>GET /api/servers/partitions</code>
 </div>
 
 </details>
@@ -29,23 +29,23 @@ lang: ko
 
 ```bash
 # 전체 파티션 정보 조회
-curl -X GET "https://api.example.com/api/v1/servers/partitions" \
+curl -X GET "https://api.example.com/api/servers/partitions" \
   -H "Authorization: Bearer <token>"
 
 # 필터 적용 조회
-curl -X GET "https://api.example.com/api/v1/servers/partitions?fileSystem=ext4" \
+curl -X GET "https://api.example.com/api/servers/partitions?fileSystem=ext4" \
   -H "Authorization: Bearer <token>"
 
 # Linux 마운트 포인트로 필터
-curl -X GET "https://api.example.com/api/v1/servers/partitions?partition=/home" \
+curl -X GET "https://api.example.com/api/servers/partitions?partition=/home" \
   -H "Authorization: Bearer <token>"
 
 # Windows 드라이브로 필터
-curl -X GET "https://api.example.com/api/v1/servers/partitions?drive=C:" \
+curl -X GET "https://api.example.com/api/servers/partitions?drive=C:" \
   -H "Authorization: Bearer <token>"
 
 # 페이지네이션 적용 조회
-curl -X GET "https://api.example.com/api/v1/servers/partitions?page=1&limit=10" \
+curl -X GET "https://api.example.com/api/servers/partitions?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -60,7 +60,6 @@ curl -X GET "https://api.example.com/api/v1/servers/partitions?page=1&limit=10" 
 | `drive` | Query | string | Optional | - | 드라이브 문자 필터 (Windows) | - |
 | `device` | Query | string | Optional | - | 디바이스 경로 필터 | - |
 | `fileSystem` | Query | string | Optional | - | 파일 시스템 타입 필터 | - |
-| `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 
@@ -95,7 +94,7 @@ curl -X GET "https://api.example.com/api/v1/servers/partitions?page=1&limit=10" 
       },
       "usage": 20,
       "fileSystem": "ext4",
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     },
     {
       "system": "server-02",
@@ -115,11 +114,11 @@ curl -X GET "https://api.example.com/api/v1/servers/partitions?page=1&limit=10" 
       },
       "usage": 50,
       "fileSystem": "NTFS",
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "Partition information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -151,7 +150,7 @@ curl -X GET "https://api.example.com/api/v1/servers/partitions?page=1&limit=10" 
       },
       "usage": 20,
       "fileSystem": "ext4",
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "pagination": {
@@ -163,7 +162,7 @@ curl -X GET "https://api.example.com/api/v1/servers/partitions?page=1&limit=10" 
     "hasPreviousPage": false
   },
   "message": "Partition information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -194,6 +193,24 @@ curl -X GET "https://api.example.com/api/v1/servers/partitions?page=1&limit=10" 
 | `pagination.itemsPerPage` | number | 페이지당 항목 수 (페이지네이션 적용 시) |
 | `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 (페이지네이션 적용 시) |
 | `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 (페이지네이션 적용 시) |
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 응답</strong></summary>
+
+**인증 실패 (401 Unauthorized)**
+
+유효하지 않은 토큰이거나 토큰이 만료된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "토큰이 만료되었습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
 
 </details>
 

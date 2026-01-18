@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/users/:identifier</code>
+  <code>GET /api/users/:identifier</code>
 </div>
 
 </details>
@@ -29,11 +29,11 @@ lang: ko
 
 ```bash
 # 사용자 ID로 조회
-curl -X GET "https://api.example.com/api/v1/users/1" \
+curl -X GET "https://api.example.com/api/users/1" \
   -H "Authorization: Bearer <token>"
 
 # 이메일로 조회
-curl -X GET "https://api.example.com/api/v1/users/user@example.com" \
+curl -X GET "https://api.example.com/api/users/user@example.com" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -66,9 +66,23 @@ curl -X GET "https://api.example.com/api/v1/users/user@example.com" \
     "position": "Manager"
   },
   "message": "User information retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>응답 필드</strong></summary>
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `id` | string | 사용자 ID |
+| `email` | string | 사용자 이메일 |
+| `userName` | string | 사용자 이름 |
+| `company` | string | 회사명 |
+| `country` | string | 국가 |
+| `position` | string | 직책 |
 
 </details>
 
@@ -81,11 +95,8 @@ curl -X GET "https://api.example.com/api/v1/users/user@example.com" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "USER_NOT_FOUND",
-    "message": "ID가 '999'인 User를 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 User를 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

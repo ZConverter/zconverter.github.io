@@ -20,7 +20,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/zdms</code>
+  <code>GET /api/zdms</code>
 </div>
 
 </details>
@@ -30,15 +30,15 @@ lang: ko
 
 ```bash
 # 전체 ZDM 목록 조회
-curl -X GET "https://api.example.com/api/v1/zdms" \
+curl -X GET "https://api.example.com/api/zdms" \
   -H "Authorization: Bearer <token>"
 
 # 연결 상태별 조회
-curl -X GET "https://api.example.com/api/v1/zdms?connection=connect" \
+curl -X GET "https://api.example.com/api/zdms?connection=connect" \
   -H "Authorization: Bearer <token>"
 
 # 추가 정보 포함 조회
-curl -X GET "https://api.example.com/api/v1/zdms?detail=true&repository=true" \
+curl -X GET "https://api.example.com/api/zdms?detail=true&repository=true" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -57,6 +57,8 @@ curl -X GET "https://api.example.com/api/v1/zdms?detail=true&repository=true" \
 | `repository` | Query | boolean | Optional | `false` | 레포지토리 정보 포함 여부 | `true`, `false` |
 | `zosRepository` | Query | boolean | Optional | `false` | ZOS 레포지토리 정보 포함 여부 | `true`, `false` |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
+| `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
+| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 
 </details>
 
@@ -64,7 +66,7 @@ curl -X GET "https://api.example.com/api/v1/zdms?detail=true&repository=true" \
 <summary><strong>응답 예시</strong></summary>
 
 <details markdown="1" open>
-<summary>기본 응답 (200 OK)</summary>
+<summary>기본 응답 (200 OK) - 페이지네이션 미적용</summary>
 
 ```json
 {
@@ -96,11 +98,62 @@ curl -X GET "https://api.example.com/api/v1/zdms?detail=true&repository=true" \
         "logFile": "/var/log/zdm",
         "install": "/opt/zdm"
       },
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "ZDM information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+</details>
+
+<details markdown="1" open>
+<summary>기본 응답 (200 OK) - 페이지네이션 적용 (page, limit 파라미터 사용 시)</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": [
+    {
+      "name": {
+        "center": "Main-Center",
+        "host": "zdm-host-01"
+      },
+      "id": {
+        "center": "1",
+        "install": "INST-001",
+        "machine": "550e8400-e29b-41d4-a716-446655440000"
+      },
+      "os": {
+        "version": "Ubuntu 22.04 LTS"
+      },
+      "ip": {
+        "public": "192.168.1.100",
+        "private": ["10.0.0.1", "10.0.0.2"]
+      },
+      "status": {
+        "connect": "connect",
+        "activate": "ok"
+      },
+      "path": {
+        "logFile": "/var/log/zdm",
+        "install": "/opt/zdm"
+      },
+      "lastUpdated": "2025-01-15 10:30:00"
+    }
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 5,
+    "totalItems": 50,
+    "itemsPerPage": 10,
+    "hasNextPage": true,
+    "hasPreviousPage": false
+  },
+  "message": "ZDM information list",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -147,14 +200,14 @@ curl -X GET "https://api.example.com/api/v1/zdms?detail=true&repository=true" \
             "raw": 512110190592,
             "formatted": "477.0 GB"
           },
-          "lastUpdated": "2025-01-15T10:30:00Z"
+          "lastUpdated": "2025-01-15 10:30:00"
         }
       ],
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "ZDM information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -200,14 +253,14 @@ curl -X GET "https://api.example.com/api/v1/zdms?detail=true&repository=true" \
           "subNet": "255.255.255.0",
           "gateWay": "192.168.1.1",
           "macAddress": "00:1A:2B:3C:4D:5E",
-          "lastUpdated": "2025-01-15T10:30:00Z"
+          "lastUpdated": "2025-01-15 10:30:00"
         }
       ],
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "ZDM information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -264,14 +317,14 @@ curl -X GET "https://api.example.com/api/v1/zdms?detail=true&repository=true" \
           },
           "usage": 50,
           "fileSystem": "ext4",
-          "lastUpdated": "2025-01-15T10:30:00Z"
+          "lastUpdated": "2025-01-15 10:30:00"
         }
       ],
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "ZDM information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -333,14 +386,14 @@ curl -X GET "https://api.example.com/api/v1/zdms?detail=true&repository=true" \
           "localPath": "/mnt/backup",
           "ipAddress": ["192.168.1.200"],
           "port": "2049",
-          "lastUpdated": "2025-01-15T10:30:00Z"
+          "lastUpdated": "2025-01-15 10:30:00"
         }
       ],
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "ZDM information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -387,15 +440,15 @@ curl -X GET "https://api.example.com/api/v1/zdms?detail=true&repository=true" \
           "platform": "AWS",
           "cloudKeyId": "1",
           "bucketName": "zdm-backup-bucket",
-          "created": "2025-01-01T00:00:00Z",
-          "lastUpdated": "2025-01-15T10:30:00Z"
+          "created": "2025-01-01 00:00:00",
+          "lastUpdated": "2025-01-15 10:30:00"
         }
       ],
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "ZDM information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -512,6 +565,51 @@ curl -X GET "https://api.example.com/api/v1/zdms?detail=true&repository=true" \
 | `zosRepository[].lastUpdated` | string | 마지막 업데이트 시간 |
 
 </details>
+
+<details markdown="1">
+<summary>페이지네이션 필드 (page, limit 파라미터 사용 시)</summary>
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `pagination.currentPage` | number | 현재 페이지 번호 |
+| `pagination.totalPages` | number | 전체 페이지 수 |
+| `pagination.totalItems` | number | 전체 항목 수 |
+| `pagination.itemsPerPage` | number | 페이지당 항목 수 |
+| `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 |
+| `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 |
+
+</details>
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 응답</strong></summary>
+
+**인증 실패 (401 Unauthorized)**
+
+유효하지 않은 토큰이거나 토큰이 만료된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "토큰이 만료되었습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**잘못된 요청 파라미터 (400 Bad Request)**
+
+유효하지 않은 필터 값이 전달된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "유효하지 않은 'connection' 값입니다. 허용된 값: connect, disconnect",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
 
 </details>
 

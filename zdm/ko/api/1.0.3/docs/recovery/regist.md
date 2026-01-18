@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>POST /api/v1/recoveries</code>
+  <code>POST /api/recoveries</code>
 </div>
 
 </details>
@@ -29,7 +29,7 @@ lang: ko
 
 ```bash
 # 기본 복구 작업 등록
-curl -X POST "https://api.example.com/api/v1/recoveries" \
+curl -X POST "https://api.example.com/api/recoveries" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -46,7 +46,7 @@ curl -X POST "https://api.example.com/api/v1/recoveries" \
   }'
 
 # 상세 설정 포함 복구 작업 등록
-curl -X POST "https://api.example.com/api/v1/recoveries" \
+curl -X POST "https://api.example.com/api/recoveries" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -91,10 +91,9 @@ curl -X POST "https://api.example.com/api/v1/recoveries" \
 | `repository.path` | string | Required | 레포지토리 경로 | - |
 | `mode` | string | Required | 작업 모드 | {% include zdm/job-modes.md %} |
 | `jobName` | string | Optional | 작업 이름 | - |
-| `overwrite` | string | Optional | 덮어쓰기 허용 여부 | {% include zdm/overwrite-options.md api=true %} |
+| `overwrite` | string | Optional | 덮어쓰기 허용 여부 | `allow`, `not allow` |
 | `user` | string | Optional | 사용자 ID (숫자) 또는 이메일 | - |
 | `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
-| `description` | string | Optional | 작업 설명 | - |
 | `afterReboot` | string | Optional | 작업 후 부팅 방식 | {% include zdm/after-reboot.md %} |
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (0: 무제한) | - |
 | `excludePartition` | string | Optional | 제외 파티션 | - |
@@ -112,7 +111,7 @@ curl -X POST "https://api.example.com/api/v1/recoveries" \
 |------|------|------|------|
 | `sourcePartition` | string | Required | 소스 파티션 |
 | `targetPartition` | string | Required | 타겟 파티션 |
-| `overwrite` | string | Optional | 덮어쓰기 허용 여부 |
+| `overwrite` | string | Optional | 덮어쓰기 허용 여부 (`allow`, `not allow`) |
 | `backupFile` | string | Optional | 사용할 백업 파일 이름 |
 | `mode` | string | Optional | 작업 모드 |
 | `repository` | object | Optional | 레포지토리 정보 |
@@ -152,7 +151,7 @@ curl -X POST "https://api.example.com/api/v1/recoveries" \
         "overwrite": "allow",
         "fileSystem": "ext4",
         "backup": {
-          "useLast": "true",
+          "useLatest": "true",
           "backupFile": "backup-2025-01-15.img",
           "backupJob": "daily-backup"
         },
@@ -187,7 +186,7 @@ curl -X POST "https://api.example.com/api/v1/recoveries" \
     }
   },
   "message": "Recovery jobs registered",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -212,7 +211,7 @@ curl -X POST "https://api.example.com/api/v1/recoveries" \
 | `partitions[].jobMode` | string | 파티션별 작업 모드 |
 | `partitions[].overwrite` | string | 덮어쓰기 상태 |
 | `partitions[].fileSystem` | string | 파일시스템 |
-| `partitions[].backup.useLast` | string | 최신 백업 파일 사용 여부 |
+| `partitions[].backup.useLatest` | string | 최신 백업 파일 사용 여부 |
 | `partitions[].backup.backupFile` | string | 백업 파일 이름 |
 | `partitions[].backup.backupJob` | string | 백업 작업 이름 |
 | `partitions[].repository.id` | string | 레포지토리 ID |
@@ -233,11 +232,8 @@ curl -X POST "https://api.example.com/api/v1/recoveries" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "platform은 oci, ncp, gcp, aws, azure, vmware, scp, openstack, cloudstack, kt, nhn, nutanix, proxmox, kvm, hyperv, xenserver중 하나여야 합니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "platform은 oci, ncp, gcp, aws, azure, vmware, scp, openstack, cloudstack, kt, nhn, nutanix, proxmox, kvm, hyperv, xenserver중 하나여야 합니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

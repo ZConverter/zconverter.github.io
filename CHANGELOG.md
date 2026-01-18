@@ -6,6 +6,177 @@
 
 ---
 
+## [API v1.0.4] - 개발 중
+
+### Added
+- (예정)
+
+---
+
+## [API v1.0.3] - 2026-01-18
+
+### Fixed
+- **PUT /recoveries/:identifier jobList 버그 수정**
+  - `jobList`만 전달 시 개별 파티션 mode 변경이 적용되지 않던 문제 해결
+  - 변경 전: `jobList`만 전달하면 DB 업데이트 없이 빈 응답 반환
+  - 변경 후: 개별 파티션 mode 변경이 정상 적용되고 `eachUpdatedFields`에 변경 내역 표시
+
+### Changed (추가)
+- **PUT /recoveries/:identifier jobList Windows 지원**
+  - 요청: `partition` (Linux) 또는 `drive` (Windows) 중 하나 필수
+  - 응답: OS에 따라 `partition` 또는 `drive` 필드로 구분하여 반환
+  - Windows 드라이브는 대문자 + `:` 형식으로 자동 정규화 (예: `c` → `C:`)
+- **POST /recoveries 응답 필드명 변경**
+  - `backup.useLast` → `backup.useLatest` (최신 백업 사용 여부)
+  - 값: `"yes"` / `"no"` (변경 없음)
+- **GET /recoveries, GET /recoveries/:identifier 응답 필드 값 형식 변경**
+  - `backup.latest` 값: `"true"` → `"use"` (또는 `"not use"`)
+  - 다른 옵션 필드들과 동일한 문자열 형식으로 통일
+- **Recovery Monitoring API 서버 필터 파라미터 통일**
+  - `serverName` → `server` 파라미터명 변경 (다른 API와 일관성)
+  - `server` 파라미터는 서버 이름 또는 ID 모두 입력 가능
+  - 숫자로만 구성된 경우 서버 ID로 판단하여 서버 이름으로 자동 변환
+  - 수정된 엔드포인트: GET /recoveries/monitoring/job/:identifier, GET /recoveries/monitoring/system/:identifier
+- **Backup Monitoring API 서버 필터 파라미터 통일**
+  - `serverName` → `server` 파라미터명 변경 (Recovery Monitoring API와 일관성)
+  - `server` 파라미터는 서버 이름 또는 ID 모두 입력 가능
+  - 숫자로만 구성된 경우 서버 ID로 판단하여 서버 이름으로 자동 변환
+  - `drive` 필터 파라미터 추가 (Windows 드라이브 필터)
+  - 수정된 엔드포인트: GET /backups/monitoring/job/:identifier, GET /backups/monitoring/system/:identifier
+
+### Fixed (추가)
+- **Recovery Monitoring API server 필터 미적용 버그 수정**
+  - `server`, `serverType` 필터가 모니터링 조회 시 적용되지 않던 문제 해결
+  - 변경 전: `server=oracle-server&serverType=target` 전달해도 필터 무시됨
+  - 변경 후: 지정된 서버 필터 조건으로 정상 필터링
+
+### Added
+- **Backup Monitoring API 에러 응답 문서화**
+  - GET /backups/monitoring/job/:identifier: 에러 응답 섹션 추가
+    - `JOB-ERROR-01` (404): 조건에 맞는 Backup 작업을 찾을 수 없음
+    - `JOB-ERROR-20` (400): 작업 데이터 불완전 (backup/backupInfo 누락)
+  - GET /backups/monitoring/system/:identifier: 에러 응답 섹션 추가
+    - `JOB-ERROR-01` (404): 서버에 파티션/백업 작업 없음
+    - `JOB-ERROR-20` (400): 작업 데이터 불완전
+- **GET /recoveries/:identifier 필터 파라미터 문서화**
+  - 지원 필터: server, serverType, mode, partition, drive, status, repositoryID, repositoryType, repositoryPath, platform, backupName
+  - 필터 조건 불일치 시 에러 응답 추가: "작업은 존재하지만, 지정된 필터 조건과 일치하는 결과가 없습니다."
+- **GET /backups/:identifier 필터 파라미터 문서화**
+  - 필터 조건 불일치 시 에러 응답 추가
+
+### Changed
+- **Backup API 서버 필터 파라미터 통일**
+  - `serverName` → `server` 파라미터명 변경 (Recovery API와 일관성)
+  - `server` 파라미터는 서버 이름 또는 ID 모두 입력 가능
+  - 수정된 파일: backup/get.md, backup/list.md
+- **Backup API drive 필터 추가**
+  - Windows 드라이브 필터 지원 (`C:`, `D:` 등)
+  - 기존 `partition` 필터는 Linux 파티션용으로 유지
+  - 수정된 파일: backup/get.md, backup/list.md
+- **Backup API 응답 partition/drive 필드 구분**
+  - Linux 서버: `partition` 필드로 파티션 출력 (예: `/`, `/home`)
+  - Windows 서버: `drive` 필드로 드라이브 출력 (예: `C:`, `D:`)
+  - 수정된 파일: backup/get.md, backup/list.md
+- **Backup/Recovery API server 필터 개선**
+  - 숫자로만 구성된 경우 서버 ID로 판단하여 서버 이름으로 자동 변환
+  - 예: `server=12` → 서버 ID 12의 sSystemName으로 조회
+  - 서버 이름과 ID 모두 동일한 파라미터로 사용 가능
+- **Recovery API drive 필터 정규화**
+  - 대문자 변환 및 `:` 자동 추가 (예: `drive=c` → `C:`로 조회)
+  - Backup API와 동일한 정규화 로직 적용
+- **Recovery API partition/drive 필터 다중 값 지원**
+  - 콤마로 구분된 문자열 지원 (예: `partition=/,/boot`, `drive=c,d`)
+  - IN 절을 사용하여 여러 파티션/드라이브 동시 조회 가능
+- **Recovery API 조회 응답 from/to 필드 통일**
+  - Windows와 Linux 모두 동일한 `from`, `to` 필드 사용
+  - 변경 전 (Windows): `"drive": "C:"`
+  - 변경 후 (Windows): `"from": "C:", "to": "C:"`
+  - `drive` 필드 제거로 API 응답 스키마 통일
+  - 수정된 파일: recovery/list.md, recovery/get.md
+- **Recovery API overwrite 필드 타입 변경**
+  - `boolean` → `string` (일관성 개선)
+  - 등록 요청 (regist): `"overwrite": "allow"` / `"overwrite": "not allow"`
+  - 조회 응답 (list, get): `"overwrite": "Overwritten"` / `"overwrite": "Not overwritten"`
+  - 다른 옵션 필드들(`autoStart`, `afterReboot` 등)과 동일한 문자열 형식으로 통일
+  - 수정된 파일: recovery/regist.md, recovery/list.md, recovery/get.md
+- **API 에러 응답 형식 통일** (10개 파일)
+  - `error` 필드를 객체에서 문자열로 변경 (실제 API 응답 형식과 일치화)
+  - 변경 전: `"error": { "code": "...", "message": "..." }`
+  - 변경 후: `"error": "에러 메시지"`
+  - 수정된 파일:
+    - backup/list.md, backup/monitoring-job.md, backup/monitoring-system.md
+    - recovery/list.md, recovery/monitoring-job.md, recovery/monitoring-system.md
+    - file/list.md, license/list.md, schedule/list.md
+    - server/list.md, server/partitions.md
+    - user/list.md, zdm/list.md, zdm/repositories.md
+- **스케줄 타입 이름 변경** (displayMappings 일치화)
+  - `smart weekly on specific day` → `Smart Weekly (Specific Day of the Week)`
+  - `smart monthly on specific week and day` → `Smart Monthly (Specific Week and Day of the Week)`
+  - `smart monthly on specific date` → `Smart Monthly (Specific Date)`
+  - `smart custom monthly on specific month, week and day` → `Smart Custom (Specific Month, Week and Day of the Week)`
+  - `smart custom monthly on specific month and date` → `Smart Custom (Specific Month and Date)`
+- **스케줄 요일 필드 형식 변경**
+  - 숫자 (`"0"` ~ `"6"`) → 문자열 (`"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"`)
+- **Smart 스케줄 basic 필드 제한사항 문서화**
+  - type 7~11의 basic 필드에서 단일 값만 허용 (복수 선택 불가)
+  - 에러 메시지 개선: 현재 선택된 값 표시
+- **time 필드 검증 추가**
+  - type 7~11에서 time 형식 검증 (`"HH:mm"`, `"00:00"` ~ `"23:59"`)
+- **전체 API 문서 날짜 형식 통일** (39개 파일, 214개 항목)
+  - ISO 8601 형식 (`2025-01-15T02:00:00Z`) → `YYYY-MM-DD HH:mm:ss` 형식 (`2025-01-15 02:00:00`)
+  - 영향받는 필드: `timestamp`, `expiresAt`, `start`, `end`, `lastUpdated`, `createdAt`, `updatedAt` 등
+  - 실제 API 응답 형식과 문서 일치화
+- **Query String 네이밍 컨벤션 통일** (camelCase)
+  - GET /users: `user_name` → `userName` 파라미터명 변경
+  - 프로젝트 전체 camelCase 통일
+
+---
+
+## [CLI v1.0.3] - 2026-01-16
+
+### Added
+- `server delete` 명령어 문서 추가
+
+### Changed
+- 파라미터 별칭 일관성 개선 및 변경
+  - `recovery regist`: `--center` 별칭 `-c` 추가, `--user` 별칭 `-u` 추가
+  - `backup regist`: `--center` 별칭 `-c` 추가
+  - `license list`: `--expiration-date` 별칭 `--exp` → `-expd` 변경
+  - `server list`: `--license-assign-only` 별칭 `-lao` → `-assigned` 변경, `--license-un-assign-only` 별칭 `-luao` → `-unassigned` 변경
+  - `token issue`: `--user-mail` 별칭 `-m` → `-mail` 변경
+  - `zdm list`: `--repository-only` 별칭 `-ro` → `-repo-only` 변경
+
+### Removed
+- `recovery regist`: `--description` 옵션 제거
+- `license regist`: `--description` 옵션 제거
+- `server list`: `--partition-only` 옵션 제거
+
+---
+
+## [API v1.0.3] - 2026-01-16
+
+### Added
+- GET /users/:identifier: 응답 필드 섹션 추가
+
+### Changed
+- GET /licenses: `id`, `name` 쿼리 파라미터 추가
+- POST /recoveries: `description` 필드 제거
+- GET /schedules: `page`, `limit` 페이지네이션 파라미터 추가
+- GET /zdms: `page`, `limit` 페이지네이션 파라미터 추가
+
+---
+
+## [API v1.0.3] - 2025-01-16
+
+### Changed
+- Backup API 문서 업데이트
+  - DELETE /backups/:identifier: `partition` 쿼리 파라미터 추가
+  - POST /backups: `description` 필드 제거, `rotation` 기본값 1 명시
+  - PUT /backups/:identifier: `description` 필드 제거
+  - GET /backups/monitoring/job/:identifier: `serverName`, `jobName`, `page`, `limit` 파라미터 추가
+
+---
+
 ## [Documentation] - 2025-01-14
 
 ### Added
@@ -74,13 +245,6 @@
   - `--scriptPath` → `--script-path`
   - `--scriptRun` → `--script-run`
   - 적용 파일: backup/regist, backup/update, recovery/regist, recovery/update
-
----
-
-## [API v1.0.4] - 개발 중
-
-### Added
-- (예정)
 
 ---
 

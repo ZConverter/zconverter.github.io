@@ -20,7 +20,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>DELETE /api/v1/servers/:identifier</code>
+  <code>DELETE /api/servers/:identifier</code>
 </div>
 
 </details>
@@ -30,11 +30,11 @@ lang: ko
 
 ```bash
 # 서버 ID로 삭제
-curl -X DELETE "https://api.example.com/api/v1/servers/1" \
+curl -X DELETE "https://api.example.com/api/servers/1" \
   -H "Authorization: Bearer <token>"
 
 # 서버 이름으로 삭제
-curl -X DELETE "https://api.example.com/api/v1/servers/server-01" \
+curl -X DELETE "https://api.example.com/api/servers/server-01" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -67,7 +67,7 @@ curl -X DELETE "https://api.example.com/api/v1/servers/server-01" \
     "message": "Server 및 관련 데이터가 성공적으로 삭제되었습니다. (disk: 2, network: 3, partition: 5, repository: 1)"
   },
   "message": "Server deletion completed",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -94,11 +94,8 @@ curl -X DELETE "https://api.example.com/api/v1/servers/server-01" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "SERVER_NOT_FOUND",
-    "message": "ID가 '999'인 Server를 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 Server를 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -112,10 +109,10 @@ curl -X DELETE "https://api.example.com/api/v1/servers/server-01" \
 | 테이블 | 설명 | 삭제 기준 |
 |--------|------|-----------|
 | `server_basic` | 서버 기본 정보 | 서버 ID 또는 이름 |
-| `server_disk` | 디스크 정보 | sSystemName 일치 |
-| `server_network` | 네트워크 정보 | sSystemName 일치 |
-| `server_partition` | 파티션 정보 | sSystemName 일치 |
-| `server_repository` | 레포지토리 정보 | sSystemName 일치 |
+| `server_disk` | 디스크 정보 | 대상 서버 정보 |
+| `server_network` | 네트워크 정보 | 대상 서버 정보 |
+| `server_partition` | 파티션 정보 | 대상 서버 정보 |
+| `server_repository` | 레포지토리 정보 | 대상 서버 정보 |
 
 </details>
 

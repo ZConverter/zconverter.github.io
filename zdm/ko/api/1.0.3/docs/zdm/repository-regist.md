@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>POST /api/v1/zdms/repositories</code>
+  <code>POST /api/zdms/repositories</code>
 </div>
 
 </details>
@@ -29,7 +29,7 @@ lang: ko
 
 ```bash
 # NFS 레포지토리 등록
-curl -X POST "https://api.example.com/api/v1/zdms/repositories" \
+curl -X POST "https://api.example.com/api/zdms/repositories" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -41,7 +41,7 @@ curl -X POST "https://api.example.com/api/v1/zdms/repositories" \
   }'
 
 # SMB 레포지토리 등록
-curl -X POST "https://api.example.com/api/v1/zdms/repositories" \
+curl -X POST "https://api.example.com/api/zdms/repositories" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -81,18 +81,10 @@ curl -X POST "https://api.example.com/api/v1/zdms/repositories" \
 
 ```json
 {
+  "requestID": "cc7d5af3-50b2-4ebd-a2f6-62c57614bbb7",
+  "message": "Repository Registration Results",
   "success": true,
-  "requestID": "req-abc123",
-  "data": {
-    "id": "1",
-    "center": "Main-Center",
-    "type": "nfs",
-    "remotePath": "/backup",
-    "localPath": "/mnt/backup",
-    "ip": "192.168.1.200"
-  },
-  "message": "Repository registered successfully",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2026-01-17 20:55:08"
 }
 ```
 
@@ -103,12 +95,10 @@ curl -X POST "https://api.example.com/api/v1/zdms/repositories" \
 
 | 필드 | 타입 | 설명 |
 |------|------|------|
-| `id` | string | 등록된 레포지토리 ID |
-| `center` | string | 센터 이름 |
-| `type` | string | 레포지토리 타입 |
-| `remotePath` | string | 원격 경로 |
-| `localPath` | string | 로컬 경로 |
-| `ip` | string | 레포지토리 서버 IP |
+| `requestID` | string | 요청 ID |
+| `message` | string | 결과 메시지 |
+| `success` | boolean | 성공 여부 |
+| `timestamp` | string | 응답 시간 |
 
 </details>
 
@@ -121,11 +111,8 @@ curl -X POST "https://api.example.com/api/v1/zdms/repositories" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "SMB 타입일 경우 account는 필수입니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "SMB 타입일 경우 account는 필수입니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -135,11 +122,8 @@ curl -X POST "https://api.example.com/api/v1/zdms/repositories" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "CENTER_NOT_FOUND",
-    "message": "ID가 '999'인 Center를 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 Center를 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

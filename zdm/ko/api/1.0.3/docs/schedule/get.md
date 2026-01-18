@@ -18,7 +18,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/schedules/:identifier</code>
+  <code>GET /api/schedules/:identifier</code>
 </div>
 
 </details>
@@ -28,7 +28,7 @@ lang: ko
 
 ```bash
 # 스케줄 ID로 조회
-curl -X GET "https://api.example.com/api/v1/schedules/1" \
+curl -X GET "https://api.example.com/api/schedules/1" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -61,11 +61,11 @@ curl -X GET "https://api.example.com/api/v1/schedules/1" \
     "type": "daily",
     "state": "enabled",
     "jobName": "daily-backup",
-    "lastRunTime": "2025-01-15T10:00:00Z",
+    "lastRunTime": "2025-01-15 10:00:00",
     "description": "Every day at 10:00"
   },
   "message": "Schedule information retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -96,11 +96,8 @@ curl -X GET "https://api.example.com/api/v1/schedules/1" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "SCHEDULE_NOT_FOUND",
-    "message": "ID가 '999'인 Schedule를 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 Schedule를 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

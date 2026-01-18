@@ -74,7 +74,7 @@ zdm-cli zdm list --output table
 | --connection | -conn | string | Optional | - | ZDM 연결 상태 | {% include zdm/connection-status.md %} |
 | --activation | -active | string | Optional | - | ZDM 활성화 상태 | {% include zdm/zdm-activation.md %} |
 | --repository | -repo | boolean | Optional | false | Repository 정보 추가조회 | - |
-| --repository-only | -ro | boolean | Optional | false | 대상 ZDM의 Repository 정보만 조회 | - |
+| --repository-only | -repo-only | boolean | Optional | false | 대상 ZDM의 Repository 정보만 조회 | - |
 | --detail | - | boolean | Optional | false | 상세 정보 조회 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 

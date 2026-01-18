@@ -74,7 +74,7 @@ zdm-cli recovery update --id 123 --change-name "MyRecovery" --platform aws --aft
 |----------|------|------|------|--------|------|--------|
 | --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --name | - | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
-| --change-name | -chn | string | Optional | - | 변경할 작업 이름 | - |
+| --change-name | -cn | string | Optional | - | 변경할 작업 이름 | - |
 | --platform | -pf | string | Optional | - | 변경할 플랫폼 | {% include zdm/platforms.md inline=true baremetal=true %} |
 | --schedule | -sc | string | Optional | - | 작업에 사용할 Schedule (JSON 파일 경로 또는 JSON 문자열) | - |
 | --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md %} |

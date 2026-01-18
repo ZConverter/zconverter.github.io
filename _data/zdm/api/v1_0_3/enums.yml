@@ -16,11 +16,11 @@ job-modes:
     - value: "increment"
       description: "증분 복구"
 
-# 덮어쓰기 옵션 - API 버전
+# 덮어쓰기 옵션 - API 버전 (boolean)
 overwrite-options:
-  - value: "allow"
+  - value: "true"
     description: "덮어쓰기 허용"
-  - value: "not allow"
+  - value: "false"
     description: "덮어쓰기 불허"
 
 # OS 유형 - API 버전 (cloud 포함)

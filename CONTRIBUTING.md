@@ -114,7 +114,7 @@ bundle exec jekyll serve --livereload
 bundle exec jekyll serve --drafts
 
 # 실 베포 사용 커맨드
-bundle exec jekyll serve --host 0.0.0.0 --port 4040 --livereload --incremental
+rm -rf _site .jekyll-cache && bundle exec jekyll serve --host 0.0.0.0 --port 4040 --livereload --incremental
 ```
 
 사이트는 http://localhost:4040 에서 접근 가능합니다.

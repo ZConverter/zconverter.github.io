@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>POST /api/v1/files/upload</code>
+  <code>POST /api/files/upload</code>
 </div>
 
 </details>
@@ -29,7 +29,7 @@ lang: ko
 
 ```bash
 # 단일 파일 업로드
-curl -X POST "https://api.example.com/api/v1/files/upload" \
+curl -X POST "https://api.example.com/api/files/upload" \
   -H "Authorization: Bearer <token>" \
   -F "file=@/path/to/file.txt"
 ```
@@ -68,7 +68,7 @@ curl -X POST "https://api.example.com/api/v1/files/upload" \
     }
   },
   "message": "File uploaded successfully",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -95,10 +95,7 @@ curl -X POST "https://api.example.com/api/v1/files/upload" \
 ```json
 {
   "success": false,
-  "error": {
-    "code": "FILE-ERROR-02",
-    "message": "파일 크기가 제한을 초과했습니다. (최대 10MB)"
-  }
+  "error": "파일 크기가 제한을 초과했습니다. (최대 10MB)"
 }
 ```
 
@@ -107,10 +104,7 @@ curl -X POST "https://api.example.com/api/v1/files/upload" \
 ```json
 {
   "success": false,
-  "error": {
-    "code": "FILE-ERROR-03",
-    "message": "파일 업로드 중 오류가 발생했습니다."
-  }
+  "error": "파일 업로드 중 오류가 발생했습니다."
 }
 ```
 

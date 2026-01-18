@@ -1,0 +1,74 @@
+# 스케줄 타입 정보
+# - overview.md의 표와 타입별 상세 예시에서 공통으로 사용
+
+- type: 0
+  name: "Once"
+  basic: "{ year, month, day, time }"
+  desc: "지정한 시간에 한번 실행"
+  smart: false
+
+- type: 1
+  name: "Every Minute"
+  basic: "{ time, interval: { minute } }"
+  desc: "지정한 시간부터 n분 마다 실행"
+  smart: false
+
+- type: 2
+  name: "Hourly"
+  basic: "{ time, interval: { hour } }"
+  desc: "지정한 시간부터 n시간 마다 실행"
+  smart: false
+
+- type: 3
+  name: "Daily"
+  basic: "{ time }"
+  desc: "매일 지정한 시간에 실행"
+  smart: false
+
+- type: 4
+  name: "Weekly"
+  basic: "{ day, time }"
+  desc: "매주 지정한 시간에 실행"
+  smart: false
+
+- type: 5
+  name: "Monthly (Specific Week and Day of the Week)"
+  basic: "{ week, day, time }"
+  desc: "매월 특정 주/요일 지정한 시간에 실행"
+  smart: false
+
+- type: 6
+  name: "Monthly on Specific Date"
+  basic: "{ day, time }"
+  desc: "매월 특정 일 지정한 시간에 실행"
+  smart: false
+
+- type: 7
+  name: "Smart Weekly (Specific Day of the Week)"
+  basic: "{ day, time }"
+  desc: "매주 특정 요일 지정한 시간에 실행"
+  smart: true
+
+- type: 8
+  name: "Smart Monthly (Specific Week and Day of the Week)"
+  basic: "{ week, day, time }"
+  desc: "매월 특정 주/요일 지정한 시간에 실행"
+  smart: true
+
+- type: 9
+  name: "Smart Monthly (Specific Date)"
+  basic: "{ day, time }"
+  desc: "매월 특정 일 지정한 시간에 실행"
+  smart: true
+
+- type: 10
+  name: "Smart Custom (Specific Month, Week and Day of the Week)"
+  basic: "{ month, week, day, time }"
+  desc: "특정 월/주/요일 지정한 시간에 실행"
+  smart: true
+
+- type: 11
+  name: "Smart Custom (Specific Month and Date)"
+  basic: "{ month, day, time }"
+  desc: "특정 월/일 지정한 시간에 실행"
+  smart: true

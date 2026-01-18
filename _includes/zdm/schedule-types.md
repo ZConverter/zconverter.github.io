@@ -1,12 +1,20 @@
 {%- comment -%}
-Schedule Types Include (Wrapper)
+Schedule Types Include
+데이터 소스: _data/zdm/api_0_3/schedule-types.yml
+
+사용법:
+{% include zdm/schedule-types.md %}              - 테이블 (Type, 이름, 설명)
+{% include zdm/schedule-types.md inline=true %}  - 인라인 (0, 1, 2, ...)
 {%- endcomment -%}
+{%- assign schedule_types = site.data.zdm.api.v1_0_3.schedule-types -%}
 {%- if include.inline -%}
-{%- include zdm/enum.html name="schedule-types" format="inline" -%}
-{%- elsif include.number and include.category -%}
-{%- include zdm/enum.html name="schedule-types" format="table" show_desc=true show_number=true show_category=true -%}
-{%- elsif include.category -%}
-{%- include zdm/enum.html name="schedule-types" format="table" show_desc=true show_category=true -%}
+{%- for item in schedule_types -%}
+`{{ item.type }}`{%- unless forloop.last -%}, {% endunless -%}
+{%- endfor -%}
 {%- else -%}
-{%- include zdm/enum.html name="schedule-types" format="table" show_desc=true -%}
+| Type | 이름 | 설명 |
+|------|------|------|
+{% for item in schedule_types -%}
+| {{ item.type }} | {{ item.name }} | {{ item.desc }} |
+{% endfor -%}
 {%- endif -%}

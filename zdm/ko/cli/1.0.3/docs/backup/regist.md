@@ -27,14 +27,14 @@ Backup 작업을 등록하는 명령어입니다.
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
-# 기본 Backup 등록 (압축 활성화, 암호화 비활성화)
+# 기본 Backup 등록 (압축: use, 암호화: not use 기본값)
 zdm-cli backup regist --server "web01" --mode "full" --repository-id 1
 
 # 압축 없이 Backup 등록
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --no-compression
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --compression "not use"
 
 # 암호화 활성화하여 Backup 등록
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --encryption
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --encryption "use"
 
 # 특정 파티션만 Backup 등록
 zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --partition "/,/home"
@@ -67,16 +67,15 @@ zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --individ
 |----------|------|------|------|--------|------|--------|
 | --server | - | string | Required | - | 작업 대상 Server | - |
 | --mode | - | string | Required | - | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
-| --center | - | string | Optional | config 설정값 | 작업 등록 Center | - |
+| --center | -c | string | Optional | config 설정값 | 작업 등록 Center | - |
 | --repository-id | -ri | number | Optional | config 설정값 | 작업시 사용할 Repository ID | - |
 | --repository-path | -rp | string | Optional | - | 작업시 사용할 Repository Path | - |
 | --partition | - | string | Optional | 전체 파티션 | 작업 대상 파티션 (콤마로 구분) | - |
-| --job-name | -name | string | Optional | - | 작업 이름 | - |
+| --job-name | -jn | string | Optional | - | 작업 이름 | - |
 | --schedule | -sc | string | Optional | - | 작업에 사용할 Schedule | - |
-| --description | -desc | string | Optional | - | 작업 설명 | - |
 | --rotation | -rot | number | Optional | 1 | 작업 반복횟수 | - |
-| --no-compression | -ncomp | boolean | Optional | false | 작업 압축 안함 | - |
-| --encryption | -enc | boolean | Optional | false | 작업 암호화 | - |
+| --compression | -comp | string | Optional | use | 작업 압축 사용 여부 | `use`, `not use` |
+| --encryption | -enc | string | Optional | not use | 작업 암호화 사용 여부 | `use`, `not use` |
 | --exclude-dir | -exd | string | Optional | - | 작업 제외 폴더 | - |
 | --exclude-partition | -exp | string | Optional | - | 작업 제외 partition | - |
 | --network-limit | -nl | number | Optional | 0 | 작업 Network 제한 속도 | - |

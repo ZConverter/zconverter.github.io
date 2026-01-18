@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/backups</code>
+  <code>GET /api/backups</code>
 </div>
 
 </details>
@@ -29,19 +29,19 @@ lang: ko
 
 ```bash
 # 전체 백업 작업 목록 조회
-curl -X GET "https://api.example.com/api/v1/backups" \
+curl -X GET "https://api.example.com/api/backups" \
   -H "Authorization: Bearer <token>"
 
 # 필터 적용 조회
-curl -X GET "https://api.example.com/api/v1/backups?mode=full&status=complete" \
+curl -X GET "https://api.example.com/api/backups?mode=full&status=complete" \
   -H "Authorization: Bearer <token>"
 
 # 상세 정보 포함 조회
-curl -X GET "https://api.example.com/api/v1/backups?detail=true" \
+curl -X GET "https://api.example.com/api/backups?detail=true" \
   -H "Authorization: Bearer <token>"
 
 # 페이지네이션 적용 조회
-curl -X GET "https://api.example.com/api/v1/backups?page=1&limit=10" \
+curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -54,9 +54,10 @@ curl -X GET "https://api.example.com/api/v1/backups?page=1&limit=10" \
 |----------|------|------|------|--------|------|--------|
 | `jobId` | Query | number | Optional | - | 작업 ID 필터 | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
-| `serverName` | Query | string | Optional | - | 작업 대상 서버 이름 필터 | - |
+| `server` | Query | string | Optional | - | 작업 대상 서버 이름/ID 필터 | - |
 | `mode` | Query | string | Optional | - | 작업 모드 필터 | {% include zdm/job-modes.md backup=true %} |
-| `partition` | Query | string | Optional | - | 작업 대상 파티션 필터 | - |
+| `partition` | Query | string | Optional | - | 파티션 필터 (Linux) | - |
+| `drive` | Query | string | Optional | - | 드라이브 필터 (Windows) | - |
 | `status` | Query | string | Optional | - | 작업 상태 필터 | {% include zdm/job-status.md %} |
 | `repositoryID` | Query | number | Optional | - | 레포지토리 ID 필터 | - |
 | `repositoryType` | Query | string | Optional | - | 레포지토리 타입 필터 | {% include zdm/repository-types.md %} |
@@ -71,7 +72,7 @@ curl -X GET "https://api.example.com/api/v1/backups?page=1&limit=10" \
 <summary><strong>응답 예시</strong></summary>
 
 <details markdown="1" open>
-<summary>기본 응답 (200 OK) - 페이지네이션 미적용</summary>
+<summary>기본 응답 - Linux (200 OK) - 페이지네이션 미적용</summary>
 
 ```json
 {
@@ -101,13 +102,13 @@ curl -X GET "https://api.example.com/api/v1/backups?page=1&limit=10" \
           "status": {
             "current": "complete",
             "time": {
-              "start": "2025-01-15T02:00:00Z",
+              "start": "2025-01-15 02:00:00",
               "elapsed": "00:30:00",
-              "end": "2025-01-15T02:30:00Z"
+              "end": "2025-01-15 02:30:00"
             }
           }
         },
-        "lastUpdated": "2025-01-15T02:30:00Z"
+        "lastUpdated": "2025-01-15 02:30:00"
       },
       "repository": {
         "id": "1",
@@ -117,7 +118,60 @@ curl -X GET "https://api.example.com/api/v1/backups?page=1&limit=10" \
     }
   ],
   "message": "Backup job list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary>기본 응답 - Windows (200 OK) - 페이지네이션 미적용</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": [
+    {
+      "system": {
+        "id": "2",
+        "name": "win-server-01",
+        "os": "Windows"
+      },
+      "job": {
+        "info": {
+          "id": "2",
+          "name": "windows-backup",
+          "mode": "full",
+          "drive": "C:",
+          "schedule": {
+            "basic": {
+              "id": "2",
+              "type": "weekly",
+              "description": "Every Sunday at 03:00"
+            },
+            "advanced": "-"
+          },
+          "status": {
+            "current": "complete",
+            "time": {
+              "start": "2025-01-12 03:00:00",
+              "elapsed": "00:45:00",
+              "end": "2025-01-12 03:45:00"
+            }
+          }
+        },
+        "lastUpdated": "2025-01-12 03:45:00"
+      },
+      "repository": {
+        "id": "1",
+        "type": "cifs",
+        "path": "\\\\backup-server\\backups"
+      }
+    }
+  ],
+  "message": "Backup job list",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -154,13 +208,13 @@ curl -X GET "https://api.example.com/api/v1/backups?page=1&limit=10" \
           "status": {
             "current": "complete",
             "time": {
-              "start": "2025-01-15T02:00:00Z",
+              "start": "2025-01-15 02:00:00",
               "elapsed": "00:30:00",
-              "end": "2025-01-15T02:30:00Z"
+              "end": "2025-01-15 02:30:00"
             }
           }
         },
-        "lastUpdated": "2025-01-15T02:30:00Z"
+        "lastUpdated": "2025-01-15 02:30:00"
       },
       "repository": {
         "id": "1",
@@ -178,7 +232,7 @@ curl -X GET "https://api.example.com/api/v1/backups?page=1&limit=10" \
     "hasPreviousPage": false
   },
   "message": "Backup job list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -221,9 +275,9 @@ curl -X GET "https://api.example.com/api/v1/backups?page=1&limit=10" \
           "status": {
             "current": "complete",
             "time": {
-              "start": "2025-01-15T02:00:00Z",
+              "start": "2025-01-15 02:00:00",
               "elapsed": "00:30:00",
-              "end": "2025-01-15T02:30:00Z"
+              "end": "2025-01-15 02:30:00"
             }
           },
           "options": {
@@ -237,7 +291,7 @@ curl -X GET "https://api.example.com/api/v1/backups?page=1&limit=10" \
             }
           }
         },
-        "lastUpdated": "2025-01-15T02:30:00Z"
+        "lastUpdated": "2025-01-15 02:30:00"
       },
       "repository": {
         "id": "1",
@@ -247,7 +301,7 @@ curl -X GET "https://api.example.com/api/v1/backups?page=1&limit=10" \
     }
   ],
   "message": "Backup job list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -270,7 +324,8 @@ curl -X GET "https://api.example.com/api/v1/backups?page=1&limit=10" \
 | `job.info.id` | string | - | 백업 작업 ID |
 | `job.info.name` | string | - | 작업 이름 |
 | `job.info.mode` | string | - | 작업 모드 (`full`, `increment`, `smart`) |
-| `job.info.partition` | string | - | 대상 파티션/드라이브 |
+| `job.info.partition` | string | Linux | 대상 파티션 (Linux 서버) |
+| `job.info.drive` | string | Windows | 대상 드라이브 (Windows 서버) |
 | `job.info.schedule` | object | - | 스케줄 정보 (스케줄 설정시에만 포함) |
 | `job.info.schedule.basic` | object/string | - | 기본 스케줄 정보 |
 | `job.info.schedule.advanced` | object/string | - | 고급 스케줄 정보 (Smart 스케줄만) |
@@ -294,6 +349,37 @@ curl -X GET "https://api.example.com/api/v1/backups?page=1&limit=10" \
 | `pagination.itemsPerPage` | number | page/limit | 페이지당 항목 수 |
 | `pagination.hasNextPage` | boolean | page/limit | 다음 페이지 존재 여부 |
 | `pagination.hasPreviousPage` | boolean | page/limit | 이전 페이지 존재 여부 |
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 응답</strong></summary>
+
+**인증 실패 (401 Unauthorized)**
+
+유효하지 않은 토큰이거나 토큰이 만료된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "토큰이 만료되었습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**잘못된 요청 파라미터 (400 Bad Request)**
+
+유효하지 않은 필터 값이 전달된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "유효하지 않은 'mode' 값입니다. 허용된 값: full, increment, smart",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
 
 </details>
 

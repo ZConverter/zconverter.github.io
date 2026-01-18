@@ -20,7 +20,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/servers</code>
+  <code>GET /api/servers</code>
 </div>
 
 </details>
@@ -30,19 +30,19 @@ lang: ko
 
 ```bash
 # 전체 서버 목록 조회
-curl -X GET "https://api.example.com/api/v1/servers" \
+curl -X GET "https://api.example.com/api/servers" \
   -H "Authorization: Bearer <token>"
 
 # 필터 적용 조회
-curl -X GET "https://api.example.com/api/v1/servers?mode=source&os=lin&connection=connect" \
+curl -X GET "https://api.example.com/api/servers?mode=source&os=lin&connection=connect" \
   -H "Authorization: Bearer <token>"
 
 # 추가 정보 포함 조회
-curl -X GET "https://api.example.com/api/v1/servers?disk=true&network=true&detail=true" \
+curl -X GET "https://api.example.com/api/servers?disk=true&network=true&detail=true" \
   -H "Authorization: Bearer <token>"
 
 # 페이지네이션 적용 조회
-curl -X GET "https://api.example.com/api/v1/servers?page=1&limit=10" \
+curl -X GET "https://api.example.com/api/servers?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -97,11 +97,11 @@ curl -X GET "https://api.example.com/api/v1/servers?page=1&limit=10" \
       "status": {
         "connect": "connect"
       },
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "Server information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -134,7 +134,7 @@ curl -X GET "https://api.example.com/api/v1/servers?page=1&limit=10" \
       "status": {
         "connect": "connect"
       },
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "pagination": {
@@ -146,7 +146,7 @@ curl -X GET "https://api.example.com/api/v1/servers?page=1&limit=10" \
     "hasPreviousPage": false
   },
   "message": "Server information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -189,11 +189,11 @@ curl -X GET "https://api.example.com/api/v1/servers?page=1&limit=10" \
         "cpuCount": "48",
         "memory": "137438953472 (128.0 GB)"
       },
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "Server information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -235,14 +235,14 @@ curl -X GET "https://api.example.com/api/v1/servers?page=1&limit=10" \
             "raw": 512110190592,
             "formatted": "477.0 GB"
           },
-          "lastUpdated": "2025-01-15T10:30:00Z"
+          "lastUpdated": "2025-01-15 10:30:00"
         }
       ],
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "Server information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -282,14 +282,14 @@ curl -X GET "https://api.example.com/api/v1/servers?page=1&limit=10" \
           "subNet": "255.255.255.0",
           "gateWay": "192.168.1.1",
           "macAddress": "00:1A:2B:3C:4D:5E",
-          "lastUpdated": "2025-01-15T10:30:00Z"
+          "lastUpdated": "2025-01-15 10:30:00"
         }
       ],
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "Server information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -341,14 +341,14 @@ curl -X GET "https://api.example.com/api/v1/servers?page=1&limit=10" \
           },
           "usage": 50,
           "fileSystem": "ext4",
-          "lastUpdated": "2025-01-15T10:30:00Z"
+          "lastUpdated": "2025-01-15 10:30:00"
         }
       ],
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "Server information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -404,14 +404,14 @@ curl -X GET "https://api.example.com/api/v1/servers?page=1&limit=10" \
           "remoteUser": "admin",
           "ipAddress": ["192.168.1.200"],
           "port": "2049",
-          "lastUpdated": "2025-01-15T10:30:00Z"
+          "lastUpdated": "2025-01-15 10:30:00"
         }
       ],
-      "lastUpdated": "2025-01-15T10:30:00Z"
+      "lastUpdated": "2025-01-15 10:30:00"
     }
   ],
   "message": "Server information list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -540,6 +540,37 @@ curl -X GET "https://api.example.com/api/v1/servers?page=1&limit=10" \
 | `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 |
 
 </details>
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 응답</strong></summary>
+
+**인증 실패 (401 Unauthorized)**
+
+유효하지 않은 토큰이거나 토큰이 만료된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "토큰이 만료되었습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**잘못된 요청 파라미터 (400 Bad Request)**
+
+유효하지 않은 필터 값이 전달된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "유효하지 않은 'mode' 값입니다. 허용된 값: source, target",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
 
 </details>
 

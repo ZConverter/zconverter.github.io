@@ -88,5 +88,32 @@
       <p>&copy; {{ 'now' | date: "%Y" }} ZConverter. All rights reserved.</p>
     </div>
   </footer>
+
+  <script>
+  (function() {
+    function openDetailsById(hash) {
+      if (!hash) return;
+      var target = document.querySelector(hash);
+      if (target && target.tagName === 'DETAILS') {
+        target.open = true;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // 페이지 로드 시 URL 해시가 있으면 해당 details 열기
+    document.addEventListener('DOMContentLoaded', function() {
+      openDetailsById(window.location.hash);
+    });
+
+    // 페이지 내 앵커 클릭 시 details 열기
+    document.addEventListener('click', function(e) {
+      var link = e.target.closest('a[href^="#"]');
+      if (link) {
+        var targetId = link.getAttribute('href');
+        openDetailsById(targetId);
+      }
+    });
+  })();
+  </script>
 </body>
 </html>

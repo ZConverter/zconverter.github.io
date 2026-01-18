@@ -33,8 +33,8 @@ zdm-cli license regist --center "zdm-center-01" --key "XXXX-XXXX-XXXX-XXXX"
 # 별칭을 사용한 등록
 zdm-cli license regist -c "zdm-center-01" -k "XXXX-XXXX-XXXX-XXXX"
 
-# 이름과 설명을 포함한 라이센스 등록
-zdm-cli license regist -c "zdm-center-01" -k "XXXX-XXXX-XXXX-XXXX" -n "Production License" -d "Main production license"
+# 이름을 포함한 라이센스 등록
+zdm-cli license regist -c "zdm-center-01" -k "XXXX-XXXX-XXXX-XXXX" -n "Production License"
 
 # 사용자 정보를 포함한 등록
 zdm-cli license regist --center "zdm-center-01" --key "XXXX-XXXX-XXXX-XXXX" --user "admin@example.com" --name "Production License"
@@ -54,7 +54,6 @@ zdm-cli license regist -c "zdm-center-01" -k "XXXX-XXXX-XXXX-XXXX" --output json
 | --key | -k | string | Required | - | 등록할 License Key | - |
 | --user | -u | string | Optional | - | 요청 사용자 ID 또는 메일 | - |
 | --name | -n | string | Optional | - | 등록할 License Name | - |
-| --description | -d | string | Optional | - | 등록할 License 설명 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>

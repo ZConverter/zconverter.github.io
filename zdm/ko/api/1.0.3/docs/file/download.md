@@ -18,7 +18,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/files/download/:fileName</code>
+  <code>GET /api/files/download/:fileName</code>
 </div>
 
 </details>
@@ -28,7 +28,7 @@ lang: ko
 
 ```bash
 # 파일 다운로드
-curl -X GET "https://api.example.com/api/v1/files/download/file-1705312200000-123456789-document.txt" \
+curl -X GET "https://api.example.com/api/files/download/file-1705312200000-123456789-document.txt" \
   -H "Authorization: Bearer <token>" \
   -o downloaded-file.txt
 ```
@@ -63,11 +63,8 @@ curl -X GET "https://api.example.com/api/v1/files/download/file-1705312200000-12
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "FILE_NOT_FOUND",
-    "message": "요청한 파일을 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "요청한 파일을 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -77,11 +74,8 @@ curl -X GET "https://api.example.com/api/v1/files/download/file-1705312200000-12
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "fileName이 누락 되었습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "fileName이 누락 되었습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

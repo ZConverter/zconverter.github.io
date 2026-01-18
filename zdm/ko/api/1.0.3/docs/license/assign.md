@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>PUT /api/v1/licenses/assign</code>
+  <code>PUT /api/licenses/assign</code>
 </div>
 
 </details>
@@ -29,7 +29,7 @@ lang: ko
 
 ```bash
 # ID로 할당
-curl -X PUT "https://api.example.com/api/v1/licenses/assign" \
+curl -X PUT "https://api.example.com/api/licenses/assign" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -38,7 +38,7 @@ curl -X PUT "https://api.example.com/api/v1/licenses/assign" \
   }'
 
 # 이름으로 할당
-curl -X PUT "https://api.example.com/api/v1/licenses/assign" \
+curl -X PUT "https://api.example.com/api/licenses/assign" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -92,7 +92,7 @@ curl -X PUT "https://api.example.com/api/v1/licenses/assign" \
     }
   },
   "message": "License assigned successfully",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -122,11 +122,8 @@ curl -X PUT "https://api.example.com/api/v1/licenses/assign" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "SERVER_NOT_FOUND",
-    "message": "ID가 '999'인 Server를 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 Server를 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -136,11 +133,8 @@ curl -X PUT "https://api.example.com/api/v1/licenses/assign" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "LICENSE_NOT_FOUND",
-    "message": "ID가 '999'인 License를 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 License를 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

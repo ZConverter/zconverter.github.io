@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/recoveries/:identifier</code>
+  <code>GET /api/recoveries/:identifier</code>
 </div>
 
 </details>
@@ -29,15 +29,15 @@ lang: ko
 
 ```bash
 # 복구 ID로 조회
-curl -X GET "https://api.example.com/api/v1/recoveries/1" \
+curl -X GET "https://api.example.com/api/recoveries/1" \
   -H "Authorization: Bearer <token>"
 
 # 복구 이름으로 조회
-curl -X GET "https://api.example.com/api/v1/recoveries/daily-recovery" \
+curl -X GET "https://api.example.com/api/recoveries/daily-recovery" \
   -H "Authorization: Bearer <token>"
 
 # 상세 정보 포함 조회
-curl -X GET "https://api.example.com/api/v1/recoveries/1?detail=true" \
+curl -X GET "https://api.example.com/api/recoveries/1?detail=true" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -49,6 +49,17 @@ curl -X GET "https://api.example.com/api/v1/recoveries/1?detail=true" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 복구 ID (숫자) 또는 복구 이름 | - |
+| `server` | Query | string | Optional | - | 작업 대상 서버 이름/ID 필터 | - |
+| `serverType` | Query | string | Optional | - | 서버 타입 필터 | {% include zdm/server-modes.md %} |
+| `mode` | Query | string | Optional | - | 작업 모드 필터 | {% include zdm/job-modes.md %} |
+| `partition` | Query | string | Optional | - | 파티션 필터 (Linux) | - |
+| `drive` | Query | string | Optional | - | 드라이브 필터 (Windows) | - |
+| `status` | Query | string | Optional | - | 작업 상태 필터 | {% include zdm/job-status.md %} |
+| `repositoryID` | Query | number | Optional | - | 레포지토리 ID 필터 | - |
+| `repositoryType` | Query | string | Optional | - | 레포지토리 타입 필터 | {% include zdm/repository-types.md %} |
+| `repositoryPath` | Query | string | Optional | - | 레포지토리 경로 필터 | - |
+| `platform` | Query | string | Optional | - | 플랫폼 필터 | {% include zdm/platforms.md inline=true %} |
+| `backupName` | Query | string | Optional | - | 백업 작업 이름 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
 
 </details>
@@ -57,7 +68,7 @@ curl -X GET "https://api.example.com/api/v1/recoveries/1?detail=true" \
 <summary><strong>응답 예시</strong></summary>
 
 <details markdown="1" open>
-<summary>기본 응답 (detail=false)</summary>
+<summary>기본 응답 - Linux (detail=false)</summary>
 
 **성공 응답 (200 OK)**
 
@@ -92,35 +103,124 @@ curl -X GET "https://api.example.com/api/v1/recoveries/1?detail=true" \
         "status": {
           "current": "complete",
           "time": {
-            "start": "2025-01-15T10:00:00Z",
+            "start": "2025-01-15 10:00:00",
             "elapsed": "00:30:00",
-            "end": "2025-01-15T10:30:00Z"
+            "end": "2025-01-15 10:30:00"
           }
         },
-        "lastUpdated": "2025-01-15T10:30:00Z"
+        "lastUpdated": "2025-01-15 10:30:00"
       },
       "detail": [
         {
-          "partition": "/",
-          "device": "/dev/sda1",
+          "from": "/",
+          "to": "/",
+          "targetDevice": "/dev/sda1",
           "mode": "full",
           "backup": {
             "jobName": "daily-backup",
             "fileName": "backup-2025-01-15.img",
-            "latest": "true"
+            "latest": "use"
           },
           "repository": {
             "id": "1",
             "path": "/backup",
             "type": "nfs"
           },
-          "lastUpdated": "2025-01-15T10:30:00Z"
+          "lastUpdated": "2025-01-15 10:30:00"
         }
       ]
     }
   },
   "message": "Recovery job retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary>기본 응답 - Windows (detail=false)</summary>
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "system": {
+      "source": {
+        "id": "3",
+        "name": "win-source-server",
+        "os": "Windows Server 2019"
+      },
+      "target": {
+        "id": "4",
+        "name": "win-target-server",
+        "os": "Windows Server 2019"
+      }
+    },
+    "job": {
+      "info": {
+        "id": "2",
+        "name": "windows-recovery",
+        "schedule": {
+          "basic": {
+            "id": "2",
+            "type": "weekly",
+            "description": "Every Sunday at 02:00"
+          }
+        },
+        "status": {
+          "current": "complete",
+          "time": {
+            "start": "2025-01-12 02:00:00",
+            "elapsed": "01:00:00",
+            "end": "2025-01-12 03:00:00"
+          }
+        },
+        "lastUpdated": "2025-01-12 03:00:00"
+      },
+      "detail": [
+        {
+          "from": "C:",
+          "to": "C:",
+          "targetDevice": "\\Device\\Harddisk0\\Partition2",
+          "mode": "full",
+          "backup": {
+            "jobName": "windows-backup",
+            "fileName": "backup-2025-01-12.img",
+            "latest": "use"
+          },
+          "repository": {
+            "id": "2",
+            "path": "\\\\nas\\backup",
+            "type": "cifs"
+          },
+          "lastUpdated": "2025-01-12 03:00:00"
+        },
+        {
+          "from": "D:",
+          "to": "D:",
+          "targetDevice": "\\Device\\Harddisk0\\Partition3",
+          "mode": "full",
+          "backup": {
+            "jobName": "windows-backup",
+            "fileName": "backup-2025-01-12-D.img",
+            "latest": "use"
+          },
+          "repository": {
+            "id": "2",
+            "path": "\\\\nas\\backup",
+            "type": "cifs"
+          },
+          "lastUpdated": "2025-01-12 03:00:00"
+        }
+      ]
+    }
+  },
+  "message": "Recovery job retrieved",
+  "timestamp": "2025-01-12 03:00:00"
 }
 ```
 
@@ -174,12 +274,12 @@ curl -X GET "https://api.example.com/api/v1/recoveries/1?detail=true" \
         "status": {
           "current": "complete",
           "time": {
-            "start": "2025-01-15T10:00:00Z",
+            "start": "2025-01-15 10:00:00",
             "elapsed": "00:30:00",
-            "end": "2025-01-15T10:30:00Z"
+            "end": "2025-01-15 10:30:00"
           }
         },
-        "lastUpdated": "2025-01-15T10:30:00Z",
+        "lastUpdated": "2025-01-15 10:30:00",
         "platform": "vmware",
         "kernal": "5.15.0-generic",
         "networkSpeed": "0",
@@ -194,22 +294,23 @@ curl -X GET "https://api.example.com/api/v1/recoveries/1?detail=true" \
       },
       "detail": [
         {
-          "partition": "/",
-          "device": "/dev/sda1",
+          "from": "/",
+          "to": "/",
+          "targetDevice": "/dev/sda1",
           "mode": "full",
           "backup": {
             "jobName": "daily-backup",
             "fileName": "backup-2025-01-15.img",
-            "latest": "true"
+            "latest": "use"
           },
           "repository": {
             "id": "1",
             "path": "/backup",
             "type": "nfs"
           },
-          "lastUpdated": "2025-01-15T10:30:00Z",
+          "lastUpdated": "2025-01-15 10:30:00",
           "option": {
-            "overwrite": "allow",
+            "overwrite": "Overwritten",
             "fileSystem": "ext4"
           }
         }
@@ -217,7 +318,7 @@ curl -X GET "https://api.example.com/api/v1/recoveries/1?detail=true" \
     }
   },
   "message": "Recovery job retrieved",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -259,9 +360,9 @@ curl -X GET "https://api.example.com/api/v1/recoveries/1?detail=true" \
 | `job.info.script.run` | string | detail | 스크립트 실행 타이밍 |
 | `job.info.afterReboot` | string | detail | 작업 후 부팅 모드 |
 | `job.info.notification.mail` | string | detail | 알림 이메일 |
-| `job.detail[].partition` | string | - | 대상 파티션 (Linux) |
-| `job.detail[].drive` | string | - | 대상 드라이브 (Windows) |
-| `job.detail[].device` | string | - | 디바이스 경로 |
+| `job.detail[].from` | string | - | 소스 파티션/드라이브 |
+| `job.detail[].to` | string | - | 타겟 파티션/드라이브 |
+| `job.detail[].targetDevice` | string | - | 타겟 디바이스 경로 |
 | `job.detail[].mode` | string | - | 작업 모드 |
 | `job.detail[].backup.jobName` | string | - | 백업 작업 이름 |
 | `job.detail[].backup.fileName` | string | - | 백업 파일 이름 |
@@ -280,15 +381,27 @@ curl -X GET "https://api.example.com/api/v1/recoveries/1?detail=true" \
 
 **복구 작업을 찾을 수 없음 (404 Not Found)**
 
+지정한 ID 또는 Name의 복구 작업이 존재하지 않는 경우 반환됩니다.
+
 ```json
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "RECOVERY_NOT_FOUND",
-    "message": "ID가 '999'인 Recovery를 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 Recovery 작업을 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**필터 조건 불일치 (404 Not Found)**
+
+복구 작업은 존재하지만, 지정한 필터 조건과 일치하는 결과가 없는 경우 반환됩니다.
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "Name이 'daily-recovery'인 Recovery 작업은 존재하지만, 지정된 필터 조건과 일치하는 결과가 없습니다.",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

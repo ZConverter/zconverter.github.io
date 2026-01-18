@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>PUT /api/v1/users/:identifier</code>
+  <code>PUT /api/users/:identifier</code>
 </div>
 
 </details>
@@ -29,7 +29,7 @@ lang: ko
 
 ```bash
 # 사용자 ID로 업데이트
-curl -X PUT "https://api.example.com/api/v1/users/1" \
+curl -X PUT "https://api.example.com/api/users/1" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -39,7 +39,7 @@ curl -X PUT "https://api.example.com/api/v1/users/1" \
   }'
 
 # 이메일로 업데이트
-curl -X PUT "https://api.example.com/api/v1/users/user@example.com" \
+curl -X PUT "https://api.example.com/api/users/user@example.com" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -119,7 +119,7 @@ curl -X PUT "https://api.example.com/api/v1/users/user@example.com" \
     }
   },
   "message": "User information updated successfully",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -149,11 +149,8 @@ curl -X PUT "https://api.example.com/api/v1/users/user@example.com" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "USER_NOT_FOUND",
-    "message": "ID가 '999'인 User를 찾을 수 없습니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "ID가 '999'인 User를 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -163,11 +160,8 @@ curl -X PUT "https://api.example.com/api/v1/users/user@example.com" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "username은 최소 2자 이상이어야 합니다"
-  },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "error": "username은 최소 2자 이상이어야 합니다",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 

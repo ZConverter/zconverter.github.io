@@ -19,7 +19,7 @@ lang: ko
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>GET /api/v1/recoveries</code>
+  <code>GET /api/recoveries</code>
 </div>
 
 </details>
@@ -29,19 +29,19 @@ lang: ko
 
 ```bash
 # 전체 복구 작업 목록 조회
-curl -X GET "https://api.example.com/api/v1/recoveries" \
+curl -X GET "https://api.example.com/api/recoveries" \
   -H "Authorization: Bearer <token>"
 
 # 필터 적용 조회
-curl -X GET "https://api.example.com/api/v1/recoveries?mode=full&status=complete" \
+curl -X GET "https://api.example.com/api/recoveries?mode=full&status=complete" \
   -H "Authorization: Bearer <token>"
 
 # 상세 정보 포함 조회
-curl -X GET "https://api.example.com/api/v1/recoveries?detail=true" \
+curl -X GET "https://api.example.com/api/recoveries?detail=true" \
   -H "Authorization: Bearer <token>"
 
 # 페이지네이션 적용 조회
-curl -X GET "https://api.example.com/api/v1/recoveries?page=1&limit=10" \
+curl -X GET "https://api.example.com/api/recoveries?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -75,7 +75,7 @@ curl -X GET "https://api.example.com/api/v1/recoveries?page=1&limit=10" \
 <summary><strong>응답 예시</strong></summary>
 
 <details markdown="1" open>
-<summary>기본 응답 (200 OK) - 페이지네이션 미적용</summary>
+<summary>기본 응답 - Linux (200 OK) - 페이지네이션 미적용</summary>
 
 ```json
 {
@@ -109,36 +109,108 @@ curl -X GET "https://api.example.com/api/v1/recoveries?page=1&limit=10" \
           "status": {
             "current": "complete",
             "time": {
-              "start": "2025-01-15T10:00:00Z",
+              "start": "2025-01-15 10:00:00",
               "elapsed": "00:30:00",
-              "end": "2025-01-15T10:30:00Z"
+              "end": "2025-01-15 10:30:00"
             }
           },
-          "lastUpdated": "2025-01-15T10:30:00Z"
+          "lastUpdated": "2025-01-15 10:30:00"
         },
         "detail": [
           {
-            "partition": "/",
-            "device": "/dev/sda1",
+            "from": "/",
+            "to": "/",
+            "targetDevice": "/dev/sda1",
             "mode": "full",
             "backup": {
               "jobName": "daily-backup",
               "fileName": "backup-2025-01-15.img",
-              "latest": "true"
+              "latest": "use"
             },
             "repository": {
               "id": "1",
               "path": "/backup",
               "type": "nfs"
             },
-            "lastUpdated": "2025-01-15T10:30:00Z"
+            "lastUpdated": "2025-01-15 10:30:00"
           }
         ]
       }
     }
   ],
   "message": "Recovery job list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary>기본 응답 - Windows (200 OK) - 페이지네이션 미적용</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": [
+    {
+      "system": {
+        "source": {
+          "id": "3",
+          "name": "win-source-server",
+          "os": "Windows Server 2019"
+        },
+        "target": {
+          "id": "4",
+          "name": "win-target-server",
+          "os": "Windows Server 2019"
+        }
+      },
+      "job": {
+        "info": {
+          "id": "2",
+          "name": "windows-recovery",
+          "schedule": {
+            "basic": {
+              "id": "2",
+              "type": "weekly",
+              "description": "Every Sunday at 02:00"
+            }
+          },
+          "status": {
+            "current": "complete",
+            "time": {
+              "start": "2025-01-12 02:00:00",
+              "elapsed": "01:00:00",
+              "end": "2025-01-12 03:00:00"
+            }
+          },
+          "lastUpdated": "2025-01-12 03:00:00"
+        },
+        "detail": [
+          {
+            "from": "C:",
+            "to": "C:",
+            "targetDevice": "\\Device\\Harddisk0\\Partition2",
+            "mode": "full",
+            "backup": {
+              "jobName": "windows-backup",
+              "fileName": "backup-2025-01-12.img",
+              "latest": "use"
+            },
+            "repository": {
+              "id": "2",
+              "path": "\\\\nas\\backup",
+              "type": "cifs"
+            },
+            "lastUpdated": "2025-01-12 03:00:00"
+          }
+        ]
+      }
+    }
+  ],
+  "message": "Recovery job list",
+  "timestamp": "2025-01-12 03:00:00"
 }
 ```
 
@@ -179,29 +251,30 @@ curl -X GET "https://api.example.com/api/v1/recoveries?page=1&limit=10" \
           "status": {
             "current": "complete",
             "time": {
-              "start": "2025-01-15T10:00:00Z",
+              "start": "2025-01-15 10:00:00",
               "elapsed": "00:30:00",
-              "end": "2025-01-15T10:30:00Z"
+              "end": "2025-01-15 10:30:00"
             }
           },
-          "lastUpdated": "2025-01-15T10:30:00Z"
+          "lastUpdated": "2025-01-15 10:30:00"
         },
         "detail": [
           {
-            "partition": "/",
-            "device": "/dev/sda1",
+            "from": "/",
+            "to": "/",
+            "targetDevice": "/dev/sda1",
             "mode": "full",
             "backup": {
               "jobName": "daily-backup",
               "fileName": "backup-2025-01-15.img",
-              "latest": "true"
+              "latest": "use"
             },
             "repository": {
               "id": "1",
               "path": "/backup",
               "type": "nfs"
             },
-            "lastUpdated": "2025-01-15T10:30:00Z"
+            "lastUpdated": "2025-01-15 10:30:00"
           }
         ]
       }
@@ -216,7 +289,7 @@ curl -X GET "https://api.example.com/api/v1/recoveries?page=1&limit=10" \
     "hasPreviousPage": false
   },
   "message": "Recovery job list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -269,12 +342,12 @@ curl -X GET "https://api.example.com/api/v1/recoveries?page=1&limit=10" \
           "status": {
             "current": "complete",
             "time": {
-              "start": "2025-01-15T10:00:00Z",
+              "start": "2025-01-15 10:00:00",
               "elapsed": "00:30:00",
-              "end": "2025-01-15T10:30:00Z"
+              "end": "2025-01-15 10:30:00"
             }
           },
-          "lastUpdated": "2025-01-15T10:30:00Z",
+          "lastUpdated": "2025-01-15 10:30:00",
           "platform": "vmware",
           "kernal": "5.15.0-generic",
           "networkSpeed": "0",
@@ -289,22 +362,23 @@ curl -X GET "https://api.example.com/api/v1/recoveries?page=1&limit=10" \
         },
         "detail": [
           {
-            "partition": "/",
-            "device": "/dev/sda1",
+            "from": "/",
+            "to": "/",
+            "targetDevice": "/dev/sda1",
             "mode": "full",
             "backup": {
               "jobName": "daily-backup",
               "fileName": "backup-2025-01-15.img",
-              "latest": "true"
+              "latest": "use"
             },
             "repository": {
               "id": "1",
               "path": "/backup",
               "type": "nfs"
             },
-            "lastUpdated": "2025-01-15T10:30:00Z",
+            "lastUpdated": "2025-01-15 10:30:00",
             "option": {
-              "overwrite": "allow",
+              "overwrite": "Overwritten",
               "fileSystem": "ext4"
             }
           }
@@ -313,7 +387,7 @@ curl -X GET "https://api.example.com/api/v1/recoveries?page=1&limit=10" \
     }
   ],
   "message": "Recovery job list",
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -355,9 +429,9 @@ curl -X GET "https://api.example.com/api/v1/recoveries?page=1&limit=10" \
 | `job.info.script.run` | string | detail | 스크립트 실행 타이밍 |
 | `job.info.afterReboot` | string | detail | 작업 후 부팅 모드 |
 | `job.info.notification.mail` | string | detail | 알림 이메일 |
-| `job.detail[].partition` | string | - | 대상 파티션 (Linux) |
-| `job.detail[].drive` | string | - | 대상 드라이브 (Windows) |
-| `job.detail[].device` | string | - | 디바이스 경로 |
+| `job.detail[].from` | string | - | 소스 파티션/드라이브 |
+| `job.detail[].to` | string | - | 타겟 파티션/드라이브 |
+| `job.detail[].targetDevice` | string | - | 타겟 디바이스 경로 |
 | `job.detail[].mode` | string | - | 작업 모드 |
 | `job.detail[].backup.jobName` | string | - | 백업 작업 이름 |
 | `job.detail[].backup.fileName` | string | - | 백업 파일 이름 |
@@ -374,6 +448,37 @@ curl -X GET "https://api.example.com/api/v1/recoveries?page=1&limit=10" \
 | `pagination.itemsPerPage` | number | page/limit | 페이지당 항목 수 |
 | `pagination.hasNextPage` | boolean | page/limit | 다음 페이지 존재 여부 |
 | `pagination.hasPreviousPage` | boolean | page/limit | 이전 페이지 존재 여부 |
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 응답</strong></summary>
+
+**인증 실패 (401 Unauthorized)**
+
+유효하지 않은 토큰이거나 토큰이 만료된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "토큰이 만료되었습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**잘못된 요청 파라미터 (400 Bad Request)**
+
+유효하지 않은 필터 값이 전달된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "유효하지 않은 'mode' 값입니다. 허용된 값: full, increment",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
 
 </details>
 

@@ -55,7 +55,7 @@ ZDM-API는 백업, 복구, 시스템 관리를 위한 **API 서버**입니다.
 <summary><strong>토큰 발급 예시</strong></summary>
 
 ```bash
-POST /api/v1/auth/issue
+POST /api/auth/issue
 Content-Type: application/json
 
 {
@@ -85,7 +85,7 @@ Content-Type: application/json
 <summary><strong>API 호출 예시</strong></summary>
 
 ```bash
-GET /api/v1/users
+GET /api/users
 Authorization: eyJhbGciOiJIUzI1NiIs...
 ```
 
@@ -96,7 +96,7 @@ Authorization: eyJhbGciOiJIUzI1NiIs...
 ## Base URL
 
 ```
-/api/v1
+/api
 ```
 
 모든 API 엔드포인트는 위 Base URL을 기준으로 합니다.
@@ -209,8 +209,8 @@ Authorization: Bearer <token>
 
 **예시:**
 ```bash
-GET /api/v1/users/1              # ID로 조회
-GET /api/v1/users/user@example.com  # 이메일로 조회
+GET /api/users/1              # ID로 조회
+GET /api/users/user@example.com  # 이메일로 조회
 ```
 
 </details>
