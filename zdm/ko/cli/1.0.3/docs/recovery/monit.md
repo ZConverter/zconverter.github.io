@@ -49,6 +49,9 @@ zdm-cli recovery monit --server-name "MyServer" --server-type source
 # 작업 ID와 모드로 필터링 모니터링
 zdm-cli recovery monit --job-id 789 --mode full
 
+# 상태로 필터링 모니터링
+zdm-cli recovery monit --server-name "MyServer" --status processing
+
 # 서버와 파티션으로 모니터링
 zdm-cli recovery monit --server-name "DB-Server" --partition "/dev/sda1"
 
@@ -74,6 +77,7 @@ zdm-cli recovery monit --server-id 456 --output table
 | --server-id | -si | number | Optional<span class="required-note">*</span> | - | 작업 대상 Server ID | - |
 | --server-name | -sn | string | Optional<span class="required-note">*</span> | - | 작업 대상 Server Name | - |
 | --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md %} |
+| --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status.md %} |
 | --partition | - | string | Optional | - | 파티션 (Linux) | - |
 | --drive | - | string | Optional | - | 드라이브 (Windows) | - |
 | --server-type | -st | string | Optional | - | 서버 타입 | {% include zdm/server-modes.md %} |

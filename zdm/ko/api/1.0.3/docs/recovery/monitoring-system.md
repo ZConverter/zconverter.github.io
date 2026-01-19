@@ -54,6 +54,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
 | `drive` | Query | string | Optional | - | 드라이브 필터 (Windows) | - |
 | `server` | Query | string | Optional | - | 서버 이름 또는 ID 필터 | - |
 | `serverType` | Query | string | Optional | - | 서버 타입 필터 | {% include zdm/server-modes.md %} |
+| `status` | Query | string | Optional | - | 작업 상태 필터 | {% include zdm/job-status.md %} |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
@@ -100,7 +101,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
         {
           "partition": "/",
           "progressInfo": {
-            "status": "complete",
+            "status": "Complete",
             "percent": "100%",
             "message": "Recovery completed",
             "start": "2025-01-15 10:00:00",
@@ -111,7 +112,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
         {
           "partition": "/home",
           "progressInfo": {
-            "status": "run",
+            "status": "Processing",
             "percent": "45%",
             "message": "Transferring data...",
             "start": "2025-01-15 10:30:00",
@@ -165,7 +166,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
         {
           "drive": "C:",
           "progressInfo": {
-            "status": "complete",
+            "status": "Complete",
             "percent": "100%",
             "message": "Recovery completed",
             "start": "2025-01-15 10:00:00",
@@ -176,7 +177,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
         {
           "drive": "D:",
           "progressInfo": {
-            "status": "run",
+            "status": "Processing",
             "percent": "50%",
             "message": "Transferring data...",
             "start": "2025-01-15 10:30:00",
@@ -230,7 +231,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
         {
           "partition": "/",
           "progressInfo": {
-            "status": "complete",
+            "status": "Complete",
             "percent": "100%",
             "message": "Recovery completed",
             "start": "2025-01-15 10:00:00",
@@ -275,7 +276,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
 | `job.log` | string[] | 작업 로그 목록 |
 | `job.details[].partition` | string | 대상 파티션 (Linux) |
 | `job.details[].drive` | string | 대상 드라이브 (Windows) |
-| `job.details[].progressInfo.status` | string | 현재 상태 |
+| `job.details[].progressInfo.status` | string | 현재 상태 (PascalCase: Preparing, Processing, Complete, Scheduled, Registered, Canceling, Canceled, Error) |
 | `job.details[].progressInfo.percent` | string | 진행률 |
 | `job.details[].progressInfo.message` | string | 진행 상태 메시지 |
 | `job.details[].progressInfo.start` | string | 시작 시간 |

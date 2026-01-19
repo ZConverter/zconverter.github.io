@@ -50,6 +50,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/job/daily-recover
 | `drive` | Query | string | Optional | - | 드라이브 필터 (Windows) | - |
 | `server` | Query | string | Optional | - | 서버 이름 또는 ID 필터 | - |
 | `serverType` | Query | string | Optional | - | 서버 타입 필터 | {% include zdm/server-modes.md %} |
+| `status` | Query | string | Optional | - | 작업 상태 필터 | {% include zdm/job-status.md %} |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
 
@@ -86,7 +87,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/job/daily-recover
         {
           "partition": "/",
           "progressInfo": {
-            "status": "run",
+            "status": "Processing",
             "percent": "45%",
             "message": "Transferring data...",
             "start": "2025-01-15 10:00:00",
@@ -97,7 +98,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/job/daily-recover
         {
           "partition": "/home",
           "progressInfo": {
-            "status": "pending",
+            "status": "Registered",
             "percent": "0%",
             "message": "Waiting...",
             "start": "-",
@@ -143,7 +144,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/job/daily-recover
         {
           "drive": "C:",
           "progressInfo": {
-            "status": "run",
+            "status": "Processing",
             "percent": "60%",
             "message": "Transferring data...",
             "start": "2025-01-15 10:00:00",
@@ -154,7 +155,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/job/daily-recover
         {
           "drive": "D:",
           "progressInfo": {
-            "status": "pending",
+            "status": "Registered",
             "percent": "0%",
             "message": "Waiting...",
             "start": "-",
@@ -185,7 +186,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/job/daily-recover
 | `job.log` | string[] | 작업 로그 목록 |
 | `job.details[].partition` | string | 대상 파티션 (Linux) |
 | `job.details[].drive` | string | 대상 드라이브 (Windows) |
-| `job.details[].progressInfo.status` | string | 현재 상태 |
+| `job.details[].progressInfo.status` | string | 현재 상태 (PascalCase: Preparing, Processing, Complete, Scheduled, Registered, Canceling, Canceled, Error) |
 | `job.details[].progressInfo.percent` | string | 진행률 |
 | `job.details[].progressInfo.message` | string | 진행 상태 메시지 |
 | `job.details[].progressInfo.start` | string | 시작 시간 |

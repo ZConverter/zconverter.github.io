@@ -106,7 +106,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (0 이상) | - |
 | `scriptPath` | string | Optional | 실행할 스크립트 경로 | - |
 | `scriptRun` | string | Optional | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
-| `state` | string | Optional | 작업 상태 | {% include zdm/job-status.md %} |
+| `status` | string | Optional | 작업 상태 변경 | {% include zdm/job-status-update.md %} |
 | `jobList` | array | Optional | 개별 작업 설정 배열 | - |
 
 **jobList 항목 구조:**

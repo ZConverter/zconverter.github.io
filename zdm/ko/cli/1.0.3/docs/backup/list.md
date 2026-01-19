@@ -43,7 +43,10 @@ zdm-cli backup list --name "MyBackup"
 zdm-cli backup list --mode full
 
 # 특정 상태의 Backup 목록 조회
-zdm-cli backup list --status run
+zdm-cli backup list --status complete
+
+# Windows 드라이브로 필터링
+zdm-cli backup list --drive "C:"
 
 # 상세 정보 포함 조회
 zdm-cli backup list --id 123 --detail
@@ -69,6 +72,7 @@ zdm-cli backup list --output json
 | --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status.md %} |
 | --repository-path | -rp | string | Optional | - | 작업에 사용한 repository path | - |
 | --repository-type | -rt | string | Optional | - | 작업에 사용한 repository type | {% include zdm/repository-types.md %} |
+| --drive | - | string | Optional | - | 작업 대상 drive (Windows) | - |
 | --detail | - | boolean | Optional | false | 상세 정보 조회 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 

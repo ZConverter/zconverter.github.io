@@ -37,7 +37,10 @@ zdm-cli backup monit --job-name "MyBackup"
 zdm-cli backup monit --server-id 456
 
 # 서버 이름으로 상태 필터링 모니터링
-zdm-cli backup monit --server-name "MyServer" --status running
+zdm-cli backup monit --server-name "MyServer" --status processing
+
+# Windows 드라이브로 필터링 모니터링
+zdm-cli backup monit --server-name "WinServer" --drive "C:"
 
 # 작업 ID와 모드로 필터링 모니터링
 zdm-cli backup monit --job-id 789 --mode full
@@ -64,7 +67,8 @@ zdm-cli backup monit --server-id 456 --output table
 | --server-id | -si | number | Optional<span class="required-note">*</span> | - | 작업 대상 Server ID | - |
 | --server-name | -sn | string | Optional<span class="required-note">*</span> | - | 작업 대상 Server Name | - |
 | --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
-| --status | - | string | Optional | - | 작업 상태 | - |
+| --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status.md %} |
+| --drive | - | string | Optional | - | 작업 대상 drive (Windows) | - |
 | --repository-path | -rp | string | Optional | - | Repository Path | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 

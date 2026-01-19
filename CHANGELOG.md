@@ -13,6 +13,53 @@
 
 ---
 
+## [CLI v1.0.3] - 2026-01-19
+
+### Changed
+- **Backup/Recovery update 명령어 `--status` 파라미터 값 제한**
+  - 변경 전: 제한 없음
+  - 변경 후: `start`, `stop` 2가지만 허용
+- **Backup/Recovery list, monit 명령어 `--status` 파라미터 값 변경**
+  - 변경 전: `run`, `complete`, `start`, `waiting`, `cancel`, `schedule`
+  - 변경 후: `preparing`, `processing`, `complete`, `scheduled`, `canceling`, `canceled`, `error`, `registered`
+- **Backup list 명령어 `--drive` 파라미터 추가**
+  - Windows 드라이브 필터 지원 (예: `C:`, `D:`)
+- **Backup monit 명령어 `--drive` 파라미터 추가**
+  - Windows 드라이브 필터 지원
+- **Backup monit 명령어 `--status` 파라미터 선택값 추가**
+  - 작업 상태 필터링 가능: `preparing`, `processing`, `complete`, `scheduled`, `canceling`, `canceled`, `error`, `registered`
+- **Recovery monit 명령어 `--status` 파라미터 추가**
+  - 작업 상태 필터링 지원
+- **Backup list, monit / Recovery monit API 파라미터명 변경 반영**
+  - `serverName` → `server` (API 일관성 통일)
+
+---
+
+## [API v1.0.3] - 2026-01-19
+
+### Changed
+- **Backup/Recovery API 작업 상태(status) 응답 형식 변경**
+  - 응답의 `status.current` 및 `progressInfo.status` 값이 PascalCase로 변경
+  - 변경 전: `"complete"`, `"run"`, `"pending"` 등 (소문자)
+  - 변경 후: `Preparing`, `Processing`, `Complete`, `Scheduled`, `Registered`, `Canceling`, `Canceled`, `Error`
+  - 쿼리 파라미터 `status`는 대소문자 구분 없이 사용 가능
+- **작업 상태 계산 로직 개선**
+  - `active.nProcessType`, 스케줄 여부, `sJobResult`, `nJobStatus`를 기반으로 상태 계산
+  - 스케줄이 있는 완료된 작업은 `Scheduled` 상태로 표시
+  - 스케줄 없이 대기 중인 작업은 `Registered` 상태로 표시
+- **Recovery Monitoring API status 필터 파라미터 추가**
+  - GET /recoveries/monitoring/job/:identifier: `status` 파라미터 추가
+  - GET /recoveries/monitoring/system/:identifier: `status` 파라미터 추가
+  - 계산된 상태값 기반 필터링 지원
+- **PUT /recoveries/:identifier 요청 필드명 변경**
+  - `state` → `status` (Backup API와 일관성 통일)
+- **PUT /backups/:identifier, PUT /recoveries/:identifier status 파라미터 제한**
+  - 작업 상태 변경 값이 `start`, `stop` 2가지로 제한
+  - `start`: 작업 시작 (nJobStatus=3)
+  - `stop`: 작업 정지 (nJobStatus=2)
+
+---
+
 ## [API v1.0.3] - 2026-01-18
 
 ### Fixed

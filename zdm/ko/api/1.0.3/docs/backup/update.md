@@ -72,7 +72,7 @@ curl -X PUT "https://api.example.com/api/backups/daily-backup" \
 |------|------|------|------|--------|
 | `changeName` | string | Optional | 변경할 작업 이름 | - |
 | `mode` | string | Optional | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
-| `status` | string | Optional | 작업 상태 | {% include zdm/job-status.md %} |
+| `status` | string | Optional | 작업 상태 변경 | {% include zdm/job-status-update.md %} |
 | `rotation` | number | Optional | 작업 반복 횟수 | - |
 | `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
 | `encryption` | string | Optional | 암호화 사용 여부 | {% include zdm/use-options.md %} |

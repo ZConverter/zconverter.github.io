@@ -56,7 +56,7 @@ zdm-cli recovery update --id 123 --schedule '{"type":"daily","time":"02:00"}'
 zdm-cli recovery update --id 123 --mail-event "admin@example.com"
 
 # 작업 상태 변경
-zdm-cli recovery update --id 123 --status stopped
+zdm-cli recovery update --id 123 --status stop
 
 # 특정 파티션의 모드 변경
 zdm-cli recovery update --id 123 --partition "/" --mode inc
@@ -83,7 +83,7 @@ zdm-cli recovery update --id 123 --change-name "MyRecovery" --platform aws --aft
 | --network-limit | -nl | number | Optional | 0 | 작업 Network 제한 속도 (Mbps) | - |
 | --script-path | -sp | string | Optional | - | 작업 스크립트 경로 | - |
 | --script-run | -sr | string | Optional | - | 작업 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
-| --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status.md %} |
+| --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status-update.md %} |
 | --partition | -pt | string | Optional | - | 변경할 작업 대상 파티션 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 

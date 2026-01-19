@@ -33,7 +33,7 @@ curl -X GET "https://api.example.com/api/backups" \
   -H "Authorization: Bearer <token>"
 
 # 필터 적용 조회
-curl -X GET "https://api.example.com/api/backups?mode=full&status=complete" \
+curl -X GET "https://api.example.com/api/backups?mode=full&status=scheduled" \
   -H "Authorization: Bearer <token>"
 
 # 상세 정보 포함 조회
@@ -100,7 +100,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
             "advanced": "-"
           },
           "status": {
-            "current": "complete",
+            "current": "Scheduled",
             "time": {
               "start": "2025-01-15 02:00:00",
               "elapsed": "00:30:00",
@@ -153,7 +153,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
             "advanced": "-"
           },
           "status": {
-            "current": "complete",
+            "current": "Scheduled",
             "time": {
               "start": "2025-01-12 03:00:00",
               "elapsed": "00:45:00",
@@ -206,7 +206,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
             "advanced": "-"
           },
           "status": {
-            "current": "complete",
+            "current": "Scheduled",
             "time": {
               "start": "2025-01-15 02:00:00",
               "elapsed": "00:30:00",
@@ -273,7 +273,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
             "advanced": "-"
           },
           "status": {
-            "current": "complete",
+            "current": "Scheduled",
             "time": {
               "start": "2025-01-15 02:00:00",
               "elapsed": "00:30:00",
@@ -329,7 +329,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
 | `job.info.schedule` | object | - | 스케줄 정보 (스케줄 설정시에만 포함) |
 | `job.info.schedule.basic` | object/string | - | 기본 스케줄 정보 |
 | `job.info.schedule.advanced` | object/string | - | 고급 스케줄 정보 (Smart 스케줄만) |
-| `job.info.status.current` | string | - | 현재 작업 상태 |
+| `job.info.status.current` | string | - | 현재 작업 상태 (PascalCase: `Preparing`, `Processing`, `Complete`, `Scheduled`, `Registered`, `Canceling`, `Canceled`, `Error`) |
 | `job.info.status.time.start` | string | - | 작업 시작 시간 |
 | `job.info.status.time.elapsed` | string | - | 경과 시간 |
 | `job.info.status.time.end` | string | - | 작업 종료 시간 |

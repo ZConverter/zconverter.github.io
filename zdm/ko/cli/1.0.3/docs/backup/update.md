@@ -54,6 +54,12 @@ zdm-cli backup update --id 123 --script-path "/scripts/new_script.sh" --script-r
 # 제외 폴더 변경
 zdm-cli backup update --id 123 --exclude-dir "/tmp,/var/cache"
 
+# 작업 시작
+zdm-cli backup update --id 123 --status start
+
+# 작업 중지
+zdm-cli backup update --id 123 --status stop
+
 # JSON 형식으로 출력
 zdm-cli backup update --id 123 --mode increment --output json
 ```
@@ -68,7 +74,7 @@ zdm-cli backup update --id 123 --mode increment --output json
 | --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --name | - | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
 | --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
-| --status | - | string | Optional | - | 작업 상태 | - |
+| --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status-update.md %} |
 | --repository-id | -ri | number | Optional | - | Repository ID | - |
 | --repository-path | -rp | string | Optional | - | Repository Path | - |
 | --change-name | -cn | string | Optional | - | 변경할 작업 이름 | - |

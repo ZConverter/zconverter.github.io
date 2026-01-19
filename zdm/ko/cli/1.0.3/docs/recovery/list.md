@@ -41,7 +41,7 @@ zdm-cli recovery list --name "my-recovery"
 zdm-cli recovery list --id 123 --detail
 
 # 상태별 필터링
-zdm-cli recovery list --status running
+zdm-cli recovery list --status processing
 
 # 플랫폼별 필터링
 zdm-cli recovery list --platform aws
@@ -53,7 +53,7 @@ zdm-cli recovery list --backup-name "my-backup"
 zdm-cli recovery list --repository-id 1
 
 # 복합 조건 조회
-zdm-cli recovery list --platform vmware --status completed --mode full
+zdm-cli recovery list --platform vmware --status complete --mode full
 
 # JSON 형식 출력
 zdm-cli recovery list --output json

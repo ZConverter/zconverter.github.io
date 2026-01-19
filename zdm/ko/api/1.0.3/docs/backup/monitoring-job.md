@@ -51,7 +51,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
 | `server` | Query | string | Optional | - | 서버 이름 또는 ID 필터 | - |
 | `repositoryType` | Query | string | Optional | - | 레포지토리 타입 필터 | {% include zdm/repository-types.md %} |
 | `repositoryPath` | Query | string | Optional | - | 레포지토리 경로 필터 | - |
-| `status` | Query | string | Optional | - | 작업 상태 필터 | - |
+| `status` | Query | string | Optional | - | 작업 상태 필터 | {% include zdm/job-status.md %} |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
@@ -78,7 +78,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
         "partition": "/"
       },
       "progressInfo": {
-        "status": "complete",
+        "status": "Scheduled",
         "percent": "100%",
         "message": "Backup completed successfully",
         "start": "2025-01-15 02:00:00",
@@ -116,7 +116,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
         "drive": "C:"
       },
       "progressInfo": {
-        "status": "run",
+        "status": "Processing",
         "percent": "60%",
         "message": "Processing files...",
         "start": "2025-01-15 02:00:00",
@@ -147,7 +147,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
 | `job.info.name` | string | 작업 이름 |
 | `job.info.partition` | string | 대상 파티션 (Linux) |
 | `job.info.drive` | string | 대상 드라이브 (Windows) |
-| `job.progressInfo.status` | string | 현재 상태 |
+| `job.progressInfo.status` | string | 현재 작업 상태 (PascalCase: `Preparing`, `Processing`, `Complete`, `Scheduled`, `Registered`, `Canceling`, `Canceled`, `Error`) |
 | `job.progressInfo.percent` | string | 진행률 |
 | `job.progressInfo.message` | string | 진행 상태 메시지 |
 | `job.progressInfo.start` | string | 시작 시간 |

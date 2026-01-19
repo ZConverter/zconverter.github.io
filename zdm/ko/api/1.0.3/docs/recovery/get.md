@@ -101,7 +101,7 @@ curl -X GET "https://api.example.com/api/recoveries/1?detail=true" \
           }
         },
         "status": {
-          "current": "complete",
+          "current": "Complete",
           "time": {
             "start": "2025-01-15 10:00:00",
             "elapsed": "00:30:00",
@@ -172,7 +172,7 @@ curl -X GET "https://api.example.com/api/recoveries/1?detail=true" \
           }
         },
         "status": {
-          "current": "complete",
+          "current": "Complete",
           "time": {
             "start": "2025-01-12 02:00:00",
             "elapsed": "01:00:00",
@@ -272,7 +272,7 @@ curl -X GET "https://api.example.com/api/recoveries/1?detail=true" \
           }
         },
         "status": {
-          "current": "complete",
+          "current": "Complete",
           "time": {
             "start": "2025-01-15 10:00:00",
             "elapsed": "00:30:00",
@@ -348,7 +348,7 @@ curl -X GET "https://api.example.com/api/recoveries/1?detail=true" \
 | `job.info.id` | string | - | 복구 작업 ID |
 | `job.info.name` | string | - | 복구 작업 이름 |
 | `job.info.schedule.basic` | object/string | - | 기본 스케줄 정보 |
-| `job.info.status.current` | string | - | 현재 작업 상태 |
+| `job.info.status.current` | string | - | 현재 작업 상태 (PascalCase: Preparing, Processing, Complete, Scheduled, Registered, Canceling, Canceled, Error) |
 | `job.info.status.time.start` | string | - | 작업 시작 시간 |
 | `job.info.status.time.elapsed` | string | - | 경과 시간 |
 | `job.info.status.time.end` | string | - | 작업 종료 시간 |

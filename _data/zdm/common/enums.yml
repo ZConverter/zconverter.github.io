@@ -9,20 +9,31 @@ server-modes:
   - value: "target"
     description: "타겟 서버 (복구 대상)"
 
-# 작업 상태
+# 작업 상태 (쿼리 파라미터용 - 대소문자 구분 없음)
 job-status:
-  - value: "run"
-    description: "실행 중"
+  - value: "preparing"
+    description: "작업 준비 중"
+  - value: "processing"
+    description: "작업 진행 중"
   - value: "complete"
-    description: "완료"
-  - value: "start"
-    description: "시작"
-  - value: "waiting"
-    description: "대기 중"
-  - value: "cancel"
+    description: "작업 완료"
+  - value: "scheduled"
+    description: "스케줄 대기 (작업 완료 후 다음 스케줄 대기)"
+  - value: "registered"
+    description: "등록됨 (스케줄 없이 대기 중)"
+  - value: "canceling"
+    description: "취소 진행 중"
+  - value: "canceled"
     description: "취소됨"
-  - value: "schedule"
-    description: "스케줄 대기"
+  - value: "error"
+    description: "오류 발생"
+
+# 작업 상태 변경용 (update API - 대소문자 구분 없음)
+job-status-update:
+  - value: "start"
+    description: "작업 시작"
+  - value: "stop"
+    description: "작업 정지"
 
 # 저장소 유형
 repository-types:
