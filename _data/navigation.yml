@@ -162,6 +162,8 @@ ko-cli-1.0.3:
         url: "/zdm/ko/cli/1.0.3/docs/server/overview"
       - title: "server list"
         url: "/zdm/ko/cli/1.0.3/docs/server/list"
+      - title: "server delete"
+        url: "/zdm/ko/cli/1.0.3/docs/server/delete"
   - title: "License"
     links:
       - title: "개요"
@@ -390,6 +392,8 @@ cli-1.0.3:
         url: "/zdm/ko/cli/1.0.3/docs/server/overview"
       - title: "server list"
         url: "/zdm/ko/cli/1.0.3/docs/server/list"
+      - title: "server delete"
+        url: "/zdm/ko/cli/1.0.3/docs/server/delete"
   - title: "License"
     links:
       - title: "개요"

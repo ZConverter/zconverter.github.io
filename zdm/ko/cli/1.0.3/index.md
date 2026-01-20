@@ -179,7 +179,7 @@ zdm-cli backup list --server user@example.com
   "message": "Success",
   "success": true,
   "data": { ... },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -208,7 +208,7 @@ zdm-cli backup list --server user@example.com
     "code": "ERROR_CODE",
     "details": { ... }
   },
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
