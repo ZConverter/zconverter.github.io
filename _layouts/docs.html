@@ -43,7 +43,7 @@
                   <ul>
                     {% for link in item.links %}
                       <li>
-                        <a href="{{ link.url }}" {% if page.url == link.url %}class="active"{% endif %}>
+                        <a href="{{ link.url }}" title="{{ link.title }}" {% if page.url == link.url %}class="active"{% endif %}>
                           {{ link.title }}
                         </a>
                         {% if link.sublinks %}
@@ -78,6 +78,28 @@
 
     <main class="docs-content">
       <article class="page">
+        {% assign path_parts = page.url | split: '/' %}
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li>
+            {% if path_parts[1] == 'zdm' %}
+              <li><a href="/zdm/{{ page.lang | default: 'ko' }}/">ZDM</a></li>
+              {% if path_parts[3] == 'api' %}
+                <li><a href="/zdm/{{ page.lang | default: 'ko' }}/api/{{ path_parts[4] }}/index">API v{{ path_parts[4] }}</a></li>
+                {% if path_parts[6] %}
+                  {% assign section_name = path_parts[6] | capitalize %}
+                  <li><span>{{ section_name }}</span></li>
+                {% endif %}
+              {% elsif path_parts[3] == 'cli' %}
+                <li><a href="/zdm/{{ page.lang | default: 'ko' }}/cli/{{ path_parts[4] }}/index">CLI v{{ path_parts[4] }}</a></li>
+                {% if path_parts[6] %}
+                  {% assign section_name = path_parts[6] | capitalize %}
+                  <li><span>{{ section_name }}</span></li>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          </ol>
+        </nav>
         <h1>{{ page.title }}</h1>
         <div class="content">
           {{ content }}

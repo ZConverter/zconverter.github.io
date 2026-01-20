@@ -289,6 +289,10 @@ th {
   border-radius: 4px;
   transition: all 0.2s;
   font-size: 0.95rem;
+  /* 말줄임 처리 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .docs-nav ul li a:hover {
@@ -336,6 +340,49 @@ th {
   margin-top: 0px;
   padding-top: 0px;
   align-self: stretch;
+}
+
+/* Breadcrumb navigation */
+.breadcrumb {
+  padding: 0.75rem 0 0.5rem 0;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.breadcrumb ol {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  font-size: 0.95rem;
+}
+
+.breadcrumb li {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb li:not(:last-child)::after {
+  content: ">";
+  margin: 0 0.5rem;
+  color: #9ca3af;
+}
+
+.breadcrumb a {
+  color: #3498db;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+  color: #2980b9;
+  text-decoration: underline;
+}
+
+.breadcrumb span {
+  color: #6b7280;
 }
 
 /* Horizontal rule styling */
