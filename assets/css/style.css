@@ -44,6 +44,8 @@ header h1 a {
 
 header nav {
   margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
 }
 
 header nav a {
@@ -67,6 +69,11 @@ main {
   flex: 1;
   width: 100%;
   max-width: 95%;
+}
+
+/* Home layout - match docs spacing */
+main.container {
+  margin-top: 2rem;
 }
 
 /* Typography */
@@ -415,6 +422,83 @@ th {
   font-weight: bold;
 }
 
+/* Sidebar Toggle Button (Hamburger in Header) */
+.sidebar-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.sidebar-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Hamburger icon with CSS */
+.hamburger-icon {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: white;
+  position: relative;
+  transition: background-color 0.3s;
+}
+
+.hamburger-icon::before,
+.hamburger-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 20px;
+  height: 2px;
+  background-color: white;
+  transition: transform 0.3s, top 0.3s;
+}
+
+.hamburger-icon::before {
+  top: -6px;
+}
+
+.hamburger-icon::after {
+  top: 6px;
+}
+
+/* Hamburger to X animation when sidebar is open */
+.sidebar-toggle.is-active .hamburger-icon {
+  background-color: transparent;
+}
+
+.sidebar-toggle.is-active .hamburger-icon::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.sidebar-toggle.is-active .hamburger-icon::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* Sidebar transition */
+.docs-layout .docs-sidebar {
+  transition: width 0.3s ease, padding 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+}
+
+/* Sidebar collapsed state */
+.docs-layout.sidebar-collapsed .docs-sidebar {
+  width: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
   .docs-layout {
@@ -426,6 +510,10 @@ th {
     position: static;
     max-height: none;
     margin-bottom: 2rem;
+  }
+
+  .docs-layout.sidebar-collapsed .docs-sidebar {
+    display: none;
   }
 
   .version-dropdown {

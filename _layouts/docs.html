@@ -11,6 +11,9 @@
     <div class="container header-container">
       <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
       <nav>
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+          <span class="hamburger-icon"></span>
+        </button>
         {% for link in site.nav_links %}
         <a href="{{ link.url | relative_url }}">{{ link.title }}</a>
         {% endfor %}
@@ -19,8 +22,8 @@
     </div>
   </header>
 
-  <div class="docs-layout">
-    <aside class="docs-sidebar">
+  <div class="docs-layout" id="docsLayout">
+    <aside class="docs-sidebar" id="docsSidebar">
       <nav class="docs-nav">
         <h3>{{ page.section_title | default: "Documentation" }}</h3>
 
@@ -112,6 +115,39 @@
         var targetId = link.getAttribute('href');
         openDetailsById(targetId);
       }
+    });
+
+    // 사이드바 토글 기능
+    var sidebar = document.getElementById('docsSidebar');
+    var toggleBtn = document.getElementById('sidebarToggle');
+    var docsLayout = document.querySelector('.docs-layout');
+    var STORAGE_KEY = 'zdm-sidebar-collapsed';
+
+    function setSidebarState(collapsed) {
+      if (collapsed) {
+        docsLayout.classList.add('sidebar-collapsed');
+        toggleBtn.classList.remove('is-active');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      } else {
+        docsLayout.classList.remove('sidebar-collapsed');
+        toggleBtn.classList.add('is-active');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+      }
+      localStorage.setItem(STORAGE_KEY, collapsed ? 'true' : 'false');
+    }
+
+    // 초기 상태 복원
+    var savedState = localStorage.getItem(STORAGE_KEY);
+    if (savedState === 'true') {
+      setSidebarState(true);
+    } else {
+      toggleBtn.classList.add('is-active');
+    }
+
+    // 토글 버튼 클릭 이벤트
+    toggleBtn.addEventListener('click', function() {
+      var isCollapsed = docsLayout.classList.contains('sidebar-collapsed');
+      setSidebarState(!isCollapsed);
     });
   })();
   </script>
