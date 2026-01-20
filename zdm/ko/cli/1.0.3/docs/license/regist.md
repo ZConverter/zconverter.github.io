@@ -27,7 +27,10 @@ lang: ko
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
-# 기본 라이센스 등록
+# config의 zdm.id를 사용하여 등록 (center 생략)
+zdm-cli license regist --key "XXXX-XXXX-XXXX-XXXX"
+
+# 센터를 직접 지정하여 등록
 zdm-cli license regist --center "zdm-center-01" --key "XXXX-XXXX-XXXX-XXXX"
 
 # 별칭을 사용한 등록
@@ -50,7 +53,7 @@ zdm-cli license regist -c "zdm-center-01" -k "XXXX-XXXX-XXXX-XXXX" --output json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --center | -c | string | Required | - | License를 등록할 센터 ID 또는 Name | - |
+| --center | -c | string | Optional | config의 zdm.id | License를 등록할 센터 ID 또는 Name | - |
 | --key | -k | string | Required | - | 등록할 License Key | - |
 | --user | -u | string | Optional | - | 요청 사용자 ID 또는 메일 | - |
 | --name | -n | string | Optional | - | 등록할 License Name | - |

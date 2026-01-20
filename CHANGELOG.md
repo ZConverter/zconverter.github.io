@@ -32,6 +32,9 @@
   - 작업 상태 필터링 지원
 - **Backup list, monit / Recovery monit API 파라미터명 변경 반영**
   - `serverName` → `server` (API 일관성 통일)
+- **License regist 명령어 `--center` 파라미터 옵션화**
+  - 변경 전: 필수 파라미터
+  - 변경 후: 선택 파라미터 (미입력시 config의 zdm.id 값 사용)
 
 ---
 
