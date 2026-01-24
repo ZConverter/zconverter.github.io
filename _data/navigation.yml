@@ -60,6 +60,8 @@ ko-api-1.0.3:
         url: "/zdm/ko/api/1.0.3/docs/schedule/get"
       - title: "POST /schedules"
         url: "/zdm/ko/api/1.0.3/docs/schedule/regist"
+      - title: "DELETE /schedules/:identifier"
+        url: "/zdm/ko/api/1.0.3/docs/schedule/delete"
   - title: "Backup"
     links:
       - title: "GET /backups"
@@ -120,12 +122,16 @@ ko-api-1.0.3:
         url: "/zdm/ko/api/1.0.3/docs/zdm/list"
       - title: "GET /zdms/:identifier"
         url: "/zdm/ko/api/1.0.3/docs/zdm/get"
+      - title: "DELETE /zdms/:identifier"
+        url: "/zdm/ko/api/1.0.3/docs/zdm/delete"
       - title: "GET /zdms/:identifier/repositories"
         url: "/zdm/ko/api/1.0.3/docs/zdm/repository"
       - title: "GET /zdms/repositories"
         url: "/zdm/ko/api/1.0.3/docs/zdm/repositories"
       - title: "POST /zdms/repositories"
         url: "/zdm/ko/api/1.0.3/docs/zdm/repository-regist"
+      - title: "DELETE /zdms/repositories/:identifier"
+        url: "/zdm/ko/api/1.0.3/docs/zdm/repository-delete"
 
 # API v1.0.4 (한국어, Beta)
 ko-api-1.0.4:
@@ -290,6 +296,8 @@ api-1.0.3:
         url: "/zdm/ko/api/1.0.3/docs/schedule/get"
       - title: "POST /schedules"
         url: "/zdm/ko/api/1.0.3/docs/schedule/regist"
+      - title: "DELETE /schedules/:identifier"
+        url: "/zdm/ko/api/1.0.3/docs/schedule/delete"
   - title: "Backup"
     links:
       - title: "GET /backups"
@@ -350,12 +358,16 @@ api-1.0.3:
         url: "/zdm/ko/api/1.0.3/docs/zdm/list"
       - title: "GET /zdms/:identifier"
         url: "/zdm/ko/api/1.0.3/docs/zdm/get"
+      - title: "DELETE /zdms/:identifier"
+        url: "/zdm/ko/api/1.0.3/docs/zdm/delete"
       - title: "GET /zdms/:identifier/repositories"
         url: "/zdm/ko/api/1.0.3/docs/zdm/repository"
       - title: "GET /zdms/repositories"
         url: "/zdm/ko/api/1.0.3/docs/zdm/repositories"
       - title: "POST /zdms/repositories"
         url: "/zdm/ko/api/1.0.3/docs/zdm/repository-regist"
+      - title: "DELETE /zdms/repositories/:identifier"
+        url: "/zdm/ko/api/1.0.3/docs/zdm/repository-delete"
 
 # API v1.0.4 (레거시, Beta)
 api-1.0.4:

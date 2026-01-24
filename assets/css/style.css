@@ -81,6 +81,8 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 1.5rem;
   margin-bottom: 1rem;
   color: #2c3e50;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 h1 { font-size: 2.5rem; }
@@ -165,14 +167,12 @@ th {
   flex: 1;
   align-items: stretch;
   position: relative;
+  overflow: hidden;
 }
 
 .docs-sidebar {
   width: 280px;
   flex-shrink: 0;
-  position: sticky;
-  top: 2rem;
-  align-self: flex-start;
   max-height: calc(100vh - 4rem);
   overflow-y: auto;
   background-color: white;
@@ -340,6 +340,9 @@ th {
   margin-top: 0px;
   padding-top: 0px;
   align-self: stretch;
+  overflow-x: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Breadcrumb navigation */
@@ -474,13 +477,15 @@ th {
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 6px;
+  padding: 10px;
   margin-right: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
   transition: background-color 0.2s;
+  min-width: 40px;
+  min-height: 40px;
 }
 
 .sidebar-toggle:hover {
@@ -546,17 +551,59 @@ th {
   visibility: hidden;
 }
 
+/* Tablet responsive - 중간 크기 화면 */
+@media (max-width: 1024px) {
+  .docs-layout {
+    flex-direction: column;
+    overflow: visible;
+    padding: 2rem 0 0 0;
+  }
+
+  .docs-sidebar {
+    width: calc(100% - 4rem);
+    margin-left: 2rem;
+    margin-right: 2rem;
+    position: static;
+    max-height: none;
+    margin-bottom: 2rem;
+    overflow: visible;
+    align-self: stretch;
+    flex-shrink: 1;
+  }
+
+  .docs-content {
+    width: 100%;
+    flex: none;
+    align-self: stretch;
+    border-radius: 0;
+  }
+
+  .docs-layout.sidebar-collapsed .docs-sidebar {
+    display: none;
+  }
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
   .docs-layout {
     flex-direction: column;
+    padding: 2rem 0 0 0;
   }
 
   .docs-sidebar {
-    width: 100%;
+    width: calc(100% - 4rem);
+    margin-left: 2rem;
+    margin-right: 2rem;
     position: static;
     max-height: none;
     margin-bottom: 2rem;
+    flex-shrink: 1;
+  }
+
+  .docs-content {
+    width: 100%;
+    flex: none;
+    border-radius: 0;
   }
 
   .docs-layout.sidebar-collapsed .docs-sidebar {

@@ -6,10 +6,54 @@
 
 ---
 
-## [API v1.0.4] - 개발 중
+## [API v1.0.3] - 2026-01-24
 
 ### Added
-- (예정)
+- **GET /backups/images/server/:serverName 필터 파라미터 추가**
+  - `partition`: Linux 파티션(mountPoint) 필터 (예: `/`, `/boot`)
+  - `drive`: Windows 드라이브 필터 (예: `C`, `C:`)
+  - 각 필터는 정확히 일치하는 경우만 반환
+- **GET /backups/images/server/:serverName 에러 응답 추가**
+  - 404 Not Found: 이미지가 없고 서버도 존재하지 않는 경우
+
+### Changed
+- **GET /backups/images/server/:serverName 응답 구조 변경**
+  - 기존: `data: { images: [...], total }`
+  - 변경: `data: [...]` (불필요한 래핑 제거)
+  - Linux/Windows OS에 따라 응답 구조 분기:
+    - Linux: `partition: { mountPoint, device, size, filesystem }`
+    - Windows: `drive: { letter, size, filesystem }`
+  - 필드 구조 변경:
+    - `name`, `type`, `time` → `image: { name, type, createdAt, ... }`
+    - `compressed`, `compressionRatio` → `image.compression: { enabled, ratio }`
+    - `server`, `os` → `server: { name, os }`
+  - `diskNumber`, `partitionNumber` 필드 제거
+- **GET /backups/images/server/:serverName jobName 필터 동작 변경**
+  - 부분 일치 → 정확히 일치로 변경
+  - `backupName`에서 확장자(`.ZIA`) 제거 후 비교
+- **GET /backups/images/server/:serverName 고아 이미지 지원 문서화**
+  - 서버 정보가 삭제되어도 백업 이미지가 존재하면 조회 가능
+  - OS 타입을 `UNKNOWN`으로 처리하여 `partition` 형식으로 응답
+
+---
+
+## [API v1.0.3] - 2026-01-23
+
+### Added
+- **DELETE /schedules/:identifier 엔드포인트 문서 추가**
+  - 스케줄 ID 기반 삭제 기능
+  - Path 파라미터: `identifier` (숫자만 허용)
+  - 응답: 삭제된 스케줄 ID 및 이름 반환
+
+- **DELETE /zdm-centers/repositories/:identifier 엔드포인트 문서 추가**
+  - Repository ID 기반 삭제 기능
+  - Path 파라미터: `identifier` (숫자만 허용)
+  - 응답: 삭제된 Repository ID, 센터 이름, 원격/로컬 경로 반환
+
+- **DELETE /zdm-centers/:identifier 엔드포인트 문서 추가**
+  - ZDM ID 기반 삭제 기능
+  - Path 파라미터: `identifier` (숫자만 허용)
+  - 응답: 삭제된 ZDM ID, 이름, 관련 테이블 삭제 수 반환
 
 ---
 
