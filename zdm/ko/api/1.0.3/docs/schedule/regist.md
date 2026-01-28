@@ -15,7 +15,7 @@ lang: ko
 > * 새로운 스케줄을 시스템에 등록합니다.
 > * 스케줄 타입에 따라 다른 구조의 basic/advanced 객체가 필요합니다.
 > * Smart 스케줄 (type 7~11)의 경우 basic과 advanced 모두 필요합니다.
-> * 스케줄 타입별 구조 및 상세 예시는 [스케줄 개요](overview.md)를 참조하세요.
+> * 스케줄 타입별 구조 및 상세 예시는 [스케줄 개요](overview)를 참조하세요.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -91,7 +91,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 | `basic` | object | Optional | 기본 스케줄 구조 |
 | `advanced` | object | Optional | 고급 스케줄 구조 (Smart 스케줄용, backup 작업 전용) |
 
-> 스케줄 타입별 `basic`/`advanced` 구조는 [스케줄 개요](overview.md#스케줄-타입별-구조)를 참조하세요.
+> 스케줄 타입별 `basic`/`advanced` 구조는 [스케줄 개요](overview#스케줄-타입별-구조-및-설명)를 참조하세요.
 
 </details>
 

@@ -162,7 +162,7 @@ curl -X POST "https://api.example.com/api/backups" \
 <summary><strong>schedule 객체 구조</strong></summary>
 
 > 기존 스케줄 ID(숫자)를 사용하거나, 새 스케줄 객체를 생성할 수 있습니다.
-> 스케줄 타입별 상세 구조는 [POST /schedules](../schedule/regist.md)를 참고하세요.
+> 스케줄 타입별 상세 구조는 [POST /schedules](../schedule/regist)를 참고하세요.
 
 | 필드 | 타입 | 필수 | 설명 |
 |------|------|------|------|
