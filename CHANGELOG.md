@@ -6,6 +6,23 @@
 
 ---
 
+## [API v1.0.3] - 2026-01-28
+
+### Added
+- **GET /backups/images/server/:serverName 필터 파라미터 추가**
+  - `center`: Center ID 또는 이름으로 필터
+  - `repositoryId`: Repository ID로 필터
+  - `repositoryPath`: Repository 경로로 필터
+
+### Changed
+- **GET /backups/images/server/:serverName 에러 응답 개선**
+  - Center 미존재: "요청한 Center 'X'을(를) 찾을 수 없습니다"
+  - Repository 미존재: "요청한 Repository ID X를 찾을 수 없습니다" / "등록된 Repository가 없습니다"
+  - 백업 이미지 미존재: "백업 이미지가 존재하지 않음 (Center: X, Repository ID: Y)"
+  - 작업 시간 초과: "백업 이미지 조회 작업 시간 초과 (10초 경과)"
+
+---
+
 ## [API v1.0.3] - 2026-01-24
 
 ### Added

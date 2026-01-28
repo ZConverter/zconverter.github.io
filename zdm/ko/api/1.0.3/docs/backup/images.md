@@ -55,6 +55,14 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 # 필터 조합
 curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)?jobName=source-centos7-bios_ROOT&partition=/&page=1&limit=10" \
   -H "Authorization: Bearer <token>"
+
+# Center 및 Repository 필터
+curl -X GET "https://api.example.com/api/backups/images/server/source-amazon2023-bios_(192.168.2.99)?center=6&repositoryId=13" \
+  -H "Authorization: Bearer <token>"
+
+# Repository Path 필터
+curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)?repositoryPath=/ZConverter" \
+  -H "Authorization: Bearer <token>"
 ```
 
 </details>
@@ -65,6 +73,9 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 |
 |----------|------|------|------|--------|------|
 | `serverName` | Path | string | Required | - | ZDM에 등록된 서버 이름 |
+| `center` | Query | string | Optional | - | Center ID 또는 이름으로 필터 |
+| `repositoryId` | Query | number | Optional | - | Repository ID로 필터 |
+| `repositoryPath` | Query | string | Optional | - | Repository 경로로 필터 (예: `/ZConverter`) |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 (정확히 일치, 확장자 제외) |
 | `partition` | Query | string | Optional | - | Linux 파티션(mountPoint) 필터 (예: `/`, `/boot`) |
 | `drive` | Query | string | Optional | - | Windows 드라이브 필터 (예: `C`, `C:`) |
@@ -72,7 +83,9 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 |
 
 **필터링 동작:**
-- `jobName`: `backupName`에서 확장자(`.ZIA`)를 제거한 값과 정확히 일치하는 경우만 반환
+- `center`: 특정 Center의 백업 이미지만 조회 (미지정 시 모든 Center)
+- `repositoryId`: 특정 Repository에 저장된 백업 이미지만 조회 (미지정 시 모든 Repository)
+- `jobName`: 해당 백업 이미지를 생성한 Backup 작업 이름
 - `partition`: Linux 서버의 mountPoint와 정확히 일치하는 경우만 반환
 - `drive`: Windows 서버의 드라이브 문자와 정확히 일치하는 경우만 반환 (`C`, `C:` 모두 허용)
 
@@ -326,9 +339,46 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 <details markdown="1">
 <summary><strong>에러 응답</strong></summary>
 
+**Center 미존재 (404 Not Found)**
+
+요청한 Center를 찾을 수 없는 경우:
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "요청한 Center '6'을(를) 찾을 수 없습니다",
+  "timestamp": "2026-01-28 08:42:51"
+}
+```
+
+**Repository 미존재 (404 Not Found)**
+
+요청한 Repository를 찾을 수 없는 경우:
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "요청한 Repository ID 14를 찾을 수 없습니다",
+  "timestamp": "2026-01-28 08:42:51"
+}
+```
+
+등록된 Repository가 하나도 없는 경우:
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "등록된 Repository가 없습니다",
+  "timestamp": "2026-01-28 08:42:51"
+}
+```
+
 **서버 미존재 (404 Not Found)**
 
-이미지가 없고 서버도 존재하지 않는 경우 반환됩니다.
+이미지가 없고 서버도 존재하지 않는 경우:
 
 ```json
 {
@@ -339,14 +389,29 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 }
 ```
 
-**ZConLinuxGetHeader 실행 오류 (500 Internal Server Error)**
+**백업 이미지 미존재 (404 Not Found)**
+
+백업 이미지가 존재하지 않는 경우:
 
 ```json
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": "백업 이미지 조회 실패: Command failed...",
-  "timestamp": "2026-01-09 10:30:00"
+  "error": "백업 이미지가 존재하지 않음 (Center: CenterName, Repository ID: 13)",
+  "timestamp": "2026-01-28 08:42:51"
+}
+```
+
+**작업 시간 초과 (500 Internal Server Error)**
+
+백업 이미지 조회 작업이 10초 내에 완료되지 않은 경우:
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "백업 이미지 조회 작업 시간 초과 (10초 경과, Center: CenterName, Repository ID: 13)",
+  "timestamp": "2026-01-28 08:42:51"
 }
 ```
 
