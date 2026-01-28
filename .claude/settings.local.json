@@ -37,7 +37,8 @@
       "Bash(bundle exec ruby:*)",
       "Bash(cat:*)",
       "Bash(git lfs ls-files:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "WebFetch(domain:zconverter.github.io)"
     ],
     "deny": [],
     "ask": []
