@@ -36,7 +36,7 @@ lang: ko
 curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)" \
   -H "Authorization: Bearer <token>"
 
-# 작업 이름으로 필터 (정확히 일치)
+# 작업 이름으로 필터 (부분 일치)
 curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)?jobName=source-centos7-bios_ROOT" \
   -H "Authorization: Bearer <token>"
 
@@ -72,11 +72,11 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 |
 |----------|------|------|------|--------|------|
-| `serverName` | Path | string | Required | - | ZDM에 등록된 서버 이름 |
+| `serverName` | Path | string | Required | - | ZDM에 등록된 서버 이름 (Center 이름으로 인식됨) |
 | `center` | Query | string | Optional | - | Center ID 또는 이름으로 필터 |
 | `repositoryId` | Query | number | Optional | - | Repository ID로 필터 |
 | `repositoryPath` | Query | string | Optional | - | Repository 경로로 필터 (예: `/ZConverter`) |
-| `jobName` | Query | string | Optional | - | 작업 이름 필터 (정확히 일치, 확장자 제외) |
+| `jobName` | Query | string | Optional | - | 작업 이름 필터 (부분 일치, 이미지 파일명에 포함 여부) |
 | `partition` | Query | string | Optional | - | Linux 파티션(mountPoint) 필터 (예: `/`, `/boot`) |
 | `drive` | Query | string | Optional | - | Windows 드라이브 필터 (예: `C`, `C:`) |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) |
@@ -85,7 +85,7 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 **필터링 동작:**
 - `center`: 특정 Center의 백업 이미지만 조회 (미지정 시 모든 Center)
 - `repositoryId`: 특정 Repository에 저장된 백업 이미지만 조회 (미지정 시 모든 Repository)
-- `jobName`: 해당 백업 이미지를 생성한 Backup 작업 이름
+- `jobName`: 백업 이미지 파일명에 해당 문자열이 포함된 경우 반환 (예: `backupTest_ROOT_1` → `SOURCE-backupTest_ROOT_1_[2026-01-29].ZIA` 매칭)
 - `partition`: Linux 서버의 mountPoint와 정확히 일치하는 경우만 반환
 - `drive`: Windows 서버의 드라이브 문자와 정확히 일치하는 경우만 반환 (`C`, `C:` 모두 허용)
 

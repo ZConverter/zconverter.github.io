@@ -6,6 +6,24 @@
 
 ---
 
+## [API v1.0.3] - 2026-01-29
+
+### Changed
+- **GET /backups/images/server/:serverName jobName 필터 동작 변경**
+  - 정확히 일치 → 부분 일치로 변경
+  - 백업 이미지 파일명에 해당 문자열이 포함된 경우 반환
+  - 예시: `jobName=backupTest_ROOT_1` → `SOURCE-backupTest_ROOT_1_[2026-01-29].ZIA` 매칭
+  - 관련 커밋: `06fdc3f` (Recovery 작업 등록 시 백업 이미지 조회 실패 버그 수정)
+- **GET /backups/images/server/:serverName serverName 파라미터 설명 보완**
+  - "ZDM에 등록된 서버 이름 (Center 이름으로 인식됨)" 명시
+  - `backup_imageinfo` 테이블은 Center 이름 기준으로 저장됨을 문서화
+- **POST /recoveries jobList 항목 구조 개선**
+  - `backupJob` 필드 추가: 사용할 백업 작업 이름 (미지정 시 최신 성공 작업 자동 선택)
+  - `backupFile` 필드 설명 상세화: 사용할 백업 이미지 파일명 (미지정 시 최신 이미지 자동 선택)
+  - 요청 예시에 `backupJob`, `backupFile` 필드 추가
+
+---
+
 ## [API v1.0.3] - 2026-01-28
 
 ### Added

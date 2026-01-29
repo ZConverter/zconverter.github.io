@@ -64,12 +64,15 @@ curl -X POST "https://api.example.com/api/recoveries" \
     "jobList": [
       {
         "sourcePartition": "/",
-        "targetPartition": "/dev/sda1"
+        "targetPartition": "/dev/sda1",
+        "backupJob": "daily-backup-root"
       },
       {
         "sourcePartition": "/home",
         "targetPartition": "/dev/sdb1",
-        "mode": "increment"
+        "mode": "increment",
+        "backupJob": "daily-backup-home",
+        "backupFile": "backup-home-2025-01-15.ZIA"
       }
     ]
   }'
@@ -112,7 +115,8 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `sourcePartition` | string | Required | 소스 파티션 |
 | `targetPartition` | string | Required | 타겟 파티션 |
 | `overwrite` | string | Optional | 덮어쓰기 허용 여부 (`allow`, `not allow`) |
-| `backupFile` | string | Optional | 사용할 백업 파일 이름 |
+| `backupJob` | string | Optional | 사용할 백업 작업 이름 (미지정 시 최신 성공 작업 자동 선택) |
+| `backupFile` | string | Optional | 사용할 백업 이미지 파일명 (미지정 시 최신 이미지 자동 선택) |
 | `mode` | string | Optional | 작업 모드 |
 | `repository` | object | Optional | 레포지토리 정보 |
 
