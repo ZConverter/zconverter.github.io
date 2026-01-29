@@ -78,6 +78,7 @@ zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --
 | --platform | - | string | Required | - | Target 서버 플랫폼 | {% include zdm/platforms.md baremetal=true inline=true %} |
 | --mode | - | string | Required | - | 작업 모드 | {% include zdm/job-modes.md recovery=true %} |
 | --repository-id | -ri | number | Optional | config 설정값 | 작업시 사용할 Repository ID | - |
+| --repository-type | -rt | string | Optional | - | 작업시 사용할 Repository 타입 | - |
 | --repository-path | -rp | string | Optional | - | 작업시 사용할 Repository 경로 | - |
 | --job-name | -jn | string | Optional | - | 작업 이름 | - |
 | --user | -u | string | Optional | - | 사용자 ID 또는 메일 | - |

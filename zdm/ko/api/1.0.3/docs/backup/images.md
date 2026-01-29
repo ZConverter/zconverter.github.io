@@ -36,7 +36,7 @@ lang: ko
 curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)" \
   -H "Authorization: Bearer <token>"
 
-# 작업 이름으로 필터 (부분 일치)
+# 작업 이름으로 필터 (정확히 일치)
 curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)?jobName=source-centos7-bios_ROOT" \
   -H "Authorization: Bearer <token>"
 
@@ -76,8 +76,8 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 | `center` | Query | string | Optional | - | Center ID 또는 이름으로 필터 |
 | `repositoryId` | Query | number | Optional | - | Repository ID로 필터 |
 | `repositoryPath` | Query | string | Optional | - | Repository 경로로 필터 (예: `/ZConverter`) |
-| `jobName` | Query | string | Optional | - | 작업 이름 필터 (부분 일치, 이미지 파일명에 포함 여부) |
-| `partition` | Query | string | Optional | - | Linux 파티션(mountPoint) 필터 (예: `/`, `/boot`) |
+| `jobName` | Query | string | Optional | - | 작업 이름 필터 (정확히 일치) |
+| `partition` | Query | string | Optional | - | 파티션/드라이브 필터 (Linux: `/`, `/boot` / Windows: `C`, `C:` 콜론 자동 제거) |
 | `drive` | Query | string | Optional | - | Windows 드라이브 필터 (예: `C`, `C:`) |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 |
@@ -85,8 +85,8 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 **필터링 동작:**
 - `center`: 특정 Center의 백업 이미지만 조회 (미지정 시 모든 Center)
 - `repositoryId`: 특정 Repository에 저장된 백업 이미지만 조회 (미지정 시 모든 Repository)
-- `jobName`: 백업 이미지 파일명에 해당 문자열이 포함된 경우 반환 (예: `backupTest_ROOT_1` → `SOURCE-backupTest_ROOT_1_[2026-01-29].ZIA` 매칭)
-- `partition`: Linux 서버의 mountPoint와 정확히 일치하는 경우만 반환
+- `jobName`: 작업 이름과 정확히 일치하는 경우만 반환
+- `partition`: Linux/Windows 모두 지원. 정확히 일치하는 경우만 반환 (Windows: `C:` → `C`로 콜론 자동 제거)
 - `drive`: Windows 서버의 드라이브 문자와 정확히 일치하는 경우만 반환 (`C`, `C:` 모두 허용)
 
 </details>
@@ -105,6 +105,7 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
     {
       "image": {
         "name": "source-centos7-bios_ROOT_[2026-01-07_08_44].ZIA",
+        "jobName": "source-centos7-bios_ROOT",
         "type": "full",
         "size": {
           "raw": 831622708,
@@ -114,6 +115,10 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
         "compression": {
           "enabled": true,
           "ratio": "35.72%"
+        },
+        "repository": {
+          "id": 13,
+          "path": "/ZConverter"
         }
       },
       "server": {
@@ -133,6 +138,7 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
     {
       "image": {
         "name": "source-centos7-bios_boot_[2026-01-08_01_19].ZIA",
+        "jobName": "source-centos7-bios_boot",
         "type": "full",
         "size": {
           "raw": 113541428,
@@ -142,6 +148,10 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
         "compression": {
           "enabled": true,
           "ratio": "72.18%"
+        },
+        "repository": {
+          "id": 13,
+          "path": "/ZConverter"
         }
       },
       "server": {
@@ -177,6 +187,7 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
     {
       "image": {
         "name": "SOURCE-2012_C.ZIA",
+        "jobName": "SOURCE-2012_C",
         "type": "full",
         "size": {
           "raw": 8416938102,
@@ -186,6 +197,10 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
         "compression": {
           "enabled": true,
           "ratio": "45.46%"
+        },
+        "repository": {
+          "id": 13,
+          "path": "/ZConverter"
         }
       },
       "server": {
@@ -220,6 +235,7 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
     {
       "image": {
         "name": "source-centos7-bios_ROOT_[2026-01-07_08_44].ZIA",
+        "jobName": "source-centos7-bios_ROOT",
         "type": "full",
         "size": {
           "raw": 831622708,
@@ -229,6 +245,10 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
         "compression": {
           "enabled": true,
           "ratio": "35.72%"
+        },
+        "repository": {
+          "id": 13,
+          "path": "/ZConverter"
         }
       },
       "server": {
@@ -288,6 +308,7 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 | `data` | array | 백업 이미지 목록 |
 | `data[].image` | object | 이미지 정보 |
 | `data[].image.name` | string | 백업 이미지 이름 |
+| `data[].image.jobName` | string | 백업 작업 이름 |
 | `data[].image.type` | string | 백업 타입 (`full`, `increment`) |
 | `data[].image.size` | object | 이미지 크기 정보 |
 | `data[].image.size.raw` | number | 이미지 크기 원본 값 (bytes) |
@@ -296,6 +317,9 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 | `data[].image.compression` | object | 압축 정보 |
 | `data[].image.compression.enabled` | boolean | 압축 여부 |
 | `data[].image.compression.ratio` | string | 압축률 (이미지크기/파티션크기, 예: "35.72%") |
+| `data[].image.repository` | object | Repository 정보 |
+| `data[].image.repository.id` | number | Repository ID |
+| `data[].image.repository.path` | string | Repository 경로 (예: "/ZConverter") |
 | `data[].server` | object | 서버 정보 |
 | `data[].server.name` | string | 백업 대상 서버 이름 |
 | `data[].server.os` | string | 서버 운영체제 |

@@ -6,6 +6,17 @@
 
 ---
 
+## [CLI v1.0.3] - 2026-01-29
+
+### Added
+- **recovery regist 명령어 `--repository-type` 옵션 추가**
+  - 별칭: `-rt`
+  - 작업시 사용할 Repository 타입 지정
+- **recovery regist 명령어 jobList 항목에 `backupJob` 필드 추가**
+  - 사용할 백업 작업 이름 지정 (미지정 시 최신 성공 작업 자동 선택)
+
+---
+
 ## [API v1.0.3] - 2026-01-29
 
 ### Changed
@@ -13,7 +24,6 @@
   - 정확히 일치 → 부분 일치로 변경
   - 백업 이미지 파일명에 해당 문자열이 포함된 경우 반환
   - 예시: `jobName=backupTest_ROOT_1` → `SOURCE-backupTest_ROOT_1_[2026-01-29].ZIA` 매칭
-  - 관련 커밋: `06fdc3f` (Recovery 작업 등록 시 백업 이미지 조회 실패 버그 수정)
 - **GET /backups/images/server/:serverName serverName 파라미터 설명 보완**
   - "ZDM에 등록된 서버 이름 (Center 이름으로 인식됨)" 명시
   - `backup_imageinfo` 테이블은 Center 이름 기준으로 저장됨을 문서화

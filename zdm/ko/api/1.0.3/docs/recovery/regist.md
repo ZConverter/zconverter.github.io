@@ -38,8 +38,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
     "target": "target-server",
     "platform": "vmware",
     "repository": {
-      "type": "nfs",
-      "path": "/backup/source-server"
+      "id": 13
     },
     "mode": "full",
     "jobName": "daily-recovery"
@@ -55,6 +54,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
     "target": "target-server",
     "platform": "aws",
     "repository": {
+      "id": 13,
       "type": "smb",
       "path": "//192.168.1.100/backup"
     },
@@ -90,8 +90,9 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `target` | string | Required | 타겟 서버 ID (숫자) 또는 서버 이름 | - |
 | `platform` | string | Required | 타겟 플랫폼 | {% include zdm/platforms.md inline=true %} |
 | `repository` | object | Required | 레포지토리 정보 | - |
-| `repository.type` | string | Required | 레포지토리 타입 | {% include zdm/repository-types.md %} |
-| `repository.path` | string | Required | 레포지토리 경로 | - |
+| `repository.id` | number | Required | 레포지토리 ID (ZDM에 등록된 Repository ID) | - |
+| `repository.type` | string | Optional | 레포지토리 타입 | {% include zdm/repository-types.md %} |
+| `repository.path` | string | Optional | 레포지토리 경로 | - |
 | `mode` | string | Required | 작업 모드 | {% include zdm/job-modes.md %} |
 | `jobName` | string | Optional | 작업 이름 | - |
 | `overwrite` | string | Optional | 덮어쓰기 허용 여부 | `allow`, `not allow` |
@@ -99,13 +100,13 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
 | `afterReboot` | string | Optional | 작업 후 부팅 방식 | {% include zdm/after-reboot.md %} |
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (0: 무제한) | - |
-| `excludePartition` | string | Optional | 제외 파티션 | - |
+| `excludePartition` | string | Optional | 제외할 파티션 목록 (콤마 구분, 예: `"h,d"` 또는 `"/boot,/home"`) | - |
 | `mailEvent` | string | Optional | 이벤트 알림 이메일 | - |
 | `autoStart` | string | Optional | 자동 시작 여부 | {% include zdm/use-options.md %} |
 | `scriptPath` | string | Optional | 실행할 스크립트 경로 | - |
 | `scriptRun` | string | Optional | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 | `cloudAuth` | string | Optional | 클라우드 인증 정보 ID/Name | - |
-| `listOnly` | boolean | Optional | 지정 항목만 작업 여부 | - |
+| `listOnly` | boolean | Optional | `true`: jobList에 지정된 파티션만 작업, `false`: 전체 파티션 작업 (기본값) | - |
 | `jobList` | array | Optional | 개별 작업 설정 배열 | - |
 
 **jobList 항목 구조:**
@@ -117,8 +118,11 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `overwrite` | string | Optional | 덮어쓰기 허용 여부 (`allow`, `not allow`) |
 | `backupJob` | string | Optional | 사용할 백업 작업 이름 (미지정 시 최신 성공 작업 자동 선택) |
 | `backupFile` | string | Optional | 사용할 백업 이미지 파일명 (미지정 시 최신 이미지 자동 선택) |
-| `mode` | string | Optional | 작업 모드 |
-| `repository` | object | Optional | 레포지토리 정보 |
+| `mode` | string | Optional | 작업 모드 (`full`, `increment`) |
+| `repository` | object | Optional | 레포지토리 정보 (미지정 시 공통 repository 사용) |
+| `repository.id` | number | Required | 레포지토리 ID |
+| `repository.type` | string | Optional | 레포지토리 타입 |
+| `repository.path` | string | Optional | 레포지토리 경로 |
 
 </details>
 
@@ -172,7 +176,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
         "overwrite": "allow",
         "fileSystem": "ext4",
         "backup": {
-          "useLast": "true",
+          "useLatest": "true",
           "backupFile": "backup-home-2025-01-15.img",
           "backupJob": "daily-backup-home"
         },
