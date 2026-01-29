@@ -72,7 +72,7 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 |
 |----------|------|------|------|--------|------|
-| `serverName` | Path | string | Required | - | ZDM에 등록된 서버 이름 (Center 이름으로 인식됨) |
+| `serverName` | Path | string | Required | - | ZDM에 등록된 서버 이름 ( source server )  |
 | `center` | Query | string | Optional | - | Center ID 또는 이름으로 필터 |
 | `repositoryId` | Query | number | Optional | - | Repository ID로 필터 |
 | `repositoryPath` | Query | string | Optional | - | Repository 경로로 필터 (예: `/ZConverter`) |

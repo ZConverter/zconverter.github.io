@@ -12,25 +12,35 @@
 - **recovery regist 명령어 `--repository-type` 옵션 추가**
   - 별칭: `-rt`
   - 작업시 사용할 Repository 타입 지정
-- **recovery regist 명령어 jobList 항목에 `backupJob` 필드 추가**
-  - 사용할 백업 작업 이름 지정 (미지정 시 최신 성공 작업 자동 선택)
 
 ---
 
 ## [API v1.0.3] - 2026-01-29
 
+### Added
+- **GET /backups/images/server/:serverName 응답 필드 추가**
+  - `image.jobName`: 백업 작업 이름 필드 추가
+
 ### Changed
 - **GET /backups/images/server/:serverName jobName 필터 동작 변경**
-  - 정확히 일치 → 부분 일치로 변경
-  - 백업 이미지 파일명에 해당 문자열이 포함된 경우 반환
-  - 예시: `jobName=backupTest_ROOT_1` → `SOURCE-backupTest_ROOT_1_[2026-01-29].ZIA` 매칭
-- **GET /backups/images/server/:serverName serverName 파라미터 설명 보완**
-  - "ZDM에 등록된 서버 이름 (Center 이름으로 인식됨)" 명시
-  - `backup_imageinfo` 테이블은 Center 이름 기준으로 저장됨을 문서화
+  - 부분 일치 → 정확히 일치로 변경
+  - 작업 이름과 정확히 일치하는 백업 이미지만 반환
+- **GET /backups/images/server/:serverName partition 파라미터 설명 개선**
+  - Linux/Windows 통합 지원 명시
+  - Windows 드라이브 콜론 자동 제거 설명 추가 (`C:` → `C`)
+- **POST /recoveries repository 필드 구조 변경**
+  - `repository.id`: Optional → Required로 변경
+  - `repository.type`: Required → Optional로 변경
+  - `repository.path`: Required → Optional로 변경
 - **POST /recoveries jobList 항목 구조 개선**
   - `backupJob` 필드 추가: 사용할 백업 작업 이름 (미지정 시 최신 성공 작업 자동 선택)
   - `backupFile` 필드 설명 상세화: 사용할 백업 이미지 파일명 (미지정 시 최신 이미지 자동 선택)
-  - 요청 예시에 `backupJob`, `backupFile` 필드 추가
+  - `repository` 객체 구조 추가: 개별 파티션마다 다른 Repository 사용 가능
+  - `excludePartition` 설명 상세화: 콤마 구분 예시 추가
+  - `listOnly` 설명 상세화: true/false 동작 명시
+  - `mode`, `repository` 필드 설명 보완
+- **POST /recoveries 응답 필드명 변경**
+  - `backup.useLast` → `backup.useLatest`
 
 ---
 
