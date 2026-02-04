@@ -46,6 +46,7 @@ zdm-cli file list -o table
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
+| --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
 
 </details>
 

@@ -47,6 +47,12 @@ zdm-cli config set --zdm-ip 192.168.1.100 --zdm-port 53307 --zdm-id 1
 
 # Repository 설정
 zdm-cli config set --zdm-repo-id 1 --zdm-repo-path /backup
+
+# Repository ID로 path 자동 조회 설정
+zdm-cli config set --zdm-repo-id 15 --auto
+
+# SMB Repository 경로 설정 (Windows 공유 경로)
+zdm-cli config set --zdm-repo-path "\\\\192.168.2.108\\ZConverter"
 ```
 
 </details>
@@ -60,6 +66,7 @@ zdm-cli config set --zdm-repo-id 1 --zdm-repo-path /backup
 | `--token` | - | string | Optional | - | API Server 인증 토큰 | - |
 | `--zdm-repo-id` | `-zri` | number | Optional | - | 기본으로 사용할 ZDM Repository ID (숫자만 입력 가능) | - |
 | `--zdm-repo-path` | `-zrp` | string | Optional | - | 기본으로 사용할 ZDM Repository 경로 | - |
+| `--auto` | - | boolean | Optional | - | `--zdm-repo-id`와 함께 사용 시 repository path 자동 조회 | - |
 | `--zdm-ip` | `-ip` | string | Optional | - | Portal IP 주소 | - |
 | `--zdm-port` | `-port` | number | Optional | - | API Server 포트 번호 (숫자만 입력 가능) | - |
 | `--zdm-id` | `-zi` | number | Optional | - | Portal ID (숫자만 입력 가능) | - |

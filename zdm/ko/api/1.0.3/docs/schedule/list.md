@@ -54,6 +54,7 @@ curl -X GET "https://api.example.com/api/schedules?state=enabled" \
 | `state` | Query | string | Optional | - | 활성화 상태 필터 | {% include zdm/schedule-state.md %} |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
+| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 <details markdown="1" id="type-선택값">
 <summary><strong>type 선택값</strong></summary>

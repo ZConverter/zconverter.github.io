@@ -84,6 +84,7 @@ zdm-cli recovery list --output table
 | --repository-type | -rt | string | Optional | | 작업에 사용한 Repository 타입 | {% include zdm/repository-types.md %} |
 | --detail | | boolean | Optional | | 상세 정보 조회 여부 | |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
+| --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
 
 </details>
 

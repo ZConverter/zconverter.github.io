@@ -64,6 +64,7 @@ curl -X GET "https://api.example.com/api/servers?page=1&limit=10" \
 | `detail` | Query | boolean | Optional | `false` | 상세 정보(리소스 등) 포함 여부 | `true`, `false` |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
+| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 </details>
 
@@ -384,7 +385,6 @@ curl -X GET "https://api.example.com/api/servers?page=1&limit=10" \
       "repository": [
         {
           "id": "1",
-          "os": "Linux",
           "size": {
             "raw": 1099511627776,
             "formatted": "1.0 TB"
@@ -509,7 +509,6 @@ curl -X GET "https://api.example.com/api/servers?page=1&limit=10" \
 | 필드 | 타입 | 설명 |
 |------|------|------|
 | `repository[].id` | string | 레포지토리 ID |
-| `repository[].os` | string | 운영체제 |
 | `repository[].size.raw` | number | 전체 크기 (bytes) |
 | `repository[].size.formatted` | string | 전체 크기 (포맷) |
 | `repository[].used.raw` | number | 사용 중인 용량 (bytes) |

@@ -79,6 +79,7 @@ zdm-cli server list --output table
 | --partition | - | boolean | Optional | false | Partition 정보 추가조회 | - |
 | --detail | - | boolean | Optional | false | 상세 정보 조회 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
+| --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
 
 </details>
 

@@ -59,6 +59,7 @@ curl -X GET "https://api.example.com/api/licenses?page=1&limit=10" \
 | `created` | Query | string | Optional | - | 생성일 필터 (YYYY-MM-DD) | - |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
+| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 </details>
 

@@ -45,6 +45,7 @@ curl -X GET "https://api.example.com/api/files/list?page=1&limit=10" \
 |----------|------|------|------|--------|------|--------|
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
+| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 </details>
 

@@ -50,10 +50,10 @@ curl -X GET "https://api.example.com/api/zdms/repositories?page=1&limit=10" \
 |----------|------|------|------|--------|------|--------|
 | `center` | Query | string | Optional | - | 센터 이름 또는 ID 필터 | - |
 | `type` | Query | string | Optional | - | 레포지토리 타입 필터 | {% include zdm/repository-types.md %} |
-| `os` | Query | string | Optional | - | OS 필터 | - |
 | `path` | Query | string | Optional | - | 경로 필터 | - |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
+| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 </details>
 
@@ -71,7 +71,6 @@ curl -X GET "https://api.example.com/api/zdms/repositories?page=1&limit=10" \
     {
       "id": "1",
       "center": "Main-Center",
-      "os": "Linux",
       "type": "NFS",
       "size": {
         "raw": 1099511627776,
@@ -111,7 +110,6 @@ curl -X GET "https://api.example.com/api/zdms/repositories?page=1&limit=10" \
     {
       "id": "1",
       "center": "Main-Center",
-      "os": "Linux",
       "type": "NFS",
       "size": {
         "raw": 1099511627776,
@@ -157,7 +155,6 @@ curl -X GET "https://api.example.com/api/zdms/repositories?page=1&limit=10" \
 |------|------|------|
 | `id` | string | 레포지토리 ID |
 | `center` | string | 센터 이름 |
-| `os` | string | 운영체제 |
 | `type` | string | 레포지토리 타입 (`NFS` / `SMB`) |
 | `size.raw` | number | 전체 크기 (bytes) |
 | `size.formatted` | string | 전체 크기 (포맷) |

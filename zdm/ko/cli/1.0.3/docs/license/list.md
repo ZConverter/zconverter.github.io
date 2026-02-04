@@ -71,6 +71,7 @@ zdm-cli license list --output table
 | --expiration-date | -expd | string | Optional | - | 라이센스 만료 날짜 (format: YYYY-MM-DD) | - |
 | --create-date | -cre | string | Optional | - | 라이센스 생성 일자 (format: YYYY-MM-DD) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
+| --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
 
 </details>
 

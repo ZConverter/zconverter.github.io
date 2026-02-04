@@ -6,6 +6,49 @@
 
 ---
 
+## [CLI v1.0.3] - 2026-02-04
+
+### Added
+- **list 명령어 정렬 옵션 추가**
+  - `--asc`: 오름차순 정렬 (기본값: 내림차순)
+  - 적용 명령어: `backup list`, `recovery list`, `server list`, `license list`, `schedule list`, `zdm list`, `file list`
+  - 사용 예시: `zdm-cli backup list --asc`
+- **`config set --auto` 옵션 추가**
+  - `--zdm-repo-id`와 함께 사용 시 repository path 자동 조회
+  - 사용 예시: `zdm-cli config set --zri 15 --auto`
+
+### Changed
+- **`zdm list --repo` 출력에서 `os` 필드 제거**
+  - API 변경사항 반영
+
+### Fixed
+- **`config set` SMB 경로 입력 시 백슬래시 손실 문제 수정**
+  - `config set --zrp "\\192.168.2.108\ZConverter"` 입력 시 올바르게 저장
+- **심볼릭 링크로 실행 시 config 파일 인식 오류 수정**
+  - 바이너리를 심볼릭 링크로 등록 후 실행 시 원본 위치의 config 파일을 찾지 못하던 문제 해결
+- **`config set --auto` 옵션 repository 조회 오류 수정**
+  - 존재하는 repository ID 입력 시 "not found" 오류가 발생하던 문제 해결
+
+---
+
+## [API v1.0.3] - 2026-02-04
+
+### Added
+- **모든 조회 API에 `sort` 쿼리 파라미터 추가**
+  - 사용법: `?sort=asc` (오름차순), 기본값: 내림차순(desc)
+  - 적용 API: GET /zdm-centers, /servers, /backups, /recoveries, /schedules, /users, /licenses, /files/list 등
+
+### Changed
+- **GET /zdm-centers/:identifier/repositories 응답에서 `os` 필드 제거**
+  - Repository 정보에서 OS 필드가 더 이상 반환되지 않음
+
+### Fixed
+- **GET /zdm-centers/:identifier/repositories type 값 "Unknown" 오류 수정**
+  - ZDM 신규 버전에서 Repository 타입이 "Unknown"으로 표시되던 문제 해결
+  - nType 값 22, 23에 대한 매핑 추가 (22→SMB, 23→NFS)
+
+---
+
 ## [CLI v1.0.3] - 2026-01-29
 
 ### Added

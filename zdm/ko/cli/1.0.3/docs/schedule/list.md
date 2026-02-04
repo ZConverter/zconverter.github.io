@@ -64,6 +64,8 @@ zdm-cli schedule list --output table
 | --id | - | number | Optional | - | 조회할 Schedule ID (해당 옵션 사용시 단일 조회) | - |
 | --type | - | number | Optional | - | 조회할 Schedule Type | {% include zdm/schedule-types.md inline=true %} |
 | --state | - | string | Optional | - | 조회할 Schedule 상태 | {% include zdm/schedule-state.md %} |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
+| --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
 
 </details>
 

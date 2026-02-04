@@ -59,6 +59,7 @@ curl -X GET "https://api.example.com/api/zdms?detail=true&repository=true" \
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
+| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 </details>
 
@@ -367,7 +368,6 @@ curl -X GET "https://api.example.com/api/zdms?detail=true&repository=true" \
         {
           "id": "1",
           "center": "Main-Center",
-          "os": "Linux",
           "type": "NFS",
           "size": {
             "raw": 1099511627776,
@@ -533,7 +533,6 @@ curl -X GET "https://api.example.com/api/zdms?detail=true&repository=true" \
 |------|------|------|
 | `repository[].id` | string | 레포지토리 ID |
 | `repository[].center` | string | 센터 이름 |
-| `repository[].os` | string | 운영체제 |
 | `repository[].type` | string | 레포지토리 타입 (`NFS` / `SMB`) |
 | `repository[].size.raw` | number | 전체 크기 (bytes) |
 | `repository[].size.formatted` | string | 전체 크기 (포맷) |

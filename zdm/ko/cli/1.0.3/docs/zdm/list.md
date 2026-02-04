@@ -77,6 +77,7 @@ zdm-cli zdm list --output table
 | --repository-only | -repo-only | boolean | Optional | false | 대상 ZDM의 Repository 정보만 조회 | - |
 | --detail | - | boolean | Optional | false | 상세 정보 조회 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
+| --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
 
 </details>
 
@@ -275,7 +276,6 @@ lastUpdated     : 2025-01-06T10:30:00Z
 repository      :
   [Repository 1]
     id          : 1
-    os          : Linux
     type        : nfs
     size        : 500.0 GB, used: 100.0 GB, free: 400.0 GB (20%)
     remotePath  : /mnt/backup
@@ -321,7 +321,6 @@ repository      :
       "repository": [
         {
           "id": "1",
-          "os": "Linux",
           "type": "nfs",
           "size": {
             "raw": 536870912000,
