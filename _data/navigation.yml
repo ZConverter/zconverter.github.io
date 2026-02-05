@@ -130,6 +130,10 @@ ko-api-1.0.3:
         url: "/zdm/ko/api/1.0.3/docs/zdm/repositories"
       - title: "POST /zdms/repositories"
         url: "/zdm/ko/api/1.0.3/docs/zdm/repository-regist"
+      - title: "PUT /zdms/repositories/:identifier"
+        url: "/zdm/ko/api/1.0.3/docs/zdm/repository-update"
+      - title: "POST /zdms/repositories/verify"
+        url: "/zdm/ko/api/1.0.3/docs/zdm/repository-verify"
       - title: "DELETE /zdms/repositories/:identifier"
         url: "/zdm/ko/api/1.0.3/docs/zdm/repository-delete"
 
@@ -366,6 +370,10 @@ api-1.0.3:
         url: "/zdm/ko/api/1.0.3/docs/zdm/repositories"
       - title: "POST /zdms/repositories"
         url: "/zdm/ko/api/1.0.3/docs/zdm/repository-regist"
+      - title: "PUT /zdms/repositories/:identifier"
+        url: "/zdm/ko/api/1.0.3/docs/zdm/repository-update"
+      - title: "POST /zdms/repositories/verify"
+        url: "/zdm/ko/api/1.0.3/docs/zdm/repository-verify"
       - title: "DELETE /zdms/repositories/:identifier"
         url: "/zdm/ko/api/1.0.3/docs/zdm/repository-delete"
 

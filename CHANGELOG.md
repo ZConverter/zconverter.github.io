@@ -8,13 +8,35 @@
 
 ## [API v1.0.3] - 2026-02-05
 
+### Added
+- **PUT /zdm-centers/repositories/:identifier 엔드포인트 추가**
+  - Repository 정보 수정 기능
+  - 수정 가능 필드: `remotePath`, `remoteUser`, `remotePwd`, `ip`
+  - `center` 필수 입력: Center 존재 여부 및 Repository 소속 일치 검증
+  - `remotePath` 입력 시: DB의 저장소 타입(SMB/NFS)에 따른 경로 양식 검증
+  - `ip` 입력 시: IPv4 양식 검증 + 기존 등록 IP와 중복 검사 후 `|` 구분자로 추가
+  - 응답 형식: `repositoryInfo` + `summary.updatedFields[{field, previous, new}]`
+  - `remotePwd` 변경 시 previous/new 모두 `"********"`로 마스킹
+
 ### Changed
+- **POST /zdm-centers/repositories 등록 결과 확인 개선**
+  - 기존: `job_interactive` INSERT 후 바로 성공 응답 (실제 등록 결과 미확인)
+  - 변경: INSERT 후 최대 10초간 polling하여 실제 등록 결과 확인 후 응답
+  - 성공: `sJobResult === "SUCCESS"` 시 성공 응답
+  - 실패: `sDescription` 내용을 에러 메시지로 반환 (HTTP 500)
+  - 타임아웃: 10초 경과 시 타임아웃 에러 반환 (HTTP 500)
+
 - **POST /backups individual.jobName 처리 개선**
   - `individual`에서 `jobName`을 명시적으로 지정한 경우 파티션 suffix 없이 그대로 사용
   - 기존: `individual.jobName = "vmware-12.0204"` → `"vmware-12.0204_var_www_html"` (suffix 강제 추가)
   - 변경: `individual.jobName = "vmware-12.0204"` → `"vmware-12.0204"` (그대로 사용)
   - 중복 jobName 지정 시 `JOB_NAME_ALREADY_EXISTS` 에러 반환 (HTTP 409)
   - `individual.jobName` 미지정 시 기존 자동 생성 로직 유지
+
+### Documentation
+- **POST /zdms/repositories 문서 수정**
+  - 등록 소요 시간 안내 문구 추가: 최대 10초간 결과 확인, 초과 시 실패 간주
+  - 에러 응답 추가: 등록 실패 (500), 등록 시간 초과 (500)
 
 ---
 

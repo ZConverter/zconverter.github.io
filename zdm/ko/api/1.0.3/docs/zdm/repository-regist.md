@@ -14,6 +14,7 @@ lang: ko
 
 > * 새로운 레포지토리를 등록합니다.
 > * SMB 타입의 경우 account와 password가 필수입니다.
+> * 등록 요청 후 최대 10초간 결과를 확인하며, 10초 이내에 완료되지 않으면 실패로 간주합니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -123,6 +124,28 @@ curl -X POST "https://api.example.com/api/zdms/repositories" \
   "success": false,
   "requestID": "req-abc123",
   "error": "ID가 '999'인 Center를 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**등록 실패 (500 Internal Server Error)**
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "Repository registration failed (result: FAIL)",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**등록 시간 초과 (500 Internal Server Error)**
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "Repository registration timed out (10s elapsed)",
   "timestamp": "2025-01-15 10:30:00"
 }
 ```

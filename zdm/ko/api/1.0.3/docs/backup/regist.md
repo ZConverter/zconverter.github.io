@@ -112,7 +112,7 @@ curl -X POST "https://api.example.com/api/backups" \
 | `server` | string \| number | Optional | 서버 ID 또는 이름 (미입력시 기본 server 사용) | - |
 | `type` | string | Optional | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
 | `repository` | object | Optional | 레포지토리 정보 | - |
-| `jobName` | string | Optional | 작업 이름 | - |
+| `jobName` | string | Optional | 작업 이름. 명시적으로 지정 시 파티션 suffix 없이 그대로 사용. 미지정 시 자동 생성 | - |
 | `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
 | `description` | string | Optional | 작업 설명 | - |
 | `rotation` | number | Optional | 작업 반복 횟수 (1~30) | - |
@@ -275,6 +275,19 @@ curl -X POST "https://api.example.com/api/backups" \
   "timestamp": "2025-01-15 10:30:00"
 }
 ```
+
+**작업 이름 중복 (409 Conflict)**
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "JOB_NAME_ALREADY_EXISTS",
+  "timestamp": "2026-02-05 10:30:00"
+}
+```
+
+> `individual.jobName`을 명시적으로 지정했으나 동일한 이름의 작업이 이미 존재하는 경우 발생합니다.
 
 </details>
 
