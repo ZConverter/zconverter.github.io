@@ -6,6 +6,18 @@
 
 ---
 
+## [API v1.0.3] - 2026-02-05
+
+### Changed
+- **POST /backups individual.jobName 처리 개선**
+  - `individual`에서 `jobName`을 명시적으로 지정한 경우 파티션 suffix 없이 그대로 사용
+  - 기존: `individual.jobName = "vmware-12.0204"` → `"vmware-12.0204_var_www_html"` (suffix 강제 추가)
+  - 변경: `individual.jobName = "vmware-12.0204"` → `"vmware-12.0204"` (그대로 사용)
+  - 중복 jobName 지정 시 `JOB_NAME_ALREADY_EXISTS` 에러 반환 (HTTP 409)
+  - `individual.jobName` 미지정 시 기존 자동 생성 로직 유지
+
+---
+
 ## [CLI v1.0.3] - 2026-02-04
 
 ### Added
