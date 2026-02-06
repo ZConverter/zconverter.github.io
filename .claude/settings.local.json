@@ -39,7 +39,8 @@
       "Bash(git lfs ls-files:*)",
       "Bash(xargs:*)",
       "WebFetch(domain:zconverter.github.io)",
-      "Bash(git check-ignore:*)"
+      "Bash(git check-ignore:*)",
+      "Bash(gh run list:*)"
     ],
     "deny": [],
     "ask": []
