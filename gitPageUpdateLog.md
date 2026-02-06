@@ -1,5 +1,25 @@
 # API Documentation Update Log
 
+## 날짜: 2026-02-06
+
+### 변경 사유
+- Repository Update 문서와 코드 응답 형식 불일치 수정
+  - backup/recovery update 응답 양식과 통일
+  - `summary.state` 필드 추가
+  - `repositoryInfo`에서 불필요한 필드 제거 (type, remotePath, localPath, ip)
+
+---
+
+## 변경된 파일 목록
+
+### [zdm/ko/api/1.0.3/docs/zdm/repository-update.md]
+- 응답 예시 JSON: `repositoryInfo`에서 `id`, `centerName`만 유지 (type, remotePath, localPath, ip 제거)
+- 응답 예시 JSON: `summary.state: "success"` 필드 추가
+- 응답 필드 테이블: 불필요한 필드 제거 및 `summary.state` 필드 추가
+- `field: "ip"` → `field: "ipAddress"` 변경 (코드와 일치)
+
+---
+
 ## 날짜: 2026-01-16
 
 ### 변경 사유
