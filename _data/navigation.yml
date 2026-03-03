@@ -137,6 +137,25 @@ ko-api-1.0.3:
       - title: "DELETE /zdms/repositories/:identifier"
         url: "/zdm/ko/api/1.0.3/docs/zdm/repository-delete"
 
+# API v1.1.0 (한국어)
+ko-api-1.1.0:
+  - title: "API Documentation"
+    links:
+      - title: "API 소개"
+        url: "/zdm/ko/api/1.1.0/index"
+  - title: "Backup History"
+    links:
+      - title: "GET /backups/histories"
+        url: "/zdm/ko/api/1.1.0/docs/backup/history-list"
+      - title: "GET /backups/histories/:identifier"
+        url: "/zdm/ko/api/1.1.0/docs/backup/history-get"
+  - title: "Recovery History"
+    links:
+      - title: "GET /recoveries/histories"
+        url: "/zdm/ko/api/1.1.0/docs/recovery/history-list"
+      - title: "GET /recoveries/histories/:identifier"
+        url: "/zdm/ko/api/1.1.0/docs/recovery/history-get"
+
 # API v1.0.4 (한국어, Beta)
 ko-api-1.0.4:
   - title: "API Documentation (Beta)"

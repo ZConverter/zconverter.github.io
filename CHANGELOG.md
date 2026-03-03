@@ -6,6 +6,32 @@
 
 ---
 
+## [API v1.1.0] - 2026-03-03
+
+### Added
+- **GET /backups/histories 엔드포인트 문서 추가**
+  - 백업 히스토리 목록 조회 (필터링 + 페이지네이션)
+  - 필터 옵션: `jobId`, `jobName`, `server`, `result`(`success`/`failed`), `sort`
+  - 페이지네이션: `page`, `limit`
+
+- **GET /backups/histories/:identifier 엔드포인트 문서 추가**
+  - 백업 히스토리 단건 조회 (ID 또는 작업 이름)
+  - ID 조회 시 단건 응답, 작업 이름 조회 시 목록 응답
+
+- **GET /recoveries/histories 엔드포인트 문서 추가**
+  - 복구 히스토리 목록 조회 (필터링 + 페이지네이션)
+  - `recoverDrive` 필드: `string[]` 타입 (콤마 구분 문자열을 배열로 변환)
+
+- **GET /recoveries/histories/:identifier 엔드포인트 문서 추가**
+  - 복구 히스토리 단건 조회 (ID 또는 작업 이름)
+
+- **API v1.1.0 문서 디렉토리 생성**
+  - `zdm/ko/api/1.1.0/` 경로에 index 및 history 문서 4개 추가
+  - navigation.yml에 `ko-api-1.1.0` 네비게이션 섹션 추가
+  - 기존 API(v1.0.3)와 동일한 엔드포인트는 v1.0.3 문서 참조 안내
+
+---
+
 ## [API v1.0.3] - 2026-02-05
 
 ### Added
