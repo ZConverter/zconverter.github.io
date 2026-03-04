@@ -32,8 +32,16 @@ lang: ko
 curl -X GET "https://api.example.com/api/recoveries/histories" \
   -H "Authorization: Bearer <token>"
 
-# 필터 적용 조회
-curl -X GET "https://api.example.com/api/recoveries/histories?result=failed&server=target-server" \
+# 타겟 서버로 필터 (기본값: target)
+curl -X GET "https://api.example.com/api/recoveries/histories?server=target-server" \
+  -H "Authorization: Bearer <token>"
+
+# 소스 서버로 필터
+curl -X GET "https://api.example.com/api/recoveries/histories?server=source-server&serverType=source" \
+  -H "Authorization: Bearer <token>"
+
+# 파티션 + 결과 필터
+curl -X GET "https://api.example.com/api/recoveries/histories?partition=C:&result=failed" \
   -H "Authorization: Bearer <token>"
 
 # 페이지네이션 적용 조회
@@ -50,11 +58,18 @@ curl -X GET "https://api.example.com/api/recoveries/histories?page=1&limit=10" \
 |----------|------|------|------|--------|------|--------|
 | `jobId` | Query | number | Optional | - | 작업 ID 필터 | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
-| `server` | Query | string | Optional | - | 작업 대상 서버 이름 필터 | - |
+| `server` | Query | string | Optional | - | 서버 이름 필터 (`serverType`에 따라 소스/타겟 구분) | - |
+| `serverType` | Query | string | Optional | `target` | 서버 타입 (`server`와 함께 사용) | `source`, `target` |
+| `partition` | Query | string | Optional | - | 드라이브/파티션 필터 (개별 항목 정확 매칭) | - |
 | `result` | Query | string | Optional | - | 작업 결과 필터 | `success`, `failed` |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
+
+> **참고:**
+> - `serverType`이 `target`(기본값)이면 `server`는 복구 대상 서버(`sRecoverySystemName`)를, `source`이면 소스 서버(`sSystemName`)를 기준으로 필터링합니다.
+> - `partition` 파라미터는 콤마 구분된 `sRecoverDrive` 필드에서 개별 항목을 정확히 매칭합니다.
+> - `partition` + `server` 사용 시, 해당 서버가 Windows이면 `:` 누락 시 자동으로 추가됩니다. (예: `C` → `C:`)
 
 </details>
 

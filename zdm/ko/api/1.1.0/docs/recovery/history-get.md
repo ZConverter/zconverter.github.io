@@ -51,7 +51,9 @@ curl -X GET "https://api.example.com/api/recoveries/histories/daily-recovery?res
 | `identifier` | Path | string | Required | - | 작업 ID (숫자) 또는 작업 이름 | - |
 | `jobId` | Query | number | Optional | - | 작업 ID 필터 | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
-| `server` | Query | string | Optional | - | 작업 대상 서버 이름 필터 | - |
+| `server` | Query | string | Optional | - | 서버 이름 필터 (`serverType`에 따라 소스/타겟 구분) | - |
+| `serverType` | Query | string | Optional | `target` | 서버 타입 (`server`와 함께 사용) | `source`, `target` |
+| `partition` | Query | string | Optional | - | 드라이브/파티션 필터 (개별 항목 정확 매칭) | - |
 | `result` | Query | string | Optional | - | 작업 결과 필터 | `success`, `failed` |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |

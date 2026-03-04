@@ -36,6 +36,10 @@ curl -X GET "https://api.example.com/api/backups/histories" \
 curl -X GET "https://api.example.com/api/backups/histories?result=success&server=server-01" \
   -H "Authorization: Bearer <token>"
 
+# 파티션 필터 적용 조회
+curl -X GET "https://api.example.com/api/backups/histories?server=server-01&partition=C:" \
+  -H "Authorization: Bearer <token>"
+
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/backups/histories?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
@@ -51,10 +55,13 @@ curl -X GET "https://api.example.com/api/backups/histories?page=1&limit=10" \
 | `jobId` | Query | number | Optional | - | 작업 ID 필터 | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `server` | Query | string | Optional | - | 작업 대상 서버 이름 필터 | - |
+| `partition` | Query | string | Optional | - | 드라이브/파티션 필터 (정확 매칭) | - |
 | `result` | Query | string | Optional | - | 작업 결과 필터 | `success`, `failed` |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
+
+> **참고:** `partition` 파라미터 사용 시 `server`를 함께 지정하면, 해당 서버가 Windows인 경우 `:` 누락 시 자동으로 추가됩니다. (예: `C` → `C:`)
 
 </details>
 

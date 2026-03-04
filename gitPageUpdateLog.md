@@ -1,5 +1,52 @@
 # API Documentation Update Log
 
+## 날짜: 2026-03-04
+
+### 변경 사유
+- API v1.1.0 히스토리 엔드포인트 문서에 누락된 필터 파라미터 추가
+- CLI v1.0.4 히스토리 서브커맨드 문서 신규 추가
+
+---
+
+### 변경된 파일 목록
+
+#### [zdm/ko/api/1.1.0/index.md]
+- 신규 엔드포인트 설명에 `partition`, `serverType` 필터 파라미터 명시
+
+#### [zdm/ko/api/1.1.0/docs/backup/history-list.md]
+- `partition` 쿼리 파라미터 추가 (정확 매칭)
+- 파티션 필터 요청 예시 추가
+- Windows 서버 파티션 정규화(`:` 자동 추가) 참고 사항 추가
+
+#### [zdm/ko/api/1.1.0/docs/backup/history-get.md]
+- `partition` 쿼리 파라미터 추가
+
+#### [zdm/ko/api/1.1.0/docs/recovery/history-list.md]
+- `serverType` 쿼리 파라미터 추가 (기본값: `target`, 선택값: `source`/`target`)
+- `partition` 쿼리 파라미터 추가 (개별 항목 정확 매칭)
+- 소스/타겟 서버 필터 요청 예시 추가
+- `serverType`, `partition`, Windows 파티션 정규화 참고 사항 추가
+
+#### [zdm/ko/api/1.1.0/docs/recovery/history-get.md]
+- `serverType`, `partition` 쿼리 파라미터 추가
+
+#### [zdm/ko/cli/1.0.4/index.md] (신규)
+- CLI v1.0.4 버전 소개 페이지
+- v1.0.3 대비 변경 사항: `backup history`, `recovery history` 서브커맨드 추가
+
+#### [zdm/ko/cli/1.0.4/docs/backup/history.md] (신규)
+- `backup history` 커맨드 문서
+- 옵션: `--job-id`, `--job-name`, `--server`, `--partition`, `--result`, `--asc`
+- Text/JSON 출력 예시 포함
+
+#### [zdm/ko/cli/1.0.4/docs/recovery/history.md] (신규)
+- `recovery history` 커맨드 문서
+- 옵션: `--job-id`, `--job-name`, `--server`, `--server-type`, `--partition`, `--result`, `--asc`
+- `--server-type` 소스/타겟 구분 설명 및 참고 사항 포함
+- Text/JSON 출력 예시 포함
+
+---
+
 ## 날짜: 2026-02-06
 
 ### 변경 사유
