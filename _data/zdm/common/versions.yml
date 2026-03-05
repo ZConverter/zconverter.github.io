@@ -2,17 +2,13 @@
 # API와 CLI의 버전 정보를 관리합니다.
 
 api:
+  - version: "1.1.0"
+    status: latest
   - version: "1.0.3"
-    status: latest      # current, beta, deprecated
-    released: 2024-01-01
-    description: "현재 안정 버전"
-  - version: "1.0.4"
-    status: beta
-    released: 2025-01-01
-    description: "베타 버전"
+    status: stable
 
 cli:
-  - version: "1.0.3"
+  - version: "1.0.4"
     status: latest
-    released: 2024-01-01
-    description: "현재 안정 버전"
+  - version: "1.0.3"
+    status: stable
