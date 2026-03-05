@@ -44,13 +44,16 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 
 <div class="service-grid">
 
+{% assign cli_latest = site.data.zdm.common.versions.cli | where: "status", "latest" | first %}
+{% assign api_latest = site.data.zdm.common.versions.api | where: "status", "latest" | first %}
+
 <div class="service-card cli">
 <h3>ZDM-CLI</h3>
 <p>백업, 복구, 시스템 관리를 위한 <strong>CLI 툴</strong></p>
 <table>
-<tr><td>현재 버전</td><td><code>1.0.4</code></td></tr>
-<tr><td>문서</td><td><a href="/zdm/ko/cli/1.0.4/index">바로가기</a></td></tr>
-<tr><td>다운로드</td><td class="link-group"><a href="/downloads/zdm-cli/1.0.4/zdm-cli-windows.zip">Windows</a> · <a href="/downloads/zdm-cli/1.0.4/zdm-cli-linux.tar.gz">Linux</a></td></tr>
+<tr><td>현재 버전</td><td><code>{{ cli_latest.version }}</code></td></tr>
+<tr><td>문서</td><td><a href="/zdm/ko/cli/{{ cli_latest.version }}/index">바로가기</a></td></tr>
+<tr><td>다운로드</td><td>{% if cli_latest.downloads.size > 0 %}{% for dl in cli_latest.downloads %}<a href="{{ dl.file }}">{{ dl.os }}</a>{% unless forloop.last %} · {% endunless %}{% endfor %} · {% endif %}<a href="/zdm/ko/downloads">전체 버전</a></td></tr>
 <tr><td>호환성</td><td><a href="/zdm/ko/compatibility">OS 호환성 정보</a></td></tr>
 <tr><td>업데이트</td><td>{{ site.time | date: "%Y-%m-%d" }}</td></tr>
 </table>
@@ -60,9 +63,9 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 <h3>ZDM-API</h3>
 <p>백업, 복구, 시스템 관리를 위한 <strong>API 서버</strong><br><span class="sub-desc">Linux 전용 · Ubuntu 22.04 이상 권장</span></p>
 <table>
-<tr><td>현재 버전</td><td><code>1.1.0</code></td></tr>
-<tr><td>문서</td><td><a href="/zdm/ko/api/1.1.0/index">바로가기</a></td></tr>
-<tr><td>다운로드</td><td><a href="/downloads/zdm-api/1.1.0/zdm-api-linux.tar.gz">Linux</a></td></tr>
+<tr><td>현재 버전</td><td><code>{{ api_latest.version }}</code></td></tr>
+<tr><td>문서</td><td><a href="/zdm/ko/api/{{ api_latest.version }}/index">바로가기</a></td></tr>
+<tr><td>다운로드</td><td>{% if api_latest.downloads.size > 0 %}{% for dl in api_latest.downloads %}<a href="{{ dl.file }}">{{ dl.os }}</a>{% unless forloop.last %} · {% endunless %}{% endfor %} · {% endif %}<a href="/zdm/ko/downloads">전체 버전</a></td></tr>
 <tr><td>업데이트</td><td>{{ site.time | date: "%Y-%m-%d" }}</td></tr>
 </table>
 </div>

@@ -4,11 +4,27 @@
 api:
   - version: "1.1.0"
     status: latest
+    downloads:
+      - os: "Linux"
+        file: "/downloads/zdm-api/1.1.0/zdm-api-linux.tar.gz"
   - version: "1.0.3"
     status: stable
+    downloads:
+      - os: "Linux"
+        file: "/downloads/zdm-api/1.0.3/zdm-api-linux.tar.gz"
 
 cli:
   - version: "1.0.4"
     status: latest
+    downloads:
+      - os: "Windows"
+        file: "/downloads/zdm-cli/1.0.4/zdm-cli-windows.zip"
+      - os: "Linux"
+        file: "/downloads/zdm-cli/1.0.4/zdm-cli-linux.tar.gz"
   - version: "1.0.3"
     status: stable
+    downloads:
+      - os: "Windows"
+        file: "/downloads/zdm-cli/1.0.3/zdm-cli-windows.zip"
+      - os: "Linux"
+        file: "/downloads/zdm-cli/1.0.3/zdm-cli-linux.tar.gz"

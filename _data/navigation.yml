@@ -15,6 +15,8 @@ ko-zdm:
     links:
       - title: "ZDM 홈"
         url: "/zdm/ko/"
+      - title: "다운로드"
+        url: "/zdm/ko/downloads"
       - title: "ZDM-CLI 문서"
         url: "/zdm/ko/cli/1.0.4/index"
       - title: "ZDM-API 문서"
