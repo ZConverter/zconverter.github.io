@@ -6,6 +6,99 @@
 
 ---
 
+## [Documentation] - 2026-03-25
+
+### Added
+- **API v1.2.0 문서 추가** — Replication API 8개 엔드포인트
+  - `GET /replications` — 복제 작업 목록 조회
+  - `GET /replications/:identifier` — 복제 작업 단건 조회
+  - `POST /replications` — 복제 작업 등록
+  - `PUT /replications/:identifier` — 복제 작업 수정
+  - `DELETE /replications/:identifier` — 복제 작업 삭제
+  - `GET /replications/histories` — 복제 히스토리 목록 조회
+  - `GET /replications/histories/:identifier` — 복제 히스토리 단건 조회
+  - `GET /replications/monitoring/job/:identifier` — 복제 작업 모니터링
+
+- **Replication V1/V2 스키마 구분 문서화**
+  - 서버 환경변수 `REPLICATION_VERSION`에 따른 V1/V2 차이점 표기
+  - 각 엔드포인트 페이지 상단에 버전 안내 공통 include 적용
+  - V1 차이점은 `<details>` 접기 섹션으로 표기 (V2 기본)
+  - V1 전용 enum 추가: `replication-v1-unit-types` (`image`, `repository`), `replication-v1-modes` (`full`, `incremental`)
+
+- **1.2.0 문서 디렉토리 생성**
+  - `zdm/ko/api/1.2.0/` — 기존 1.1.0 문서 50개 + 신규 replication 8개 + index.md (총 59개)
+  - `_includes/zdm/ko/api/docs/replication/` — 8개 include 파일
+  - `_includes/zdm/ko/api/docs/replication/_version-notice.md` — 버전 안내 공통 include
+
+- **Replication 관련 enum include 파일 생성**
+  - `replication-unit-types`, `replication-modes`, `transfer-types`, `replication-job-status`, `replication-history-result`
+  - V1 전용: `replication-v1-unit-types`, `replication-v1-modes`
+
+### Changed
+- **versions.yml** — API 1.2.0을 `latest`로 추가, 1.1.0을 `stable`로 변경
+- **navigation.yml** — `ko-api-1.2.0` 네비게이션 섹션 추가 (Replication / Replication V1 포함), 메인 네비 링크 1.2.0으로 갱신
+- **zdm/ko/api/index.md** — 리다이렉트 대상 1.1.0 → 1.2.0으로 변경
+- **zdm/ko/index.md** — v1.2.0 업데이트 항목 추가
+
+---
+
+## [Documentation] - 2026-03-05
+
+### Added
+- **문서 콘텐츠 includes 공통화**
+  - API 문서 46개, CLI 문서 38개를 `_includes/zdm/ko/` 하위로 추출
+  - 버전별 페이지는 front matter + `{% include %}` 호출 구조로 변경
+  - CLI 1.0.4 독립 문서 38개, API 1.1.0 독립 문서 46개 생성
+
+- **버전 셀렉터 드롭다운 UI 추가**
+  - `_layouts/docs.html` breadcrumb 옆에 버전 선택 드롭다운 추가
+  - `versions.yml` 데이터 기반 동적 버전 목록 표시
+  - `assets/css/style.css`에 드롭다운 스타일 추가
+
+- **다운로드 페이지 신설** (`/zdm/ko/downloads`)
+  - `versions.yml` 기반 버전별 다운로드 테이블 동적 생성
+  - 바이너리 미등록 버전은 "준비 중" 표시
+  - 접기/펼치기(details) 지원
+
+- **Token 개요에 토큰 발급 절차 섹션 추가**
+  - config set → config show → token issue 단계별 예시
+
+- **Config 튜토리얼 초기 설정 절차 개선**
+  - zdm list → config set → zdm list --repo-only → config set → config show 단계별 예시
+  - Token 개요 페이지 동적 링크 추가
+
+- **다운로드 디렉토리 버전별 구조 생성**
+  - `downloads/zdm-api/1.1.0/`, `downloads/zdm-cli/1.0.4/` 생성
+
+### Changed
+- **네비게이션 URL 수정**
+  - `ko-cli-1.0.4` 섹션: 모든 URL을 `/zdm/ko/cli/1.0.3/` → `/zdm/ko/cli/1.0.4/`로 변경
+  - `ko-api-1.1.0` 섹션: 모든 URL을 `/zdm/ko/api/1.0.3/` → `/zdm/ko/api/1.1.0/`로 변경
+
+- **소개 페이지(index.md) 구조 개선**
+  - API/CLI index를 `_includes`로 공통화 (버전 파라미터로 분기)
+  - 소개 페이지: 목차 + 소개 + 주요 기능 + 변경 사항 + 공통 옵션/Base URL + 참고사항
+  - Quick Start, 기본 사용법, 응답 형식, 식별자 패턴, 환경 설정 등 레퍼런스 성격 내용 제거
+
+- **메인 페이지(zdm/ko/index.md) 다운로드 동적 렌더링**
+  - 하드코딩된 버전/링크를 `versions.yml` 기반으로 변경
+  - 다운로드 미등록 시 링크 숨김, "전체 버전" 링크로 다운로드 페이지 연결
+
+- **versions.yml 구조 개선**
+  - `downloads` 배열 필드 추가 (os, file)
+  - 불필요한 `released`, `description` 필드 제거
+
+- **include 내 링크 동적 경로 처리**
+  - `page.url` 기반 `base_path` 변수로 버전별 올바른 경로 생성
+  - Token overview의 Config 개요 링크 404 수정
+
+### Removed
+- **1.1.0 index의 "나머지 API는 v1.0.3 문서와 동일합니다" 문구 제거** (자체 문서 보유)
+- **1.0.4 index의 "나머지 커맨드는 v1.0.3 문서와 동일합니다" 문구 제거** (자체 문서 보유)
+- **사용 가이드 페이지 제거** (내용을 소개 페이지 및 각 섹션 문서로 분산)
+
+---
+
 ## [API v1.1.0] - 2026-03-03
 
 ### Added

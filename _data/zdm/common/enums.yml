@@ -119,6 +119,65 @@ weekdays:
     number: 6
     description: "토요일"
 
+# 복제 단위 유형 (V1)
+replication-v1-unit-types:
+  - value: "image"
+    description: "이미지 단위"
+  - value: "repository"
+    description: "레포지토리 단위"
+
+# 복제 모드 (V1)
+replication-v1-modes:
+  - value: "full"
+    description: "전체 복제"
+  - value: "incremental"
+    description: "증분 복제"
+
+# 복제 단위 유형
+replication-unit-types:
+  - value: "backup"
+    description: "백업 작업 단위"
+  - value: "repository"
+    description: "레포지토리 단위"
+  - value: "server"
+    description: "서버 단위"
+
+# 복제 모드
+replication-modes:
+  - value: "full"
+    description: "전체 복제"
+  - value: "incremental"
+    description: "증분 복제"
+  - value: "sync"
+    description: "동기화"
+
+# 전송 유형
+transfer-types:
+  - value: "one-way"
+    description: "단방향 전송"
+  - value: "two-way"
+    description: "양방향 전송"
+
+# 복제 작업 상태
+replication-job-status:
+  - value: "pending"
+    description: "대기 중"
+  - value: "running"
+    description: "실행 중"
+  - value: "success"
+    description: "완료"
+  - value: "failed"
+    description: "실패"
+  - value: "stopped"
+    description: "정지됨"
+
+# 복제 히스토리 결과
+replication-history-result:
+  - value: "success"
+    description: "성공"
+  - value: "failed"
+    description: "실패"
+
 # ZDM 활성화 상태
 zdm-activation:
   - value: "ok"
