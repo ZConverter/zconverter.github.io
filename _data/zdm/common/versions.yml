@@ -2,8 +2,13 @@
 # API와 CLI의 버전 정보를 관리합니다.
 
 api:
-  - version: "1.2.0"
+  - version: "1.3.0"
     status: latest
+    downloads:
+      - os: "Linux"
+        file: "/downloads/zdm-api/1.3.0/zdm-api-linux.tar.gz"
+  - version: "1.2.0"
+    status: stable
     downloads:
       - os: "Linux"
         file: "/downloads/zdm-api/1.2.0/zdm-api-linux.tar.gz"

@@ -6,6 +6,47 @@
 
 ---
 
+## [Documentation] - 2026-04-08
+
+### Added
+- **API v1.3.0 문서 추가** — Cloud Auth 8개, OS Replication 8개 엔드포인트
+  - **Cloud Auth (ZOS)**
+    - `POST /cloud-auth/zos` — ZOS 인증 키 파일 업로드 + 메타데이터 등록
+    - `GET /cloud-auth/zos` — ZOS 인증 목록 조회
+    - `GET /cloud-auth/zos/download/:fileName` — ZOS 인증 키 파일 다운로드
+    - `DELETE /cloud-auth/zos/:identifier` — ZOS 인증 삭제
+  - **Cloud Auth (Recovery)**
+    - `POST /cloud-auth/recovery` — Recovery 인증 정보 등록 (GCP: 키 파일 업로드 포함)
+    - `GET /cloud-auth/recovery` — Recovery 인증 목록 조회
+    - `DELETE /cloud-auth/recovery/:identifier` — Recovery 인증 삭제
+  - **Cloud Auth (Region)**
+    - `GET /cloud-auth/regions/:platform` — 플랫폼별 리전 목록 조회 (aws, gcp)
+  - **OS Replication**
+    - `POST /os-replications` — OS 복제 작업 등록
+    - `GET /os-replications` — OS 복제 작업 목록 조회
+    - `GET /os-replications/:identifier` — OS 복제 작업 단건 조회
+    - `PUT /os-replications/:identifier` — OS 복제 작업 수정
+    - `DELETE /os-replications/:identifier` — OS 복제 작업 삭제
+    - `GET /os-replications/histories` — OS 복제 히스토리 목록 조회
+    - `GET /os-replications/histories/:identifier` — OS 복제 히스토리 단건 조회
+    - `GET /os-replications/monitoring/job/:identifier` — OS 복제 작업 모니터링
+
+- **1.3.0 문서 디렉토리 생성**
+  - `zdm/ko/api/1.3.0/` — 기존 1.2.0 문서 + 신규 cloud-auth 8개 + os-replication 8개
+  - `_includes/zdm/ko/api/docs/cloud-auth/` — 8개 include 파일
+  - `_includes/zdm/ko/api/docs/os-replication/` — 8개 include 파일
+
+- **다운로드 파일 추가**
+  - `downloads/zdm-api/1.3.0/zdm-api-linux.tar.gz`
+
+### Changed
+- **versions.yml** — API 1.3.0을 `latest`로 추가, 1.2.0을 `stable`로 변경
+- **navigation.yml** — `ko-api-1.3.0` 네비게이션 섹션 추가 (Cloud Auth, OS Replication 포함), 메인 네비 링크 1.3.0으로 갱신
+- **zdm/ko/api/index.md** — 리다이렉트 대상 1.2.0 → 1.3.0으로 변경, 경로 오류 수정 (`/zdm/api/` → `/zdm/ko/api/`)
+- **recovery-regist.md** — AWS/GCP 리전 파라미터에 리전 목록 조회 API 참조 링크 추가, GCP 요청 예시에 `displayName` 파라미터 추가
+
+---
+
 ## [Documentation] - 2026-03-25
 
 ### Added
