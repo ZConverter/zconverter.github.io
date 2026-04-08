@@ -27,8 +27,8 @@ curl -X POST "https://api.example.com/api/cloud-auth/recovery" \
   -F "center=center-01" \
   -F "cloudType=aws" \
   -F "displayName=AWS 프로덕션" \
-  -F "awsAccessKey=AKIAIOSFODNN7EXAMPLE" \
-  -F "awsSecretKey=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" \
+  -F "awsAccessKey=AWS_ACC_KEY" \
+  -F "awsSecretKey==AWS_SEC_KEY" \
   -F "awsRegion=ap-northeast-2" \
   -F "awsDisplayRegion=Asia Pacific (Seoul)"
 

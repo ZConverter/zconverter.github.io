@@ -58,8 +58,8 @@ curl -X GET "https://api.example.com/api/cloud-auth/recovery?cloudType=aws&page=
       "id": 1,
       "displayName": "AWS_RECOVERY",
       "cloudType": "AWS",
-      "accessKey": "AKIAIOSFODNN7EXAMPLE",
-      "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+      "accessKey": "AWS_ACC_KEY",
+      "secretKey": "AWS_SEC_KEY",
       "region": "ap-northeast-2",
       "displayRegion": "Asia Pacific (Seoul)"
     }
