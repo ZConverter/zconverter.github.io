@@ -8,6 +8,17 @@
 
 ## [Documentation] - 2026-04-09
 
+### Changed
+- **CLI v1.2.1 패치 내용 반영** — `backup regist` `--repository-path` 선택적 변경, 에러 출력 수정
+- **API v1.3.1 패치 내용 반영** — Repository 조회 실패 에러 메시지 구체화
+- **CLI `backup regist` 문서 수정** — `--repository-path` 파라미터 설명 변경
+  - 기본값 `-` → `config 설정값`, 미입력 + config 없으면 생략 가능으로 명시
+- **API `POST /backups` 요청 본문 문서 수정** — `repository` 필드 구조 변경
+  - `repository.id` 필드 추가 (Required)
+  - `repository.type` Required → Optional
+  - `repository.path` Required → Optional
+- **versions.yml** — CLI 1.2.1을 `latest`로 추가 (docs: 1.2.0), API 1.3.1을 `latest`로 추가 (docs: 1.3.0)
+
 ### Added
 - **CLI v1.2.0 문서 추가** — Replication 커맨드 6개 + 개요
   - `replication list` — Replication 목록/정보 조회

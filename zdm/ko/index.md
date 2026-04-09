@@ -79,66 +79,66 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 ### ZDM-API
 
 <details markdown="1">
-<summary><strong>v1.3.0</strong> <span style="color: #7f8c8d; font-size: 0.85rem;">(2026-04-08)</span></summary>
-
-{% include zdm/ko/api/changelog/1.3.0.md %}
+<summary><strong>v1.3.0</strong> <span style="color: #7f8c8d; font-size: 0.85rem;">(2026-04-08)</span> · <strong>[latest: v1.3.1]</strong> <span style="color: #7f8c8d; font-size: 0.85rem;">(2026-04-09)</span></summary>
 
 [v1.3.0 문서 바로가기](/zdm/ko/api/1.3.0/index)
+
+{% include zdm/ko/api/changelog/1.3.0.md %}
 
 </details>
 
 <details markdown="1">
 <summary><strong>v1.2.0</strong> <span style="color: #7f8c8d; font-size: 0.85rem;">(2026-03-25)</span></summary>
 
-{% include zdm/ko/api/changelog/1.2.0.md %}
-
 [v1.2.0 문서 바로가기](/zdm/ko/api/1.2.0/index)
+
+{% include zdm/ko/api/changelog/1.2.0.md %}
 
 </details>
 
 <details markdown="1">
 <summary><strong>v1.1.0</strong> <span style="color: #7f8c8d; font-size: 0.85rem;">(2026-03-04)</span></summary>
 
-{% include zdm/ko/api/changelog/1.1.0.md %}
-
 [v1.1.0 문서 바로가기](/zdm/ko/api/1.1.0/index)
+
+{% include zdm/ko/api/changelog/1.1.0.md %}
 
 </details>
 
 <details markdown="1">
 <summary><strong>v1.0.3</strong></summary>
 
-{% include zdm/ko/api/changelog/1.0.3.md %}
-
 [v1.0.3 문서 바로가기](/zdm/ko/api/1.0.3/index)
+
+{% include zdm/ko/api/changelog/1.0.3.md %}
 
 </details>
 
 ### ZDM-CLI
 
 <details markdown="1">
-<summary><strong>v1.2.0</strong> <span style="color: #7f8c8d; font-size: 0.85rem;">(2026-04-09)</span></summary>
-
-{% include zdm/ko/cli/changelog/1.2.0.md %}
+<summary><strong>v1.2.0</strong> <span style="color: #7f8c8d; font-size: 0.85rem;">(2026-04-09)</span> · <strong>[latest: v1.2.1]</strong> <span style="color: #7f8c8d; font-size: 0.85rem;">(2026-04-09)</span></summary>
 
 [v1.2.0 문서 바로가기](/zdm/ko/cli/1.2.0/index)
+
+{% include zdm/ko/cli/changelog/1.2.0.md %}
 
 </details>
 
 <details markdown="1">
 <summary><strong>v1.0.4</strong> <span style="color: #7f8c8d; font-size: 0.85rem;">(2026-03-04)</span></summary>
 
-{% include zdm/ko/cli/changelog/1.0.4.md %}
-
 [v1.0.4 문서 바로가기](/zdm/ko/cli/1.0.4/index)
+
+{% include zdm/ko/cli/changelog/1.0.4.md %}
 
 </details>
 
 <details markdown="1">
 <summary><strong>v1.0.3</strong></summary>
 
-{% include zdm/ko/cli/changelog/1.0.3.md %}
-
 [v1.0.3 문서 바로가기](/zdm/ko/cli/1.0.3/index)
+
+{% include zdm/ko/cli/changelog/1.0.3.md %}
 
 </details>

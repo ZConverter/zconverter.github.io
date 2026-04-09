@@ -74,8 +74,9 @@ curl -X POST "https://api.example.com/api/backups" \
 | `type` | string | Required | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
 | `partition` | array | Required | 작업 대상 파티션 배열 (전체 작업시 빈 배열 `[]`) | - |
 | `repository` | object | Required | 레포지토리 정보 | - |
-| `repository.type` | string | Required | 레포지토리 타입 | {% include zdm/repository-types.md %} |
-| `repository.path` | string | Required | 레포지토리 경로 | - |
+| `repository.id` | number | Required | 레포지토리 ID | - |
+| `repository.type` | string | Optional | 레포지토리 타입 | {% include zdm/repository-types.md %} |
+| `repository.path` | string | Optional | 레포지토리 경로 | - |
 | `jobName` | string | Optional | 작업 이름 | - |
 | `user` | string \| number | Optional | 사용자 ID (숫자) 또는 이메일 | - |
 | `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |

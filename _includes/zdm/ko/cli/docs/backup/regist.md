@@ -62,7 +62,7 @@ zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --individ
 | --mode | - | string | Required | - | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
 | --center | -c | string | Optional | config 설정값 | 작업 등록 Center | - |
 | --repository-id | -ri | number | Optional | config 설정값 | 작업시 사용할 Repository ID | - |
-| --repository-path | -rp | string | Optional | - | 작업시 사용할 Repository Path | - |
+| --repository-path | -rp | string | Optional | config 설정값 | 작업시 사용할 Repository Path (미입력 시 config 기본값 사용, 없으면 생략) | - |
 | --partition | - | string | Optional | 전체 파티션 | 작업 대상 파티션 (콤마로 구분) | - |
 | --job-name | -jn | string | Optional | - | 작업 이름 | - |
 | --schedule | -sc | string | Optional | - | 작업에 사용할 Schedule | - |
