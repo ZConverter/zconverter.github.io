@@ -49,7 +49,7 @@ zdm-cli license assign --license "my-license" --server "server-01" --output json
 **Text 형식 (기본)**
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* License Info Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* License Assign Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -60,17 +60,16 @@ timestamp : 2024-01-15 10:30:00
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [data]
 
-name                : my-license
-key                 : XXXX-XXXX-XXXX-XXXX
-category            : zdm(backup)
-description         : Production License
-copies.total        : 10
-copies.used         : 1
-copies.available    : 9
-copies.usage        : 10%
-dates.created       : 2024-01-01
-dates.expires       : 2025-12-31
-dates.daysRemaining : 365
+[Server]
+  id                : 1
+  name              : server-01
+
+[License]
+  id                : 5
+  name              : my-license
+  category          : zdm(backup)
+  created           : 2024-01-01
+  expiration        : 2025-12-31
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -82,20 +81,16 @@ dates.daysRemaining : 365
   "message": "License assigned successfully",
   "success": true,
   "data": {
-    "name": "my-license",
-    "key": "XXXX-XXXX-XXXX-XXXX",
-    "category": "zdm(backup)",
-    "description": "Production License",
-    "copies": {
-      "total": 10,
-      "used": 1,
-      "available": 9,
-      "usage": "10%"
+    "server": {
+      "id": "1",
+      "name": "server-01"
     },
-    "dates": {
+    "license": {
+      "id": "5",
+      "name": "my-license",
+      "category": "zdm(backup)",
       "created": "2024-01-01",
-      "expires": "2025-12-31",
-      "daysRemaining": 365
+      "expiration": "2025-12-31"
     }
   },
   "timestamp": "2024-01-15 10:30:00"

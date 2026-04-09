@@ -1,11 +1,18 @@
 
-<details markdown="1" open>
+{% if include.changelog %}
+---
+
+## {{ include.changelog_title }}
+
+{{ include.changelog }}
+{% endif %}
+
+<details markdown="1">
 <summary><strong>목차</strong></summary>
 
 - [ZDM API 소개](#zdm-api-소개)
 - [주요 기능](#주요-기능)
-{% if include.changelog %}- [{{ include.changelog_title }}](#변경-사항)
-{% endif %}- [Base URL](#base-url)
+- [Base URL](#base-url)
 - [참고사항](#참고사항)
 
 </details>
@@ -20,28 +27,21 @@ ZDM-API는 백업, 복구, 시스템 관리를 위한 **API 서버**입니다.
 
 ## 주요 기능
 
-<details markdown="1" open>
-<summary><strong>핵심 기능</strong></summary>
-
-- **토큰 기반 인증** - 안전한 API 접근 제어
-- **사용자 관리** - 사용자 계정 및 권한 관리
-- **서버 관리** - 시스템 리소스 통합 관리
-- **백업/복구** - 자동화된 데이터 보호 및 복원
-{% if include.version == "1.1.0" %}- **백업/복구 히스토리** - 백업 및 복구 실행 히스토리 조회 **(v1.1.0 신규)**
-{% endif %}- **스케줄링** - 정기적인 백업 작업 예약
-- **파일 관리** - 백업 파일 업로드/다운로드
-- **라이선스 관리** - 라이선스 발급 및 할당
-- **ZDM 센터** - 멀티 센터 환경 관리
-
-</details>
-
-{% if include.changelog %}
----
-
-## {{ include.changelog_title }}
-
-{{ include.changelog }}
-{% endif %}
+| 기능 | 설명 | 엔드포인트 |
+|------|------|------------|
+| **인증** | 안전한 API 접근 제어 | `POST /auth/issue` |
+| **사용자** | 사용자 계정 및 권한 관리 | `GET /users`, `PUT /users/:id` |
+| **서버** | 시스템 리소스 통합 관리 | `GET /servers`, `DELETE /servers/:id` |
+| **백업** | 자동화된 데이터 보호 | `GET /backups`, `POST /backups`, `PUT`, `DELETE` |
+| **복구** | 데이터 복원 | `GET /recoveries`, `POST /recoveries`, `PUT`, `DELETE` |
+{% if include.version >= "1.1.0" %}| **히스토리** | 백업/복구 실행 이력 조회 | `GET /backups/histories`, `GET /recoveries/histories` |
+{% endif %}{% if include.version >= "1.2.0" %}| **복제** | Replication 작업 관리 | `GET /replications`, `POST`, `PUT`, `DELETE` |
+{% endif %}{% if include.version >= "1.3.0" %}| **Cloud 인증** | 클라우드 인증 관리 (ZOS, Recovery) | `POST /cloud-auth/*`, `GET`, `DELETE` |
+| **OS 복제** | OS 복제 작업 관리 | `POST /os-replications`, `GET`, `PUT`, `DELETE` |
+{% endif %}| **스케줄** | 정기적인 백업 작업 예약 | `GET /schedules`, `POST /schedules` |
+| **파일** | 백업 파일 업로드/다운로드 | `POST /files/upload`, `GET /files/download` |
+| **라이선스** | 라이선스 발급 및 할당 | `GET /licenses`, `POST /licenses`, `PUT /licenses/assign` |
+| **ZDM 센터** | 멀티 센터 환경 관리 | `GET /zdm-centers` |
 
 ---
 

@@ -60,7 +60,7 @@ lang: ko
 <td><strong>v{{ v.version }}</strong></td>
 <td>{% if v.status == "latest" %}<span class="badge badge-latest">latest</span>{% elsif v.status == "stable" %}<span class="badge badge-stable">stable</span>{% else %}{{ v.status }}{% endif %}</td>
 <td>{% if v.downloads.size > 0 %}{% for dl in v.downloads %}<a href="{{ dl.file }}">{{ dl.os }}</a>{% unless forloop.last %} · {% endunless %}{% endfor %}{% else %}<span class="no-download">준비 중</span>{% endif %}</td>
-<td><a href="/zdm/ko/cli/{{ v.version }}/index">v{{ v.version }} 문서</a></td>
+<td><a href="/zdm/ko/cli/{{ v.docs | default: v.version }}/index">v{{ v.version }} 문서</a></td>
 </tr>
 {% endfor %}
 </tbody>
@@ -81,7 +81,7 @@ lang: ko
 <td><strong>v{{ v.version }}</strong></td>
 <td>{% if v.status == "latest" %}<span class="badge badge-latest">latest</span>{% elsif v.status == "stable" %}<span class="badge badge-stable">stable</span>{% else %}{{ v.status }}{% endif %}</td>
 <td>{% if v.downloads.size > 0 %}{% for dl in v.downloads %}<a href="{{ dl.file }}">{{ dl.os }}</a>{% unless forloop.last %} · {% endunless %}{% endfor %}{% else %}<span class="no-download">준비 중</span>{% endif %}</td>
-<td><a href="/zdm/ko/api/{{ v.version }}/index">v{{ v.version }} 문서</a></td>
+<td><a href="/zdm/ko/api/{{ v.docs | default: v.version }}/index">v{{ v.version }} 문서</a></td>
 </tr>
 {% endfor %}
 </tbody>

@@ -6,6 +6,29 @@
 
 ---
 
+## [Documentation] - 2026-04-09
+
+### Added
+- **CLI v1.2.0 문서 추가** — Replication 커맨드 6개 + 개요
+  - `replication list` — Replication 목록/정보 조회
+  - `replication regist` — Replication 등록 (V1/V2 분기)
+  - `replication delete` — Replication 삭제
+  - `replication update` — Replication 수정
+  - `replication monit` — Replication 모니터링
+  - `replication history` — Replication 실행 히스토리 조회
+
+- **1.1.0 문서 디렉토리 생성**
+  - `zdm/ko/cli/1.2.0/` — 기존 1.0.4 문서 + 신규 replication 7개 페이지
+  - `_includes/zdm/ko/cli/docs/replication/` — 7개 include 파일 (overview, list, regist, delete, update, monit, history)
+
+### Changed
+- **versions.yml** — CLI 1.2.0을 `latest`로 추가, 1.0.4를 `stable`로 변경
+- **navigation.yml** — `ko-cli-1.2.0` 네비게이션 섹션 추가 (Replication 포함), 메인 네비 링크 1.2.0으로 갱신
+- **zdm/ko/cli/index.md** — 리다이렉트 대상 1.0.4 → 1.2.0으로 변경
+- **license assign 문서** — 출력 예시를 실제 API 응답 구조(`{ server, license }`)에 맞게 수정, resultTitle `License Info Result` → `License Assign Result`
+
+---
+
 ## [Documentation] - 2026-04-08
 
 ### Added
