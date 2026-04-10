@@ -215,6 +215,10 @@
         var summary = details.querySelector('summary');
         if (summary) summary.classList.add('section-active');
       }
+      // 활성 메뉴가 사이드바 내에서 보이도록 스크롤
+      setTimeout(function() {
+        activeLink.scrollIntoView({ block: 'center', behavior: 'instant' });
+      }, 0);
     }
 
     // 사이드바 details 열림 상태 유지
