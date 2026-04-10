@@ -39,7 +39,7 @@
                   {% endif %}
                 {% endfor %}
                 <details {% if is_active_section %}open{% endif %}>
-                  <summary>{{ item.title }}</summary>
+                  <summary {% if is_active_section %}class="section-active"{% endif %}>{{ item.title }}</summary>
                   <ul>
                     {% for link in item.links %}
                       <li>
@@ -193,6 +193,54 @@
     toggleBtn.addEventListener('click', function() {
       var isCollapsed = docsLayout.classList.contains('sidebar-collapsed');
       setSidebarState(!isCollapsed);
+    });
+
+    // 사이드바 활성 섹션 강조 (클라이언트 사이드)
+    var activeLink = document.querySelector('.docs-nav ul li a.active');
+    if (!activeLink) {
+      // Liquid 비교 실패 시 현재 URL로 직접 매칭
+      var currentPath = window.location.pathname.replace(/\/$/, '');
+      document.querySelectorAll('.docs-nav ul li a').forEach(function(a) {
+        var href = a.getAttribute('href').replace(/\/$/, '');
+        if (currentPath === href || currentPath === href + '/index') {
+          a.classList.add('active');
+          activeLink = a;
+        }
+      });
+    }
+    if (activeLink) {
+      var details = activeLink.closest('details');
+      if (details) {
+        details.open = true;
+        var summary = details.querySelector('summary');
+        if (summary) summary.classList.add('section-active');
+      }
+    }
+
+    // 사이드바 details 열림 상태 유지
+    var NAV_STATE_KEY = 'zdm-nav-open-sections';
+    var navDetails = document.querySelectorAll('.docs-nav .nav-section details');
+
+    function saveNavState() {
+      var state = [];
+      navDetails.forEach(function(d, i) {
+        if (d.open) state.push(i);
+      });
+      sessionStorage.setItem(NAV_STATE_KEY, JSON.stringify(state));
+    }
+
+    function restoreNavState() {
+      var saved = sessionStorage.getItem(NAV_STATE_KEY);
+      if (!saved) return;
+      var state = JSON.parse(saved);
+      state.forEach(function(i) {
+        if (navDetails[i]) navDetails[i].open = true;
+      });
+    }
+
+    restoreNavState();
+    navDetails.forEach(function(d) {
+      d.addEventListener('toggle', saveNavState);
     });
 
     // 버전 셀렉터 토글

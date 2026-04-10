@@ -165,15 +165,16 @@ th {
   margin: 0;
   padding: 2rem 2rem 0 2rem;
   flex: 1;
-  align-items: stretch;
+  align-items: flex-start;
   position: relative;
-  overflow: hidden;
 }
 
 .docs-sidebar {
   width: 280px;
   flex-shrink: 0;
-  max-height: calc(100vh - 4rem);
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100vh - 2rem);
   overflow-y: auto;
   background-color: white;
   border-radius: 8px;
@@ -250,6 +251,11 @@ th {
   color: #3498db;
   background-color: #f8f9fa;
   border-radius: 4px;
+}
+
+.docs-nav .nav-section details summary.section-active {
+  color: #3498db;
+  font-weight: 600;
 }
 
 .docs-nav .nav-section details[open] {
