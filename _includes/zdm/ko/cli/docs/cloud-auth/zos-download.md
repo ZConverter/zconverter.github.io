@@ -48,6 +48,8 @@ zdm-cli cloud-auth zos-download --fn key.json --sp /tmp
 File downloaded: /home/user/aws-key.json
 ```
 
+> **Note**: 다운로드 명령어는 파일 저장 결과만 출력하며 JSON 형식은 지원하지 않습니다.
+
 </details>
 
 ---

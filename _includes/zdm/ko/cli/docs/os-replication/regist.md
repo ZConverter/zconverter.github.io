@@ -100,6 +100,23 @@ replicationMode : full
 autoStart       : start
 ```
 
+**JSON 형식**
+```json
+{
+  "success": true,
+  "data": {
+    "results": [{
+      "state": "success",
+      "jobName": "upload-daily",
+      "unitType": "upload",
+      "replicationMode": "full",
+      "autoStart": "start"
+    }],
+    "summary": { "total": 1, "successful": 1, "failed": 0 }
+  }
+}
+```
+
 </details>
 
 ---

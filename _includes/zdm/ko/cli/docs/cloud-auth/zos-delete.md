@@ -53,6 +53,21 @@ displayName : AWS Production Key
 fileName    : aws-key.json
 ```
 
+**JSON 형식**
+```json
+{
+  "success": true,
+  "data": {
+    "state": "success",
+    "cloudInfo": {
+      "id": 1,
+      "displayName": "AWS Production Key",
+      "fileName": "aws-key.json"
+    }
+  }
+}
+```
+
 </details>
 
 ---

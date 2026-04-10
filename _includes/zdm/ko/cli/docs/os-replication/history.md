@@ -74,6 +74,33 @@ end         : 2026-04-10 02:15:30
 elapsed     : 00:15:30
 ```
 
+**JSON 형식**
+```json
+{
+  "success": true,
+  "data": [{
+    "id": 101,
+    "system": { "name": "web01" },
+    "job": {
+      "name": "upload-daily",
+      "id": 1,
+      "sourcePath": "/backup/repo",
+      "targetPath": "cloud://bucket/backup",
+      "unitType": "upload",
+      "replicationMode": "full"
+    },
+    "result": { "status": "success", "description": "Upload completed successfully" },
+    "size": { "total": 1073741824, "replicated": 1073741824 },
+    "count": { "total": 150, "replicated": 150 },
+    "time": {
+      "start": "2026-04-10 02:00:00",
+      "end": "2026-04-10 02:15:30",
+      "elapsed": "00:15:30"
+    }
+  }]
+}
+```
+
 </details>
 
 ---

@@ -102,6 +102,22 @@ name : upload-daily
   status: stopped → start
 ```
 
+**JSON 형식**
+```json
+{
+  "success": true,
+  "data": {
+    "replicationInfo": { "id": 1, "name": "upload-daily" },
+    "summary": {
+      "updatedFields": [
+        { "field": "upload-mode", "previous": "full", "new": "incremental" },
+        { "field": "status", "previous": "stopped", "new": "start" }
+      ]
+    }
+  }
+}
+```
+
 </details>
 
 ---

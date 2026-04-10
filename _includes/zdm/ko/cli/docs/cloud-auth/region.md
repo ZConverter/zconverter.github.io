@@ -61,6 +61,31 @@ us-central1     — Iowa (zones: us-central1-a, us-central1-b, us-central1-c, us
 europe-west1    — Belgium (zones: europe-west1-b, europe-west1-c, europe-west1-d)
 ```
 
+**JSON 형식 — AWS**
+```json
+{
+  "success": true,
+  "data": [
+    { "code": "us-east-1", "name": "US East (N. Virginia)" },
+    { "code": "ap-northeast-2", "name": "Asia Pacific (Seoul)" }
+  ]
+}
+```
+
+**JSON 형식 — GCP**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "code": "asia-northeast3",
+      "name": "Seoul",
+      "zones": ["asia-northeast3-a", "asia-northeast3-b", "asia-northeast3-c"]
+    }
+  ]
+}
+```
+
 </details>
 
 ---

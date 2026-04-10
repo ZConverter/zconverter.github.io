@@ -46,6 +46,20 @@ id          : 1
 displayName : AWS Seoul Production
 ```
 
+**JSON 형식**
+```json
+{
+  "success": true,
+  "data": {
+    "state": "success",
+    "cloudInfo": {
+      "id": 1,
+      "displayName": "AWS Seoul Production"
+    }
+  }
+}
+```
+
 </details>
 
 ---

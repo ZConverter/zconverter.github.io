@@ -60,6 +60,21 @@ filePath      : /cloud-auth/zos/aws-key.json
 createDate    : 2026-04-10 10:00:00
 ```
 
+**JSON 형식**
+```json
+{
+  "success": true,
+  "data": [{
+    "id": 1,
+    "displayName": "AWS Production Key",
+    "cloudPlatform": "aws",
+    "fileName": "aws-key.json",
+    "filePath": "/cloud-auth/zos/aws-key.json",
+    "createDate": "2026-04-10 10:00:00"
+  }]
+}
+```
+
 </details>
 
 ---

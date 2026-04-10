@@ -73,6 +73,34 @@ elapsed : 00:05:23
   [2026-04-10 02:03:15] Processing file: backup-2026-04-10.tar.gz
 ```
 
+**JSON 형식**
+```json
+{
+  "success": true,
+  "data": {
+    "system": { "name": "web01" },
+    "job": {
+      "info": { "name": "upload-daily", "id": 1 },
+      "progress": {
+        "status": "Processing",
+        "step": "Uploading files",
+        "percent": "45%",
+        "message": "Uploading backup-2026-04-10.tar.gz"
+      },
+      "time": {
+        "start": "2026-04-10 02:00:00",
+        "end": "-",
+        "elapsed": "00:05:23"
+      },
+      "log": [
+        "[2026-04-10 02:00:00] Upload started",
+        "[2026-04-10 02:03:15] Processing file: backup-2026-04-10.tar.gz"
+      ]
+    }
+  }
+}
+```
+
 </details>
 
 ---

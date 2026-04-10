@@ -69,6 +69,32 @@ region          : asia-northeast1
 displayRegion   : Tokyo
 ```
 
+**JSON 형식**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "displayName": "AWS Seoul",
+      "cloudType": "aws",
+      "accessKey": "AKIA****EXAMPLE",
+      "region": "ap-northeast-2",
+      "displayRegion": "Asia Pacific (Seoul)"
+    },
+    {
+      "id": 2,
+      "displayName": "GCP Tokyo",
+      "cloudType": "gcp",
+      "serviceAccount": "sa@my-project.iam.gserviceaccount.com",
+      "project": "my-project",
+      "region": "asia-northeast1",
+      "displayRegion": "Tokyo"
+    }
+  ]
+}
+```
+
 </details>
 
 ---

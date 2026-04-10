@@ -57,6 +57,17 @@ history         : 5
 logEvent        : 12
 ```
 
+**JSON 형식**
+```json
+{
+  "success": true,
+  "data": {
+    "deletedJob": { "id": 1, "name": "upload-daily" },
+    "deletedRelations": { "replicationInfo": 1, "history": 5, "logEvent": 12 }
+  }
+}
+```
+
 </details>
 
 ---
