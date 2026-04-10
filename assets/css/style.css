@@ -482,12 +482,14 @@ th {
 
 .docs-content details summary {
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.6rem 0.75rem;
   font-weight: 600;
+  font-size: 1.05rem;
   color: #2c3e50;
   list-style: none;
   user-select: none;
-  transition: color 0.2s;
+  transition: color 0.2s, background-color 0.2s;
+  border-radius: 4px;
 }
 
 .docs-content details summary::-webkit-details-marker {
@@ -518,6 +520,21 @@ th {
 
 .docs-content details > *:not(summary) {
   margin-top: 1rem;
+}
+
+/* Changelog details 내 소제목 강조 */
+.docs-content details > p > strong:first-child {
+  display: inline-block;
+  font-size: 0.95rem;
+  color: #2c3e50;
+}
+
+.docs-content details > p > strong:first-child::before {
+  content: "●";
+  color: #3498db;
+  margin-right: 0.4rem;
+  font-size: 0.7rem;
+  vertical-align: middle;
 }
 
 /* Command Card - CLI 명령어 카드 스타일 */
