@@ -35,8 +35,11 @@ zdm-cli backup update --name "OldJob" --rotation 5 --network-limit 1000
 # Repository 변경
 zdm-cli backup update --id 123 --repository-id 2
 
+# 스케줄 변경 (기존 스케줄 ID 사용)
+zdm-cli backup update --id 123 --schedule-id 1234
+
 # 스케줄 변경 (JSON 파일 사용)
-zdm-cli backup update --id 123 --schedule "/path/to/schedule.json"
+zdm-cli backup update --id 123 --schedule-file "/path/to/schedule.json"
 
 # 스케줄 변경 (JSON 문자열 직접 입력)
 zdm-cli backup update --id 123 --schedule '{"type":"daily","time":"02:00"}'
@@ -71,7 +74,9 @@ zdm-cli backup update --id 123 --mode increment --output json
 | --repository-id | -ri | number | Optional | - | Repository ID | - |
 | --repository-path | -rp | string | Optional | - | Repository Path | - |
 | --change-name | -cn | string | Optional | - | 변경할 작업 이름 | - |
-| --schedule | -sc | string | Optional | - | 작업에 사용할 Schedule (JSON 파일 경로 또는 JSON 문자열) | - |
+| --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 | - |
+| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID | - |
+| --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 | - |
 | --rotation | -rot | number | Optional | - | 작업 반복횟수 | - |
 | --compression | -comp | string | Optional | - | 작업 압축 사용 여부 | `use`, `not use` |
 | --encryption | -enc | string | Optional | - | 작업 암호화 사용 여부 | `use`, `not use` |

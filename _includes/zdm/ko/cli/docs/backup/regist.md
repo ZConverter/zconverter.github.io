@@ -35,8 +35,8 @@ zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --partiti
 # 작업 이름 지정하여 등록
 zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --job-name "daily_backup"
 
-# 스케줄 설정과 함께 등록
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --schedule "schedule_id"
+# 스케줄 설정과 함께 등록 (기존 스케줄 ID)
+zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --schedule-id 1234
 
 # 제외 폴더 설정
 zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --exclude-dir "/tmp,/var/log"
@@ -65,7 +65,9 @@ zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --individ
 | --repository-path | -rp | string | Optional | config 설정값 | 작업시 사용할 Repository Path (미입력 시 config 기본값 사용, 없으면 생략) | - |
 | --partition | - | string | Optional | 전체 파티션 | 작업 대상 파티션 (콤마로 구분) | - |
 | --job-name | -jn | string | Optional | - | 작업 이름 | - |
-| --schedule | -sc | string | Optional | - | 작업에 사용할 Schedule | - |
+| --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 | - |
+| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID | - |
+| --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 | - |
 | --rotation | -rot | number | Optional | 1 | 작업 반복횟수 | - |
 | --compression | -comp | string | Optional | use | 작업 압축 사용 여부 | `use`, `not use` |
 | --encryption | -enc | string | Optional | not use | 작업 암호화 사용 여부 | `use`, `not use` |

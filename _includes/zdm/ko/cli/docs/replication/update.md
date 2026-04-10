@@ -34,7 +34,7 @@ zdm-cli replication update --id 123 --cn new-repl-name
 zdm-cli replication update --id 123 --comp --nl 1000
 
 # 스케줄 설정
-zdm-cli replication update --id 123 --schedule "0 3 * * *"
+zdm-cli replication update --id 123 --schedule-id 1234
 ```
 
 </details>
@@ -75,7 +75,9 @@ zdm-cli replication update --id 123 --schedule "0 3 * * *"
 | --encryption | --enc | boolean | Optional | - | 암호화 사용 여부 |
 | --network-limit | --nl | number | Optional | - | 네트워크 속도 제한 |
 | --mail-event | --me | string | Optional | - | 이벤트 메일 수신 주소 |
-| --schedule | - | string | Optional | - | 스케줄 (cron 표현식) |
+| --schedule | - | string | Optional | - | 스케줄 JSON 문자열 |
+| --schedule-id | - | number | Optional | - | 기존 스케줄 ID |
+| --schedule-file | - | string | Optional | - | 스케줄 JSON 파일 경로 |
 | --exclude | --ex | string | Optional | - | 제외 패턴 (v2 전용) |
 | --output | -o | string | Optional | text | 출력 형식 |
 

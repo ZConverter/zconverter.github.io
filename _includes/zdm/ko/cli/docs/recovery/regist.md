@@ -43,7 +43,7 @@ zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --
 zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" --repository-id 1 --network-limit 1000
 
 # 스케줄 설정
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" --repository-id 1 --schedule "schedule.json"
+zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" --repository-id 1 --schedule-file "schedule.json"
 
 # 메일 알림 설정
 zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" --repository-id 1 --mail-event "admin@example.com"
@@ -75,7 +75,9 @@ zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --
 | --repository-path | -rp | string | Optional | - | 작업시 사용할 Repository 경로 | - |
 | --job-name | -jn | string | Optional | - | 작업 이름 | - |
 | --user | -u | string | Optional | - | 사용자 ID 또는 메일 | - |
-| --schedule | -sc | string | Optional | - | 작업에 사용할 Schedule (JSON 파일 경로 또는 JSON 문자열) | - |
+| --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 | - |
+| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID | - |
+| --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 | - |
 | --exclude-partition | -exp | string | Optional | - | 작업 제외 partition | - |
 | --mail-event | -me | string | Optional | - | 작업 이벤트 수신 메일 | - |
 | --network-limit | -nl | number | Optional | 0 | 작업 Network 제한 속도 (Mbps) | - |

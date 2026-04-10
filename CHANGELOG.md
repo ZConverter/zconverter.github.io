@@ -6,6 +6,16 @@
 
 ---
 
+## [Documentation] - 2026-04-10
+
+### Changed
+- **CLI v1.3.0 변경 내용 반영** — `--schedule` 옵션 3개 분리 (`--schedule`, `--schedule-id`, `--schedule-file`)
+  - 기존: `--schedule` 하나로 ID/JSON/파일 자동 감지 → ID 입력 시 파일 경로로 오인식되는 버그 존재
+  - 변경: 용도별 명시적 분리, 상호 배타적 사용, `[Schedule]` 헬프 섹션 분리
+  - 적용 커맨드: backup, recovery, replication, os-replication의 regist/update
+
+---
+
 ## [Documentation] - 2026-04-09
 
 ### Changed

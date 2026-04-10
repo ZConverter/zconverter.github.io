@@ -39,8 +39,11 @@ zdm-cli recovery update --id 123 --network-limit 1000
 # 스크립트 설정 변경
 zdm-cli recovery update --name "my-recovery" --script-path "/path/to/script.sh" --script-run before
 
+# 스케줄 변경 (기존 스케줄 ID 사용)
+zdm-cli recovery update --id 123 --schedule-id 1234
+
 # 스케줄 변경 (JSON 파일 사용)
-zdm-cli recovery update --id 123 --schedule "schedule.json"
+zdm-cli recovery update --id 123 --schedule-file "schedule.json"
 
 # 스케줄 변경 (JSON 문자열 사용)
 zdm-cli recovery update --id 123 --schedule '{"type":"daily","time":"02:00"}'
@@ -69,7 +72,9 @@ zdm-cli recovery update --id 123 --change-name "MyRecovery" --platform aws --aft
 | --name | - | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
 | --change-name | -cn | string | Optional | - | 변경할 작업 이름 | - |
 | --platform | -pf | string | Optional | - | 변경할 플랫폼 | {% include zdm/platforms.md inline=true baremetal=true %} |
-| --schedule | -sc | string | Optional | - | 작업에 사용할 Schedule (JSON 파일 경로 또는 JSON 문자열) | - |
+| --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 | - |
+| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID | - |
+| --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 | - |
 | --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md %} |
 | --after-reboot | -ar | string | Optional | - | 작업 완료 후 부팅 모드 | {% include zdm/after-reboot.md %} |
 | --mail-event | -me | string | Optional | - | 작업 이벤트 수신 메일 | - |

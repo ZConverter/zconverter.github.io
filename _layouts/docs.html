@@ -113,8 +113,8 @@
               <ul class="version-selector-dropdown" id="versionDropdown">
                 {% for v in versions %}
                   <li>
-                    <a href="/zdm/{{ page.lang | default: 'ko' }}/{{ product_type }}/{{ v.version }}/index"
-                       {% if v.version == current_version %}class="active"{% endif %}>
+                    <a href="/zdm/{{ page.lang | default: 'ko' }}/{{ product_type }}/{{ v.docs | default: v.version }}/index"
+                       {% if v.version == current_version or v.docs == current_version %}class="active"{% endif %}>
                       v{{ v.version }}{% if v.status == 'latest' %} (latest){% endif %}
                     </a>
                   </li>

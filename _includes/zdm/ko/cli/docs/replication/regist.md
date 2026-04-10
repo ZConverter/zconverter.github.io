@@ -34,7 +34,7 @@ zdm-cli replication regist --tc center1 --ut repository --sri 1 --tri 2
 zdm-cli replication regist --tc center1 --ut server --ssi 1 --tri 1
 
 # 스케줄과 자동 시작 옵션 추가
-zdm-cli replication regist --tc center1 --ut backup --bjn daily-backup --tri 1 --schedule "0 2 * * *" --start
+zdm-cli replication regist --tc center1 --ut backup --bjn daily-backup --tri 1 --schedule-id 1234 --start
 ```
 
 </details>
@@ -99,7 +99,9 @@ zdm-cli replication regist --tc center1 --ut backup --bjn daily-backup --tri 1 -
 |----------|------|------|------|--------|------|
 | --compression | --comp | boolean | Optional | - | 압축 사용 여부 |
 | --network-limit | --nl | number | Optional | 0 | 네트워크 속도 제한 |
-| --schedule | - | string | Optional | - | 스케줄 (cron 표현식) |
+| --schedule | - | string | Optional | - | 스케줄 JSON 문자열 |
+| --schedule-id | - | number | Optional | - | 기존 스케줄 ID |
+| --schedule-file | - | string | Optional | - | 스케줄 JSON 파일 경로 |
 | --start | - | boolean | Optional | - | 자동 시작 |
 | --output | -o | string | Optional | text | 출력 형식 |
 
