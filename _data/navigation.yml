@@ -18,9 +18,9 @@ ko-zdm:
       - title: "다운로드"
         url: "/zdm/ko/downloads"
       - title: "ZDM-CLI 문서"
-        url: "/zdm/ko/cli/1.3.0/index"
+        url: "/zdm/ko/cli/1.3.1/index"
       - title: "ZDM-API 문서"
-        url: "/zdm/ko/api/1.3.0/index"
+        url: "/zdm/ko/api/1.3.1/index"
 
 # API v1.0.3 (한국어)
 ko-api-1.0.3:
@@ -409,6 +409,8 @@ ko-cli-1.3.1:
         url: "/zdm/ko/cli/1.3.1/docs/schedule/regist"
       - title: "schedule list"
         url: "/zdm/ko/cli/1.3.1/docs/schedule/list"
+      - title: "schedule delete"
+        url: "/zdm/ko/cli/1.3.1/docs/schedule/delete"
   - title: "ZDM Center"
     links:
       - title: "개요"
@@ -1410,7 +1412,7 @@ zdm:
       - title: "ZDM 홈"
         url: "/zdm/"
       - title: "ZDM-CLI 문서"
-        url: "/zdm/ko/cli/1.3.0/index"
+        url: "/zdm/ko/cli/1.3.1/index"
       - title: "ZDM-API 문서"
         url: "/zdm/ko/api/1.3.0/index"
 

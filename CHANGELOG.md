@@ -6,6 +6,17 @@
 
 ---
 
+## [Documentation] - 2026-04-13
+
+### Changed
+- **API v1.3.1 문서 추가** — Schedule 검증 개선 및 Backup Update 모드 자동 전환
+  - Schedule `type` 필드 문자열 입력 지원
+  - Backup Update 모드-스케줄 교차 변경 시 자동 전환
+  - Smart Schedule basic/advanced 모드 정합성 검증 추가
+  - Schedule 삭제 시 사용 중 여부 검증 추가, 삭제 응답에 type/description 포함
+
+---
+
 ## [Documentation] - 2026-04-10
 
 ### Changed
