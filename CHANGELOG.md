@@ -6,7 +6,7 @@
 
 ---
 
-## [Documentation] - 2026-04-13
+## 2026-04-13
 
 ### Changed
 - **API v1.3.1 문서 추가** — Schedule 검증 개선 및 Backup Update 모드 자동 전환
@@ -16,10 +16,19 @@
   - Schedule 삭제 시 사용 중 여부 검증 추가, 삭제 응답에 type/description 포함
   - Backup Update 기존 스케줄 ID 참조 시 동작 수정, 호환성 검증 추가
   - Schedule description 변환 수정 (타입 7 시간 누락, 타입 11 월/날짜 순서)
+- **CLI v1.3.1 문서 추가** — Schedule 검증 강화 / 출력 형식 개선
+  - Schedule 입력값 mode별 검증 추가 (smart 구조, type 범위, JSON 문법)
+  - `backup regist` smart 모드 schedule 필수화
+  - `backup regist/update` `--schedule-id` 옵션 smart 모드 JSON 형식 지원
+  - `schedule delete` 신규 커맨드 추가
+  - `schedule create` 서버 자동 등록으로 변경
+  - `--schedule` / `--schedule-file` 입력 시 basic 자동 래핑
+  - `schedule list --type` 문자열 입력 지원
+  - Schedule type 출력 문자열 개선
 
 ---
 
-## [Documentation] - 2026-04-10
+## 2026-04-10
 
 ### Changed
 - **CLI v1.3.0 변경 내용 반영** — `--schedule` 옵션 3개 분리 (`--schedule`, `--schedule-id`, `--schedule-file`)
@@ -29,7 +38,7 @@
 
 ---
 
-## [Documentation] - 2026-04-09
+## 2026-04-09
 
 ### Changed
 - **CLI v1.2.1 패치 내용 반영** — `backup regist` `--repository-path` 선택적 변경, 에러 출력 수정
@@ -63,7 +72,7 @@
 
 ---
 
-## [Documentation] - 2026-04-08
+## 2026-04-08
 
 ### Added
 - **API v1.3.0 문서 추가** — Cloud Auth 8개, OS Replication 8개 엔드포인트
@@ -104,7 +113,7 @@
 
 ---
 
-## [Documentation] - 2026-03-25
+## 2026-03-25
 
 ### Added
 - **API v1.2.0 문서 추가** — Replication API 8개 엔드포인트
@@ -140,7 +149,7 @@
 
 ---
 
-## [Documentation] - 2026-03-05
+## 2026-03-05
 
 ### Added
 - **문서 콘텐츠 includes 공통화**
@@ -197,7 +206,7 @@
 
 ---
 
-## [API v1.1.0] - 2026-03-03
+## 2026-03-03
 
 ### Added
 - **GET /backups/histories 엔드포인트 문서 추가**
@@ -223,7 +232,7 @@
 
 ---
 
-## [API v1.0.3] - 2026-02-05
+## 2026-02-05
 
 ### Added
 - **PUT /zdm-centers/repositories/:identifier 엔드포인트 추가**
@@ -257,88 +266,72 @@
 
 ---
 
-## [CLI v1.0.3] - 2026-02-04
+## 2026-02-04
 
 ### Added
-- **list 명령어 정렬 옵션 추가**
+- **CLI: list 명령어 정렬 옵션 추가**
   - `--asc`: 오름차순 정렬 (기본값: 내림차순)
   - 적용 명령어: `backup list`, `recovery list`, `server list`, `license list`, `schedule list`, `zdm list`, `file list`
   - 사용 예시: `zdm-cli backup list --asc`
-- **`config set --auto` 옵션 추가**
+- **CLI: `config set --auto` 옵션 추가**
   - `--zdm-repo-id`와 함께 사용 시 repository path 자동 조회
   - 사용 예시: `zdm-cli config set --zri 15 --auto`
-
-### Changed
-- **`zdm list --repo` 출력에서 `os` 필드 제거**
-  - API 변경사항 반영
-
-### Fixed
-- **`config set` SMB 경로 입력 시 백슬래시 손실 문제 수정**
-  - `config set --zrp "\\192.168.2.108\ZConverter"` 입력 시 올바르게 저장
-- **심볼릭 링크로 실행 시 config 파일 인식 오류 수정**
-  - 바이너리를 심볼릭 링크로 등록 후 실행 시 원본 위치의 config 파일을 찾지 못하던 문제 해결
-- **`config set --auto` 옵션 repository 조회 오류 수정**
-  - 존재하는 repository ID 입력 시 "not found" 오류가 발생하던 문제 해결
-
----
-
-## [API v1.0.3] - 2026-02-04
-
-### Added
-- **모든 조회 API에 `sort` 쿼리 파라미터 추가**
+- **API: 모든 조회 API에 `sort` 쿼리 파라미터 추가**
   - 사용법: `?sort=asc` (오름차순), 기본값: 내림차순(desc)
   - 적용 API: GET /zdm-centers, /servers, /backups, /recoveries, /schedules, /users, /licenses, /files/list 등
 
 ### Changed
-- **GET /zdm-centers/:identifier/repositories 응답에서 `os` 필드 제거**
+- **CLI: `zdm list --repo` 출력에서 `os` 필드 제거**
+  - API 변경사항 반영
+- **API: GET /zdm-centers/:identifier/repositories 응답에서 `os` 필드 제거**
   - Repository 정보에서 OS 필드가 더 이상 반환되지 않음
 
 ### Fixed
-- **GET /zdm-centers/:identifier/repositories type 값 "Unknown" 오류 수정**
+- **CLI: `config set` SMB 경로 입력 시 백슬래시 손실 문제 수정**
+  - `config set --zrp "\\192.168.2.108\ZConverter"` 입력 시 올바르게 저장
+- **CLI: 심볼릭 링크로 실행 시 config 파일 인식 오류 수정**
+  - 바이너리를 심볼릭 링크로 등록 후 실행 시 원본 위치의 config 파일을 찾지 못하던 문제 해결
+- **CLI: `config set --auto` 옵션 repository 조회 오류 수정**
+  - 존재하는 repository ID 입력 시 "not found" 오류가 발생하던 문제 해결
+- **API: GET /zdm-centers/:identifier/repositories type 값 "Unknown" 오류 수정**
   - ZDM 신규 버전에서 Repository 타입이 "Unknown"으로 표시되던 문제 해결
   - nType 값 22, 23에 대한 매핑 추가 (22→SMB, 23→NFS)
 
 ---
 
-## [CLI v1.0.3] - 2026-01-29
+## 2026-01-29
 
 ### Added
-- **recovery regist 명령어 `--repository-type` 옵션 추가**
+- **CLI: recovery regist 명령어 `--repository-type` 옵션 추가**
   - 별칭: `-rt`
   - 작업시 사용할 Repository 타입 지정
-
----
-
-## [API v1.0.3] - 2026-01-29
-
-### Added
-- **GET /backups/images/server/:serverName 응답 필드 추가**
+- **API: GET /backups/images/server/:serverName 응답 필드 추가**
   - `image.jobName`: 백업 작업 이름 필드 추가
 
 ### Changed
-- **GET /backups/images/server/:serverName jobName 필터 동작 변경**
+- **API: GET /backups/images/server/:serverName jobName 필터 동작 변경**
   - 부분 일치 → 정확히 일치로 변경
   - 작업 이름과 정확히 일치하는 백업 이미지만 반환
-- **GET /backups/images/server/:serverName partition 파라미터 설명 개선**
+- **API: GET /backups/images/server/:serverName partition 파라미터 설명 개선**
   - Linux/Windows 통합 지원 명시
   - Windows 드라이브 콜론 자동 제거 설명 추가 (`C:` → `C`)
-- **POST /recoveries repository 필드 구조 변경**
+- **API: POST /recoveries repository 필드 구조 변경**
   - `repository.id`: Optional → Required로 변경
   - `repository.type`: Required → Optional로 변경
   - `repository.path`: Required → Optional로 변경
-- **POST /recoveries jobList 항목 구조 개선**
+- **API: POST /recoveries jobList 항목 구조 개선**
   - `backupJob` 필드 추가: 사용할 백업 작업 이름 (미지정 시 최신 성공 작업 자동 선택)
   - `backupFile` 필드 설명 상세화: 사용할 백업 이미지 파일명 (미지정 시 최신 이미지 자동 선택)
   - `repository` 객체 구조 추가: 개별 파티션마다 다른 Repository 사용 가능
   - `excludePartition` 설명 상세화: 콤마 구분 예시 추가
   - `listOnly` 설명 상세화: true/false 동작 명시
   - `mode`, `repository` 필드 설명 보완
-- **POST /recoveries 응답 필드명 변경**
+- **API: POST /recoveries 응답 필드명 변경**
   - `backup.useLast` → `backup.useLatest`
 
 ---
 
-## [API v1.0.3] - 2026-01-28
+## 2026-01-28
 
 ### Added
 - **GET /backups/images/server/:serverName 필터 파라미터 추가**
@@ -355,7 +348,7 @@
 
 ---
 
-## [API v1.0.3] - 2026-01-24
+## 2026-01-24
 
 ### Added
 - **GET /backups/images/server/:serverName 필터 파라미터 추가**
@@ -620,7 +613,7 @@
 
 ---
 
-## [Documentation] - 2025-01-14
+## 2025-01-14
 
 ### Added
 - 다국어 지원 (i18n) 폴더 기반 구조 적용
@@ -730,7 +723,7 @@
 
 ---
 
-## [Documentation] - 2025-01-12
+## 2025-01-12
 
 ### Added
 - CHANGELOG.md 생성

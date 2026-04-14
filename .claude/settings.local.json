@@ -43,7 +43,8 @@
       "Bash(gh run list:*)",
       "Bash(mkdir -p backup/update schedule/delete)",
       "Bash(mv backup/update-1.3.0.md backup/update/1.3.0.md)",
-      "Bash(mv schedule/delete-1.3.0.md schedule/delete/1.3.0.md)"
+      "Bash(mv schedule/delete-1.3.0.md schedule/delete/1.3.0.md)",
+      "Bash(git:*)"
     ],
     "deny": [],
     "ask": []
