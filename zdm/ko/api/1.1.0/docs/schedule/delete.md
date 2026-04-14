@@ -6,4 +6,4 @@ navigation: ko-api-1.1.0
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/schedule/delete.md %}
+{% include zdm/ko/api/docs/schedule/delete/1.3.0.md %}

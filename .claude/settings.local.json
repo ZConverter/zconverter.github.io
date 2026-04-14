@@ -40,7 +40,10 @@
       "Bash(xargs:*)",
       "WebFetch(domain:zconverter.github.io)",
       "Bash(git check-ignore:*)",
-      "Bash(gh run list:*)"
+      "Bash(gh run list:*)",
+      "Bash(mkdir -p backup/update schedule/delete)",
+      "Bash(mv backup/update-1.3.0.md backup/update/1.3.0.md)",
+      "Bash(mv schedule/delete-1.3.0.md schedule/delete/1.3.0.md)"
     ],
     "deny": [],
     "ask": []

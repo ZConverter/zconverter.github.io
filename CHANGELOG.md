@@ -14,6 +14,8 @@
   - Backup Update 모드-스케줄 교차 변경 시 자동 전환
   - Smart Schedule basic/advanced 모드 정합성 검증 추가
   - Schedule 삭제 시 사용 중 여부 검증 추가, 삭제 응답에 type/description 포함
+  - Backup Update 기존 스케줄 ID 참조 시 동작 수정, 호환성 검증 추가
+  - Schedule description 변환 수정 (타입 7 시간 누락, 타입 11 월/날짜 순서)
 
 ---
 
