@@ -6,7 +6,7 @@ Replication 작업을 삭제하는 명령어입니다.
 ## `replication delete` {#replication-delete}
 
 > * Replication 작업을 삭제합니다.
-> * 작업 ID 또는 이름으로 삭제할 수 있습니다.
+> * `--center` 파라미터가 필수이며, 작업 ID 또는 이름으로 삭제 대상을 지정합니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -22,13 +22,13 @@ Replication 작업을 삭제하는 명령어입니다.
 
 ```bash
 # ID로 삭제
-zdm-cli replication delete --id 123
+zdm-cli replication delete -c srcconm --id 123
 
 # 이름으로 삭제
-zdm-cli replication delete --name repl01
+zdm-cli replication delete -c 9 --name repl01
 
 # JSON 형식으로 출력
-zdm-cli replication delete --id 123 --output json
+zdm-cli replication delete -c srcconm --id 123 --output json
 ```
 
 </details>
@@ -38,11 +38,12 @@ zdm-cli replication delete --id 123 --output json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --id | - | number | Required* | - | 삭제할 작업 ID | - |
+| --center | -c | string | Required | - | Center ID 또는 이름 | - |
 | --name | - | string | Required* | - | 삭제할 작업 이름 | - |
+| --id | - | number | Required* | - | 삭제할 작업 ID | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
-> \* `--id` 또는 `--name` 중 하나는 반드시 입력해야 합니다.
+> \* `--name` 또는 `--id` 중 하나는 반드시 입력해야 합니다.
 
 </details>
 

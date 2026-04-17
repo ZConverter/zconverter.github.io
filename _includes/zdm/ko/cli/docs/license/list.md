@@ -6,6 +6,7 @@ License 목록 및 정보를 조회하는 명령어입니다.
 ## `license list` {#license-list}
 
 > * License 목록(정보)을 조회합니다.
+> * Center, 이름, 타입, 만료일 등 다양한 조건으로 필터링할 수 있습니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -22,6 +23,13 @@ License 목록 및 정보를 조회하는 명령어입니다.
 ```bash
 # 전체 라이센스 목록 조회
 zdm-cli license list
+
+# 특정 Center의 라이센스 조회
+zdm-cli license list --center 9
+zdm-cli license list -c "zdm-center-01"
+
+# 여러 Center의 라이센스 조회 (콤마 구분)
+zdm-cli license list --center "9,12,15"
 
 # 특정 ID의 라이센스 조회
 zdm-cli license list --id 123
@@ -49,6 +57,9 @@ zdm-cli license list --output json
 
 # 테이블 형식으로 출력
 zdm-cli license list --output table
+
+# 오름차순 정렬
+zdm-cli license list --asc
 ```
 
 </details>
@@ -58,13 +69,14 @@ zdm-cli license list --output table
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Optional | - | 조회할 Center ID 또는 Name (콤마 구분으로 복수 지정 가능) | - |
 | --id | - | number | Optional | - | 조회할 License ID | - |
 | --name | -n | string | Optional | - | 조회할 License 이름 | - |
 | --type | - | string | Optional | - | 조회할 License Type | {% include zdm/license-categories.md %} |
 | --expiration-date | -expd | string | Optional | - | 라이센스 만료 날짜 (format: YYYY-MM-DD) | - |
 | --create-date | -cre | string | Optional | - | 라이센스 생성 일자 (format: YYYY-MM-DD) | - |
-| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 | --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

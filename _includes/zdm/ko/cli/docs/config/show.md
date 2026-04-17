@@ -24,7 +24,7 @@ Config 파일의 현재 설정 내용을 조회합니다.
 zdm-cli config show
 
 # JSON 형식으로 출력
-zdm-cli config show --output json
+zdm-cli config show -o json
 
 # Table 형식으로 출력
 zdm-cli config show --output table
@@ -37,7 +37,7 @@ zdm-cli config show --output table
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `--output` | `-o` | string | Optional | `text` | 출력 형식 지정 | `text`, `json`, `table` |
+| `--output` | `-o` | string | Optional | `text` | 출력 형식 지정 | {% include zdm/output-formats.md %} |
 
 </details>
 
@@ -51,7 +51,7 @@ zdm-cli config show --output table
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [info]
 
-config path  : /path/to/.zdm-cli.json
+config path  : /home/user/.zdm-cli/config.json
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [data]
@@ -59,10 +59,10 @@ config path  : /path/to/.zdm-cli.json
 zconverter_dir_path    : /ZConverterManager
 user.mail              : admin@example.com
 token                  : eyJhbGciOiJIUzI1NiIs...
-zdm.ip                 : 192.168.1.100
+zdm.ip                 : 121.189.21.220
 zdm.port               : 53307
-zdm.id                 : 1
-zdm.repository.id      : 1
+zdm.id                 : 9
+zdm.repository.id      : 43
 zdm.repository.path    : /backup
 zdm.zos_repository.id  : -
 zdm.zos_repository.platform : -
@@ -79,11 +79,11 @@ zdm.zos_repository.platform : -
   },
   "token": "eyJhbGciOiJIUzI1NiIs...",
   "zdm": {
-    "ip": "192.168.1.100",
+    "ip": "121.189.21.220",
     "port": 53307,
-    "id": 1,
+    "id": 9,
     "repository": {
-      "id": 1,
+      "id": 43,
       "path": "/backup"
     },
     "zos_repository": {

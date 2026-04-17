@@ -9,6 +9,7 @@
 
 > * 새로운 복제 작업을 시스템에 등록합니다.
 > * 복제 단위 유형(backup, repository, server)에 따라 필수 필드가 달라집니다.
+> * v2.0.0부터 `sourceRepository`, `targetRepository`, `sourceServer`, `backup` 필드를 단일 문자열(comma-separated)로 단순화했습니다. 다중 값은 콤마로 구분하며, 각 값은 ID 또는 이름/경로를 혼용할 수 있습니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -32,15 +33,13 @@ curl -X POST "https://api.example.com/api/replications" \
     "targetCenter": "2",
     "replicationUnitType": "backup",
     "replicationMode": "full",
-    "backupJobName": ["daily-backup"],
-    "targetRepository": {
-      "path": "/replication/target"
-    },
+    "backup": "daily-backup",
+    "targetRepository": "/replication/target",
     "compression": "use",
     "autoStart": "not use"
   }'
 
-# repository 단위 복제 등록
+# repository 단위 복제 등록 (다중 소스)
 curl -X POST "https://api.example.com/api/replications" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
@@ -49,12 +48,8 @@ curl -X POST "https://api.example.com/api/replications" \
     "targetCenter": "2",
     "replicationUnitType": "repository",
     "replicationMode": "incremental",
-    "sourceRepository": [
-      { "id": 1 }
-    ],
-    "targetRepository": {
-      "path": "//192.168.1.100/replication"
-    },
+    "sourceRepository": "39,40",
+    "targetRepository": "41",
     "networkLimit": 1024
   }'
 
@@ -67,12 +62,8 @@ curl -X POST "https://api.example.com/api/replications" \
     "targetCenter": "2",
     "replicationUnitType": "server",
     "replicationMode": "sync",
-    "sourceServer": [
-      { "name": "web-server-01" }
-    ],
-    "targetRepository": {
-      "path": "/replication/server"
-    },
+    "sourceServer": "web-server-01",
+    "targetRepository": "/replication/server",
     "schedule": {
       "type": 3,
       "basic": {
@@ -101,29 +92,29 @@ curl -X POST "https://api.example.com/api/replications" \
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (0: 무제한) | - |
 | `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
 | `autoStart` | string | Optional | 자동 시작 여부 | {% include zdm/use-options.md %} |
-| `targetRepository` | object | Required | 타겟 레포지토리 정보 | - |
-| `targetRepository.id` | number | Optional | 레포지토리 ID (id 또는 path 중 하나 필수) | - |
-| `targetRepository.path` | string | Optional | 레포지토리 경로 (id 또는 path 중 하나 필수) | - |
-| `sourceRepository` | array | Conditional | 소스 레포지토리 배열 (unitType=repository 시 필수) | - |
-| `sourceRepository[].id` | number | Optional | 레포지토리 ID (id 또는 path 중 하나 필수) | - |
-| `sourceRepository[].path` | string | Optional | 레포지토리 경로 (id 또는 path 중 하나 필수) | - |
-| `sourceServer` | array | Conditional | 소스 서버 배열 (unitType=server 시 필수) | - |
-| `sourceServer[].id` | number | Optional | 서버 ID (id 또는 name 중 하나 필수) | - |
-| `sourceServer[].name` | string | Optional | 서버 이름 (id 또는 name 중 하나 필수) | - |
-| `backupJobName` | string[] | Conditional | 백업 작업 이름 배열 (unitType=backup 시 필수) | - |
+| `targetRepository` | string | Required | 타겟 레포지토리 (단일 ID 또는 경로, 예: `"41"` / `"/replication/target"`) | - |
+| `sourceRepository` | string | Conditional | 소스 레포지토리 (unitType=repository 시 필수, comma-separated ID/경로 다중 가능, 예: `"39,40"`) | - |
+| `sourceServer` | string | Conditional | 소스 서버 (unitType=server 시 필수, comma-separated ID/이름 다중 가능, 예: `"1,web-server-01"`) | - |
+| `backup` | string | Conditional | 백업 작업 (unitType=backup 시 필수, comma-separated ID/작업이름 다중 가능, 예: `"1,daily-backup"`) | - |
+
+> **v1.3.x → v2.0.0 마이그레이션**:
+> - `sourceRepository: [{ id: 1 }, { path: "/p2" }]` → `sourceRepository: "1,/p2"`
+> - `targetRepository: { id: 41 }` → `targetRepository: "41"`
+> - `sourceServer: [{ name: "web-01" }]` → `sourceServer: "web-01"`
+> - `backupJobName: ["daily-backup"]` → `backup: "daily-backup"` (필드명도 변경)
 
 <details markdown="1">
 <summary><strong>V1 요청 본문 차이점</strong></summary>
 
-> V1에서는 다음과 같은 차이가 있습니다.
+> V1에서도 동일하게 `sourceRepository`/`targetRepository`를 단일 문자열로 단순화했습니다.
 
 | 항목 | V2 | V1 |
 |------|----|----|
 | `replicationUnitType` | {% include zdm/replication-unit-types.md %} | {% include zdm/replication-v1-unit-types.md %} |
 | `replicationMode` | {% include zdm/replication-modes.md %} | {% include zdm/replication-v1-modes.md %} |
-| 소스 참조 (image) | `backupJobName`: string[] | `backupName`: string, `transferBackupName`: string |
-| 소스 레포지토리 | `sourceRepository`: array (배열) | `sourceRepository`: object (단일 객체) |
-| 소스 서버 | `sourceServer`: array | 미지원 |
+| 소스 참조 (image) | `backup`: string (다중) | `backupName`: string, `transferBackupName`: string |
+| 소스 레포지토리 | `sourceRepository`: string (다중) | `sourceRepository`: string (단일) |
+| 소스 서버 | `sourceServer`: string (다중) | 미지원 |
 
 **V1 요청 본문 필드:**
 
@@ -133,11 +124,10 @@ curl -X POST "https://api.example.com/api/replications" \
 | `replicationMode` | string | Optional | 복제 모드 | {% include zdm/replication-v1-modes.md %} |
 | `backupName` | string | Conditional | 백업 이름 (unitType=image 시 필수) | - |
 | `transferBackupName` | string | Conditional | 전송 백업 이름 (unitType=image 시 필수) | - |
-| `sourceRepository` | object | Conditional | 소스 레포지토리 (unitType=repository 시 필수, 단일 객체) | - |
-| `sourceRepository.id` | number | Optional | 레포지토리 ID (id 또는 path 중 하나 필수) | - |
-| `sourceRepository.path` | string | Optional | 레포지토리 경로 (id 또는 path 중 하나 필수) | - |
+| `sourceRepository` | string | Conditional | 소스 레포지토리 (unitType=repository 시 필수, 단일 ID 또는 경로, 예: `"39"`) | - |
+| `targetRepository` | string | Required | 타겟 레포지토리 (단일 ID 또는 경로, 예: `"41"`) | - |
 
-> 그 외 공통 필드 (`sourceCenter`, `targetCenter`, `jobName`, `ip`, `port`, `compression`, `networkLimit`, `schedule`, `autoStart`, `targetRepository`)는 V2와 동일합니다.
+> 그 외 공통 필드 (`sourceCenter`, `targetCenter`, `jobName`, `ip`, `port`, `compression`, `networkLimit`, `schedule`, `autoStart`)는 V2와 동일합니다.
 
 **V1 요청 예시:**
 
@@ -153,9 +143,7 @@ curl -X POST "https://api.example.com/api/replications" \
     "replicationMode": "full",
     "backupName": "daily-backup",
     "transferBackupName": "daily-backup-transfer",
-    "targetRepository": {
-      "path": "/replication/target"
-    },
+    "targetRepository": "/replication/target",
     "compression": "use"
   }'
 
@@ -168,12 +156,8 @@ curl -X POST "https://api.example.com/api/replications" \
     "targetCenter": "2",
     "replicationUnitType": "repository",
     "replicationMode": "incremental",
-    "sourceRepository": {
-      "id": 1
-    },
-    "targetRepository": {
-      "path": "//192.168.1.100/replication"
-    }
+    "sourceRepository": "39",
+    "targetRepository": "//192.168.1.100/replication"
   }'
 ```
 
@@ -225,7 +209,7 @@ curl -X POST "https://api.example.com/api/replications" \
     ]
   },
   "message": "Replication job registration completed",
-  "timestamp": "2026-03-20 10:30:00"
+  "timestamp": "2026-04-17 10:30:00"
 }
 ```
 
@@ -259,7 +243,7 @@ curl -X POST "https://api.example.com/api/replications" \
   "success": false,
   "requestID": "req-abc123",
   "error": "replicationUnitType은 backup, repository, server 중 하나여야 합니다",
-  "timestamp": "2026-03-20 10:30:00"
+  "timestamp": "2026-04-17 10:30:00"
 }
 ```
 
@@ -270,7 +254,7 @@ curl -X POST "https://api.example.com/api/replications" \
   "success": false,
   "requestID": "req-abc123",
   "error": "JOB_NAME_ALREADY_EXISTS",
-  "timestamp": "2026-03-20 10:30:00"
+  "timestamp": "2026-04-17 10:30:00"
 }
 ```
 

@@ -24,6 +24,9 @@ Backup 작업 정보를 수정하는 명령어입니다.
 # ID로 작업 모드 변경
 zdm-cli backup update --id 123 --mode full
 
+# Center 지정하여 작업 모드 변경
+zdm-cli backup update --id 123 --mode full --center 9
+
 # 작업 이름 변경
 zdm-cli backup update --name "backup" --change-name "MyBackup"
 
@@ -71,10 +74,11 @@ zdm-cli backup update --id 123 --mode increment --output json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Optional | config 설정값 | 작업 대상 Center | - |
 | --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --name | - | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
 | --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
-| --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status-update.md %} |
+| --status | - | string | Optional | - | 작업 상태 | `start`, `stop` |
 | --repository-id | -ri | number | Optional | - | Repository ID | - |
 | --repository-path | -rp | string | Optional | - | Repository Path | - |
 | --change-name | -cn | string | Optional | - | 변경할 작업 이름 | - |

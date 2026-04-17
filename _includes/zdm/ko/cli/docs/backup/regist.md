@@ -23,40 +23,49 @@ Backup 작업을 등록하는 명령어입니다.
 
 ```bash
 # 기본 Backup 등록 (압축: use, 암호화: not use 기본값)
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --center 9
+
+# Center 이름으로 지정하여 등록
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --center srcconm
 
 # 압축 없이 Backup 등록
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --compression "not use"
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --compression "not use"
 
 # 암호화 활성화하여 Backup 등록
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --encryption "use"
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --encryption "use"
 
 # 특정 파티션만 Backup 등록
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --partition "/,/home"
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --partition "/,/home"
 
 # 작업 이름 지정하여 등록
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --job-name "daily_backup"
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --job-name "daily_backup"
 
 # 스케줄 설정과 함께 등록 (기존 스케줄 ID)
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --schedule-id 1234
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --schedule-id 1234
 
 # smart 모드 등록 (스케줄 필수)
-zdm-cli backup regist --server "web01" --mode "smart" --repository-id 1 --schedule-id '{"type":7,"basic":100,"advanced":200}'
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode smart --schedule-id '{"type":7,"basic":100,"advanced":200}'
 
 # 스케줄 JSON 직접 입력 (basic 자동 래핑)
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --schedule '{"type":3,"time":"12:00"}'
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --schedule '{"type":3,"time":"12:00"}'
+
+# 스케줄 파일 사용
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --schedule-file "/path/to/schedule.json"
 
 # 제외 폴더 설정
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --exclude-dir "/tmp,/var/log"
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --exclude-dir "/tmp,/var/log"
+
+# 제외 파티션 설정
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --exclude-partition "/dev"
 
 # 자동 시작 설정
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --start
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --start
 
 # 스크립트 실행 설정
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --script-path "/scripts/pre_backup.sh" --script-run before
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --script-path "/scripts/pre_backup.sh" --script-run before
 
 # 파티션별 개별 설정 (JSON 형태)
-zdm-cli backup regist --server "web01" --mode "full" --repository-id 1 --individual '[{"partition":"/","jobName":"root_backup"}]'
+zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --individual '[{"partition":"/","jobName":"root_backup"}]'
 ```
 
 </details>

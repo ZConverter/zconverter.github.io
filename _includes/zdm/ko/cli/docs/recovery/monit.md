@@ -24,6 +24,12 @@ Recovery 작업의 실시간 진행 상태를 모니터링합니다.
 # 작업 ID로 모니터링
 zdm-cli recovery monit --job-id 123
 
+# 특정 Center 지정하여 모니터링
+zdm-cli recovery monit --center 9 --job-id 123
+
+# 복수 Center 조회 (콤마 구분)
+zdm-cli recovery monit --center 9,10 --job-name "my-recovery"
+
 # 작업 이름으로 모니터링
 zdm-cli recovery monit --job-name "my-recovery"
 
@@ -65,19 +71,20 @@ zdm-cli recovery monit --server-id 456 --output table
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Optional | - | 작업 대상 Center (콤마 구분 복수 지정 가능) | - |
 | --job-id | -ji | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --job-name | -jn | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
 | --server-id | -si | number | Optional<span class="required-note">*</span> | - | 작업 대상 Server ID | - |
 | --server-name | -sn | string | Optional<span class="required-note">*</span> | - | 작업 대상 Server Name | - |
-| --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md %} |
+| --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md recovery=true %} |
 | --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status.md %} |
 | --partition | - | string | Optional | - | 파티션 (Linux) | - |
 | --drive | - | string | Optional | - | 드라이브 (Windows) | - |
-| --server-type | -st | string | Optional | - | 서버 타입 | {% include zdm/server-modes.md %} |
-| --detail | - | boolean | Optional | - | 상세 정보 조회 | - |
+| --server-type | -st | string | Optional | - | 서버 타입 | `source`, `target` |
+| --detail | - | boolean | Optional | false | 상세 정보 조회 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
-> <span class="required-note">*</span> `job-id`/`job-name`과 `server-id`/`server-name`은 동시에 사용할 수 없습니다.<br>
+> <span class="required-note">*</span> `job-id`/`job-name` 또는 `server-id`/`server-name` 중 하나는 필수로 입력해야 합니다.<br>
 > <span class="required-note">*</span> ID와 Name은 동시에 입력할 수 없습니다.<br>
 > <span class="required-note">*</span> job과 server 파라미터는 동시에 사용할 수 없습니다.
 

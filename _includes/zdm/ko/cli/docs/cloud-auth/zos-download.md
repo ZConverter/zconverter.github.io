@@ -36,7 +36,6 @@ zdm-cli cloud-auth zos-download --fn key.json --sp /tmp
 |----------|------|------|------|--------|------|--------|
 | --file-name | -fn | string | Required | - | 다운로드할 파일명 | - |
 | --save-path | -sp | string | Optional | 현재 디렉토리 | 저장 경로 | - |
-| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

@@ -21,17 +21,17 @@ Recovery 작업을 삭제합니다.
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
-# ID로 Recovery 작업 삭제
-zdm-cli recovery delete --id 123
+# Center 지정 + ID로 Recovery 작업 삭제
+zdm-cli recovery delete --center 9 --id 123
 
-# 이름으로 Recovery 작업 삭제
-zdm-cli recovery delete --name "my-recovery-job"
+# Center 지정 + 이름으로 Recovery 작업 삭제
+zdm-cli recovery delete --center 9 --name "my-recovery-job"
 
 # JSON 형식으로 결과 출력
-zdm-cli recovery delete --id 123 --output json
+zdm-cli recovery delete --center 9 --id 123 --output json
 
 # 테이블 형식으로 결과 출력
-zdm-cli recovery delete --name "my-recovery" --output table
+zdm-cli recovery delete --center 9 --name "my-recovery" --output table
 ```
 
 </details>
@@ -41,6 +41,7 @@ zdm-cli recovery delete --name "my-recovery" --output table
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Required | - | 작업 대상 Center | - |
 | --name | - | string | Optional<span class="required-note">*</span> | - | 작업 이름 | - |
 | --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |

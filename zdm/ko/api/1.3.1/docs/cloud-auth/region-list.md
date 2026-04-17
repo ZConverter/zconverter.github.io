@@ -6,4 +6,4 @@ navigation: ko-api-1.3.1
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/cloud-auth/region-list.md %}
+{% include zdm/ko/api/docs/cloud-auth/region-list/1.3.1.md %}

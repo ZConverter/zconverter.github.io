@@ -42,6 +42,7 @@ curl -X GET "https://api.example.com/api/cloud-auth/zos?cloudPlatform=oci&page=1
 | `cloudPlatform` | Query | string | Optional | 클라우드 플랫폼 필터 | `oci`, `nhn`, `ncp`, `aws`, `azure`, `minio` |
 | `page` | Query | number | Optional | 페이지 번호 | |
 | `limit` | Query | number | Optional | 페이지당 개수 | |
+| `center` | Query | string | Optional | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
 | `sort` | Query | string | Optional | 정렬 방향 | `asc`, `desc` |
 
 </details>

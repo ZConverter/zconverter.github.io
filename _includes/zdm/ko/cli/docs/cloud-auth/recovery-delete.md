@@ -21,7 +21,7 @@ Recovery 클라우드 인증을 삭제하는 명령어입니다.
 
 ```bash
 # ID로 삭제
-zdm-cli cloud-auth recovery-delete --id 1
+zdm-cli cloud-auth recovery-delete -c center01 --id 1
 ```
 
 </details>
@@ -31,6 +31,7 @@ zdm-cli cloud-auth recovery-delete --id 1
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Required | - | Center ID 또는 이름 | - |
 | --id | - | number | Required | - | Recovery 인증 ID | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 

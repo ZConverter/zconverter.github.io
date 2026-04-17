@@ -22,40 +22,46 @@
 
 ```bash
 # 기본 Recovery 작업 등록
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "openstack" --mode "full" --repository-id 1
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform vmware --mode full --repository-id 1
+
+# Center 지정하여 등록
+zdm-cli recovery regist --center 9 --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform vmware --mode full --repository-id 1
+
+# Center 이름으로 지정
+zdm-cli recovery regist --center srcconm --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform vmware --mode full
 
 # 작업 이름 지정
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" --repository-id 1 --job-name "my-recovery-job"
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform vmware --mode full --repository-id 1 --job-name "my-recovery-job"
 
 # 오버라이트 허용 설정 (Linux 전용)
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "baremetal" --mode "full" --repository-id 1 --overwrite
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform baremetal --mode full --repository-id 1 --overwrite
 
 # 스크립트 실행 설정
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "vmware" --mode "full" --repository-id 1 --script-path "/tmp/test.sh" --script-run after
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform vmware --mode full --repository-id 1 --script-path "/tmp/test.sh" --script-run after
 
 # 복구 완료 후 재부팅 설정
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" --repository-id 1 --after-reboot reboot
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform aws --mode full --repository-id 1 --after-reboot reboot
 
 # 자동 시작 활성화
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" --repository-id 1 --start
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform aws --mode full --repository-id 1 --start
 
 # 네트워크 제한 설정
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" --repository-id 1 --network-limit 1000
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform aws --mode full --repository-id 1 --network-limit 1000
 
 # 스케줄 설정
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" --repository-id 1 --schedule-file "schedule.json"
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform aws --mode full --repository-id 1 --schedule-file "schedule.json"
 
 # 메일 알림 설정
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" --repository-id 1 --mail-event "admin@example.com"
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform aws --mode full --repository-id 1 --mail-event "admin@example.com"
 
 # 클라우드 인증 정보 사용
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" --repository-id 1 --cloud-auth "aws-credentials"
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform aws --mode full --repository-id 1 --cloud-auth "aws-credentials"
 
 # 커스텀 작업 리스트 사용 (JSON 형식)
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" --repository-id 1 --job-list '[{"sourcePartition":"/","targetPartition":"/","overwrite":true,"mode":"full","repository":{"id":1}}]'
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform aws --mode full --repository-id 1 --job-list '[{"sourcePartition":"/","targetPartition":"/","overwrite":true,"mode":"full","repository":{"id":1}}]'
 
 # 특정 파티션만 작업 등록
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" --repository-id 1 --job-list '[{"sourcePartition":"/boot","targetPartition":"/boot"}]' --list-only
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform aws --mode full --repository-id 1 --job-list '[{"sourcePartition":"/boot","targetPartition":"/boot"}]' --list-only
 ```
 
 </details>
@@ -66,15 +72,15 @@ zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --center | -c | string | Optional | config 설정값 | 작업 등록 Center | - |
-| --source | - | string | Required | - | 작업 대상 Source 서버 | - |
-| --target | - | string | Required | - | 작업 대상 Target 서버 | - |
+| --source | - | string | Required | - | 작업 대상 Source 서버 이름 | - |
+| --target | - | string | Required | - | 작업 대상 Target 서버 이름 | - |
 | --platform | - | string | Required | - | Target 서버 플랫폼 | {% include zdm/platforms.md baremetal=true inline=true %} |
 | --mode | - | string | Required | - | 작업 모드 | {% include zdm/job-modes.md recovery=true %} |
 | --repository-id | -ri | number | Optional | config 설정값 | 작업시 사용할 Repository ID | - |
+| --repository-path | -rp | string | Optional | config 설정값 | 작업시 사용할 Repository 경로 | - |
 | --repository-type | -rt | string | Optional | - | 작업시 사용할 Repository 타입 | - |
-| --repository-path | -rp | string | Optional | - | 작업시 사용할 Repository 경로 | - |
 | --job-name | -jn | string | Optional | - | 작업 이름 | - |
-| --user | -u | string | Optional | - | 사용자 ID 또는 메일 | - |
+| --user | -u | string | Optional | config 설정값 | 사용자 ID 또는 메일 | - |
 | --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 | - |
 | --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID | - |
 | --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 | - |
@@ -85,7 +91,7 @@ zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --
 | --script-path | -sp | string | Optional | - | 실행할 스크립트 파일 경로 (사전에 ZDM에 업로드 필요) | - |
 | --script-run | -sr | string | Optional | - | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 | --overwrite | - | boolean | Optional | false | 파티션 오버라이트 허용 여부 (Linux 전용) | - |
-| --after-reboot | -ar | string | Optional | reboot | 복구 완료 후 동작 | {% include zdm/after-reboot.md %} |
+| --after-reboot | -ar | string | Optional | reboot | 복구 완료 후 동작 | `reboot`, `shutdown`, `none` |
 | --cloud-auth | -ca | string | Optional | - | 클라우드 인증정보 ID 또는 Name | - |
 | --list-only | -lo | boolean | Optional | - | jobList에 지정된 파티션만 작업 등록 | - |
 | --job-list | -jl | string | Optional | - | 사용자 커스텀 작업 등록 (JSON 문자열 형태) | - |
@@ -133,23 +139,23 @@ zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --
 
 ```bash
 # 단일 파티션 지정
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" \
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform vmware --mode full \
   --job-list '[{"sourcePartition":"/","targetPartition":"/"}]'
 
 # 복수 파티션 지정 (각 파티션별 설정)
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" \
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform vmware --mode full \
   --job-list '[{"sourcePartition":"/","targetPartition":"/","overwrite":true},{"sourcePartition":"/boot","targetPartition":"/boot","mode":"full"}]'
 
 # 특정 백업 파일 지정
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" \
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform aws --mode full \
   --job-list '[{"sourcePartition":"/","targetPartition":"/","backupFile":"backup-2025-01-01.img"}]'
 
 # 파티션별 다른 Repository 사용
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" \
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform aws --mode full \
   --job-list '[{"sourcePartition":"/","targetPartition":"/","repository":{"id":1}},{"sourcePartition":"/data","targetPartition":"/data","repository":{"id":2}}]'
 
 # listOnly와 함께 사용 (지정된 파티션만 작업 등록)
-zdm-cli recovery regist --source "ubuntu22" --target "rhel8" --platform "aws" --mode "full" \
+zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky810_172.26.0.17" --platform aws --mode full \
   --job-list '[{"sourcePartition":"/boot","targetPartition":"/boot"}]' --list-only
 ```
 

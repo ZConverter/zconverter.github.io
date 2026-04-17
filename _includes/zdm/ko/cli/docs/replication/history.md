@@ -23,11 +23,20 @@ Replication 실행 히스토리를 조회하는 명령어입니다.
 # 전체 Replication 히스토리 조회
 zdm-cli replication history
 
+# 특정 Center의 히스토리 조회 (콤마 구분)
+zdm-cli replication history --center 9,10
+
+# 작업 ID로 필터링
+zdm-cli replication history --job-id 123
+
 # 작업 이름으로 필터링
 zdm-cli replication history --job-name repl01
 
 # 서버 및 결과로 필터링
 zdm-cli replication history --server web01 --result success
+
+# 실패한 히스토리만 조회
+zdm-cli replication history --result failed
 
 # 오름차순 정렬
 zdm-cli replication history --asc
@@ -43,11 +52,12 @@ zdm-cli replication history --output json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | - | string | Optional | - | Center ID 또는 이름 (콤마로 구분하여 복수 지정 가능) | - |
 | --job-id | - | number | Optional | - | 작업 ID로 필터링 | - |
 | --job-name | - | string | Optional | - | 작업 이름으로 필터링 | - |
 | --server | - | string | Optional | - | 서버 이름으로 필터링 | - |
-| --result | - | string | Optional | - | 결과 상태로 필터링 | success, failed |
-| --asc | - | boolean | Optional | false | 오름차순 정렬 | - |
+| --result | - | string | Optional | - | 결과 상태로 필터링 | `success`, `failed` |
+| --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>

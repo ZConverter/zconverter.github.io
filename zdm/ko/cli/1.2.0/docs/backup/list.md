@@ -6,4 +6,4 @@ navigation: ko-cli-1.2.0
 lang: ko
 ---
 
-{% include zdm/ko/cli/docs/backup/list.md %}
+{% include zdm/ko/cli/docs/backup/list/1.3.1.md %}

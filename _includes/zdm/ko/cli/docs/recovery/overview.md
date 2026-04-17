@@ -1,12 +1,17 @@
 
-복구 기능에 대한 개요입니다.
+Recovery(복구) 기능에 대한 개요입니다.
 
 <details markdown="1" open>
-<summary><strong>목차</strong></summary>
+<summary><strong>하위 커맨드</strong></summary>
 
-- [복구 모드](#복구-모드)
-- [복구 상태](#복구-상태)
-- [지원 플랫폼](#지원-플랫폼)
+| 커맨드 | 설명 |
+|--------|------|
+| `recovery regist` | Recovery 작업 등록 |
+| `recovery list` | Recovery 작업 목록 조회 |
+| `recovery update` | Recovery 작업 수정 |
+| `recovery delete` | Recovery 작업 삭제 |
+| `recovery monit` | Recovery 작업 모니터링 |
+| `recovery history` | Recovery 실행 히스토리 조회 |
 
 </details>
 
@@ -75,6 +80,31 @@
 | KVM | `kvm` |
 | Hyper-V | `hyperv` |
 | XenServer | `xenserver` |
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>물리 서버</strong></summary>
+
+| 플랫폼 | 코드 |
+|--------|------|
+| Bare Metal | `baremetal` |
+
+</details>
+
+---
+
+## 공통 파라미터
+
+<details markdown="1" open>
+<summary><strong>v2.0.0 공통 파라미터</strong></summary>
+
+| 파라미터 | 별칭 | 타입 | 설명 |
+|----------|------|------|------|
+| --center | -c | string | 작업 대상 Center (v2.0.0 추가) |
+| --output | -o | string | 출력 형식 ({% include zdm/output-formats.md %}) |
+
+> `--center` 파라미터는 모든 recovery 하위 커맨드에서 사용 가능합니다. 미지정시 config 설정값을 사용합니다.
 
 </details>
 

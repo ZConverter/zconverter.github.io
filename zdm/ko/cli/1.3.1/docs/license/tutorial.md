@@ -6,4 +6,4 @@ navigation: ko-cli-1.3.1
 lang: ko
 ---
 
-{% include zdm/ko/cli/docs/license/tutorial.md %}
+{% include zdm/ko/cli/docs/license/tutorial/1.3.1.md %}

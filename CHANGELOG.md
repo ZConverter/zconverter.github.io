@@ -6,6 +6,25 @@
 
 ---
 
+## [Documentation] - 2026-04-17
+
+### Added
+- **CLI v2.0.0 문서 추가** — 멀티 ZDM(Center) 지원, Replication V2 API, 전체 커맨드 문서 신규 작성
+- **CLI v2.0.0 Changelog 추가** — `_includes/zdm/ko/cli/changelog/2.0.0.md`
+- **API v2.0.0 문서 추가** — Replication regist body schema 단순화(Breaking) 및 GET 엔드포인트 `center` query parameter 지원
+- **API v2.0.0 Changelog 추가** — `_includes/zdm/ko/api/changelog/2.0.0.md`
+
+### Changed
+- **versions.yml** — CLI v2.0.0 / API v2.0.0 latest 등록, 각 v1.3.1 stable 변경
+- **navigation.yml** — `ko-cli-2.0.0`, `ko-api-2.0.0` 네비게이션 섹션 추가, `ko-zdm` 메인 링크를 v2.0.0으로 갱신
+- **CLI 리다이렉트** — `/zdm/ko/cli/index.md` → v2.0.0으로 갱신
+- **API 리다이렉트** — `/zdm/ko/api/index.md` → v2.0.0으로 갱신
+- **CLI 문서 컨텐츠** — 전체 커맨드 문서 v2.0.0 기준으로 재작성, 이전 버전용 1.3.1 보존 파일 분리
+- **API 문서 컨텐츠** — 전체 71개 공용 include 파일을 1.3.1 보존본으로 분리(메이저 버전 라인 분리), v2.0.0 공용에서 `replication/regist.md` 재작성(Breaking) 및 12개 list 파일에 `center` 쿼리 행 추가
+- **메인 랜딩** — `zdm/ko/index.md`의 ZDM-API 업데이트 목록 최상단에 v2.0.0 항목 추가, latest 배지 갱신
+
+---
+
 ## 2026-04-13
 
 ### Changed

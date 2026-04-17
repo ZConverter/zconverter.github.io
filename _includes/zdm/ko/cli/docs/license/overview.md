@@ -1,11 +1,27 @@
 
-라이센스 관리 기능에 대한 개요입니다.
+라이센스 관리 기능에 대한 개요입니다. 라이센스를 등록, 조회, 서버에 할당할 수 있습니다.
 
 <details markdown="1" open>
 <summary><strong>목차</strong></summary>
 
+- [하위 명령어](#하위-명령어)
 - [라이센스 타입](#라이센스-타입)
 - [라이센스 정보 구조](#라이센스-정보-구조)
+
+</details>
+
+---
+
+## 하위 명령어
+
+<details markdown="1" open>
+<summary><strong>license 하위 명령어 목록</strong></summary>
+
+| 명령어 | 설명 |
+|--------|------|
+| `license list` | License 목록 조회 |
+| `license assign` | License를 서버에 할당 |
+| `license regist` | License 키 등록 |
 
 </details>
 

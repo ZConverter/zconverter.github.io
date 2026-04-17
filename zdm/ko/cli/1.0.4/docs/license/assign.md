@@ -6,4 +6,4 @@ navigation: ko-cli-1.0.4
 lang: ko
 ---
 
-{% include zdm/ko/cli/docs/license/assign.md %}
+{% include zdm/ko/cli/docs/license/assign/1.3.1.md %}

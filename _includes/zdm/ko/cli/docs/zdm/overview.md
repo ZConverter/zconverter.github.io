@@ -1,5 +1,5 @@
 
-ZDM 센터 관리 기능에 대한 개요입니다.
+ZDM Center 관리 기능에 대한 개요입니다.
 
 <details markdown="1" open>
 <summary><strong>목차</strong></summary>
@@ -7,6 +7,7 @@ ZDM 센터 관리 기능에 대한 개요입니다.
 - [연결 상태](#연결-상태)
 - [활성화 상태](#활성화-상태)
 - [Repository 타입](#repository-타입)
+- [하위 커맨드](#하위-커맨드)
 
 </details>
 
@@ -19,8 +20,8 @@ ZDM 센터 관리 기능에 대한 개요입니다.
 
 | 상태 | 설명 |
 |------|------|
-| `connect` | ZDM 센터에 정상적으로 연결됨 |
-| `disconnect` | ZDM 센터 연결 끊김 |
+| `connect` | ZDM Center에 정상적으로 연결됨 |
+| `disconnect` | ZDM Center 연결 끊김 |
 
 </details>
 
@@ -33,8 +34,8 @@ ZDM 센터 관리 기능에 대한 개요입니다.
 
 | 상태 | 설명 |
 |------|------|
-| `ok` | ZDM 센터가 정상적으로 활성화됨 |
-| `fail` | ZDM 센터 활성화 실패 |
+| `ok` | ZDM Center가 정상적으로 활성화됨 |
+| `fail` | ZDM Center 활성화 실패 |
 
 </details>
 
@@ -49,6 +50,19 @@ ZDM 센터 관리 기능에 대한 개요입니다.
 |------|------|
 | `nfs` | NFS 네트워크 저장소 |
 | `smb` | SMB/CIFS 네트워크 저장소 |
+
+</details>
+
+---
+
+## 하위 커맨드
+
+<details markdown="1" open>
+<summary><strong>사용 가능한 하위 커맨드</strong></summary>
+
+| 커맨드 | 설명 |
+|--------|------|
+| `zdm list` | ZDM Center 목록 및 정보 조회 |
 
 </details>
 

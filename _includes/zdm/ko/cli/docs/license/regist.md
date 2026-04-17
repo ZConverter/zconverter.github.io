@@ -5,7 +5,7 @@
 
 ## `license regist` {#license-regist}
 
-> * License 정보를 등록합니다.
+> * License 키를 ZDM 서버에 등록합니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>

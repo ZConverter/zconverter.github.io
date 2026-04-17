@@ -23,8 +23,14 @@ Backup 목록 및 정보를 조회하는 명령어입니다.
 # 전체 Backup 목록 조회
 zdm-cli backup list
 
+# 특정 Center의 Backup 목록 조회
+zdm-cli backup list --center 9
+
+# 여러 Center의 Backup 목록 조회 (콤마 구분)
+zdm-cli backup list --center 9,srcconm
+
 # 특정 서버의 Backup 목록 조회
-zdm-cli backup list --server "web01"
+zdm-cli backup list --server ca-rocky810_172.25.0.48
 
 # 작업 ID로 특정 Backup 조회
 zdm-cli backup list --id 123
@@ -38,17 +44,17 @@ zdm-cli backup list --mode full
 # 특정 상태의 Backup 목록 조회
 zdm-cli backup list --status complete
 
-# Windows 드라이브로 필터링
-zdm-cli backup list --drive "C:"
-
 # 상세 정보 포함 조회
 zdm-cli backup list --id 123 --detail
 
 # Repository 경로로 필터링
 zdm-cli backup list --repository-path "/backup/repo"
 
-# JSON 형식으로 출력
-zdm-cli backup list --output json
+# 오름차순 정렬 및 JSON 형식으로 출력
+zdm-cli backup list --asc --output json
+
+# Center와 서버 조합 필터링
+zdm-cli backup list --center 9 --server ca-rocky810_172.25.0.48 --detail
 ```
 
 </details>
@@ -58,6 +64,7 @@ zdm-cli backup list --output json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Optional | - | Center ID 또는 이름 (콤마로 구분하여 복수 지정 가능) | - |
 | --server | - | string | Optional | - | 작업 대상 Server | - |
 | --name | - | string | Optional | - | 작업 이름 | - |
 | --id | - | number | Optional | - | 작업 ID | - |
@@ -65,10 +72,10 @@ zdm-cli backup list --output json
 | --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status.md %} |
 | --repository-path | -rp | string | Optional | - | 작업에 사용한 repository path | - |
 | --repository-type | -rt | string | Optional | - | 작업에 사용한 repository type | {% include zdm/repository-types.md %} |
-| --drive | - | string | Optional | - | 작업 대상 drive (Windows) | - |
+| --partition | - | string | Optional | - | 작업 대상 파티션 | - |
 | --detail | - | boolean | Optional | false | 상세 정보 조회 | - |
-| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 | --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 
@@ -100,7 +107,7 @@ partition        : /
 status(current)  : complete
 schedule.basic   : id: 1, type: daily, description: Daily backup at 2AM
 schedule.advanced: -
-system.name      : web01
+system.name      : ca-rocky810_172.25.0.48
 system.os        : Linux
 repository.path  : /backup/repo
 repository.type  : nfs
@@ -147,7 +154,7 @@ lastUpdated      : 2025-01-01T10:30:00Z
         "lastUpdated": "2025-01-01T10:30:00Z"
       },
       "system": {
-        "name": "web01",
+        "name": "ca-rocky810_172.25.0.48",
         "os": "Linux"
       },
       "repository": {
@@ -185,7 +192,7 @@ partition             : /
 status(current)       : complete
 schedule.basic        : id: 1, type: daily, description: Daily backup at 2AM
 schedule.advanced     : -
-system.name           : web01
+system.name           : ca-rocky810_172.25.0.48
 system.os             : Linux
 system.agent          : 3.0.1
 system.ip.public      : 1.2.3.4
@@ -248,7 +255,7 @@ lastUpdated           : 2025-01-01T10:30:00Z
         "lastUpdated": "2025-01-01T10:30:00Z"
       },
       "system": {
-        "name": "web01",
+        "name": "ca-rocky810_172.25.0.48",
         "os": "Linux",
         "agent": "3.0.1",
         "ip": {

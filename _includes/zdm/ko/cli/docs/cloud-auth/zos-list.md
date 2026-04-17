@@ -37,11 +37,12 @@ zdm-cli cloud-auth zos-list --dn "Production"
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Optional | - | Center ID 또는 이름 (콤마로 구분하여 복수 지정 가능) | - |
 | --display-name | -dn | string | Optional | - | 표시 이름 필터 | - |
 | --cloud-platform | -cp | string | Optional | - | 클라우드 플랫폼 필터 | `oci`, `nhn`, `ncp`, `aws`, `azure`, `minio` |
 | --page | - | number | Optional | 1 | 페이지 번호 | - |
 | --limit | - | number | Optional | 20 | 페이지당 항목 수 | - |
-| --asc | - | boolean | Optional | - | 오름차순 정렬 | - |
+| --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>

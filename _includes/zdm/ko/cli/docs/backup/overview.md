@@ -4,9 +4,28 @@
 <details markdown="1" open>
 <summary><strong>목차</strong></summary>
 
+- [하위 명령어](#하위-명령어)
 - [백업 모드](#백업-모드)
 - [백업 상태](#백업-상태)
 - [Repository 타입](#repository-타입)
+
+</details>
+
+---
+
+## 하위 명령어
+
+<details markdown="1" open>
+<summary><strong>backup 하위 명령어 목록</strong></summary>
+
+| 명령어 | 설명 |
+|--------|------|
+| `list` | Backup 작업 목록 및 상세 정보 조회 |
+| `history` | Backup 작업 실행 이력 조회 |
+| `regist` | 새로운 Backup 작업 등록 |
+| `delete` | Backup 작업 정보 삭제 |
+| `update` | 기존 Backup 작업 설정 변경 |
+| `monit` | Backup 작업 실시간 모니터링 |
 
 </details>
 

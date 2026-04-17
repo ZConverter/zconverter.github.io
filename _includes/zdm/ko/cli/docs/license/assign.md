@@ -37,8 +37,8 @@ zdm-cli license assign --license "my-license" --server "server-01" --output json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --license | -l | string | Required | - | 할당할 라이센스 | - |
-| --server | -s | string | Required | - | 라이센스 할당할 서버 | - |
+| --license | -l | string | Required | - | 할당할 라이센스 ID 또는 Name | - |
+| --server | -s | string | Required | - | 라이센스 할당할 서버 ID 또는 Name | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>

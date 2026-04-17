@@ -60,6 +60,9 @@ zdm-cli schedule create -t 11 --basic-month 4 --basic-day 19 --basic-time 12:00 
 
 # 사용자 지정 경로에 저장
 zdm-cli schedule create -t 3 --basic-time 12:00 -p /custom/path/schedule.json
+
+# 센터 지정하여 생성 및 등록
+zdm-cli schedule create -t 3 --basic-time "02:00" --center 9
 ```
 
 </details>
@@ -71,8 +74,8 @@ zdm-cli schedule create -t 3 --basic-time 12:00 -p /custom/path/schedule.json
 |----------|------|------|------|--------|------|--------|
 | --type | -t | number | Required | - | Schedule Type | {% include zdm/schedule-types.md inline=true %} |
 | --path | -p | string | Optional | - | 생성된 Schedule File 저장 Path | - |
-| --center | -c | string | Optional | - | Schedule 등록 Center | - |
-| --user | -u | string | Optional | - | Schedule 등록 User | - |
+| --center | -c | string | Optional | - | Schedule 등록 Center ID 또는 Name | - |
+| --user | -u | string | Optional | - | Schedule 등록 User ID 또는 Email | - |
 | --basic-year | -by | string | Optional | - | Basic Schedule - 년도 설정 | - |
 | --basic-month | -bm | string | Optional | - | Basic Schedule - 월 설정 | - |
 | --basic-week | -bw | string | Optional | - | Basic Schedule - 주 설정 | - |

@@ -21,22 +21,22 @@ OS Replication 작업 설정을 변경하는 명령어입니다.
 
 ```bash
 # 작업 시작
-zdm-cli os-replication update --id 1 --status start
+zdm-cli os-replication update -c center01 --id 1 --status start
 
 # 작업 중지
-zdm-cli os-replication update --name my-job --status stop
+zdm-cli os-replication update -c center01 --name my-job --status stop
 
 # 업로드 모드 변경
-zdm-cli os-replication update --id 1 --upload-mode incremental
+zdm-cli os-replication update -c center01 --id 1 --upload-mode incremental
 
 # 다운로드 네트워크 제한 설정
-zdm-cli os-replication update --id 1 --download-network-limit 500
+zdm-cli os-replication update -c center01 --id 1 --download-network-limit 500
 
 # 스케줄 변경
-zdm-cli os-replication update --id 1 --schedule-id 1234
+zdm-cli os-replication update -c center01 --id 1 --schedule-id 1234
 
 # 작업 이름 변경
-zdm-cli os-replication update --id 1 --cn new-job-name
+zdm-cli os-replication update -c center01 --id 1 --cn new-job-name
 ```
 
 </details>
@@ -44,10 +44,11 @@ zdm-cli os-replication update --id 1 --cn new-job-name
 <details markdown="1" open>
 <summary><strong>파라미터</strong></summary>
 
-**대상 지정 (하나 필수)**
+**센터 및 대상 지정**
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Required | - | Center ID 또는 이름 | - |
 | --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --name | - | string | Optional<span class="required-note">*</span> | - | 작업 이름 | - |
 

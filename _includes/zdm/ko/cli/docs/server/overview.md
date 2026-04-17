@@ -7,6 +7,7 @@
 - [서버 OS 타입](#서버-os-타입)
 - [서버 모드](#서버-모드)
 - [라이센스 할당](#라이센스-할당)
+- [하위 커맨드](#하위-커맨드)
 
 </details>
 
@@ -49,6 +50,20 @@
 |------|------|
 | `--license-assign-only` | 라이센스가 할당된 서버만 조회 |
 | `--license-un-assign-only` | 라이센스가 미할당된 서버만 조회 |
+
+</details>
+
+---
+
+## 하위 커맨드
+
+<details markdown="1" open>
+<summary><strong>사용 가능한 하위 커맨드</strong></summary>
+
+| 커맨드 | 설명 |
+|--------|------|
+| `server list` | 서버 목록 및 정보 조회 |
+| `server delete` | 서버 삭제 |
 
 </details>
 

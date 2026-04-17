@@ -6,6 +6,7 @@ Config 파일의 설정 값을 수정합니다.
 ## `config set` {#config-set}
 
 > * Config 파일에 저장된 설정 정보를 수정합니다.
+> * 최소 하나 이상의 설정 파라미터를 지정해야 합니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -20,29 +21,23 @@ Config 파일의 설정 값을 수정합니다.
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
-# ZDM 서버 IP 설정
-zdm-cli config set --zdm-ip 192.168.1.100
-
-# ZDM 서버 포트 설정
-zdm-cli config set --zdm-port 53307
+# ZDM 서버 IP 및 포트 설정
+zdm-cli config set --zdm-ip 121.189.21.220 --zdm-port 53307
 
 # 사용자 이메일 설정
 zdm-cli config set --user-mail admin@example.com
 
-# Linux 환경에서 ZConverter 디렉토리 경로 설정
-zdm-cli config set --zcon-dir-path /ZConverterManager
-
-# Windows 환경에서 ZConverter 디렉토리 경로 설정
-zdm-cli config set --zcon-dir-path "C:\Program Files (x86)\ZConverter_CloudAgent"
+# 기본 Center ID 설정 (v2.0.0 신규)
+zdm-cli config set --zdm-id 9
 
 # 여러 설정 동시 변경
-zdm-cli config set --zdm-ip 192.168.1.100 --zdm-port 53307 --zdm-id 1
-
-# Repository 설정
-zdm-cli config set --zdm-repo-id 1 --zdm-repo-path /backup
+zdm-cli config set --zdm-ip 121.189.21.220 --zdm-port 53307 --zdm-id 9
 
 # Repository ID로 path 자동 조회 설정
-zdm-cli config set --zdm-repo-id 15 --auto
+zdm-cli config set --zdm-repo-id 43 --auto
+
+# Repository 수동 설정
+zdm-cli config set --zdm-repo-id 43 --zdm-repo-path /backup
 
 # SMB Repository 경로 설정 (Windows 공유 경로)
 zdm-cli config set --zdm-repo-path "\\\\192.168.2.108\\ZConverter"
@@ -59,12 +54,13 @@ zdm-cli config set --zdm-repo-path "\\\\192.168.2.108\\ZConverter"
 | `--token` | - | string | Optional | - | API Server 인증 토큰 | - |
 | `--zdm-repo-id` | `-zri` | number | Optional | - | 기본으로 사용할 ZDM Repository ID (숫자만 입력 가능) | - |
 | `--zdm-repo-path` | `-zrp` | string | Optional | - | 기본으로 사용할 ZDM Repository 경로 | - |
-| `--auto` | - | boolean | Optional | - | `--zdm-repo-id`와 함께 사용 시 repository path 자동 조회 | - |
-| `--zdm-ip` | `-ip` | string | Optional | - | Portal IP 주소 | - |
-| `--zdm-port` | `-port` | number | Optional | - | API Server 포트 번호 (숫자만 입력 가능) | - |
-| `--zdm-id` | `-zi` | number | Optional | - | Portal ID (숫자만 입력 가능) | - |
-| `--zcon-dir-path` | `-zdp` | string | Optional | - | ZConverter 설치 디렉토리 경로 (Linux: /ZConverterManager, Windows: C:\Program Files (x86)\ZConverter_CloudAgent) | - |
-| `--output` | `-o` | string | Optional | `text` | 출력 형식 지정 | `text`, `json`, `table` |
+| `--auto` | - | boolean | Optional | - | `--zdm-repo-id`와 함께 사용 시 API에서 repository path 자동 조회 | - |
+| `--zdm-ip` | `-ip` | string | Optional | - | ZDM API 서버 IP 주소 | - |
+| `--zdm-port` | `-port` | number | Optional | - | ZDM API 서버 포트 번호 (숫자만 입력 가능) | - |
+| `--zdm-id` | `-zi` | number | Optional | - | 기본 Center ID (숫자만 입력 가능) | - |
+| `--output` | `-o` | string | Optional | `text` | 출력 형식 지정 | {% include zdm/output-formats.md %} |
+
+> 최소 하나 이상의 설정 파라미터를 입력해야 합니다.
 
 </details>
 
@@ -83,11 +79,11 @@ state : success
 [Changed Fields]
 [Change 1]
 field : zdm-ip
-value : 192.168.1.1 -> 192.168.1.100
+value : 192.168.1.1 -> 121.189.21.220
 
 [Change 2]
-field : zdm-port
-value : 8080 -> 53307
+field : zdm-id
+value : 1 -> 9
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -119,12 +115,12 @@ state : no_change
     {
       "field": "zdm-ip",
       "previous": "192.168.1.1",
-      "new": "192.168.1.100"
+      "new": "121.189.21.220"
     },
     {
-      "field": "zdm-port",
-      "previous": 8080,
-      "new": 53307
+      "field": "zdm-id",
+      "previous": 1,
+      "new": 9
     }
   ]
 }

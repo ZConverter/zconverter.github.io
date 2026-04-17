@@ -5,7 +5,7 @@ ZDM 서버에 등록된 Schedule을 삭제합니다.
 
 ## `schedule delete` {#schedule-delete}
 
-> * Schedule ID를 지정하여 등록된 Schedule을 삭제하는 명령어입니다.
+> * Center와 Schedule ID를 지정하여 등록된 Schedule을 삭제하는 명령어입니다.
 > * 삭제된 Schedule의 ID, 이름, 타입, 설명이 결과로 출력됩니다.
 
 <details markdown="1" open>
@@ -21,14 +21,17 @@ ZDM 서버에 등록된 Schedule을 삭제합니다.
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
-# Schedule ID로 삭제
-zdm-cli schedule delete --id 123
+# Center와 Schedule ID로 삭제
+zdm-cli schedule delete --center 9 --id 123
+
+# 별칭을 사용한 삭제
+zdm-cli schedule delete -c "zdm-center-01" --id 123
 
 # JSON 형식으로 결과 출력
-zdm-cli schedule delete --id 123 --output json
+zdm-cli schedule delete --center 9 --id 123 --output json
 
 # 테이블 형식으로 결과 출력
-zdm-cli schedule delete --id 123 --output table
+zdm-cli schedule delete --center 9 --id 123 --output table
 ```
 
 </details>
@@ -38,6 +41,7 @@ zdm-cli schedule delete --id 123 --output table
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Required | - | 삭제할 Schedule이 속한 Center ID 또는 Name | - |
 | --id | - | number | Required | - | 삭제할 Schedule ID | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 

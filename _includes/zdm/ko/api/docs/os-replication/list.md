@@ -41,6 +41,7 @@ curl -X GET "https://api.example.com/api/os-replications?type=upload&mode=full&p
 | `mode` | Query | string | Optional | 복제 모드 필터 | `full`, `incremental` |
 | `page` | Query | number | Optional | 페이지 번호 | |
 | `limit` | Query | number | Optional | 페이지당 개수 | |
+| `center` | Query | string | Optional | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
 | `sort` | Query | string | Optional | 정렬 방향 | `asc`, `desc` |
 
 </details>

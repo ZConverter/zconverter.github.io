@@ -21,17 +21,17 @@ Server를 삭제합니다.
 <summary><strong>사용 예시</strong></summary>
 
 ```bash
-# ID로 Server 삭제
-zdm-cli server delete --id 123
+# Center와 ID로 Server 삭제
+zdm-cli server delete --center 9 --id 123
 
-# 이름으로 Server 삭제
-zdm-cli server delete --name "my-server"
+# Center와 이름으로 Server 삭제
+zdm-cli server delete --center srcconm --name "web-server-01"
+
+# Center 이름 사용
+zdm-cli server delete -c 9 --id 123
 
 # JSON 형식으로 결과 출력
-zdm-cli server delete --id 123 --output json
-
-# 테이블 형식으로 결과 출력
-zdm-cli server delete --name "my-server" --output table
+zdm-cli server delete --center 9 --id 123 --output json
 ```
 
 </details>
@@ -41,11 +41,12 @@ zdm-cli server delete --name "my-server" --output table
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --name | - | string | Optional<span class="required-note">*</span> | - | 삭제할 Server 이름 | - |
-| --id | - | number | Optional<span class="required-note">*</span> | - | 삭제할 Server ID | - |
-| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
+| `--center` | `-c` | string | Required | - | Center ID 또는 이름 (미입력 시 config의 zdm.id 사용) | - |
+| `--name` | - | string | Optional<span class="required-note">*</span> | - | 삭제할 Server 이름 | - |
+| `--id` | - | number | Optional<span class="required-note">*</span> | - | 삭제할 Server ID | - |
+| `--output` | `-o` | string | Optional | `text` | 출력 형식 | {% include zdm/output-formats.md %} |
 
-> <span class="required-note">*</span> --id 또는 --name 중 하나만 필수로 입력해야 합니다. 두 옵션을 동시에 사용할 수 없습니다.
+> <span class="required-note">*</span> --id 또는 --name 중 하나는 필수로 입력해야 합니다.
 
 </details>
 
@@ -62,14 +63,14 @@ zdm-cli server delete --name "my-server" --output table
 
 status    : success
 message   : Server deleted successfully
-timestamp : 2025-01-06 10:30:00
+timestamp : 2026-04-17 10:30:00
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [data]
 
 [Deleted Server]
 id        : 123
-name      : my-server
+name      : web-server-01
 
 [Summary]
 state     : deleted
@@ -88,14 +89,14 @@ message   : Server has been successfully deleted
   "data": {
     "deletedServer": {
       "id": 123,
-      "name": "my-server"
+      "name": "web-server-01"
     },
     "summary": {
       "state": "deleted",
       "message": "Server has been successfully deleted"
     }
   },
-  "timestamp": "2025-01-06 10:30:00"
+  "timestamp": "2026-04-17 10:30:00"
 }
 ```
 
@@ -109,17 +110,17 @@ message   : Server has been successfully deleted
 
 status    : success
 message   : Server deleted successfully
-timestamp : 2025-01-06 10:30:00
+timestamp : 2026-04-17 10:30:00
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [data]
 
 [Deleted Server]
-┌─────────┬─────┬───────────┬─────────┬─────────────────────────────────────┐
-│ (index) │ id  │ name      │ state   │ message                             │
-├─────────┼─────┼───────────┼─────────┼─────────────────────────────────────┤
-│ 0       │ 123 │ my-server │ deleted │ Server has been successfully deleted│
-└─────────┴─────┴───────────┴─────────┴─────────────────────────────────────┘
+┌─────────┬─────┬────────────────┬─────────┬─────────────────────────────────────┐
+│ (index) │ id  │ name           │ state   │ message                             │
+├─────────┼─────┼────────────────┼─────────┼─────────────────────────────────────┤
+│ 0       │ 123 │ web-server-01  │ deleted │ Server has been successfully deleted│
+└─────────┴─────┴────────────────┴─────────┴─────────────────────────────────────┘
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 

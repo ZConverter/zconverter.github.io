@@ -7,6 +7,7 @@
 - [스케줄 생성 절차](#스케줄-생성-절차)
 - [스케줄 검증 절차](#스케줄-검증-절차)
 - [스케줄 등록 절차](#스케줄-등록-절차)
+- [자동 등록을 활용한 간편 절차](#자동-등록을-활용한-간편-절차)
 
 </details>
 
@@ -141,6 +142,29 @@ zdm-cli recovery regist --source "source-server" --target "target-server" --plat
 
 # 5. 등록 결과 확인
 zdm-cli recovery list
+```
+
+</details>
+
+---
+
+## 자동 등록을 활용한 간편 절차
+
+<details markdown="1" open>
+<summary><strong>create 명령어로 생성과 등록을 동시에</strong></summary>
+
+`schedule create` 명령어는 스케줄 파일 생성과 ZDM 서버 등록을 자동으로 수행합니다.
+별도의 `verify` + `regist` 과정 없이 한 번에 처리할 수 있습니다.
+
+```bash
+# 1. 스케줄 생성 + 자동 등록 (센터 지정)
+zdm-cli schedule create -t 3 --basic-time 02:00 --center 9
+
+# 2. 등록된 스케줄 확인
+zdm-cli schedule list --center 9
+
+# 3. 백업 작업에 스케줄 연결
+zdm-cli backup regist --server "server-01" --mode full --repository-id 1 --schedule "schedule_id"
 ```
 
 </details>

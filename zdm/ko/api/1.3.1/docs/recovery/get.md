@@ -6,4 +6,4 @@ navigation: ko-api-1.3.1
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/recovery/get.md %}
+{% include zdm/ko/api/docs/recovery/get/1.3.1.md %}

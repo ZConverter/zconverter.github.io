@@ -37,6 +37,7 @@ zdm-cli os-replication monit --ji 1 --output json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Optional | - | Center ID 또는 이름 (콤마로 구분하여 복수 지정 가능) | - |
 | --job-id | -ji | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --job-name | -jn | string | Optional<span class="required-note">*</span> | - | 작업 이름 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |

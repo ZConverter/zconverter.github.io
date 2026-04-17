@@ -61,6 +61,7 @@ curl -X GET "https://api.example.com/api/recoveries?page=1&limit=10" \
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
+| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 </details>

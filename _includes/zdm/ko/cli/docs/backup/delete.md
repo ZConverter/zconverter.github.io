@@ -24,6 +24,9 @@ Backup 작업 정보를 삭제하는 명령어입니다.
 # 작업 ID로 삭제
 zdm-cli backup delete --id 123
 
+# Center 지정하여 작업 ID로 삭제
+zdm-cli backup delete --id 123 --center 9
+
 # 작업 이름으로 삭제
 zdm-cli backup delete --name "MyBackup"
 
@@ -41,6 +44,7 @@ zdm-cli backup delete --name "OldBackup" --output table
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Optional | config 설정값 | 작업 대상 Center | - |
 | --name | - | string | Optional<span class="required-note">*</span> | - | 작업 이름 | - |
 | --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
@@ -137,17 +141,6 @@ logData deleted    : Yes
   "timestamp": "2025-01-01 12:00:00"
 }
 ```
-
-</details>
-
----
-
-## 참조
-
-<details markdown="1">
-<summary><strong>출력 형식</strong></summary>
-
-{% include zdm/output-formats.md desc=true %}
 
 </details>
 

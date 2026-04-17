@@ -21,10 +21,10 @@ ZOS 클라우드 인증을 삭제하는 명령어입니다.
 
 ```bash
 # ID로 삭제
-zdm-cli cloud-auth zos-delete --id 1
+zdm-cli cloud-auth zos-delete -c center01 --id 1
 
 # 파일명으로 삭제
-zdm-cli cloud-auth zos-delete --fn key.json
+zdm-cli cloud-auth zos-delete -c center01 --fn key.json
 ```
 
 </details>
@@ -34,6 +34,7 @@ zdm-cli cloud-auth zos-delete --fn key.json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Required | - | Center ID 또는 이름 | - |
 | --id | - | number | Optional<span class="required-note">*</span> | - | ZOS 인증 ID | - |
 | --file-name | -fn | string | Optional<span class="required-note">*</span> | - | ZOS 인증 파일명 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |

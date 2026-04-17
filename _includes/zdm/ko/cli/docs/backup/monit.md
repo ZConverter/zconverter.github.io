@@ -23,6 +23,12 @@ Backup 작업의 진행 상황을 모니터링하는 명령어입니다.
 # 작업 ID로 모니터링
 zdm-cli backup monit --job-id 123
 
+# Center 지정하여 작업 ID로 모니터링
+zdm-cli backup monit --job-id 123 --center 9
+
+# 여러 Center에서 모니터링 (콤마 구분)
+zdm-cli backup monit --job-id 123 --center 9,srcconm
+
 # 작업 이름으로 모니터링
 zdm-cli backup monit --job-name "MyBackup"
 
@@ -31,9 +37,6 @@ zdm-cli backup monit --server-id 456
 
 # 서버 이름으로 상태 필터링 모니터링
 zdm-cli backup monit --server-name "MyServer" --status processing
-
-# Windows 드라이브로 필터링 모니터링
-zdm-cli backup monit --server-name "WinServer" --drive "C:"
 
 # 작업 ID와 모드로 필터링 모니터링
 zdm-cli backup monit --job-id 789 --mode full
@@ -55,6 +58,7 @@ zdm-cli backup monit --server-id 456 --output table
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Optional | - | Center ID 또는 이름 (콤마로 구분하여 복수 지정 가능) | - |
 | --job-id | -ji | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --job-name | -jn | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
 | --server-id | -si | number | Optional<span class="required-note">*</span> | - | 작업 대상 Server ID | - |
@@ -92,7 +96,7 @@ timestamp : 2025-01-01 10:15:00
 [data]
 
 [System Information]
-name : web01
+name : ca-rocky810_172.25.0.48
 
 [Job Information]
 name      : backup_job_01
@@ -122,7 +126,7 @@ end       : -
   "success": true,
   "data": {
     "system": {
-      "name": "web01"
+      "name": "ca-rocky810_172.25.0.48"
     },
     "job": {
       "info": {
@@ -167,7 +171,7 @@ timestamp : 2025-01-01 10:00:00
 [data]
 
 [System Information]
-name : web01
+name : ca-rocky810_172.25.0.48
 
 [Jobs Summary]
 total           : 3
@@ -222,7 +226,7 @@ end       : -
   "success": true,
   "data": {
     "system": {
-      "name": "web01"
+      "name": "ca-rocky810_172.25.0.48"
     },
     "summary": {
       "total": 3,

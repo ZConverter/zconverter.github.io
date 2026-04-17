@@ -46,16 +46,17 @@ zdm-cli os-replication list --output json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Optional | - | Center ID 또는 이름 (콤마로 구분하여 복수 지정 가능) | - |
 | --id | - | number | Optional | - | job ID (단건 조회) | - |
 | --name | - | string | Optional | - | job name (단건 조회) | - |
 | --server | - | string | Optional | - | 서버 필터 | - |
 | --type | - | string | Optional | - | 복제 타입 필터 | `upload`, `download` |
 | --mode | - | string | Optional | - | 복제 모드 필터 | `full`, `incremental` |
 | --status | - | string | Optional | - | 작업 상태 필터 | `running`, `stopped`, `error`, `waiting`, `scheduled`, `disabled` |
-| --detail | - | boolean | Optional | - | 상세 정보 포함 | - |
+| --detail | - | boolean | Optional | false | 상세 정보 포함 | - |
 | --page | - | number | Optional | 1 | 페이지 번호 | - |
 | --limit | - | number | Optional | 20 | 페이지당 항목 수 | - |
-| --asc | - | boolean | Optional | - | 오름차순 정렬 | - |
+| --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>

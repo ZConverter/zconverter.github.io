@@ -6,4 +6,4 @@ navigation: ko-api-1.3.1
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/server/partition.md %}
+{% include zdm/ko/api/docs/server/partition/1.3.1.md %}

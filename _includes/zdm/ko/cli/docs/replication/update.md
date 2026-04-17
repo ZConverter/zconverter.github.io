@@ -7,6 +7,7 @@ Replication 작업을 수정하는 명령어입니다.
 
 > * Replication 작업의 설정을 수정합니다.
 > * 작업 ID 또는 이름으로 대상을 지정합니다.
+> * `--center` 파라미터는 지원하지 않습니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -22,10 +23,13 @@ Replication 작업을 수정하는 명령어입니다.
 
 ```bash
 # Replication 모드 변경
-zdm-cli replication update --id 123 --mode full
+zdm-cli replication update --id 123 --mode increment
 
 # 작업 시작
 zdm-cli replication update --name repl01 --status start
+
+# 작업 중지
+zdm-cli replication update --id 123 --status stop
 
 # 작업 이름 변경
 zdm-cli replication update --id 123 --cn new-repl-name
@@ -33,8 +37,17 @@ zdm-cli replication update --id 123 --cn new-repl-name
 # 압축 및 네트워크 제한 설정
 zdm-cli replication update --id 123 --comp --nl 1000
 
-# 스케줄 설정
+# 이벤트 메일 설정
+zdm-cli replication update --id 123 --me admin@example.com
+
+# 스케줄 설정 (기존 스케줄 ID)
 zdm-cli replication update --id 123 --schedule-id 1234
+
+# 스케줄 JSON 직접 입력
+zdm-cli replication update --id 123 --schedule '{"type":3,"time":"02:00"}'
+
+# JSON 형식으로 출력
+zdm-cli replication update --id 123 --mode full --output json
 ```
 
 </details>
@@ -56,30 +69,30 @@ zdm-cli replication update --id 123 --schedule-id 1234
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --change-name | --cn | string | Optional | - | 새 작업 이름 | - |
-| --mode | - | string | Optional | - | Replication 모드 | v1: full, increment / v2: full, increment, sync |
-| --status | - | string | Optional | - | 작업 상태 변경 | start, stop, cancel |
-| --transfer-type | --tt | string | Optional | - | 전송 타입 (v2 전용) | - |
-
-**Repository**
-
-| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 |
-|----------|------|------|------|--------|------|
-| --target-repository-id | --tri | number | Optional | - | 타겟 Repository ID |
-| --target-repository-path | --trp | string | Optional | - | 타겟 Repository 경로 |
+| --status | - | string | Optional | - | 작업 상태 변경 | `start`, `stop` |
+| --mode | - | string | Optional | - | Replication 모드 | `full`, `increment`, `sync` |
 
 **작업 옵션**
 
-| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 |
-|----------|------|------|------|--------|------|
-| --compression | --comp | boolean | Optional | - | 압축 사용 여부 |
-| --encryption | --enc | boolean | Optional | - | 암호화 사용 여부 |
-| --network-limit | --nl | number | Optional | - | 네트워크 속도 제한 |
-| --mail-event | --me | string | Optional | - | 이벤트 메일 수신 주소 |
-| --schedule | - | string | Optional | - | 스케줄 JSON 문자열 |
-| --schedule-id | - | number | Optional | - | 기존 스케줄 ID |
-| --schedule-file | - | string | Optional | - | 스케줄 JSON 파일 경로 |
-| --exclude | --ex | string | Optional | - | 제외 패턴 (v2 전용) |
-| --output | -o | string | Optional | text | 출력 형식 |
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| --compression | --comp | boolean | Optional | - | 압축 사용 여부 | - |
+| --network-limit | --nl | number | Optional | - | 네트워크 속도 제한 | - |
+| --mail-event | --me | string | Optional | - | 이벤트 메일 수신 주소 | - |
+
+**스케줄**
+
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| --schedule | - | string | Optional | - | 스케줄 JSON 문자열 | - |
+| --schedule-id | - | number | Optional | - | 기존 스케줄 ID | - |
+| --schedule-file | - | string | Optional | - | 스케줄 JSON 파일 경로 | - |
+
+**출력**
+
+| 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
+|----------|------|------|------|--------|------|--------|
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

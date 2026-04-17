@@ -21,16 +21,22 @@ Replication 작업을 모니터링하는 명령어입니다.
 
 ```bash
 # 작업 ID로 모니터링
-zdm-cli replication monit --job-id 123
+zdm-cli replication monit --ji 123
 
 # 작업 이름으로 모니터링
-zdm-cli replication monit --job-name repl01
+zdm-cli replication monit --jn repl01
+
+# 특정 Center의 작업 모니터링 (콤마 구분)
+zdm-cli replication monit --center 9,10 --ji 123
 
 # 서버 필터 추가
-zdm-cli replication monit --job-id 123 --server web01
+zdm-cli replication monit --ji 123 --server web01
+
+# 상태 필터 추가
+zdm-cli replication monit --jn repl01 --status run
 
 # JSON 형식으로 출력
-zdm-cli replication monit --job-id 123 --output json
+zdm-cli replication monit --ji 123 --output json
 ```
 
 </details>
@@ -40,6 +46,7 @@ zdm-cli replication monit --job-id 123 --output json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | - | string | Optional | - | Center ID 또는 이름 (콤마로 구분하여 복수 지정 가능) | - |
 | --job-id | --ji | number | Required* | - | 작업 ID | - |
 | --job-name | --jn | string | Required* | - | 작업 이름 | - |
 | --server | - | string | Optional | - | 대상 서버 이름 | - |

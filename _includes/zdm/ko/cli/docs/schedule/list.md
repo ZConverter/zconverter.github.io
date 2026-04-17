@@ -7,7 +7,7 @@
 
 > * ZDM 서버에 등록된 Schedule 목록을 조회하는 명령어입니다.
 > * ID를 지정하면 단일 Schedule의 상세 정보를 조회합니다.
-> * Type 또는 상태(State)로 필터링하여 조회할 수 있습니다.
+> * Center, Type 또는 상태(State)로 필터링하여 조회할 수 있습니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -24,6 +24,13 @@
 ```bash
 # 전체 Schedule 목록 조회
 zdm-cli schedule list
+
+# 특정 Center의 Schedule 조회
+zdm-cli schedule list --center 9
+zdm-cli schedule list -c "zdm-center-01"
+
+# 여러 Center의 Schedule 조회 (콤마 구분)
+zdm-cli schedule list --center "9,12,15"
 
 # 특정 ID의 Schedule 조회
 zdm-cli schedule list --id 123
@@ -49,6 +56,9 @@ zdm-cli schedule list --output json
 
 # 테이블 형식으로 출력
 zdm-cli schedule list --output table
+
+# 오름차순 정렬
+zdm-cli schedule list --asc
 ```
 
 </details>
@@ -58,11 +68,12 @@ zdm-cli schedule list --output table
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| --center | -c | string | Optional | - | 조회할 Center ID 또는 Name (콤마 구분으로 복수 지정 가능) | - |
 | --id | - | number | Optional | - | 조회할 Schedule ID (해당 옵션 사용시 단일 조회) | - |
 | --type | - | string | Optional | - | 조회할 Schedule Type (숫자 0~11 또는 Type 이름) | {% include zdm/schedule-types.md inline=true %} |
 | --state | - | string | Optional | - | 조회할 Schedule 상태 | {% include zdm/schedule-state.md %} |
-| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 | --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

@@ -24,6 +24,12 @@ Recovery 작업 목록 및 상세 정보를 조회합니다.
 # 전체 Recovery 작업 목록 조회
 zdm-cli recovery list
 
+# 특정 Center의 Recovery 목록 조회
+zdm-cli recovery list --center 9
+
+# 복수 Center 조회 (콤마 구분)
+zdm-cli recovery list --center 9,10
+
 # 특정 ID로 Recovery 작업 조회
 zdm-cli recovery list --id 123
 
@@ -48,6 +54,9 @@ zdm-cli recovery list --repository-id 1
 # 복합 조건 조회
 zdm-cli recovery list --platform vmware --status complete --mode full
 
+# 오름차순 정렬
+zdm-cli recovery list --asc
+
 # JSON 형식 출력
 zdm-cli recovery list --output json
 
@@ -62,22 +71,23 @@ zdm-cli recovery list --output table
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --status | | string | Optional | | 작업 상태 | {% include zdm/job-status.md %} |
-| --mode | | string | Optional | | 작업 모드 | {% include zdm/job-modes.md recovery=true %} |
-| --name | | string | Optional | | 작업 이름 | |
-| --id | | number | Optional | | 작업 ID | |
-| --partition | | string | Optional | | 작업 대상 partition (Linux) | |
-| --drive | | string | Optional | | 작업 대상 drive (Windows) | |
-| --platform | | string | Optional | | 작업 대상 플랫폼 | {% include zdm/platforms.md inline=true %} |
-| --backup-name | -bn | string | Optional | | Recovery 작업시 사용한 Backup 작업 이름 | |
-| --server | | string | Optional | | 작업 대상 Server | |
-| --server-type | | string | Optional | | 작업 대상 Server Type | {% include zdm/server-modes.md %} |
-| --repository-id | -ri | string | Optional | | 작업에 사용한 Repository ID | |
-| --repository-path | -rp | string | Optional | | 작업에 사용한 Repository 경로 | |
-| --repository-type | -rt | string | Optional | | 작업에 사용한 Repository 타입 | {% include zdm/repository-types.md %} |
-| --detail | | boolean | Optional | | 상세 정보 조회 여부 | |
-| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
+| --center | -c | string | Optional | - | 작업 대상 Center (콤마 구분 복수 지정 가능) | - |
+| --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status.md %} |
+| --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md recovery=true %} |
+| --name | - | string | Optional | - | 작업 이름 | - |
+| --id | - | number | Optional | - | 작업 ID | - |
+| --partition | - | string | Optional | - | 작업 대상 partition (Linux) | - |
+| --drive | - | string | Optional | - | 작업 대상 drive (Windows) | - |
+| --platform | - | string | Optional | - | 작업 대상 플랫폼 | {% include zdm/platforms.md baremetal=true inline=true %} |
+| --backup-name | -bn | string | Optional | - | Recovery 작업시 사용한 Backup 작업 이름 | - |
+| --server | - | string | Optional | - | 작업 대상 Server | - |
+| --server-type | - | string | Optional | - | 작업 대상 Server Type | `source`, `target` |
+| --repository-id | -ri | string | Optional | - | 작업에 사용한 Repository ID | - |
+| --repository-path | -rp | string | Optional | - | 작업에 사용한 Repository 경로 | - |
+| --repository-type | -rt | string | Optional | - | 작업에 사용한 Repository 타입 | {% include zdm/repository-types.md %} |
+| --detail | - | boolean | Optional | false | 상세 정보 조회 여부 | - |
 | --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
+| --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
 

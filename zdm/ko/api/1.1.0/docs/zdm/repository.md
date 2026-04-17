@@ -6,4 +6,4 @@ navigation: ko-api-1.1.0
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/zdm/repository.md %}
+{% include zdm/ko/api/docs/zdm/repository/1.3.1.md %}
