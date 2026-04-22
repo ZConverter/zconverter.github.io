@@ -99,6 +99,20 @@ zdm-cli backup update --id 123 --mode increment --output json
 </details>
 
 <details markdown="1" open>
+<summary><strong>스케줄 등록/수정 정책 (v2.0.0)</strong></summary>
+
+`--schedule`, `--schedule-id`, `--schedule-file` 옵션으로 스케줄을 변경할 때 아래 규칙에 따라 동작합니다.
+
+| 시나리오 | 동작 |
+|---------|------|
+| 기존 스케줄 없음 | 신규 스케줄 등록 |
+| 모드 동일(F/I→F/I, Smart→Smart) + 기존 스케줄 있음 | 기존 스케줄의 데이터만 입력값으로 갱신 (스케줄 ID 보존) |
+| 모드 전환(F/I↔Smart) | 신규 스케줄 등록 (기존 스케줄 참조 해제, advanced 자동 초기화) |
+| 입력이 스케줄 ID(숫자) + 기존 스케줄 있음 | 입력 ID의 스케줄 데이터를 기존 스케줄에 복사하여 갱신 (ID 보존) |
+
+</details>
+
+<details markdown="1" open>
 <summary><strong>출력 예시 (Text format)</strong></summary>
 
 ```

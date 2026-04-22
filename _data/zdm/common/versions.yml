@@ -64,19 +64,11 @@ cli:
   - version: "1.2.1"
     status: stable
     docs: "1.2.0"
-    downloads:
-      - os: "Windows"
-        file: "/downloads/zdm-cli/1.2.1/zdm-cli-windows.zip"
-      - os: "Linux"
-        file: "/downloads/zdm-cli/1.2.1/zdm-cli-linux.tar.gz"
+    downloads: []
   - version: "1.2.0"
     status: stable
     docs: "1.2.0"
-    downloads:
-      - os: "Windows"
-        file: "/downloads/zdm-cli/1.2.0/zdm-cli-windows.zip"
-      - os: "Linux"
-        file: "/downloads/zdm-cli/1.2.0/zdm-cli-linux.tar.gz"
+    downloads: []
   - version: "1.0.4"
     status: stable
     downloads:
