@@ -27,6 +27,28 @@ jobs:
           ruby-version: '3.1'
           bundler-cache: true
 
+      - name: Verify versions.yml downloads integrity
+        run: |
+          ruby -ryaml -e '
+            data = YAML.load_file("_data/zdm/common/versions.yml")
+            missing = []
+            %w[api cli].each do |prod|
+              (data[prod] || []).each do |v|
+                (v["downloads"] || []).each do |d|
+                  path = "." + d["file"]
+                  missing << "  #{prod} v#{v["version"]} -> #{d["file"]}" unless File.exist?(path)
+                end
+              end
+            end
+            if missing.empty?
+              puts "OK: all downloads paths exist"
+            else
+              puts "MISSING downloads referenced in versions.yml:"
+              puts missing
+              exit 1
+            end
+          '
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v4

@@ -6,6 +6,40 @@
 
 ---
 
+## [Documentation] - 2026-04-22
+
+### Fixed
+- **CLI v1.2.0 / v1.2.1 다운로드 404 수정** — `_data/zdm/common/versions.yml`에서 두 버전의 `downloads:`를 빈 배열(`[]`)로 변경. 해당 경로의 바이너리가 실제로 존재한 적 없어(`downloads/zdm-cli/1.2.0/`, `downloads/zdm-cli/1.2.1/`) 다운로드 페이지에서 "준비 중"으로 정상 표시되도록 수정.
+- **CLI 리다이렉트 URL 언어 코드 누락 수정** — `zdm/ko/cli/index.md`의 4개 리다이렉트 경로를 `/zdm/cli/2.0.0/index` → `/zdm/ko/cli/2.0.0/index`로 보정. 이전 버전부터 반복된 오타를 정리.
+
+### Changed
+- **CLAUDE.md 릴리즈 절차 전면 보강** — 메이저/마이너/패치 케이스를 모두 포괄하도록 재작성
+  - "릴리즈 유형 분류" 절 신설 — 표준 / 부분 갱신 / 재사용 패치 3유형 판정 기준과 공통 불변식 명시
+  - `versions.yml`의 `docs:`·`downloads:` 분기 상세화
+  - "재사용 패치" 시 2·3·4·6·7단계 생략 규칙과 8단계 patch 배지 병기 패턴 문서화
+  - wrapper의 `navigation:` 키와 `include:` 경로가 독립 관리된다는 원칙 명문화
+  - 7단계에 `versions.yml` ↔ 실제 파일 정합성 검증 하위 단계 추가
+  - 리다이렉트 URL 형식(`/zdm/{lang}/{product}/{version}/index`) 명시
+  - 체크리스트를 3유형별 매트릭스로 교체 + 과거 릴리즈 사례 대조표 추가
+- **API `backup/update.md` 스케줄 정책 표를 CLI 문서에도 반영** — `_includes/zdm/ko/cli/docs/backup/update.md`에 "스케줄 등록/수정 정책 (v2.0.0)" 섹션 추가 (API/CLI 문서 일관성 유지)
+
+### Added
+- **CI 정합성 검증 스텝** — `.github/workflows/jekyll.yml`에 "Verify versions.yml downloads integrity" 스텝 추가. `versions.yml`에 등록된 `downloads[].file` 경로의 실제 파일 존재 여부를 빌드 전 검증해 깨진 링크 배포를 차단.
+
+---
+
+## [Documentation] - 2026-04-20
+
+### Changed
+- **API v2.0.0 Changelog 추가 항목** — `_includes/zdm/ko/api/changelog/2.0.0.md`에 누적 fix 반영
+  - Schedule 처리 정책 정리(`PUT /backups/:identifier`)
+  - Schedule 작업명 매핑 fix(`POST /recoveries`, `PUT /recoveries/:identifier`, `PUT /backups/:identifier`)
+  - Recovery 등록 backup image 조회 timeout 동적화(파티션당 30초)
+  - 에러 응답 메시지 구체화(필수 필드 누락 시 `<field> is required`, fallback에 원본 메시지 포함)
+- **API 문서 컨텐츠** — `backup/update.md`에 스케줄 등록/수정 정책 표 추가
+
+---
+
 ## [Documentation] - 2026-04-17
 
 ### Added
