@@ -99,4 +99,19 @@ timestamp : 2024-01-15 10:30:00
 
 </details>
 
+<details markdown="1">
+<summary><strong>할당 제약</strong></summary>
+
+API 검증으로 다음 케이스에서 할당이 거부되며 CLI는 에러 메시지를 출력하고 종료합니다.
+
+- **License와 Server가 서로 다른 center에 속한 경우** (HTTP 403)
+  - 메시지 예: `License (center 1) and Server 'server-01' (center 2) belong to different centers`
+- **Server에 이미 다른 license가 할당된 경우** (HTTP 409)
+  - 메시지 예: `Server 'server-01' already has a license assigned (nLicenseID: 5)`
+- **해당 server가 과거 라이선스를 할당받은 이력이 있는 경우** (HTTP 409)
+  - 메시지 예: `License (id 5) is already assigned to server 'server-01' in center 1`
+  - `license_history` 테이블에 `(sSystemName, nCenterID)` 매칭 row가 있으면 거부됨 — 한 번 할당된 server는 재할당 불가
+
+</details>
+
 ---

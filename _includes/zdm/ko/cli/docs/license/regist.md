@@ -102,7 +102,7 @@ dates.daysRemaining : 365
       "total": 10,
       "used": 0,
       "available": 10,
-      "usage": "0%"
+      "usage": 0
     },
     "dates": {
       "created": "2024-01-15",

@@ -41,7 +41,7 @@ curl -X POST "https://api.example.com/api/licenses" \
 |------|------|------|------|
 | `center` | string | Required | 센터 ID (숫자) 또는 센터 이름 |
 | `key` | string | Required | 라이선스 키 |
-| `user` | string | Optional | 라이선스 사용자 |
+| `user` | string \| number | Optional | 라이선스 사용자 ID 또는 이름 (생략 시 인증 토큰의 사용자 ID 자동 적용) |
 | `name` | string | Optional | 라이선스 이름 |
 | `description` | string | Optional | 라이선스 설명 |
 
@@ -73,7 +73,7 @@ curl -X POST "https://api.example.com/api/licenses" \
       "total": 100,
       "used": 0,
       "available": 100,
-      "usage": "0%"
+      "usage": 0
     },
     "description": "Enterprise backup license",
     "dates": {
@@ -100,11 +100,11 @@ curl -X POST "https://api.example.com/api/licenses" \
 | `copies.total` | number | 총 카피 수 |
 | `copies.used` | number | 사용 중인 카피 수 |
 | `copies.available` | number | 사용 가능한 카피 수 |
-| `copies.usage` | string | 사용률 (예: "0%", "25%") |
+| `copies.usage` | number | 사용률(%) (예: 0, 25) |
 | `description` | string | 라이선스 설명 |
 | `dates.created` | string | 생성일 |
 | `dates.expires` | string | 만료일 |
-| `dates.daysRemaining` | number | 만료까지 남은 일수 |
+| `dates.daysRemaining` | number | 만료까지 남은 일수 (만료된 경우 `0`) |
 
 </details>
 
