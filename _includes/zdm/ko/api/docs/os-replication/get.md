@@ -35,3 +35,41 @@ curl -X GET "https://api.example.com/api/os-replications/1" \
 | `identifier` | Path | string | Required | 작업 ID(숫자) 또는 작업 이름 |
 
 </details>
+
+<details markdown="1" open>
+<summary><strong>응답 예시 (Upload)</strong></summary>
+
+```json
+{
+  "requestID": "...",
+  "success": true,
+  "data": {
+    "system": { "name": "center-01" },
+    "job": {
+      "info": {
+        "id": "1",
+        "name": "os_repl_upload_1712345678901",
+        "replicationType": "Upload",
+        "status": {
+          "current": "Complete",
+          "time": { "start": "2026-04-08 12:00:00", "elapsed": "-", "end": "-" }
+        },
+        "lastUpdated": "2026-04-08 12:00:00"
+      },
+      "cloudKeyId": 1,
+      "sourceRepository": { "id": "3", "path": "/source/path" },
+      "uploadInfo": {
+        "mode": "Full",
+        "folderName": "testUpload",
+        "networkLimit": 10,
+        "fileFilter": "*.iso",
+        "newly": "Disabled"
+      }
+    }
+  },
+  "message": "Os Replication retrieved",
+  "timestamp": "2026-04-08 12:00:00"
+}
+```
+
+</details>

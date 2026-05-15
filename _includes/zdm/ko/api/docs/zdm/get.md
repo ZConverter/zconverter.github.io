@@ -49,7 +49,7 @@ curl -X GET "https://api.example.com/api/zdms/1?detail=true&repository=true" \
 | `partition` | Query | boolean | Optional | `false` | 파티션 정보 포함 여부 | `true`, `false` |
 | `repository` | Query | boolean | Optional | `false` | 레포지토리 정보 포함 여부 | `true`, `false` |
 | `zosRepository` | Query | boolean | Optional | `false` | ZOS 레포지토리 정보 포함 여부 | `true`, `false` |
-| `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
+| `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 (현재 버전 미동작) | `true`, `false` |
 
 </details>
 
@@ -298,7 +298,6 @@ curl -X GET "https://api.example.com/api/zdms/1?detail=true&repository=true" \
       {
         "id": "1",
         "center": "Main-Center",
-        "os": "Linux",
         "type": "NFS",
         "size": {
           "raw": 1099511627776,
@@ -331,6 +330,8 @@ curl -X GET "https://api.example.com/api/zdms/1?detail=true&repository=true" \
 
 <details markdown="1">
 <summary>ZOS 레포지토리 정보 포함 응답 (zosRepository=true)</summary>
+
+> 주의: 현재 버전에서 `zosRepository` 옵션은 query에서 받아들이지만 응답 데이터는 채워지지 않습니다(빈 배열 반환). 추후 버전에서 활성화될 예정입니다.
 
 ```json
 {
@@ -461,7 +462,6 @@ curl -X GET "https://api.example.com/api/zdms/1?detail=true&repository=true" \
 |------|------|------|
 | `repository[].id` | string | 레포지토리 ID |
 | `repository[].center` | string | 센터 이름 |
-| `repository[].os` | string | 운영체제 |
 | `repository[].type` | string | 레포지토리 타입 (`NFS` / `SMB`) |
 | `repository[].size.raw` | number | 전체 크기 (bytes) |
 | `repository[].size.formatted` | string | 전체 크기 (포맷) |

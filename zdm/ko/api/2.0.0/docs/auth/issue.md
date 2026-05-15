@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: POST /auth/issue
+title: POST /token/issue
 section_title: ZDM API Documentation
 navigation: ko-api-2.0.0
 lang: ko

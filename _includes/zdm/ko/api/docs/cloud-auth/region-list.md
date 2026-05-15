@@ -15,6 +15,8 @@
   <code>GET /api/cloud-auth/regions/:platform</code>
 </div>
 
+> 단수형 alias `GET /api/cloud-auth/region/:platform` 도 동일하게 동작합니다(권장: 복수형).
+
 </details>
 
 <details markdown="1" open>

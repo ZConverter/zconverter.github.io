@@ -51,6 +51,10 @@ curl -X GET "https://api.example.com/api/backups/1?detail=true" \
 | `repositoryType` | Query | string | Optional | - | 레포지토리 타입 필터 | {% include zdm/repository-types.md %} |
 | `repositoryPath` | Query | string | Optional | - | 레포지토리 경로 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
+| `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
+| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
+| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능) | - |
+| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 </details>
 

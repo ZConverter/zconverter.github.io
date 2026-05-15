@@ -82,6 +82,9 @@ curl -X PUT "https://api.example.com/api/backups/1" \
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (0 이상) | - |
 | `schedule` | object/number | Optional | 스케줄 객체 또는 기존 스케줄 ID (스케줄 타입에 따라 작업 모드 자동 전환) | - |
 | `repository` | object | Optional | 레포지토리 정보 | - |
+| `repository.id` | number | Required (repository 지정 시) | 레포지토리 ID | - |
+| `repository.type` | string | Optional | 레포지토리 타입 | {% include zdm/repository-types.md %} |
+| `repository.path` | string | Optional | 레포지토리 경로 | - |
 | `scriptPath` | string | Optional | 실행할 스크립트 경로 | - |
 | `scriptRun` | string | Optional | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 

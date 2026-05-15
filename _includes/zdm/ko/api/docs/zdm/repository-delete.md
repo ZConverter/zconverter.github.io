@@ -33,6 +33,7 @@ curl -X DELETE "https://api.example.com/api/zdms/repositories/1" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 레포지토리 ID (숫자만 허용) | - |
+| `center` | Query | string | Optional | - | 센터 식별자(ID 또는 이름). 지정 시 레포지토리가 해당 센터에 속하는지 검증 (불일치 시 403) | - |
 
 </details>
 
@@ -91,6 +92,19 @@ curl -X DELETE "https://api.example.com/api/zdms/repositories/1" \
   "success": false,
   "requestID": "req-abc123",
   "error": "identifier는 숫자(Repository ID)만 허용됩니다",
+  "timestamp": "2026-01-23 10:30:00"
+}
+```
+
+**센터-레포지토리 소속 불일치 (403 Forbidden)**
+
+`center` 쿼리 지정 시 레포지토리가 해당 센터에 속하지 않으면 반환됩니다.
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "Repository does not belong to center 'Main-Center'",
   "timestamp": "2026-01-23 10:30:00"
 }
 ```

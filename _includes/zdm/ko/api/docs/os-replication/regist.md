@@ -90,6 +90,8 @@ curl -X POST "https://api.example.com/api/os-replications" \
 > - `cloudKeyId` — `cloud_info_zos` 존재 + center 소속 검증
 > - `zosRepositoryId` — `center_zos_repository` 존재 + center 소속 검증
 > - `repositoryId` — `center_repository` 존재 + center 소속 검증
+>
+> **참고**: 등록 API는 `schedule` 필드를 수신하지만 내부적으로 `nScheduleID=0`으로 저장하므로 등록 시점에는 스케줄이 적용되지 않습니다(필요 시 수정 API에서 부여). `autoStart`가 `use`이면 `nJobStatus=START`, `not use`이면 `nJobStatus=COMPLETE`로 저장됩니다.
 
 </details>
 
@@ -116,5 +118,16 @@ curl -X POST "https://api.example.com/api/os-replications" \
   "timestamp": "2026-04-08 12:00:00"
 }
 ```
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 코드</strong></summary>
+
+| 코드 | HTTP | 설명 |
+|------|------|------|
+| `NOT_FOUND` | 404 | center / cloudKey / zosRepository / repository 미존재 |
+| `BAD_REQUEST` | 400 | cloudKey / zosRepository / repository 의 center 소속 불일치 |
+| `INTERNAL_SERVER_ERROR` | 500 | 트랜잭션 실패 등 내부 오류 |
 
 </details>

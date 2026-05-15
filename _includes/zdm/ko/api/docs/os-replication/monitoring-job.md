@@ -30,10 +30,12 @@ curl -X GET "https://api.example.com/api/os-replications/monitoring/job/1" \
 <details markdown="1" open>
 <summary><strong>요청 파라미터</strong></summary>
 
-| 파라미터 | 위치 | 타입 | 필수 | 설명 |
-|---------|------|------|------|------|
-| `Authorization` | Header | string | Required | Bearer 토큰 |
-| `identifier` | Path | string | Required | 작업 ID(숫자) 또는 작업 이름 |
+| 파라미터 | 위치 | 타입 | 필수 | 설명 | 선택값 |
+|---------|------|------|------|------|--------|
+| `Authorization` | Header | string | Required | Bearer 토큰 | |
+| `identifier` | Path | string | Required | 작업 ID(숫자) 또는 작업 이름 | |
+| `status` | Query | string | Optional | 작업 상태 필터. 활성 작업의 계산된 status와 불일치 시 404 | (job status enum) |
+| `server` | Query | string | Optional | 작업 대상 서버 이름 필터. 불일치 시 404 | |
 
 </details>
 
@@ -84,5 +86,15 @@ curl -X GET "https://api.example.com/api/os-replications/monitoring/job/1" \
 | `Canceling` | 작업 취소 중 |
 | `Canceled` | 작업 취소됨 |
 | `Error` | 에러 발생 |
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 코드</strong></summary>
+
+| 코드 | HTTP | 설명 |
+|------|------|------|
+| `NOT_FOUND` | 404 | 작업 미존재 또는 `status`/`server` 필터와 불일치 |
+| `INTERNAL_SERVER_ERROR` | 500 | 내부 오류 |
 
 </details>

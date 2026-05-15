@@ -7,6 +7,7 @@
 
 > * 시스템에 등록된 모든 서버의 파티션 정보를 조회합니다.
 > * 필터 옵션을 통해 특정 조건의 파티션만 조회할 수 있습니다.
+> * 작업 대상이 될 수 없는 파티션(swap, `/media/cdrom*`, `/mnt/cdrom` 등 `free` 용량이 0인 파티션)은 응답에서 자동 제외됩니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -55,6 +56,8 @@ curl -X GET "https://api.example.com/api/servers/partitions?page=1&limit=10" \
 | `fileSystem` | Query | string | Optional | - | 파일 시스템 타입 필터 | - |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
+| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
+| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 </details>
 

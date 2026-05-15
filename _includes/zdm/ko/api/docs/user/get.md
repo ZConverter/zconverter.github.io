@@ -93,6 +93,19 @@ curl -X GET "https://api.example.com/api/users/user@example.com" \
 }
 ```
 
+**인증 실패 (401 Unauthorized)**
+
+유효하지 않은 토큰이거나 토큰이 만료된 경우 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "success": false,
+  "error": "토큰이 만료되었습니다.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
 </details>
 
 ---

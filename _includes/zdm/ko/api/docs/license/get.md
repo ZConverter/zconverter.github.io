@@ -5,8 +5,8 @@
 
 ## `GET /licenses/:identifier` {#get-licenses-identifier}
 
-> * 라이선스 ID 또는 라이선스 이름으로 특정 라이선스의 정보를 조회합니다.
-> * identifier가 숫자인 경우 라이선스 ID로, 그 외에는 라이선스 이름으로 조회합니다.
+> * **주의 (현재 구현)**: 경로 세그먼트 `:identifier`는 서버에서 무시되며, 본 엔드포인트는 `GET /licenses`와 동일하게 전체 라이선스 목록(배열)을 반환합니다.
+> * 단건 조회가 필요한 경우 `GET /licenses/key/:key`를 사용하거나, `GET /licenses?id=...` / `GET /licenses?name=...` 쿼리 파라미터를 사용하세요.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -53,24 +53,26 @@ curl -X GET "https://api.example.com/api/licenses/Enterprise-License" \
 {
   "success": true,
   "requestID": "req-abc123",
-  "data": {
-    "name": "Enterprise License",
-    "key": "XXXX-XXXX-XXXX-XXXX",
-    "category": "zdm(backup)",
-    "copies": {
-      "total": 100,
-      "used": 25,
-      "available": 75,
-      "usage": 25
-    },
-    "description": "Enterprise backup license",
-    "dates": {
-      "created": "2025-01-01",
-      "expires": "2026-01-01",
-      "daysRemaining": 365
+  "data": [
+    {
+      "name": "Enterprise License",
+      "key": "XXXX-XXXX-XXXX-XXXX",
+      "category": "zdm(backup)",
+      "copies": {
+        "total": 100,
+        "used": 25,
+        "available": 75,
+        "usage": 25
+      },
+      "description": "Enterprise backup license",
+      "dates": {
+        "created": "2025-01-01",
+        "expires": "2026-01-01",
+        "daysRemaining": 365
+      }
     }
-  },
-  "message": "License information retrieved",
+  ],
+  "message": "License information list",
   "timestamp": "2025-01-15 10:30:00"
 }
 ```
@@ -92,23 +94,7 @@ curl -X GET "https://api.example.com/api/licenses/Enterprise-License" \
 | `description` | string | 라이선스 설명 |
 | `dates.created` | string | 생성일 |
 | `dates.expires` | string | 만료일 |
-| `dates.daysRemaining` | number | 만료까지 남은 일수 |
-
-</details>
-
-<details markdown="1">
-<summary><strong>에러 응답</strong></summary>
-
-**라이선스를 찾을 수 없음 (404 Not Found)**
-
-```json
-{
-  "success": false,
-  "requestID": "req-abc123",
-  "error": "ID가 '999'인 License를 찾을 수 없습니다",
-  "timestamp": "2025-01-15 10:30:00"
-}
-```
+| `dates.daysRemaining` | number | 현재 시각 기준 만료까지 남은 일수 (만료된 경우 `0`) |
 
 </details>
 

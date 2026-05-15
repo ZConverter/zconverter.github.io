@@ -85,7 +85,7 @@ curl -X PUT "https://api.example.com/api/licenses/assign" \
       "expiration": "2026-01-01"
     }
   },
-  "message": "License assigned successfully",
+  "message": "License Assignment Results",
   "timestamp": "2025-01-15 10:30:00"
 }
 ```

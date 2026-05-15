@@ -80,31 +80,36 @@ curl -X GET "https://api.example.com/api/replications/1?detail=true" \
     },
     "job": {
       "info": {
-        "id": 1,
+        "id": "1",
         "name": "backup-replication-01",
-        "unitType": "backup",
-        "replicationMode": "full",
-        "status": "success",
-        "startTime": "2026-03-20 02:00:00",
-        "endTime": "2026-03-20 02:30:00",
+        "unitType": "Backup Policy",
+        "replicationMode": "Full",
+        "status": {
+          "current": "Complete",
+          "time": {
+            "start": "2026-03-20 02:00:00",
+            "elapsed": "00:30:00",
+            "end": "2026-03-20 02:30:00"
+          }
+        },
         "lastUpdated": "2026-03-20 02:30:00"
       },
       "backupJob": [
         {
           "name": "daily-backup",
-          "id": 10
+          "id": "10"
         }
       ],
       "repository": {
         "target": {
-          "id": 1,
-          "type": "nfs",
+          "id": "1",
+          "type": "NFS",
           "path": "/replication/target"
         }
       },
       "option": {
-        "compression": "use",
-        "encryption": "not use",
+        "compression": "Use",
+        "encryption": "Not Use",
         "networkLimit": 0,
         "mailEvent": ""
       }
@@ -125,22 +130,23 @@ curl -X GET "https://api.example.com/api/replications/1?detail=true" \
 | 필드 | 타입 | 설명 |
 |------|------|------|
 | `system.name` | string | 센터 이름 |
-| `job.info.id` | number | 복제 작업 ID |
+| `job.info.id` | string | 복제 작업 ID (문자열로 반환) |
 | `job.info.name` | string | 작업 이름 |
-| `job.info.unitType` | string | 복제 단위 유형 ({% include zdm/replication-unit-types.md %}) |
-| `job.info.replicationMode` | string | 복제 모드 ({% include zdm/replication-modes.md %}) |
-| `job.info.status` | string | 작업 상태 |
-| `job.info.startTime` | string | 작업 시작 시간 |
-| `job.info.endTime` | string | 작업 종료 시간 |
+| `job.info.unitType` | string | 복제 단위 유형 표시값 (`Backup Policy`/`Repository`/`Server`/`Unknown`) |
+| `job.info.replicationMode` | string | 복제 모드 표시값 (`Full`/`Incremental`/`Sync`/`Unknown`) |
+| `job.info.status.current` | string | 작업 상태 (PascalCase: `Preparing`, `Processing`, `Complete`, `Scheduled`, `Registered`, `Canceling`, `Canceled`, `Error`) |
+| `job.info.status.time.start` | string | 작업 시작 시간 (`YYYY-MM-DD HH:mm:ss` 또는 `-`) |
+| `job.info.status.time.elapsed` | string | 경과 시간 (`HH:MM:SS` 또는 `-`) |
+| `job.info.status.time.end` | string | 작업 종료 시간 (`YYYY-MM-DD HH:mm:ss` 또는 `-`) |
 | `job.info.lastUpdated` | string | 마지막 업데이트 시간 |
 | `job.backupJob[].name` | string | 백업 작업 이름 (unitType=backup) |
-| `job.backupJob[].id` | number | 백업 작업 ID (unitType=backup) |
-| `job.server.source[].id` | number | 소스 서버 ID (unitType=server) |
+| `job.backupJob[].id` | string | 백업 작업 ID (unitType=backup, 문자열) |
+| `job.server.source[].id` | string | 소스 서버 ID (unitType=server, 문자열) |
 | `job.server.source[].name` | string | 소스 서버 이름 (unitType=server) |
-| `job.repository.source` | object | 소스 레포지토리 정보 (unitType=repository) |
+| `job.repository.source` | object | 소스 레포지토리 정보 (unitType=repository) — `{id, path}` 만 반환 |
 | `job.repository.target` | object | 타겟 레포지토리 정보 |
-| `job.option.compression` | string | 압축 사용 여부 |
-| `job.option.encryption` | string | 암호화 사용 여부 |
+| `job.option.compression` | string | 압축 사용 여부 (`Use`/`Not Use`/`Unknown`) |
+| `job.option.encryption` | string | 암호화 사용 여부 (`Use`/`Not Use`/`Unknown`) |
 | `job.option.networkLimit` | number | 네트워크 제한 속도 (0: 무제한) |
 | `job.option.mailEvent` | string | 이벤트 알림 이메일 |
 

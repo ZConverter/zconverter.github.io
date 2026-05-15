@@ -78,7 +78,7 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/1?status=ru
         "Processing: /backup/source/data.tar.gz"
       ],
       "progress": {
-        "status": "running",
+        "status": "Processing",
         "step": "Transferring",
         "percent": "65%",
         "message": "Transferring files to target repository"
@@ -120,7 +120,7 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/1?status=ru
         "Replication completed successfully"
       ],
       "progress": {
-        "status": "success",
+        "status": "Complete",
         "step": "Complete",
         "percent": "100%",
         "message": "Replication completed successfully"
@@ -150,7 +150,7 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/1?status=ru
 | `job.info.name` | string | 작업 이름 |
 | `job.info.id` | number | 작업 ID |
 | `job.log` | string[] | 작업 로그 목록 (최근 10건) |
-| `job.progress.status` | string | 현재 작업 상태 |
+| `job.progress.status` | string | 현재 작업 상태 (PascalCase: `Preparing`/`Processing`/`Complete`/`Scheduled`/`Registered`/`Canceling`/`Canceled`/`Error`) |
 | `job.progress.step` | string | 현재 작업 단계 |
 | `job.progress.percent` | string | 진행률 |
 | `job.progress.message` | string | 진행 상태 메시지 |

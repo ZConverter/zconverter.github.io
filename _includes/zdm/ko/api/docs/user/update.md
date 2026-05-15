@@ -99,12 +99,12 @@ curl -X PUT "https://api.example.com/api/users/user@example.com" \
       "state": "success",
       "updatedFields": [
         {
-          "field": "사용자 이름",
+          "field": "username",
           "previous": "홍길동",
           "new": "김철수"
         },
         {
-          "field": "회사명",
+          "field": "company",
           "previous": "Old Company",
           "new": "New Company"
         }
@@ -125,9 +125,10 @@ curl -X PUT "https://api.example.com/api/users/user@example.com" \
 |------|------|------|
 | `userInfo.id` | string | 사용자 ID |
 | `userInfo.email` | string | 사용자 이메일 |
+| `userInfo.errorMessage` | string | 처리 실패 시 에러 메시지 (Optional, `state="fail"`일 때 포함될 수 있음) |
 | `summary.state` | string | 업데이트 결과 (`success` / `fail`) |
 | `summary.updatedFields` | array | 변경된 필드 목록 |
-| `summary.updatedFields[].field` | string | 변경된 필드 한글명 |
+| `summary.updatedFields[].field` | string | 변경된 필드 라벨(영문). 예: `username`, `password`, `company`, `company address`, `company size`, `organization`, `phone`, `position`, `country`, `timezone`, `language`, `email notice` |
 | `summary.updatedFields[].previous` | any | 변경 전 값 |
 | `summary.updatedFields[].new` | any | 변경 후 값 |
 
@@ -154,6 +155,19 @@ curl -X PUT "https://api.example.com/api/users/user@example.com" \
   "success": false,
   "requestID": "req-abc123",
   "error": "username은 최소 2자 이상이어야 합니다",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**변경할 필드 없음 (400 Bad Request)**
+
+요청 본문이 비어있거나(`No fields provided for update`) 모든 필드 값이 기존 값과 동일한 경우(`No fields changed`) 반환됩니다.
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "No fields changed",
   "timestamp": "2025-01-15 10:30:00"
 }
 ```

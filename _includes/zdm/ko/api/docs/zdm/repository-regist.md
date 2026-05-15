@@ -71,7 +71,7 @@ curl -X POST "https://api.example.com/api/zdms/repositories" \
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
-**성공 응답 (201 Created)**
+**성공 응답 (200 OK)**
 
 ```json
 {

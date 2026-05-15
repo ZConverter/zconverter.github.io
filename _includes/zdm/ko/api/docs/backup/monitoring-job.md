@@ -48,6 +48,8 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
+| `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
+| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 </details>
 

@@ -478,7 +478,7 @@ curl -X GET "https://api.example.com/api/servers?page=1&limit=10" \
 </details>
 
 <details markdown="1">
-<summary>파티션 필드 (partition=true)</summary>
+<summary>파티션 필드 (partition=true) — `free` 용량이 0인 파티션(swap, cdrom 등) 자동 제외</summary>
 
 | 필드 | 타입 | 설명 |
 |------|------|------|

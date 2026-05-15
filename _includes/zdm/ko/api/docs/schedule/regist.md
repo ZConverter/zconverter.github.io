@@ -91,7 +91,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
-**일반 스케줄 등록 성공 응답 (201 Created)**
+**일반 스케줄 등록 성공 응답 (200 OK)**
 
 ```json
 {
@@ -100,17 +100,17 @@ curl -X POST "https://api.example.com/api/schedules" \
   "data": {
     "basic": {
       "id": "1",
-      "type": "daily",
-      "state": "enabled",
-      "description": "Every day at 10:00"
+      "type": 3,
+      "state": 1,
+      "description": "[Basic] Start working at 10:00 every day."
     }
   },
-  "message": "Schedule registered successfully",
+  "message": "Schedule data regist result",
   "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
-**Smart 스케줄 등록 성공 응답 (201 Created)**
+**Smart 스케줄 등록 성공 응답 (200 OK)**
 
 ```json
 {
@@ -119,18 +119,18 @@ curl -X POST "https://api.example.com/api/schedules" \
   "data": {
     "basic": {
       "id": "1",
-      "type": "Smart Weekly (Specific Day of the Week)",
-      "state": "enabled",
-      "description": "Every Monday at 10:00 (Full)"
+      "type": 7,
+      "state": 1,
+      "description": "[Basic] Start working every Monday at 10:00"
     },
     "advanced": {
       "id": "2",
-      "type": "Smart Weekly (Specific Day of the Week)",
-      "state": "enabled",
-      "description": "Every Tuesday, Wednesday, Thursday, Friday at 12:00 (Increment)"
+      "type": 7,
+      "state": 1,
+      "description": "[Advanced] Start working every Tuesday, Wednesday, Thursday, Friday at 12:00"
     }
   },
-  "message": "Schedule registered successfully",
+  "message": "Schedule data regist result",
   "timestamp": "2025-01-15 10:30:00"
 }
 ```
@@ -143,12 +143,12 @@ curl -X POST "https://api.example.com/api/schedules" \
 | 필드 | 타입 | 설명 |
 |------|------|------|
 | `basic.id` | string | 기본 스케줄 ID |
-| `basic.type` | string | 스케줄 타입 |
-| `basic.state` | string | 활성화 상태 |
+| `basic.type` | number | 스케줄 타입 (0~11 enum 정수) |
+| `basic.state` | number | 활성화 상태 (0=disabled, 1=enabled) |
 | `basic.description` | string | 스케줄 설명 |
 | `advanced.id` | string | 고급 스케줄 ID (Smart 스케줄만) |
-| `advanced.type` | string | 스케줄 타입 (Smart 스케줄만) |
-| `advanced.state` | string | 활성화 상태 (Smart 스케줄만) |
+| `advanced.type` | number | 스케줄 타입 (Smart 스케줄만, 0~11 enum 정수) |
+| `advanced.state` | number | 활성화 상태 (Smart 스케줄만, 0=disabled, 1=enabled) |
 | `advanced.description` | string | 스케줄 설명 (Smart 스케줄만) |
 
 </details>
@@ -164,6 +164,17 @@ curl -X POST "https://api.example.com/api/schedules" \
   "requestID": "req-abc123",
   "error": "유효한 스케줄 타입이 아닙니다. (0 ~ 11 만 가능)",
   "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**basic 스케줄 데이터 누락 (400 Bad Request)**
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "basic schedule data is required",
+  "timestamp": "2026-05-15 10:30:00"
 }
 ```
 

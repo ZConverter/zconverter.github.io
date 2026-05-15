@@ -24,6 +24,7 @@ curl -X PUT "https://api.example.com/api/os-replications/1" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
+    "center": "center-01",
     "changeName": "new-job-name",
     "uploadMode": "incremental",
     "uploadFolderName": "newFolder",
@@ -42,6 +43,7 @@ curl -X PUT "https://api.example.com/api/os-replications/1" \
 |---------|------|------|------|------|--------|
 | `Authorization` | Header | string | Required | Bearer 토큰 | |
 | `identifier` | Path | string | Required | 작업 ID 또는 이름 | |
+| `center` | Body | string \| number | Required | 센터 ID 또는 이름 (소속 검증용) | |
 | `changeName` | Body | string | Optional | 변경할 작업 이름 | |
 | `status` | Body | string | Optional | 작업 상태 | `start`, `stop` |
 | `uploadMode` | Body | string | Optional | 업로드 모드 | `full`, `incremental` |
@@ -51,7 +53,7 @@ curl -X PUT "https://api.example.com/api/os-replications/1" \
 | `uploadFileFilter` | Body | string | Optional | 업로드 파일 필터 | |
 | `downloadMode` | Body | string | Optional | 다운로드 모드 | `full`, `incremental` |
 | `downloadNetworkLimit` | Body | number | Optional | 다운로드 네트워크 제한 | |
-| `schedule` | Body | object/number | Optional | 스케줄 | |
+| `schedule` | Body | object/number | Optional | (현재 미지원 — 요청 시 무시됨) | |
 
 </details>
 
@@ -76,5 +78,16 @@ curl -X PUT "https://api.example.com/api/os-replications/1" \
   "timestamp": "2026-04-08 12:00:00"
 }
 ```
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 코드</strong></summary>
+
+| 코드 | HTTP | 설명 |
+|------|------|------|
+| `NOT_FOUND` | 404 | 작업 / center 미존재 |
+| `CENTER-ERROR-01` | 403 | 작업의 center 소속과 요청 center 불일치 |
+| `INTERNAL_SERVER_ERROR` | 500 | 트랜잭션 실패 등 내부 오류 |
 
 </details>

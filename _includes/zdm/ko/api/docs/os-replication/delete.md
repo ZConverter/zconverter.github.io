@@ -33,6 +33,7 @@ curl -X DELETE "https://api.example.com/api/os-replications/1" \
 |---------|------|------|------|------|
 | `Authorization` | Header | string | Required | Bearer 토큰 |
 | `identifier` | Path | string | Required | 작업 ID(숫자) 또는 작업 이름 |
+| `center` | Query | string | Optional | 센터 ID/이름. 지정 시 작업의 센터 소속과 일치하지 않으면 `CENTER_MISMATCH`(403) |
 
 </details>
 
@@ -51,5 +52,16 @@ curl -X DELETE "https://api.example.com/api/os-replications/1" \
   "timestamp": "2026-04-07 12:00:00"
 }
 ```
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>에러 코드</strong></summary>
+
+| 코드 | HTTP | 설명 |
+|------|------|------|
+| `NOT_FOUND` | 404 | 작업 / center 미존재 |
+| `CENTER-ERROR-01` | 403 | 작업의 center 소속과 요청 center 불일치 |
+| `INTERNAL_SERVER_ERROR` | 500 | 트랜잭션 실패 등 내부 오류 |
 
 </details>

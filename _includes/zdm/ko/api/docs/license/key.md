@@ -20,7 +20,7 @@
 <summary><strong>요청 예시</strong></summary>
 
 ```bash
-curl -X GET "https://api.example.com/api/licenses/key/XXXX-XXXX-XXXX-XXXX" \
+curl -X GET "https://api.example.com/api/licenses/key/ABCDEFGH12345678IJKLMN" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -31,10 +31,7 @@ curl -X GET "https://api.example.com/api/licenses/key/XXXX-XXXX-XXXX-XXXX" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `key` | Path | string | Required | - | 라이선스 키 | - |
-| `category` | Query | string | Optional | - | 라이선스 카테고리 필터 | {% include zdm/license-categories.md %} |
-| `exp` | Query | string | Optional | - | 만료일 필터 (YYYY-MM-DD) | - |
-| `created` | Query | string | Optional | - | 생성일 필터 (YYYY-MM-DD) | - |
+| `key` | Path | string | Required | - | 라이선스 키 (고유값이므로 단건 조회) | - |
 
 </details>
 
@@ -49,7 +46,7 @@ curl -X GET "https://api.example.com/api/licenses/key/XXXX-XXXX-XXXX-XXXX" \
   "requestID": "req-abc123",
   "data": {
     "name": "Enterprise License",
-    "key": "XXXX-XXXX-XXXX-XXXX",
+    "key": "ABCDEFGH12345678IJKLMN",
     "category": "zdm(backup)",
     "copies": {
       "total": 100,
@@ -86,7 +83,7 @@ curl -X GET "https://api.example.com/api/licenses/key/XXXX-XXXX-XXXX-XXXX" \
 | `description` | string | 라이선스 설명 |
 | `dates.created` | string | 생성일 |
 | `dates.expires` | string | 만료일 |
-| `dates.daysRemaining` | number | 만료까지 남은 일수 |
+| `dates.daysRemaining` | number | 현재 시각 기준 만료까지 남은 일수 (만료된 경우 `0`) |
 
 </details>
 
@@ -99,7 +96,7 @@ curl -X GET "https://api.example.com/api/licenses/key/XXXX-XXXX-XXXX-XXXX" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": "Key가 'XXXX-XXXX-XXXX-XXXX'인 License를 찾을 수 없습니다",
+  "error": "Key가 'ABCDEFGH12345678IJKLMN'인 License를 찾을 수 없습니다",
   "timestamp": "2025-01-15 10:30:00"
 }
 ```

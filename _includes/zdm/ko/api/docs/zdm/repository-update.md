@@ -186,7 +186,7 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
 }
 ```
 
-**센터-레포지토리 소속 불일치 (400 Bad Request)**
+**센터-레포지토리 소속 불일치 (403 Forbidden)**
 
 ```json
 {
@@ -219,7 +219,7 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
 }
 ```
 
-**IP 중복 (409 Conflict)**
+**IP 중복 (400 Bad Request)**
 
 ```json
 {

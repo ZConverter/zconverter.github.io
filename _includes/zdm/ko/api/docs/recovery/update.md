@@ -26,6 +26,7 @@ curl -X PUT "https://api.example.com/api/recoveries/1" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
+    "center": "1",
     "changeName": "weekly-recovery",
     "mode": "increment",
     "afterReboot": "shutdown"
@@ -36,6 +37,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
+    "center": "1",
     "jobList": [
       {
         "partition": "/",
@@ -50,6 +52,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
+    "center": "1",
     "mode": "increment",
     "afterReboot": "reboot",
     "jobList": [
@@ -65,6 +68,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
+    "center": "1",
     "jobList": [
       {
         "drive": "C:",
@@ -90,6 +94,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 
 | 필드 | 타입 | 필수 | 설명 | 선택값 |
 |------|------|------|------|--------|
+| `center` | string \| number | Required | 작업이 속한 center ID 또는 Name (소속 검증용) | - |
 | `changeName` | string | Optional | 변경할 작업 이름 | - |
 | `platform` | string | Optional | 플랫폼 | {% include zdm/platforms.md inline=true %} |
 | `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
@@ -107,7 +112,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 | 필드 | 타입 | 필수 | 설명 |
 |------|------|------|------|
 | `partition` | string | Conditional | 대상 파티션 - Linux (partition 또는 drive 중 하나 필수) |
-| `drive` | string | Conditional | 대상 드라이브 - Windows (partition 또는 drive 중 하나 필수) |
+| `drive` | string | Conditional | 대상 드라이브 - Windows (partition 또는 drive 중 하나 필수). 입력값은 대문자 변환 및 `:` 자동 추가됨 (`c` → `C:`, `c:` → `C:`) |
 | `mode` | string | Optional | 변경할 작업 모드 |
 
 > **mode와 jobList 동시 사용 시 처리 순서:**

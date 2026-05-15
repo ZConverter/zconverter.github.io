@@ -84,14 +84,14 @@ curl -X POST "https://api.example.com/api/replications" \
 | `sourceCenter` | string \| number | Required | 소스 센터 ID 또는 이름 | - |
 | `targetCenter` | string \| number | Required | 타겟 센터 ID 또는 이름 | - |
 | `replicationUnitType` | string | Required | 복제 단위 유형 | {% include zdm/replication-unit-types.md %} |
-| `replicationMode` | string | Optional | 복제 모드 | {% include zdm/replication-modes.md %} |
+| `replicationMode` | string | Optional | 복제 모드 (기본값: `full`) | {% include zdm/replication-modes.md %} |
 | `jobName` | string | Optional | 작업 이름 | - |
 | `ip` | string | Optional | 타겟 IP 주소 | - |
 | `port` | number | Optional | 타겟 포트 | - |
 | `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
-| `networkLimit` | number | Optional | 네트워크 제한 속도 (0: 무제한) | - |
+| `networkLimit` | number | Optional | 네트워크 제한 속도 (기본값: 0, 0=무제한) | - |
 | `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
-| `autoStart` | string | Optional | 자동 시작 여부 | {% include zdm/use-options.md %} |
+| `autoStart` | string | Optional | 자동 시작 여부 (기본값: `not use`) | {% include zdm/use-options.md %} |
 | `targetRepository` | string | Required | 타겟 레포지토리 (단일 ID 또는 경로, 예: `"41"` / `"/replication/target"`) | - |
 | `sourceRepository` | string | Conditional | 소스 레포지토리 (unitType=repository 시 필수, comma-separated ID/경로 다중 가능, 예: `"39,40"`) | - |
 | `sourceServer` | string | Conditional | 소스 서버 (unitType=server 시 필수, comma-separated ID/이름 다중 가능, 예: `"1,web-server-01"`) | - |
@@ -198,13 +198,9 @@ curl -X POST "https://api.example.com/api/replications" \
       {
         "state": "success",
         "jobName": "backup-replication-01",
-        "unitType": "backup",
-        "replicationMode": "full",
-        "autoStart": "not use",
-        "schedule": {
-          "type": "Daily",
-          "time": "02:00"
-        }
+        "unitType": "Backup Policy",
+        "replicationMode": "Full",
+        "autoStart": "not use"
       }
     ]
   },

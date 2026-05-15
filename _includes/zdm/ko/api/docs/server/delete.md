@@ -39,6 +39,7 @@ curl -X DELETE "https://api.example.com/api/servers/server-01" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 서버 ID (숫자) 또는 서버 이름 | - |
+| `center` | Query | string | Optional | - | 삭제 대상 서버의 소속 center 식별자 (ID/이름). 단일 값만 허용. 지정 시 서버가 해당 center에 속하는지 검증 후 삭제. | - |
 
 </details>
 
@@ -88,6 +89,19 @@ curl -X DELETE "https://api.example.com/api/servers/server-01" \
   "success": false,
   "requestID": "req-abc123",
   "error": "ID가 '999'인 Server를 찾을 수 없습니다",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+**center 불일치 (403 Forbidden)**
+
+`center` 쿼리에 지정된 center에 대상 서버가 소속되어 있지 않은 경우 반환됩니다.
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "Server does not belong to center 'center-01'",
   "timestamp": "2025-01-15 10:30:00"
 }
 ```

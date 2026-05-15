@@ -39,6 +39,7 @@ curl -X DELETE "https://api.example.com/api/backups/daily-backup" \
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 백업 ID (숫자) 또는 백업 이름 | - |
 | `partition` | Query | string | Optional | - | 삭제할 작업 대상 파티션 필터 | - |
+| `center` | Query | string | Optional | - | center 식별자 필터 (ID 또는 이름) | - |
 
 </details>
 

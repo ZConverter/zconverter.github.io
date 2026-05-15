@@ -80,7 +80,7 @@ curl -X POST "https://api.example.com/api/backups" \
 | `jobName` | string | Optional | 작업 이름 | - |
 | `user` | string \| number | Optional | 사용자 ID (숫자) 또는 이메일 | - |
 | `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
-| `rotation` | number | Optional | `1` | 작업 반복 횟수 (1~30) | - |
+| `rotation` | number | Optional | 작업 반복 횟수 (1~30, 기본값 `1`) | - |
 | `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
 | `encryption` | string | Optional | 암호화 사용 여부 | {% include zdm/use-options.md %} |
 | `excludeDir` | string | Optional | 작업에서 제외힐 디렉토리 목록 | - |
@@ -108,7 +108,6 @@ curl -X POST "https://api.example.com/api/backups" \
 | `repository` | object | Optional | 레포지토리 정보 | - |
 | `jobName` | string | Optional | 작업 이름. 명시적으로 지정 시 파티션 suffix 없이 그대로 사용. 미지정 시 자동 생성 | - |
 | `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
-| `description` | string | Optional | 작업 설명 | - |
 | `rotation` | number | Optional | 작업 반복 횟수 (1~30) | - |
 | `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
 | `encryption` | string | Optional | 암호화 사용 여부 | {% include zdm/use-options.md %} |

@@ -39,6 +39,8 @@ curl -X GET "https://api.example.com/api/os-replications?type=upload&mode=full&p
 | `server` | Query | string | Optional | 서버 이름 필터 | |
 | `type` | Query | string | Optional | 복제 방식 필터 | `upload`, `download` |
 | `mode` | Query | string | Optional | 복제 모드 필터 | `full`, `incremental` |
+| `status` | Query | string | Optional | 작업 상태 필터 (`VALID_JOB_STATUS_VALUES`) | (job status enum) |
+| `detail` | Query | boolean | Optional | 상세 정보 포함 여부 | `true`, `false` |
 | `page` | Query | number | Optional | 페이지 번호 | |
 | `limit` | Query | number | Optional | 페이지당 개수 | |
 | `center` | Query | string | Optional | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |

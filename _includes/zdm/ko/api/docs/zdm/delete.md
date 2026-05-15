@@ -38,6 +38,7 @@ curl -X DELETE "https://api.example.com/api/zdms/Main-Center" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | ZDM ID (숫자) 또는 ZDM 이름 | - |
+| `center` | Query | string | Optional | - | 센터 식별자(ID 또는 이름). 지정 시 ZDM이 해당 센터에 속하는지 검증 (불일치 시 403) | - |
 
 </details>
 
@@ -91,6 +92,19 @@ curl -X DELETE "https://api.example.com/api/zdms/Main-Center" \
   "success": false,
   "requestID": "req-abc123",
   "error": "'Main-Center'에 해당하는 ZDM을 찾을 수 없습니다",
+  "timestamp": "2026-01-23 10:30:00"
+}
+```
+
+**센터-ZDM 소속 불일치 (403 Forbidden)**
+
+`center` 쿼리 지정 시 ZDM이 해당 센터에 속하지 않으면 반환됩니다.
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "ZDM does not belong to center 'Main-Center'",
   "timestamp": "2026-01-23 10:30:00"
 }
 ```

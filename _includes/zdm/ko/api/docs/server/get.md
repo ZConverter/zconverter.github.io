@@ -51,6 +51,8 @@ curl -X GET "https://api.example.com/api/servers/1?detail=true&disk=true" \
 | `partition` | Query | boolean | Optional | `false` | 파티션 정보 포함 여부 | `true`, `false` |
 | `repository` | Query | boolean | Optional | `false` | 레포지토리 정보 포함 여부 | `true`, `false` |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
+| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
+| `sort` | Query | string | Optional | `desc` | augmentation 배열 정렬 순서 | `asc`, `desc` |
 
 </details>
 
@@ -414,7 +416,7 @@ curl -X GET "https://api.example.com/api/servers/1?detail=true&disk=true" \
 </details>
 
 <details markdown="1">
-<summary>파티션 필드 (partition=true)</summary>
+<summary>파티션 필드 (partition=true) — `free` 용량이 0인 파티션(swap, cdrom 등) 자동 제외</summary>
 
 | 필드 | 타입 | 설명 |
 |------|------|------|

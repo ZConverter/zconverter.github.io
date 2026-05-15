@@ -33,6 +33,7 @@ curl -X DELETE "https://api.example.com/api/cloud-auth/recovery/1" \
 |---------|------|------|------|------|
 | `Authorization` | Header | string | Required | Bearer 토큰 |
 | `identifier` | Path | number | Required | 삭제할 인증 정보 ID |
+| `center` | Query | string | Optional | 센터 ID 또는 이름 — 지정 시 대상 레코드가 해당 center 소속인지 검증(불일치 시 `CENTER-ERROR-01`/403) |
 
 </details>
 

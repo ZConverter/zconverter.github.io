@@ -24,6 +24,10 @@
 # 스케줄 ID로 삭제
 curl -X DELETE "https://api.example.com/api/schedules/1" \
   -H "Authorization: Bearer <token>"
+
+# center 소속 검증과 함께 삭제 (스케줄이 해당 센터 소속이 아니면 403)
+curl -X DELETE "https://api.example.com/api/schedules/1?center=1" \
+  -H "Authorization: Bearer <token>"
 ```
 
 </details>
@@ -34,6 +38,7 @@ curl -X DELETE "https://api.example.com/api/schedules/1" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 스케줄 ID (숫자만 허용) | - |
+| `center` | Query | string | Optional | - | 센터 식별자(ID 또는 이름). 지정 시 스케줄이 해당 센터 소속인지 검증 | - |
 
 </details>
 
@@ -93,6 +98,17 @@ curl -X DELETE "https://api.example.com/api/schedules/1" \
   "requestID": "req-abc123",
   "error": "Schedule ID '1' is referenced by: backup(2), recovery(1)",
   "timestamp": "2026-01-23 10:30:00"
+}
+```
+
+**다른 센터 소속 (403 Forbidden)**
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "Schedule does not belong to center '1'",
+  "timestamp": "2026-05-15 10:30:00"
 }
 ```
 

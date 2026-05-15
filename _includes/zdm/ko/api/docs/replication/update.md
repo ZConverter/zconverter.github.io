@@ -28,6 +28,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
+    "center": "1",
     "changeName": "weekly-replication",
     "replicationMode": "incremental",
     "compression": "use"
@@ -38,6 +39,7 @@ curl -X PUT "https://api.example.com/api/replications/backup-replication-01" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
+    "center": "1",
     "status": "start"
   }'
 
@@ -46,6 +48,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
+    "center": "1",
     "schedule": {
       "type": 4,
       "basic": {
@@ -72,6 +75,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 
 | 필드 | 타입 | 필수 | 설명 | 선택값 |
 |------|------|------|------|--------|
+| `center` | string \| number | Required | 작업 소속 센터 ID 또는 이름 (소유 검증용) | - |
 | `changeName` | string | Optional | 변경할 작업 이름 | - |
 | `status` | string | Optional | 작업 상태 변경 | `start`, `stop` |
 | `replicationMode` | string | Optional | 복제 모드 | {% include zdm/replication-modes.md %} |
@@ -178,7 +182,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": "ID가 '999'인 Replication을 찾을 수 없습니다",
+  "error": "Replication not found (identifier: 999, center: 1)",
   "timestamp": "2026-03-20 10:30:00"
 }
 ```

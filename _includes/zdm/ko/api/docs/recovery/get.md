@@ -54,6 +54,7 @@ curl -X GET "https://api.example.com/api/recoveries/1?detail=true" \
 | `platform` | Query | string | Optional | - | 플랫폼 필터 | {% include zdm/platforms.md inline=true %} |
 | `backupName` | Query | string | Optional | - | 백업 작업 이름 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
+| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능) | - |
 
 </details>
 

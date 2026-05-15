@@ -38,6 +38,7 @@ curl -X DELETE "https://api.example.com/api/recoveries/daily-recovery" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 복구 ID (숫자) 또는 복구 이름 | - |
+| `center` | Query | string | Optional | - | center 식별자 필터 (스키마 정의됨, routes 적용 여부 확인 필요) | - |
 
 </details>
 

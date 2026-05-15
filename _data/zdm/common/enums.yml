@@ -160,16 +160,22 @@ transfer-types:
 
 # 복제 작업 상태
 replication-job-status:
-  - value: "pending"
-    description: "대기 중"
-  - value: "running"
+  - value: "preparing"
+    description: "준비 중"
+  - value: "processing"
     description: "실행 중"
-  - value: "success"
+  - value: "complete"
     description: "완료"
-  - value: "failed"
-    description: "실패"
-  - value: "stopped"
-    description: "정지됨"
+  - value: "scheduled"
+    description: "스케줄됨"
+  - value: "canceling"
+    description: "취소 중"
+  - value: "canceled"
+    description: "취소됨"
+  - value: "error"
+    description: "에러"
+  - value: "registered"
+    description: "등록됨"
 
 # 복제 히스토리 결과
 replication-history-result:

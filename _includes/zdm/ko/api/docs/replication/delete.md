@@ -28,7 +28,7 @@ curl -X DELETE "https://api.example.com/api/replications/1" \
   -H "Authorization: Bearer <token>"
 
 # 작업 이름으로 삭제
-curl -X DELETE "https://api.example.com/api/replications/backup-replication-01" \
+curl -X DELETE "https://api.example.com/api/replications/backup-replication-01?center=1" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -40,6 +40,7 @@ curl -X DELETE "https://api.example.com/api/replications/backup-replication-01" 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 복제 작업 ID (숫자) 또는 작업 이름 | - |
+| `center` | Query | string | Conditional | - | 센터 식별자(ID/이름). **`identifier`가 작업 이름인 경우 필수** (silent cross-center 삭제 방지) | - |
 
 </details>
 
@@ -92,7 +93,7 @@ curl -X DELETE "https://api.example.com/api/replications/backup-replication-01" 
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": "ID가 '999'인 Replication을 찾을 수 없습니다",
+  "error": "Replication not found (identifier: 999)",
   "timestamp": "2026-03-20 10:30:00"
 }
 ```

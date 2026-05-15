@@ -6,6 +6,47 @@
 
 ---
 
+## [Documentation] - 2026-05-15
+
+### Fixed
+- **API v2.0.0 문서 ↔ ZDM-API 코드 일괄 동기화** — 12개 도메인(auth / backup / cloud-auth / file / license / os-replication / recovery / replication / schedule / server / user / zdm) 전수 점검 후 **총 94건 patch 적용 (실패 0)**. 도메인별 동기화 리포트는 ZDM-API repo의 `.claude/doc-sync-reports/2026-05-15/<domain>.md`에 보존
+  - **1차 Blocker 40건** — 사용자가 문서 그대로 사용 시 실패하는 케이스 일괄 해소
+    - `auth/issue.md` 엔드포인트 경로 오기 (`/api/auth/issue` → `/api/token/issue`)
+    - `recovery/update.md`, `replication/update.md`, `os-replication/update.md`, `replication/delete.md`의 필수 `center` 필드 누락 보강
+    - `cloud-auth/recovery-regist.md` curl 예시 `awsSecretKey==` 등호 두 개 오타 정정
+    - `replication` get/list/monitoring 응답: `job.info` 구조 + `unitType`/`replicationMode`/`compression`/`encryption` PascalCase 표기 정정
+    - `schedule` POST 응답: `type`/`state` 응답값을 string → numeric enum으로 정정, MED-003/008 prefix 정상화 반영
+    - `file` upload/download status code(201 → 200) 및 응답 본문 구조 정정, `/files/list` 인증 명세 제거
+    - `license/:identifier` 라우트 목록 조회 동작 명시, 성공 응답 status code 정정
+    - `zdm/repository-update.md` 상태코드 오기재 정정(409→400, 400→403, 201→200), `repository.os` 필드 응답 제거
+  - **2차 Missing + Outdated 51건** — 쿼리 파라미터 표 누락 보강 및 응답 구조 동기화
+    - `backup` 4건: `delete/get/monitoring-*`의 `center`/`page`/`limit`/`sort`/`detail` 쿼리 파라미터 표 추가
+    - `server` 4건: 오늘자 변경 `nPartFree != 0` 필터(swap/cdrom 등 제외) 동작 문서화
+    - `recovery`: Windows 콜론/대소문자 자동 정규화 동작 반영(`regist.md`/`update.md`), `history-get`/`history-list` include 본문 신규 생성
+    - `os-replication` 6건: 쿼리 파라미터 + 도메인 에러 코드 표 + `schedule`/`autoStart` 동작 설명 추가
+    - `user/update.md` 응답 `summary.updatedFields[].field` 한글 → 영문 라벨 정정
+    - `auth/issue.md` 유효성 실패 응답 상태코드 400 → 422 정정
+  - **3차 Extra + Info 3건** — `cloud-auth` INFO-004 zos-delete/recovery-delete `center` 쿼리 추가 등 보조 patch
+
+### Changed
+- **백그라운드 에이전트 기반 자동 동기화 파이프라인 도입** — ZDM-API repo의 `api-doc-sync` 서브에이전트가 12개 도메인 독립 병렬로 코드↔문서 비교 → unified diff 형식 patch 제안 → 도메인별 적용 에이전트가 적용. 시급도 1/2/3차 단계로 순차 진행. 정책상 버전 스냅샷(`<action>/<version>.md`)은 수정 대상 외, 최상위 `<action>.md`만 갱신
+- **API v2.0.0 좌측 사이드바 네비게이션 한글화** — `_data/navigation.yml`의 `ko-api-2.0.0` 섹션
+  - 75개 항목 중 73개 `title:` 한글화 (기존 한글 항목 `API 소개` / `개요`는 유지)
+  - 표기 스타일: `[METHOD] <한글 요약>` (배지 형식, 예: `[POST] 토큰 발급`, `[GET] 목록 조회`, `[PUT] 수정`, `[DELETE] 삭제`)
+  - 명명 규칙: 동사 통일(`조회 / 등록 / 수정 / 삭제 / 발급 / 할당 / 업로드 / 다운로드 / 모니터링`), "단일 조회" vs "목록 조회"로 구분, 같은 섹션 내 동일 동사가 여러 번이면 괄호로 보조 분류(예: `모니터링 (작업 단위)` / `모니터링 (시스템 단위)`, `파티션 목록 (서버별)` / `파티션 전체 목록`)
+  - 용어 통일: `레포지토리` → `저장소` (ZDM Center 섹션 6건), 모니터링 `(작업)` → `(작업 단위)` (4건), `(시스템)` → `(시스템 단위)` (2건)
+  - URL 라인은 변경 없음 — `title:` 라인만 수정 (73 insertion / 73 deletion, 단일 hunk @ L1566)
+  - **영향 범위는 좌측 사이드바만** — `_layouts/docs.html`이 `navigation.yml`의 `title`을 사이드바에 한해서만 사용 확인. 브라우저 탭 제목/breadcrumb/페이지 본문은 별도 출처라 영향 없음
+  - 다른 버전(`ko-api-1.0.3` ~ `ko-api-1.3.1`) 및 CLI 섹션은 손대지 않음 (당시 표기 historical preservation)
+  - `_includes/zdm/ko/api/index.md`의 명세표, `CONTRIBUTING.md` 등 본문 문서는 미변경 (역할 분리: 사이드바는 탐색용 한글, 본문은 정식 엔드포인트 명세)
+
+### Notes
+- 스킵 51건의 대부분은 의도된 케이스(상위 단계 patch에 선반영 또는 단순 관찰 Info — patch 블록 부재)
+- 실패 0건, 모든 12개 도메인 정상 동기화
+- 사이드바 한글화는 v2.0.0만 우선 적용. 사용자 반응 보고 v1.x 점진 확장 여부 결정
+
+---
+
 ## [Documentation] - 2026-04-22
 
 ### Fixed
@@ -259,6 +300,22 @@
 
 ---
 
+## [Documentation] - 2026-03-04
+
+### Added
+- **API v1.1.0 history 엔드포인트 누락 필터 파라미터 추가**
+  - `zdm/ko/api/1.1.0/index.md` — 신규 엔드포인트 설명에 `partition`, `serverType` 필터 파라미터 명시
+  - `zdm/ko/api/1.1.0/docs/backup/history-list.md` — `partition` 쿼리 파라미터 추가(정확 매칭), 파티션 필터 요청 예시 추가, Windows 서버 파티션 정규화(`:` 자동 추가) 참고 사항 추가
+  - `zdm/ko/api/1.1.0/docs/backup/history-get.md` — `partition` 쿼리 파라미터 추가
+  - `zdm/ko/api/1.1.0/docs/recovery/history-list.md` — `serverType` 쿼리 파라미터 추가(기본값 `target`, 선택값 `source`/`target`), `partition` 쿼리 파라미터 추가(개별 항목 정확 매칭), 소스/타겟 서버 필터 요청 예시 추가
+  - `zdm/ko/api/1.1.0/docs/recovery/history-get.md` — `serverType`, `partition` 쿼리 파라미터 추가
+- **CLI v1.0.4 history 서브커맨드 문서 신규 추가**
+  - `zdm/ko/cli/1.0.4/index.md` (신규) — v1.0.3 대비 변경 사항(`backup history`, `recovery history` 서브커맨드 추가) 안내
+  - `zdm/ko/cli/1.0.4/docs/backup/history.md` (신규) — `backup history` 커맨드. 옵션: `--job-id`, `--job-name`, `--server`, `--partition`, `--result`, `--asc`. Text/JSON 출력 예시 포함
+  - `zdm/ko/cli/1.0.4/docs/recovery/history.md` (신규) — `recovery history` 커맨드. 옵션: `--job-id`, `--job-name`, `--server`, `--server-type`, `--partition`, `--result`, `--asc`. `--server-type` 소스/타겟 구분 설명 및 참고 사항 포함, Text/JSON 출력 예시 포함
+
+---
+
 ## 2026-03-03
 
 ### Added
@@ -282,6 +339,18 @@
   - `zdm/ko/api/1.1.0/` 경로에 index 및 history 문서 4개 추가
   - navigation.yml에 `ko-api-1.1.0` 네비게이션 섹션 추가
   - 기존 API(v1.0.3)와 동일한 엔드포인트는 v1.0.3 문서 참조 안내
+
+---
+
+## [Documentation] - 2026-02-06
+
+### Fixed
+- **Repository Update 문서와 코드 응답 형식 불일치 수정** — `zdm/ko/api/1.0.3/docs/zdm/repository-update.md`
+  - 응답 예시 JSON: `repositoryInfo`에서 `id`, `centerName`만 유지 (`type`, `remotePath`, `localPath`, `ip` 제거)
+  - 응답 예시 JSON: `summary.state: "success"` 필드 추가
+  - 응답 필드 테이블: 불필요한 필드 제거 및 `summary.state` 필드 추가
+  - `field: "ip"` → `field: "ipAddress"` 변경 (코드와 일치)
+  - backup/recovery update 응답 양식과 통일
 
 ---
 
@@ -652,6 +721,21 @@
 - POST /recoveries: `description` 필드 제거
 - GET /schedules: `page`, `limit` 페이지네이션 파라미터 추가
 - GET /zdms: `page`, `limit` 페이지네이션 파라미터 추가
+
+---
+
+## [Documentation] - 2026-01-16
+
+### Changed
+- **Recovery 작업 등록시 `overwrite` 필드 타입 변경** — `zdm/ko/api/1.0.3/docs/recovery/{regist,list,get}.md`
+  - **요청 (INPUT)**: `"allow"` / `"not allow"` (string) → `true` / `false` (boolean)
+  - **응답 (OUTPUT)**: `"allow"` / `"not allow"` (string) → `"overwrite"` / `"not overwrite"` (string)
+  - `_data/zdm/api_0_3/enums.yml` — `overwrite-options` 값 변경: `"allow"`/`"not allow"` → `"true"`/`"false"` (boolean 타입)
+  - `regist.md` 요청 본문 테이블 + jobList 항목 구조 테이블의 `overwrite` 타입 `string` → `boolean`
+  - `regist.md` 요청 예시 JSON: `"overwrite": "allow"` → `"overwrite": true`
+  - `regist.md` 응답 예시 + `list.md`/`get.md` (detail=true) 응답 예시: `"overwrite": "allow"` → `"overwrite": "overwrite"`
+  - **참고**: 요청은 boolean, 응답은 string으로 비대칭. 이후 2026-01-19 [API v1.0.3]에서 `boolean` → `string` 통일로 재변경됨
+- **DTO 전체 도메인 검토 결과**: Recovery만 변경, 나머지 8개 도메인(Backup/Server/Schedule/License/User/ZDM/File/Auth) DTO와 문서 일치 확인 — 추가 변경 없음
 
 ---
 

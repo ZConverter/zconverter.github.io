@@ -117,6 +117,10 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `repository.type` | string | Optional | 레포지토리 타입 |
 | `repository.path` | string | Optional | 레포지토리 경로 |
 
+> **Windows 파티션 정규화 (since 2026-05-15)**
+>
+> Windows 서버 대상으로 등록 시 `sourcePartition` / `targetPartition` 입력값은 비교 단계에서 자동으로 대문자 변환 및 `:` 보정이 적용됩니다. 입력 `c`, `C`, `c:`, `C:` 모두 동일하게 `C:`로 취급되어 서버 파티션 정보와 매칭됩니다. (Linux는 정규화 없음 — 원본 그대로 비교)
+
 </details>
 
 <details markdown="1" open>
@@ -186,7 +190,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
       "failed": 0
     }
   },
-  "message": "Recovery jobs registered",
+  "message": "Recovery job registration completed",
   "timestamp": "2025-01-15 10:30:00"
 }
 ```

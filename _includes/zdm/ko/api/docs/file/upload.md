@@ -6,7 +6,7 @@
 ## `POST /files/upload` {#post-files-upload}
 
 > * 단일 파일을 서버에 업로드합니다.
-> * 최대 파일 크기는 10MB이며, 한 번에 최대 5개까지 업로드 가능합니다.
+> * 최대 파일 크기는 10MB 입니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -38,14 +38,14 @@ curl -X POST "https://api.example.com/api/files/upload" \
 
 **제한 사항:**
 - 최대 파일 크기: 10MB
-- 최대 파일 수: 5개
+- 한 요청당 파일 수: 1개 (멀티 업로드 미지원)
 
 </details>
 
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
-**성공 응답 (201 Created)**
+**성공 응답 (200 OK)**
 
 ```json
 {
@@ -60,7 +60,7 @@ curl -X POST "https://api.example.com/api/files/upload" \
       "path": "/ZConverterManger/api-files/uploads/file-1705312200000-123456789-document.txt"
     }
   },
-  "message": "File uploaded successfully",
+  "message": "File upload result",
   "timestamp": "2025-01-15 10:30:00"
 }
 ```
@@ -87,8 +87,10 @@ curl -X POST "https://api.example.com/api/files/upload" \
 
 ```json
 {
+  "requestID": "req-abc123",
   "success": false,
-  "error": "파일 크기가 제한을 초과했습니다. (최대 10MB)"
+  "error": "File size exceeds the limit.",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
 
@@ -96,10 +98,24 @@ curl -X POST "https://api.example.com/api/files/upload" \
 
 ```json
 {
+  "requestID": "req-abc123",
   "success": false,
-  "error": "파일 업로드 중 오류가 발생했습니다."
+  "error": "An error occurred during file upload.",
+  "timestamp": "2025-01-15 10:30:00"
 }
 ```
+
+</details>
+
+<details markdown="1">
+<summary><strong>에러 코드</strong></summary>
+
+| 코드 | HTTP | 메시지 | 발생 시점 |
+|------|------|--------|-----------|
+| `FILE-ERROR-01` | 404 | File not found. | 업로드 요청에 파일 본문이 비어있을 때 |
+| `FILE-ERROR-04` | 400 | File size exceeds the limit. | 파일 크기가 10MB 초과 (multer `LIMIT_FILE_SIZE`) |
+| `FILE-ERROR-05` | 400 | An error occurred during file upload. | 그 외 multer 처리 오류 |
+| `DTO-CREATION-01` | 500 | DTO creation error. | 응답 DTO 변환 중 오류 |
 
 </details>
 

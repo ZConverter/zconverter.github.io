@@ -55,9 +55,10 @@ curl -X GET "https://api.example.com/api/files/download/file-1705312200000-12345
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "요청한 파일을 찾을 수 없습니다",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": {
+    "code": "FILE-ERROR-01",
+    "message": "File '<fileName>' not found."
+  }
 }
 ```
 
@@ -71,6 +72,16 @@ curl -X GET "https://api.example.com/api/files/download/file-1705312200000-12345
   "timestamp": "2025-01-15 10:30:00"
 }
 ```
+
+</details>
+
+<details markdown="1">
+<summary><strong>에러 코드</strong></summary>
+
+| 코드 | HTTP | 메시지 | 발생 시점 |
+|------|------|--------|-----------|
+| `FILE-ERROR-01` | 404 | File '<fileName>' not found. | 요청한 파일이 업로드 경로에 존재하지 않음 |
+| `DTO-VALIDATION-02` | 400 | URL parameter validation failed. | `fileName` 경로 파라미터 검증 실패 |
 
 </details>
 
