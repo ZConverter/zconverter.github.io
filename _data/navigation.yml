@@ -20,7 +20,7 @@ ko-zdm:
       - title: "ZDM-CLI 문서"
         url: "/zdm/ko/cli/2.0.0/index"
       - title: "ZDM-API 문서"
-        url: "/zdm/ko/api/2.0.0/index"
+        url: "/zdm/ko/api/2.0.1/index"
 
 # API v1.0.3 (한국어)
 ko-api-1.0.3:

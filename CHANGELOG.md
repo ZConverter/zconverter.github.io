@@ -6,6 +6,53 @@
 
 ---
 
+## [Documentation] - 2026-05-18
+
+### Changed
+- **API changelog include 단순화 — 내부 식별자·스키마 비노출** — `_includes/zdm/ko/api/changelog/{1.3.1, 2.0.0, 2.0.1}.md` 일괄 트리밍. 내부 함수·메서드·헬퍼명(`applyBaseConditions` / `normalizeWindowsPartition` / `processJobList` / `withServiceContext` / `validateJobScheduleCompatibility` / `insertLicenseHistory` 등), 소스 파일 경로(`src/domain/.../*.ts`), DB 컬럼명·테이블명(`sLetter` / `nPartFree` / `sSystemName` / `nCenterID` / `license_history` 등), 내부 클래스·서비스명, 구현 흐름·라인 변화·쿼리 수 변화·zod regex 등을 모두 제거. 엔드포인트 경로·공개 요청/응답 필드명·HTTP 상태 코드·공개 에러 코드·사용자 관찰 가능 동작 변화는 유지. 내부 리팩터링은 "외부 응답 변경 없음(클라이언트 영향 없음)" 한 줄로 축약. 동작 로직 / 스키마 유출 위험 차단 목적. v1.0.3·1.1.0·1.2.0·1.3.0은 이미 간결하여 변경 없음.
+- **CLAUDE.md 4단계 작성 가이드 보강** — changelog include 작성 시 내부 식별자/스키마 비노출 규칙 명시. 포함 가능 정보(엔드포인트, 공개 필드명, HTTP 코드, 공개 에러 코드, 예시 페이로드, breaking change 표시) vs 제외 대상(함수명, 파일 경로, DB 컬럼, 내부 클래스, 구현 세부) 항목별 명시 + 내부 리팩터링은 한 줄 요약 권장 규칙 추가.
+- **재사용 패치 규칙 갱신 — intro 페이지(`index.md`)는 모든 버전이 개별 생성** (`CLAUDE.md` 3단계 (D) 신설). 기존 규칙은 `docs:` 재사용 시 `zdm/ko/{prod}/{version}/` 디렉토리 자체를 만들지 않았으나, 이 경우 latest 재사용 패치의 문서 링크가 `docs:` 버전의 intro로 빠져 헤더가 기준 버전(예: `ZDM API Documentation v2.0.0`)으로 표시되는 문제 발생. 변경 후엔 `zdm/ko/{prod}/{version}/index.md`만 새 버전 디렉토리에 만들고(`title:`만 새 버전, `navigation:`·include `version=`·changelog는 `docs:` 버전 재사용) 하위 docs wrapper는 만들지 않음. 영향 파일:
+  - `CLAUDE.md` 3단계 (D)·6단계 본문 / 2단계 본문 / 모든 유형 공통 불변식 #1 / 체크리스트 표(행 2·3·6 + 각주 ³) 일괄 갱신
+  - `zdm/ko/index.md`·`zdm/ko/downloads.md`·`_layouts/docs.html` Liquid: intro 링크가 `v.docs | default: v.version` → `v.version`으로 변경되어 latest 재사용 패치도 자신의 intro로 정확히 라우팅. 4곳 모두 갱신.
+  - `_data/navigation.yml`의 `ko-zdm` 메인 ZDM-API 문서 링크 `/zdm/ko/api/2.0.0/index` → `/zdm/ko/api/2.0.1/index`
+  - `zdm/ko/api/index.md` 리다이렉트 URL `/zdm/ko/api/2.0.0/index` → `/zdm/ko/api/2.0.1/index`
+- **CLI v1.2.1 intro 페이지 백필** — 신규 규칙 일관성을 위해 `zdm/ko/cli/1.2.1/index.md`를 생성(기존엔 디렉토리 자체가 없었음). `title: ZDM CLI Documentation v1.2.1` / `navigation: ko-cli-1.2.0` / changelog include는 v1.2.0 그대로.
+- **재사용 패치 changelog include 규칙 추가** (`CLAUDE.md` 4단계) — 재사용 패치라도 사용자 노출 변경(behavior/bug fix/신규 에러코드)이나 내부 리팩터링이 있는 경우 `_includes/zdm/ko/{prod}/changelog/{version}.md`를 선택적으로 생성하도록 명문화. 생성 시 intro의 changelog include를 신규 파일로 교체하고 랜딩페이지 기준 버전 details에 추가 include로 병기. 체크리스트 행 4 (재사용 패치 컬럼: `−` → `◇⁴`) + 각주 ⁴ 신설.
+- **ZDM-API v2.0.1 changelog include 신규 생성** — `_includes/zdm/ko/api/changelog/2.0.1.md`. `/project/zdm-api-v2/CHANGELOG.md`의 `[2.0.0]` 섹션 중 gitpage 2.0.0.md에 없던 2026-05-15 신규 항목(monitoring 서비스 공통 패턴 추출 / server-partition swap 누락 / Recovery Windows 파티션 정규화 / Job-name OS 일관성 / `JOB-ERROR-22` 신규)을 v2.0.1 changelog로 발췌. `zdm/ko/api/2.0.1/index.md` 인트로의 changelog include는 `2.0.0.md` → `2.0.1.md`로 교체(인트로 페이지에서는 v2.0.1 신규 변경분만 표시 — v2.0.0 changelog 본문은 v2.0.0 인트로로 가서 확인). 랜딩페이지 `zdm/ko/index.md`의 기준 버전(v2.0.0 + patch v2.0.1) details에는 `2.0.0.md` 다음 줄에 `2.0.1.md`도 함께 include하여 두 changelog가 같은 details에 노출됨(v1.3.0 + v1.3.1 부분 갱신 패턴과 동일한 표시 모양).
+
+### Added
+- **ZDM-API v2.0.1 추가 (재사용 패치)** — v2.0.0 대비 사용자 가이드(엔드포인트·요청/응답 스키마) 변경 없음. `_data/zdm/common/versions.yml`의 `api:` 최상단에 v2.0.1(latest, `docs: "2.0.0"`) 추가하고 기존 v2.0.0은 stable로 강등. **신규 intro 페이지 `zdm/ko/api/2.0.1/index.md` 생성** (위 Changed 항목의 신규 규칙 적용). 신규 바이너리 `/downloads/zdm-api/2.0.1/zdm-api-linux.tar.gz` 배치. `_data/navigation.yml`·`zdm/ko/api/2.0.1/`·`_includes/zdm/ko/api/changelog/2.0.1.md`·리다이렉트 페이지는 `docs:` 재사용 규칙대로 신규 생성하지 않음. 메인 랜딩페이지 `zdm/ko/index.md`의 ZDM-API 헤더는 `latest v2.0.1 (2026-05-18)`로 갱신하고 v2.0.0 details summary에 `patch v2.0.1 (2026-05-18)` 배지를 병기(CLI v1.2.0/v1.2.1 패턴과 동일, 별도 details 블록은 만들지 않음). 자잘한 내부 버그 수정 모음:
+  - **서버 파티션 조회 시 size 0 파티션(swap/cdrom 등) 일괄 배제** — `server-partition.repository.ts`에 `applyBaseConditions` 신설 후 read 경로 4곳(`findAll`/`countAll`/`findBySystemNames`/`findByServerName`)에 일괄 적용. 기존엔 `applyFilters` 미경유 경로에서 swap이 결과에 포함되던 문제 해소
+  - **Recovery Windows 파티션 입력 정규화** — `recovery-validation.service.ts`에 `normalizeWindowsPartition` 신설. `C` / `c` / `C:` / `c:` 모두 매치, DB sLetter 대소문자 혼재에도 안전. `recovery-job-list-normalizer.service.ts`의 `processJobList` `exist` 매칭도 동일 정규화 적용해 user input이 silent하게 무시되던 케이스 차단
+  - **작업 이름 생성기 Windows/Linux 형식 비대칭 해소** — `job-name.utils.ts`에서 Windows도 `C:` → `_C`로 prefix 통일(Linux `/var/log` → `_var_log`와 대칭). 입력 누락 시 에러도 `throw new Error` → `createCustomError(Job.Common.MISSING_REQUIRED_PARAMETER)`로 교체하여 외곽 catch에서 `NO_PARTITIONS_TO_PROCESS`로 부정확하게 래핑되던 문제 정정. `error-code.ts`에 신규 `JOB-ERROR-22`(400) 추가
+  - **Backup/Recovery monitoring 서비스 공통 패턴 추출 + step 2 단순화** — `validateSettledResults`/`unwrapSettled`/`fetchLatestLogMessages`/`computeCalculatedStatus`/`assertStatusMatches`/`withServiceContext` 6개 private helper로 보일러플레이트 통합. ByJob 흐름에서 step 1의 `identifierCheck`를 재활용해 step 2의 `type==="name"|"id"` 분기와 recovery/backup 재조회 생략(쿼리 4→3 / 3→2). 외부 응답 시그니처/구조 동일성 유지
+  - **모니터링 percent 원인파악용 DEBUG 로그 정리** — `recovery-monitoring-get.service.ts` ByJob/ByServer에 `recoveryActive raw result` 로그 추가. DTO 진입 시점 active 값 + partition별 computed percent 로그 추가(원인 확정 후 제거 예정인 임시 로그)
+- 세부 출처: `/project/zdm-api-v2/CHANGELOG.md`의 2026-05-15 entries 및 `git log` (`6b0f5e2 서버 파티션 - 스왑 파티션 제거`, `3570919 백업 모니터링 수정`, `0770442 리커버리 모니터링 수정`, `b909aa7 recovery regist 진행시 jobList에서 source/targetPartition에서 윈도우 정규화`, `844004d 작업이름 관련 신규 에러코드 추가 및 윈도우 작업이름 양식 수정`, `0328753 서버 파티션 조회시 swap 같은 사이즈 0으로 책정되는 파티션들 배제`).
+- **다운로드 페이지에 배포일·문서 갱신일 컬럼 추가** — 사용자가 각 버전의 바이너리 배포 시점과 문서 마지막 갱신 시점을 한눈에 확인할 수 있도록 `_data/zdm/common/versions.yml`에 `released`·`docs_updated` 필드를 추가하고 `zdm/ko/downloads.md` 테이블 컬럼 2개 확장. 재사용 패치(`docs:` 재사용)는 `docs_updated`를 패치일로 기록하는 규칙을 `CLAUDE.md` 1단계 및 체크리스트에 명시.
+- **동일 버전 재업로드(hotfix 재빌드) 처리 규칙** — `CLAUDE.md` 1단계에 명문화. `released`는 새 업로드일로 갱신하되 `docs_updated`는 문서가 실제로 바뀐 경우에만 갱신. 시맨틱 버저닝 관점에서는 가능한 경우 패치 번호 부여를 우선 검토.
+
+### Fixed
+- **v2.0.0 `docs_updated` 실제 마지막 문서 변경일 기준으로 정정** — 신규 도입한 필드 초기값이 최초 등록일(4/17)로 일괄 입력되어 있던 것을 CHANGELOG 추적 결과 기준으로 수정.
+  - API v2.0.0: `2026-04-17` → `2026-05-15` (12개 도메인 94건 patch 동기화일)
+  - CLI v2.0.0: `2026-04-17` → `2026-04-22` (`backup/update.md` 스케줄 정책 표 추가일)
+  - `released`는 양쪽 모두 `2026-04-17` 유지 (바이너리 재배포 기록 없음).
+- **메인 랜딩페이지 ZDM-CLI/ZDM-API 카드의 "업데이트" 표시 출처 변경 + 프로그램/문서 일자 분리** — `zdm/ko/index.md`의 두 카드가 `{{ site.time }}`(사이트 빌드 시각)을 보여주던 것을 제거. 대신 "프로그램 업데이트"(latest 버전의 `released`)와 "문서 업데이트"(latest 버전의 `docs_updated`) 두 행으로 분리해 의미를 구분. 사이트 어디든 push되면 빌드 시각이 갱신되어 "버전 자체가 갱신된 날"을 호도할 수 있었던 문제를 해소. 값이 비어 있으면 각자 `-` 표시.
+
+### Changed
+- **배포일·문서 갱신일 모두 git history 자동 추출로 전환** — 수동 `released`·`docs_updated` 입력을 fallback으로 격하하고 두 값 모두 git mtime 기반으로 자동 계산되도록 변경. 진실원이 git history로 통일됨.
+  - **배포일** — OS별로 분리해 각 `downloads[].file` 바이너리의 git mtime을 그대로 표시(Windows / Linux 각각 별도 행). 기존 단일 컬럼/행 표시를 OS 단위로 분리.
+  - **문서 갱신일** — 신규 Jekyll Generator 플러그인 `_plugins/doc_mtime_generator.rb`가 wrapper(`zdm/ko/{prod}/{docs}/**/*.md`)의 transitive include 중 **`_includes/zdm/ko/{prod}/` 하위의 .md 파일만** 추적해 git mtime 최대값을 계산. wrapper 자체와 공통 include(`_includes/zdm/*.md`)·`_data/*.yml`은 추적 제외. 결과를 `site.data.zdm.common.doc_mtimes[prod][version]`에 주입.
+  - **공통 자료 변경 시 운영 규칙 명문화** — `CLAUDE.md` 10단계 (B) 신설. enum/공통 include를 변경하면 `docs_updated` 자동 추적 밖이므로, 영향 받는 각 제품 도메인의 `_includes/zdm/ko/{prod}/docs/...` 파일 중 하나 이상을 같은 커밋에 포함해 touch하는 규칙을 명시. 체크리스트 10단계도 보강.
+  - 부수 효과: CLI v2.0.0의 `docs_updated`가 수동값 `2026-04-22`보다 정확한 자동값 `2026-04-23`으로 잡힘 — Generator가 transitive include까지 추적하면서 놓치고 있던 변경 시점을 잡아낸 결과.
+  - 보조 변경: tar.gz 우선 매칭 → OS별 분리 매칭으로 Liquid 로직 단순화.
+  - `.github/workflows/jekyll.yml`에 `git-restore-mtime` 설치·실행 스텝 추가. `actions/checkout@v4` `fetch-depth: 0`로 변경(full history 필요).
+  - `zdm/ko/downloads.md`·`zdm/ko/index.md`에서 `v.released` 참조를 `site.static_files | where: "path", v.downloads[0].file | first` 의 `modified_time`으로 교체. 추출 실패 시 `v.released` 수동 fallback → `-` 순.
+  - `_data/zdm/common/versions.yml`에서 자동 추출이 가능한 모든 항목의 `released` 필드 제거. `downloads: []`인 CLI v1.2.0/v1.2.1만 수동 fallback으로 유지.
+  - 부수 효과: 정보 부재로 비어 있던 v1.0.3(CLI/API) 배포일이 git 기준 `2026-03-04`로 자동 채워짐. API v2.0.0은 오늘(2026-05-18) 신규 바이너리 커밋 시각이 반영됨.
+  - `CLAUDE.md` 1단계의 `released`·동일버전 재업로드 규칙·체크리스트를 자동 추출 동작 기준으로 재작성.
+
+---
+
 ## [Documentation] - 2026-05-15
 
 ### Fixed

@@ -20,6 +20,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore mtimes from git history
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git-restore-mtime
+          git restore-mtime --quiet
+          # 검증: downloads/ 디렉토리의 바이너리 mtime이 git 시각으로 복원됐는지 출력
+          find downloads -type f -printf '%TY-%Tm-%Td  %p\n' | sort
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
