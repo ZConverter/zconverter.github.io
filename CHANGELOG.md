@@ -6,6 +6,45 @@
 
 ---
 
+## [Documentation] - 2026-05-19
+
+### Fixed
+- **schedule 도메인 5개 액션 상세 동기화** — `_includes/zdm/ko/api/docs/schedule/{overview,list,get,regist,delete}.md`
+  - 5개 액션 전수 점검, 총 42건 patch 적용 (Blocker 10 / Missing 13 / Outdated 10 / Info 25)
+- **공통 Blocker 패턴**
+  - **`type`/`state` 응답값 케이스 정정** (`GET /schedules` / `GET /schedules/:identifier`): 문서는 소문자(`daily`/`enabled`)였으나 실제 응답은 PascalCase (`Daily`/`Enabled`/`Smart Custom (Specific Month and Date)` 등) → 본문 표·예시 정정
+  - **`description` 동적 생성 반영** (list / get / delete): 응답 `description`은 `[Basic]`/`[Advanced]` prefix가 붙은 영문 문장 → 본문 표·예시 정정
+  - **list `type` 쿼리 enum 형식 명확화**: 기존 표 값(숫자/타이틀케이스)으로는 호출 실패. 소문자(`daily`) 또는 정확한 원문(`Smart Custom (Specific Month and Date)`)만 허용 → 표 수정 + URL encoding 안내 추가
+- **액션별 단발 Blocker**
+  - **overview**: 타입 0~11 정의 / smart 규칙 / 요일 변환 표 신규 작성
+  - **`POST /schedules`**: `basic` 필드 본문 표 Optional 표기 ↔ 실제 누락 시 400 응답 (문서 자기모순) → required 정정
+  - **`GET /schedules/:identifier`**: 응답 필드 표에 `type`/`state` enum 선택값·`Unknown` fallback 안내 부재 → 보강
+- **`POST /schedules` Outdated 4건** — Center NOT_FOUND / Smart 다중요일 / 시간 형식 / `type` 범위 에러 메시지가 한글로 적혀 있었으나 실제 출력은 영문 + HTTP 코드 일부 부정확(409→400, 422→400) → 정정
+
+### Added
+- **schedule 도메인 예시 케이스 47건 신규 추가** — 응답 분기·검증 실패 케이스별 종합 예시
+  - **`POST /schedules` 21건**: type 0~11 각각의 요청 body JSON + 정상 응답 JSON + 8가지 검증 실패 응답 예시 (basic 누락, smart에 advanced 누락, single value 제약 위반, time 누락, DTO 검증 실패, Center NOT_FOUND 등)
+  - **`GET /schedules` 9건**: 쿼리 조합 6가지(기본 / `type=daily` / `type=Smart Custom (...)` URL encoding / `center=1,3,5` 다중 / `page=2&limit=20` / `id=15`) + 페이지네이션 적용·미적용 응답 분기 + 빈 결과
+  - **`GET /schedules/:identifier` 6건**: basic 타입 / smart 타입 / Unknown fallback 응답 + 404 / 422 / 403 에러 응답 JSON
+  - **`DELETE /schedules/:identifier` 5건**: 정상 응답 + 404 / 403 / 409 에러 응답 + `SCHEDULE_IN_USE` 메시지의 정확한 형식(`backup(N), recovery(N), replication(N)`, 0 카운트는 생략)
+  - **overview 6건**: 타입별 basic/advanced 구조, 응답 description 변환표, 요일 변환 예시
+- **`POST /backups` schedule 동봉 예시 20건 추가** — `_includes/zdm/ko/api/docs/backup/regist.md`
+  - 정상 등록: schedule 미동봉(즉시 1회 실행), basic type 1/2/3, smart type 7/11, schedule ID 참조
+  - 검증 실패 응답: smart 모드인데 schedule 누락 / smart type에 advanced 누락 / 잘못된 type 범위 / basic 단일값 위반 / Center NOT_FOUND
+  - 동작 안내: smart 모드 schedule 필수 정책, mode↔schedule 교차 변경 자동 전환 정책, inline schedule 객체 vs schedule ID 참조 우선순위
+- **`POST /recoveries` schedule 동봉 예시 15건 추가** — `_includes/zdm/ko/api/docs/recovery/regist.md`
+  - 정상 등록: schedule 미동봉(즉시 1회 실행), basic type 0/1/2/6, schedule ID 참조
+  - **smart 거부 케이스 명시**: schedule type 7~11(smart) 동봉 시 거부 응답 (정확한 HTTP 코드 + 메시지)
+  - 일반 검증 실패: basic 필수 필드 누락, 잘못된 type 범위, Center NOT_FOUND
+  - 동작 안내: **Recovery는 smart schedule 미지원** (basic 타입 0~6만 허용), schedule 미동봉 시 즉시 1회 실행 동작, `autoStart` 옵션과의 상호작용
+
+### Notes
+- 이전 2026-05-15 schedule 항목들은 모두 반영 완료 확인 (외부 응답 변경 없음)
+- backup/recovery의 schedule 동봉 흐름은 schedule 도메인의 type 0~11 정책을 그대로 따르되, recovery는 smart 타입(7~11) 거부 정책이 별도 적용
+- 총 변경량 124건 (patch 42 + schedule 예시 47 + backup schedule 예시 20 + recovery schedule 예시 15), 실패 0건. 변경량이 크므로 빌드 후 시각적 검증 권장
+
+---
+
 ## [Documentation] - 2026-05-18
 
 ### Changed

@@ -349,3 +349,452 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 </details>
 
 ---
+
+## 예시 모음 (보강)
+
+### 타입별 `basic` 객체 필수 필드 (JSON 골격)
+
+<details markdown="1" open>
+<summary><strong>type 0 ~ 11 basic 필드 구성</strong></summary>
+
+각 타입의 `basic` 객체에 **반드시 포함되어야 하는 키**의 골격입니다. 값은 예시이며, 누락 시 zod 스키마에서 `xxx is required` 에러가 발생합니다.
+
+```jsonc
+// type 0 (Once) — 단발성 실행
+{ "year": "2026", "month": "1", "day": "20", "time": "14:30" }
+
+// type 1 (Every Minute) — 분 간격
+{ "time": "00:00", "interval": { "minute": "5" } }
+
+// type 2 (Hourly) — 시간 간격
+{ "time": "00:30", "interval": { "hour": "2" } }
+
+// type 3 (Daily) — 매일
+{ "time": "03:00" }
+
+// type 4 (Weekly) — 매주 특정 요일 (복수 허용)
+{ "day": "mon, tue", "time": "02:00" }
+
+// type 5 (Monthly Week+Day) — 매월 특정 주 + 요일 (복수 허용)
+{ "week": "2", "day": "tue, wed", "time": "04:00" }
+
+// type 6 (Monthly on Specific Date) — 매월 특정 날짜 (복수 허용)
+{ "day": "15, 20", "time": "05:00" }
+
+// type 7 (Smart Weekly) — 매주 특정 요일 (basic: 단일 요일만)
+{ "day": "mon", "time": "01:00" }
+
+// type 8 (Smart Monthly Week+Day) — basic: 단일 주 + 단일 요일
+{ "week": "1", "day": "mon", "time": "02:00" }
+
+// type 9 (Smart Monthly Date) — basic: 단일 날짜
+{ "day": "1", "time": "03:00" }
+
+// type 10 (Smart Custom Month/Week/Day) — basic: 단일 월/주/요일
+{ "month": "1", "week": "1", "day": "mon", "time": "04:00" }
+
+// type 11 (Smart Custom Month/Date) — basic: 단일 월 + 단일 날짜
+{ "month": "3", "day": "1", "time": "05:00" }
+```
+
+</details>
+
+### Smart 타입 `advanced` 객체 필수 필드 (JSON 골격)
+
+<details markdown="1" open>
+<summary><strong>type 7 ~ 11 advanced 필드 구성 (복수 값 허용)</strong></summary>
+
+```jsonc
+// type 7 advanced — 복수 요일
+{ "day": "tue, fri", "time": "13:00" }
+
+// type 8 advanced — 복수 주 + 복수 요일
+{ "week": "2, 3", "day": "mon, thu", "time": "14:00" }
+
+// type 9 advanced — 복수 날짜
+{ "day": "15, 19", "time": "15:00" }
+
+// type 10 advanced — 복수 월/주/요일
+{ "month": "1,4,7,10", "week": "2,4", "day": "wed, fri", "time": "16:00" }
+
+// type 11 advanced — 복수 월 + 복수 날짜
+{ "month": "3,6,9,12", "day": "15,20,25", "time": "17:00" }
+```
+
+> `basic`과 `advanced`의 키 구성은 동일합니다. 다만 `advanced`는 위 필드들에 **콤마로 구분된 복수 값**을 허용합니다.
+
+</details>
+
+### 요일 입력 ↔ DB 저장 형식 (binary) 변환
+
+<details markdown="1" open>
+<summary><strong>요일 표기 변환 예시</strong></summary>
+
+사용자가 보낸 `day` 필드(요일형, type 4/5/7/8/10)는 `mon,tue,wed,thu,fri,sat,sun` 순서의 7자리 `0|1|...` 패턴으로 저장됩니다 (출력 끝에 `|` 포함).
+
+| 입력 (요청 body의 `day`) | DB 저장(`sDayweek`) | 응답 description 내 표기 |
+|--------------------------|----------------------|---------------------------|
+| `"mon"`                  | `1\|0\|0\|0\|0\|0\|0\|` | `Monday` |
+| `"fri"`                  | `0\|0\|0\|0\|1\|0\|0\|` | `Friday` |
+| `"sun"`                  | `0\|0\|0\|0\|0\|0\|1\|` | `Sunday` |
+| `"mon, fri"`             | `1\|0\|0\|0\|1\|0\|0\|` | `Monday, Friday` |
+| `"tue,wed,thu"` (공백 없음) | `0\|1\|1\|1\|0\|0\|0\|` | `Tuesday, Wednesday, Thursday` |
+| `"sat, sun"`             | `0\|0\|0\|0\|0\|1\|1\|` | `Saturday, Sunday` |
+
+> 콤마 주변 공백은 무시됩니다. `"mon, tue"`와 `"mon,tue"`는 동일하게 처리됩니다 (대소문자도 무시 — 내부적으로 `toLowerCase()` 후 trim).
+
+</details>
+
+<details markdown="1">
+<summary><strong>날짜·주차·월 binary 변환 예시</strong></summary>
+
+| 필드 | 길이 | 입력 예시 | DB 저장 예시 |
+|------|------|-----------|---------------|
+| `day` (날짜형, type 0/6/9/11) | 31 슬롯 | `"1"` | `1\|0\|0\|0\|0\|...\|0\|` (31개) |
+| `day` (날짜형) | 31 슬롯 | `"15, 20"` | `0\|...\|0\|1\|0\|0\|0\|0\|1\|0\|...\|` (15·20 위치에 1) |
+| `week` | 5 슬롯 | `"1"` | `1\|0\|0\|0\|0\|` |
+| `week` | 5 슬롯 | `"2, 4"` | `0\|1\|0\|1\|0\|` |
+| `month` | 12 슬롯 | `"1,4,7,10"` | `1\|0\|0\|1\|0\|0\|1\|0\|0\|1\|0\|0\|` |
+
+</details>
+
+### 타입별 응답 `description` 매핑
+
+<details markdown="1" open>
+<summary><strong>type 별 description 변환 예시 (응답 본문 문구)</strong></summary>
+
+응답의 `description` 필드는 코드에서 type별 영문 템플릿으로 생성되며, `[Basic]`/`[Advanced]` prefix가 붙습니다. Smart 타입은 mode 정보를 등록 시점에 명시 전달합니다.
+
+| type | 예시 입력 | 응답 `description` |
+|------|-----------|---------------------|
+| 0 | `{year:"2026", month:"01", day:"20", time:"14:30"}` | `[Basic] Start working on 20/01/2026 14:30.` |
+| 1 | `{time:"00:00", interval:{minute:"5"}}` | `[Basic] Start working at 00:00 every 5 Minute.` |
+| 2 | `{time:"00:30", interval:{hour:"2"}}` | `[Basic] Start working at 00:30 every 2 Hour.` |
+| 3 | `{time:"03:00"}` | `[Basic] Start working at 03:00 every day.` |
+| 4 | `{day:"mon, tue", time:"02:00"}` | `[Basic] Start working at 02:00 Monday, Tuesday every week.` |
+| 5 | `{week:"2", day:"tue, wed", time:"04:00"}` | `[Basic] Start working at 04:00 Second Week / Tuesday, Wednesday every month.` |
+| 6 | `{day:"15, 20", time:"05:00"}` | `[Basic] Start working at 05:00 15, 20 every month.` |
+| 7 (basic) | `{day:"mon", time:"01:00"}` | `[Basic] Start working every Monday at 01:00` |
+| 7 (advanced) | `{day:"tue, fri", time:"13:00"}` | `[Advanced] Start working every Tuesday, Friday at 13:00` |
+| 8 (basic) | `{week:"1", day:"mon", time:"02:00"}` | `[Basic] Start working at 02:00 on Monday First Week of every month.` |
+| 8 (advanced) | `{week:"2, 3", day:"mon, thu", time:"14:00"}` | `[Advanced] Start working at 14:00 on the Monday, Thursday of the Second Week, Third Week of every month.` |
+| 9 (basic) | `{day:"1", time:"03:00"}` | `[Basic] Start working at 03:00 on the 1 of every month.` |
+| 9 (advanced) | `{day:"15, 19", time:"15:00"}` | `[Advanced] Start working at 15:00 on the 15, 19 of every month.` |
+| 10 (basic) | `{month:"1", week:"1", day:"mon", time:"04:00"}` | `[Basic] Start working at 04:00 on the First Week Monday of January` |
+| 10 (advanced) | `{month:"1,4,7,10", week:"2,4", day:"wed, fri", time:"16:00"}` | `[Advanced] Start working at 16:00 on the Second Week, Fourth Week / Wednesday, Friday of January, April, July, October` |
+| 11 (basic) | `{month:"3", day:"1", time:"05:00"}` | `[Basic] Start working on March 1 at 05:00` |
+| 11 (advanced) | `{month:"3,6,9,12", day:"15,20,25", time:"17:00"}` | `[Advanced] Start working at 17:00 on the 15, 20, 25 of March, June, September, December` |
+
+> 주차 표기는 `1→First`, `2→Second`, `3→Third`, `4→Fourth`, `5→Last`로 변환됩니다. 월 표기는 영문 풀네임(`January` ~ `December`).
+
+</details>
+
+### 요청 ↔ 응답 종합 예시
+
+<details markdown="1" open>
+<summary><strong>일반 스케줄 (type 3 — Daily) 등록 요청·응답</strong></summary>
+
+**요청 — `POST /schedules`**
+
+```json
+{
+  "center": "6",
+  "type": 3,
+  "basic": {
+    "time": "03:00"
+  }
+}
+```
+
+**정상 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "basic": {
+      "id": "1",
+      "type": 3,
+      "state": 1,
+      "description": "[Basic] Start working at 03:00 every day."
+    }
+  },
+  "message": "Schedule data regist result",
+  "timestamp": "2026-05-19 10:30:00"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary><strong>일반 스케줄 (type 5 — Monthly Week + Day) 등록 요청·응답</strong></summary>
+
+**요청**
+
+```json
+{
+  "center": "6",
+  "type": 5,
+  "basic": {
+    "week": "2",
+    "day": "tue, wed",
+    "time": "04:00"
+  }
+}
+```
+
+**정상 응답**
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "basic": {
+      "id": "12",
+      "type": 5,
+      "state": 1,
+      "description": "[Basic] Start working at 04:00 Second Week / Tuesday, Wednesday every month."
+    }
+  },
+  "message": "Schedule data regist result",
+  "timestamp": "2026-05-19 10:30:00"
+}
+```
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>Smart 스케줄 (type 7 — Smart Weekly) 등록 요청·응답</strong></summary>
+
+**요청**
+
+```json
+{
+  "center": "6",
+  "type": 7,
+  "basic": {
+    "day": "mon",
+    "time": "01:00"
+  },
+  "advanced": {
+    "day": "tue, fri",
+    "time": "13:00"
+  }
+}
+```
+
+**정상 응답 (Smart 스케줄: `basic`/`advanced` 모두 반환)**
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "basic": {
+      "id": "21",
+      "type": 7,
+      "state": 1,
+      "description": "[Basic] Start working every Monday at 01:00"
+    },
+    "advanced": {
+      "id": "22",
+      "type": 7,
+      "state": 1,
+      "description": "[Advanced] Start working every Tuesday, Friday at 13:00"
+    }
+  },
+  "message": "Schedule data regist result",
+  "timestamp": "2026-05-19 10:30:00"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary><strong>Smart 스케줄 (type 11 — Smart Custom Month + Date) 등록 요청·응답</strong></summary>
+
+**요청**
+
+```json
+{
+  "center": "6",
+  "type": 11,
+  "basic": {
+    "month": "3",
+    "day": "1",
+    "time": "05:00"
+  },
+  "advanced": {
+    "month": "3,6,9,12",
+    "day": "15,20,25",
+    "time": "17:00"
+  }
+}
+```
+
+**정상 응답**
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "basic": {
+      "id": "31",
+      "type": 11,
+      "state": 1,
+      "description": "[Basic] Start working on March 1 at 05:00"
+    },
+    "advanced": {
+      "id": "32",
+      "type": 11,
+      "state": 1,
+      "description": "[Advanced] Start working at 17:00 on the 15, 20, 25 of March, June, September, December"
+    }
+  },
+  "message": "Schedule data regist result",
+  "timestamp": "2026-05-19 10:30:00"
+}
+```
+
+</details>
+
+### 검증 실패 응답 예시
+
+<details markdown="1" open>
+<summary><strong>대표 에러 응답 (요청 ↔ 응답)</strong></summary>
+
+**Smart 타입(7)에 basic.day로 복수 요일 입력 (409 Conflict)**
+
+```json
+// 요청
+{
+  "center": "6",
+  "type": 7,
+  "basic": { "day": "mon, tue", "time": "01:00" },
+  "advanced": { "day": "wed, fri", "time": "13:00" }
+}
+```
+
+```json
+// 응답
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "Smart Weekly (Specific Day of the Week) type schedule does not allow multiple weekday selections in basic. (Currently selected weekdays: mon, tue)",
+  "timestamp": "2026-05-19 10:30:00"
+}
+```
+
+**Smart 타입(8)에 basic.week로 복수 주 입력 (409 Conflict)**
+
+```json
+// 요청
+{
+  "center": "6",
+  "type": 8,
+  "basic": { "week": "1, 2", "day": "mon", "time": "02:00" },
+  "advanced": { "week": "3, 4", "day": "mon, thu", "time": "14:00" }
+}
+```
+
+```json
+// 응답
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "Smart Monthly (Specific Week and Day of the Week) type schedule does not allow multiple week selections in basic. (Currently selected weeks: 1, 2)",
+  "timestamp": "2026-05-19 10:30:00"
+}
+```
+
+**Smart 타입(11)에 basic.month로 복수 월 입력 (409 Conflict)**
+
+```json
+// 요청
+{
+  "center": "6",
+  "type": 11,
+  "basic": { "month": "1, 3", "day": "1", "time": "05:00" },
+  "advanced": { "month": "3,6,9,12", "day": "15,20,25", "time": "17:00" }
+}
+```
+
+```json
+// 응답
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "Smart Custom (Specific Month and Date) type schedule does not allow multiple month selections in basic. (Currently selected months: 1, 3)",
+  "timestamp": "2026-05-19 10:30:00"
+}
+```
+
+**type 7에 `time` 필드 누락 (400 Bad Request — zod 스키마 검증 단계)**
+
+```json
+// 요청
+{
+  "center": "6",
+  "type": 7,
+  "basic": { "day": "mon" }
+}
+```
+
+```json
+// 응답
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "basic schedule validation failed (type: 7): time: time is required",
+  "timestamp": "2026-05-19 10:30:00"
+}
+```
+
+**type 11에 basic.month 누락 (400 Bad Request — zod 스키마 검증 단계)**
+
+```json
+// 요청
+{
+  "center": "6",
+  "type": 11,
+  "basic": { "day": "1", "time": "05:00" }
+}
+```
+
+```json
+// 응답
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "basic schedule validation failed (type: 11): month: month is required",
+  "timestamp": "2026-05-19 10:30:00"
+}
+```
+
+**요일 형식 오류 — 잘못된 요일 표기 (422 Unprocessable Entity)**
+
+```json
+// 요청 (type 4, `day`에 `monday` 같은 풀네임 사용)
+{
+  "center": "6",
+  "type": 4,
+  "basic": { "day": "monday", "time": "02:00" }
+}
+```
+
+```json
+// 응답
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "Invalid day value. (day must be one of: mon, tue, wed, thu, fri, sat, sun)",
+  "timestamp": "2026-05-19 10:30:00"
+}
+```
+
+</details>
+
+---

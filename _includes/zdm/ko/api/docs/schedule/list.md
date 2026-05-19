@@ -21,7 +21,7 @@
 <summary><strong>요청 예시</strong></summary>
 
 ```bash
-# 전체 스케줄 목록 조회
+# 전체 스케줄 목록 조회 (필터 없음, 페이지네이션 미적용)
 curl -X GET "https://api.example.com/api/schedules" \
   -H "Authorization: Bearer <token>"
 
@@ -31,6 +31,26 @@ curl -X GET "https://api.example.com/api/schedules?type=daily" \
 
 # 활성화 상태별 조회
 curl -X GET "https://api.example.com/api/schedules?state=enabled" \
+  -H "Authorization: Bearer <token>"
+
+# 타입 + 정렬 (오름차순)
+curl -X GET "https://api.example.com/api/schedules?type=daily&sort=asc" \
+  -H "Authorization: Bearer <token>"
+
+# 정확한 원문 타입 (공백/괄호 포함 → URL 인코딩 필요)
+curl -X GET "https://api.example.com/api/schedules?type=Smart%20Custom%20%28Specific%20Month%20and%20Date%29" \
+  -H "Authorization: Bearer <token>"
+
+# 다중 센터 필터 (comma-separated; ID 또는 이름 혼용 가능)
+curl -X GET "https://api.example.com/api/schedules?center=1,3,5" \
+  -H "Authorization: Bearer <token>"
+
+# 페이지네이션 (2페이지, 페이지당 20개)
+curl -X GET "https://api.example.com/api/schedules?page=2&limit=20" \
+  -H "Authorization: Bearer <token>"
+
+# 단일 ID 조회 필터
+curl -X GET "https://api.example.com/api/schedules?id=15" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -120,6 +140,112 @@ curl -X GET "https://api.example.com/api/schedules?state=enabled" \
     "hasPreviousPage": false
   },
   "message": "Schedule information list",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary>다양한 type 값 응답 (200 OK) - PascalCase 표시 + Unknown 폴백</summary>
+
+> 응답의 `type`/`state`는 displayMappings에 따라 첫 글자 대문자 표기로 반환됩니다. DB 값이 매핑되지 않은 경우 `"Unknown"`이 반환됩니다.
+> `description`은 시스템이 자동 생성하며 `[Basic]` 또는 `[Advanced]` 접두사로 시작합니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "message": "Schedule information list",
+  "success": true,
+  "data": [
+    {
+      "id": "1",
+      "center": { "id": "1", "name": "Main Center" },
+      "type": "Daily",
+      "state": "Enabled",
+      "jobName": "daily-backup",
+      "lastRunTime": "2025-01-15 10:00:00",
+      "description": "[Basic] Start working at 10:00 every day."
+    },
+    {
+      "id": "2",
+      "center": { "id": "1", "name": "Main Center" },
+      "type": "Weekly",
+      "state": "Enabled",
+      "jobName": "weekly-backup",
+      "lastRunTime": "2025-01-13 02:30:00",
+      "description": "[Basic] Start working at 02:30 Monday, Wednesday every week."
+    },
+    {
+      "id": "3",
+      "center": { "id": "2", "name": "Branch Center" },
+      "type": "Smart Monthly (Specific Date)",
+      "state": "Disabled",
+      "jobName": "monthly-report",
+      "lastRunTime": "2025-01-01 00:00:00",
+      "description": "[Basic] Start working at 00:00 on the 1 of every month."
+    },
+    {
+      "id": "4",
+      "center": { "id": "2", "name": "Branch Center" },
+      "type": "Smart Custom (Specific Month and Date)",
+      "state": "Enabled",
+      "jobName": "quarterly-snapshot",
+      "lastRunTime": "-",
+      "description": "[Advanced] Start working at 03:00 on the 1, 15 of January, April, July, October"
+    },
+    {
+      "id": "5",
+      "center": { "id": "-", "name": "-" },
+      "type": "Unknown",
+      "state": "Unknown",
+      "jobName": "legacy-job",
+      "lastRunTime": "-",
+      "description": "-"
+    }
+  ],
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary>빈 결과 응답 (200 OK) - 페이지네이션 미적용</summary>
+
+> 일치하는 결과가 없거나 `center` 필터가 어떤 센터에도 매칭되지 않으면 빈 배열을 반환합니다 (에러가 아님).
+
+```json
+{
+  "requestID": "req-abc123",
+  "message": "Schedule information list",
+  "success": true,
+  "data": [],
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary>빈 결과 응답 (200 OK) - 페이지네이션 적용</summary>
+
+> `page` 또는 `limit`을 지정한 상태에서 결과가 0건이면 `data: []`와 빈 페이지네이션 메타가 함께 반환됩니다.
+
+```json
+{
+  "requestID": "req-abc123",
+  "message": "Schedule information list",
+  "success": true,
+  "data": [],
+  "pagination": {
+    "currentPage": 2,
+    "totalPages": 0,
+    "totalItems": 0,
+    "itemsPerPage": 20,
+    "hasNextPage": false,
+    "hasPreviousPage": true
+  },
   "timestamp": "2025-01-15 10:30:00"
 }
 ```
