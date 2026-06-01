@@ -49,6 +49,16 @@
   - **`zdm/ko/cli/2.0.2/index.md`** — `navigation: ko-cli-2.0.0` → `ko-cli-2.0.2`
   - v2.0.1 은 patch stable 이라 그대로 base v2.0.0 사이드바 공유 — v2.0.2 (latest) 만 처리
 
+### Fixed (CI 빌드 안정성)
+- **`Gemfile.lock` git 추적 활성화 (`.gitignore` 에서 제거) + `x86_64-linux` 플랫폼 보강** — GitHub Actions 빌드의 `sass-embedded` 컴파일 실패 (`exit code 5`) 영구 해결.
+  - **근본 원인**: `Gemfile.lock` 이 `.gitignore` 에 등재되어 git 추적 안 됨 → GitHub Actions 매 빌드마다 lock 없이 `bundle install` → fresh resolve 시 transitive 의존 `sass-embedded` 최신(1.100.0) 가져옴 → Ruby 3.1.7 환경에서 native 컴파일 실패.
+  - **트리거**: `actions/setup-ruby` 의 `bundler-cache: true` 가 평소엔 캐시 hit 으로 잠재 문제를 가려왔으나 캐시 만료 + sass-embedded 신버전 게시 타이밍이 겹치며 노출.
+  - **조치**:
+    - `.gitignore` 에서 `Gemfile.lock` 라인 제거 — Jekyll 사이트는 애플리케이션이므로 lock commit 이 Bundler 공식 표준
+    - `Gemfile.lock` 의 `PLATFORMS` 에 `x86_64-linux` 추가 (`bundle lock --add-platform x86_64-linux`)
+    - `sass-embedded (1.69.5-x86_64-linux-gnu)` precompiled variant 라인 추가 — Bundler 가 source 컴파일 없이 RubyGems 의 native binary 다운로드
+  - **효과**: 캐시 만료 / sass-embedded 신버전 게시 / Ruby 마이너 버전 변동과 무관하게 항상 1.69.5 의 linux precompiled binary 사용. 빌드 재현성 보장.
+
 ### Improved (절차서 보강)
 - **CLAUDE.md 3단계 (D-2) 신설 — "latest 인 재사용 패치 시 사이드바·wrapper 분리"** — 본 작업(v2.0.2 nav 섹션 + 64개 wrapper 신설) 의 트리거 조건/자동화 명령/검증 항목을 절차서로 명문화. 적용 조건 표(메이저·마이너 / stable patch / latest patch) 로 어디까지 적용하는지 명확화. stable patch 는 base 사이드바 공유 유지 정책 명시. 향후 latest patch 출시 시 명령 복붙으로 처리 가능.
 - **CLAUDE.md 3단계 (D) 박스 보조 안내 추가** — "단, 재사용 패치가 `status: latest` 인 경우는 예외 — (D-2) 절차로 분리" 한 줄로 (D) 와 (D-2) 의 분기 트리거 환기.
