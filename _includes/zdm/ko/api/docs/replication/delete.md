@@ -49,19 +49,32 @@ curl -X DELETE "https://api.example.com/api/replications/backup-replication-01?c
 
 **성공 응답 (200 OK)**
 
+> **v2.0.2 변경 사항**: 응답 양식이 backup/recovery 와 통일되었습니다. 기존 `deletedJob` / `deletedRelations` 키는 제거되고 `jobInfo[]` + `summary` 구조로 교체되었습니다. 이전 양식은 [v2.0.1](./delete/2.0.1.md) 문서를 참고하세요.
+
 ```json
 {
   "success": true,
   "requestID": "req-abc123",
   "data": {
-    "deletedJob": {
-      "id": 1,
-      "name": "backup-replication-01"
-    },
-    "deletedRelations": {
-      "replicationInfo": 1,
-      "history": 5,
-      "logEvent": 12
+    "jobInfo": [
+      {
+        "name": "backup-replication-01",
+        "deletedComponents": {
+          "basicInfo": true,
+          "detailInfo": true,
+          "historyData": true,
+          "logData": true
+        }
+      }
+    ],
+    "summary": {
+      "state": "success",
+      "affectedComponents": {
+        "basicInfoDeleted": 1,
+        "detailInfoDeleted": 1,
+        "historyDataDeleted": 5,
+        "logDataDeleted": 12
+      }
     }
   },
   "message": "Replication job deleted",
@@ -76,11 +89,18 @@ curl -X DELETE "https://api.example.com/api/replications/backup-replication-01?c
 
 | 필드 | 타입 | 설명 |
 |------|------|------|
-| `deletedJob.id` | number | 삭제된 작업 ID |
-| `deletedJob.name` | string | 삭제된 작업 이름 |
-| `deletedRelations.replicationInfo` | number | 삭제된 복제 정보 수 |
-| `deletedRelations.history` | number | 삭제된 히스토리 수 |
-| `deletedRelations.logEvent` | number | 삭제된 로그 이벤트 수 |
+| `jobInfo[].name` | string | 삭제된 작업 이름 |
+| `jobInfo[].deletedComponents.basicInfo` | boolean | 기본 정보(메인 테이블) 삭제 여부 — atomic transaction 이라 성공 시 항상 `true` |
+| `jobInfo[].deletedComponents.detailInfo` | boolean | 상세 정보(job_replication_info) 삭제 여부 |
+| `jobInfo[].deletedComponents.historyData` | boolean | 히스토리 데이터 삭제 여부 |
+| `jobInfo[].deletedComponents.logData` | boolean | 로그 데이터 삭제 여부 |
+| `summary.state` | string | 삭제 결과 — atomic 이라 응답 본문 만들어지면 항상 `"success"` (실패 시 throw → 404/500) |
+| `summary.affectedComponents.basicInfoDeleted` | number | 삭제된 기본 정보 수 (Main, 항상 1) |
+| `summary.affectedComponents.detailInfoDeleted` | number | 삭제된 상세 정보 수 (Info affectedRows) |
+| `summary.affectedComponents.historyDataDeleted` | number | 삭제된 히스토리 수 |
+| `summary.affectedComponents.logDataDeleted` | number | 삭제된 로그 이벤트 수 |
+
+> **참고**: `partition` 키와 `errorMessage` 키는 응답에 부재합니다 (replication 은 partition 개념 없음, atomic 이라 실패 시 throw).
 
 </details>
 

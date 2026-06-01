@@ -40,18 +40,58 @@ curl -X DELETE "https://api.example.com/api/os-replications/1" \
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
+> **v2.0.2 변경 사항**: 응답 양식이 backup/recovery 와 통일되었습니다. 기존 `deletedJob` / `deletedRelations` 키는 제거되고 `jobInfo[]` + `summary` 구조로 교체되었습니다. 이전 양식은 [v2.0.1](./delete/2.0.1.md) 문서를 참고하세요.
+
 ```json
 {
   "requestID": "...",
   "success": true,
   "data": {
-    "deletedJob": { "id": 1, "name": "os_repl_upload_1712345678901" },
-    "deletedRelations": { "replicationInfo": 1, "history": 5, "logEvent": 12 }
+    "jobInfo": [
+      {
+        "name": "os_repl_upload_1712345678901",
+        "deletedComponents": {
+          "basicInfo": true,
+          "detailInfo": true,
+          "historyData": true,
+          "logData": true
+        }
+      }
+    ],
+    "summary": {
+      "state": "success",
+      "affectedComponents": {
+        "basicInfoDeleted": 1,
+        "detailInfoDeleted": 1,
+        "historyDataDeleted": 5,
+        "logDataDeleted": 12
+      }
+    }
   },
   "message": "Os Replication deleted",
   "timestamp": "2026-04-07 12:00:00"
 }
 ```
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>응답 필드</strong></summary>
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `jobInfo[].name` | string | 삭제된 작업 이름 |
+| `jobInfo[].deletedComponents.basicInfo` | boolean | 메인 테이블 삭제 여부 — atomic transaction 이라 성공 시 항상 `true` |
+| `jobInfo[].deletedComponents.detailInfo` | boolean | 상세 정보 삭제 여부 |
+| `jobInfo[].deletedComponents.historyData` | boolean | 히스토리 데이터 삭제 여부 |
+| `jobInfo[].deletedComponents.logData` | boolean | 로그 데이터 삭제 여부 |
+| `summary.state` | string | atomic 이라 응답 본문 만들어지면 항상 `"success"` (실패 시 throw → 404/500) |
+| `summary.affectedComponents.basicInfoDeleted` | number | 삭제된 기본 정보 수 (Main, 항상 1) |
+| `summary.affectedComponents.detailInfoDeleted` | number | 삭제된 상세 정보 수 |
+| `summary.affectedComponents.historyDataDeleted` | number | 삭제된 히스토리 수 |
+| `summary.affectedComponents.logDataDeleted` | number | 삭제된 로그 이벤트 수 |
+
+> **참고**: `partition` 키와 `errorMessage` 키는 응답에 부재합니다.
 
 </details>
 

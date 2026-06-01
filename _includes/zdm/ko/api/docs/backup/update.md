@@ -137,6 +137,8 @@ curl -X PUT "https://api.example.com/api/backups/1" \
 
 **성공 응답 (200 OK)**
 
+> **v2.0.2 변경 사항**: `Schedule` / `Schedule(Basic)` / `Schedule(Advanced)` 필드의 `previous` / `new` 가 단순 ID(숫자) 가 아닌 `{ id, type, description }` 객체 구조로 확장되었습니다. 그 외 필드 (`jobName`, `mode`, `rotation` 등) 는 기존 그대로 단순 값. 이전 양식은 [v2.0.1](./update/2.0.1.md) 문서를 참고하세요.
+
 ```json
 {
   "success": true,
@@ -171,9 +173,17 @@ curl -X PUT "https://api.example.com/api/backups/1" \
           "field": "compression",
           "previous": "not use",
           "new": "use"
+        },
+        {
+          "field": "Schedule",
+          "previous": { "id": 5,  "type": "daily", "description": "매일 03:00 실행" },
+          "new":      { "id": 10, "type": "daily", "description": "매일 03:00 실행" }
         }
       ]
-    }
+    },
+    "notices": [
+      "Schedule was duplicated (1 schedule = 1 job principle). Source schedule ID: 5, new schedule ID: 10."
+    ]
   },
   "message": "Backup job updated",
   "timestamp": "2025-01-15 10:30:00"
@@ -193,8 +203,19 @@ curl -X PUT "https://api.example.com/api/backups/1" \
 | `jobInfo[].errorMessage` | string | 실패 시 오류 메시지 |
 | `summary.state` | string | 수정 결과 (`success` / `fail`) |
 | `summary.updatedFields[].field` | string | 수정된 필드명 |
-| `summary.updatedFields[].previous` | any | 수정 전 값 |
-| `summary.updatedFields[].new` | any | 수정 후 값 |
+| `summary.updatedFields[].previous` | any \| ScheduleChangeValue \| null | 수정 전 값. **Schedule 계열** (`Schedule` / `Schedule(Basic)` / `Schedule(Advanced)`) 인 경우 `{ id, type, description }` 객체 또는 `null` (이전 schedule 없음 / 모드 전환 reset). 그 외 단순 값. |
+| `summary.updatedFields[].new` | any \| ScheduleChangeValue \| null | 수정 후 값. Schedule 계열은 동일 객체 구조 |
+| `notices[]` | string[] | 부가 안내 메시지 (예: schedule 복제 알림 — `Source schedule ID: N, new schedule ID: M`) |
+
+**ScheduleChangeValue 구조** (v2.0.2 신규):
+
+| 하위 필드 | 타입 | 설명 |
+|------|------|------|
+| `id` | number | schedule ID |
+| `type` | string | schedule 타입 lowercase short alias (예: `daily`, `weekly`, `monthly_date`, `smart_weekly`, `smart_monthly_week`, `smart_monthly_date`, `smart_custom_monthly_week`, `smart_custom_monthly_date`, `once`, `every_minute`, `hourly`, `unknown`) |
+| `description` | string | schedule 내용 한국어 설명 (예: `"매일 03:00 실행"`, `"매주 Monday 03:00 실행"`, `"매월 1, 15일 03:00 실행"`). 조회 실패 시 `"스케줄 조회 실패"` |
+
+> **참고**: id ≤ 0 (이전 schedule 없음) 인 경우 해당 필드는 `null` 로 반환됩니다. schedule 자동 복제로 새 ID 가 발급된 경우 `notices` 에 안내 메시지 첨부.
 
 </details>
 

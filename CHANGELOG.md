@@ -6,6 +6,55 @@
 
 ---
 
+## [Documentation] - 2026-06-01
+
+### Added
+- **ZDM-API v2.0.2 신규 버전 추가 (부분 갱신 릴리즈)** — `_data/zdm/common/versions.yml` 의 `api:` 최상단에 v2.0.2 추가(`status: latest`, `docs: "2.0.2"`, downloads `/downloads/zdm-api/2.0.2/zdm-api-linux.tar.gz`). 기존 v2.0.1 → stable 강등. 신규 intro 페이지 `zdm/ko/api/2.0.2/index.md` + 80+ wrapper (`zdm/ko/api/2.0.2/docs/**/*.md`, v2.0.0 통째 복사 + `navigation` 키 일괄 `ko-api-2.0.2` 치환). `_data/navigation.yml` 의 `ko-api-2.0.2:` 신규 섹션(182 line, 75 URL) 추가 + `ko-zdm` 메인 링크 `ZDM-API 문서` URL → `/zdm/ko/api/2.0.2/index`. `zdm/ko/api/index.md` 의 redirect / window.location / refresh meta 3곳 모두 `/zdm/ko/api/2.0.2/index` 로 갱신.
+- **ZDM-API v2.0.2 changelog include 신규 생성** — `_includes/zdm/ko/api/changelog/2.0.2.md`. 사용자 facing 변경 2건 + 운영 개선 한 줄 요약 (BREAKING 응답 양식 통일 + Schema Extension Schedule detail 구조). 1) **BREAKING**: `DELETE /replications/:identifier` 와 `DELETE /os-replications/:identifier` 응답이 `{ deletedJob, deletedRelations }` → backup/recovery 와 동일한 `{ jobInfo[] + summary }` 구조로 교체. atomic transaction 특성으로 `state` 는 항상 `"success"`, `deletedComponents.*` 모두 true. `partition` / `errorMessage` 키 부재 (replication 미사용 / atomic throw). 기존 `deletedJob.id` 제거. 2) **Schema Extension**: `PUT /backups/:identifier` 응답의 `summary.updatedFields[]` 중 Schedule 계열 (`Schedule` / `Schedule(Basic)` / `Schedule(Advanced)`) 의 `previous` / `new` 가 단순 ID(숫자) → `{ id, type, description }` 객체로 확장. id ≤ 0 → `null`. schedule 자동 복제(1 schedule = 1 job 원칙) 시 `notices` 안내 메시지. ScheduleChangeValue 의 `type` 은 lowercase short alias (`daily`/`weekly`/`monthly_date`/`smart_*` 등). 그 외 필드 응답 형식 변경 없음. 클라이언트 영향도 표 동봉. 운영 개선 항목으로 내부 아키텍처 정비(Modular Monolith + DDD-lite 3계층 통일, port/adapter 폐기, infrastructure/persistence → repository 디렉토리 단순화, dependency-cruiser 도입)는 "외부 API 변경 없음" 한 줄로 요약.
+- **ZDM-API v2.0.2 문서 컨텐츠 수정 — 변경된 3 파일 + 이전 버전 보존본 분리** (CLAUDE.md 5단계 절차).
+  - `_includes/zdm/ko/api/docs/replication/delete.md`: 응답 예시 + 응답 필드 표를 `jobInfo[] + summary` 양식으로 교체. v2.0.2 변경 사항 안내 박스 + 이전 양식 링크([v2.0.1](./delete/2.0.1.md)) 추가. partition / errorMessage 키 부재 안내.
+  - `_includes/zdm/ko/api/docs/os-replication/delete.md`: 동일 패턴. 응답 필드 표 신규 추가 (기존엔 없었음).
+  - `_includes/zdm/ko/api/docs/backup/update.md`: 응답 예시의 `updatedFields[]` 배열에 Schedule 케이스 + `notices[]` 안내 메시지 추가. 응답 필드 표에 ScheduleChangeValue 구조 (id / type / description) 별도 표 + previous/new union 타입 (`any | ScheduleChangeValue | null`) 명시.
+  - 이전 버전 보존본 분리 — `_includes/zdm/ko/api/docs/{replication,os-replication}/delete/2.0.1.md` 와 `_includes/zdm/ko/api/docs/backup/update/2.0.1.md` 신규 (직전 공용 파일 그대로 복사). `zdm/ko/api/2.0.0/docs/{replication,os-replication}/delete.md` 와 `zdm/ko/api/2.0.0/docs/backup/update.md` 의 include 경로 3곳을 신 보존본 (`.../2.0.1.md`) 으로 변경 — v2.0.0 / v2.0.1 페이지가 이전 양식 그대로 보존됨 (v2.0.1 은 `docs: "2.0.0"` 재사용 패치이므로 v2.0.0 wrapper 갱신만으로 함께 보존).
+- **메인 랜딩페이지 ZDM-API 섹션 — 독립 details 블록 추가 (부분 갱신 릴리즈 정책 8단계)** — `zdm/ko/index.md` 의 `## 업데이트 목록` > `### ZDM-API` 헤더 latest 배지 `v2.0.1` → `v2.0.2 (2026-06-01)`. 신규 v2.0.2 독립 details 블록을 ZDM-API 섹션 최상단에 추가 (v2.0.0 details 위). 부분 갱신 릴리즈는 patch 배지 병기가 아닌 독립 details 가 정책 (CLAUDE.md 8단계 표). v2.0.0 details 는 v2.0.0 + patch v2.0.1 (재사용 패치) 그대로 유지.
+- **ZDM-CLI v2.0.1 / v2.0.2 changelog include 신규 생성** — `_includes/zdm/ko/cli/changelog/{2.0.1,2.0.2}.md`. `/project/zdm-cli-v2/CHANGELOG.md` 의 `[2.0.1]` 3개 헤더(2026-05-20/21) 와 `[2.0.2]` 4개 헤더(2026-05-28/29) 를 사용자 facing 변경 위주로 통합 정리.
+  - **v2.0.1**: `--interactive` 신규 도입(`schedule create`, `backup regist`) / `backup monit` 출력 개편(`--log` 옵션 + message 한 줄) / `backup monit --server-*` description 정정 / `backup update --schedule*` description 보강 / `backup regist --mode` 기본값 `full` / `backup regist --ind` Individual JSON 예시 enum 정정 / Node 빌드 v18→v22 hotfix
+  - **v2.0.2**: `schedule create --interactive` type 별 정밀 분기 / `replication·os-replication delete` 응답 양식 통일 / `backup monit` message status 별 placeholder / dependency-cruiser 도입
+- **CLI v2.0.1 / v2.0.2 intro 페이지 신규 생성** — `zdm/ko/cli/{2.0.1,2.0.2}/index.md`. 재사용 패치 패턴(`navigation: ko-cli-2.0.0` + `version="2.0.0"` 재사용 + changelog 만 분기) 적용. 버전 셀렉터 드롭다운에서 v2.0.1, v2.0.2 가 보이며 클릭 시 해당 intro 로 진입.
+
+### Changed
+- **`_data/zdm/common/versions.yml` cli 섹션 갱신** — `v2.0.2` 를 `status: latest` 로 신규 추가, `v2.0.1` 을 `stable` 로 추가, `v2.0.0` 은 `latest → stable` 로 강등. v2.0.1/v2.0.2 모두 `docs: "2.0.0"` 재사용 패치. 다운로드 파일도 v2.0.0 디렉토리 재사용 (별도 빌드 산출물 미배치).
+- **`zdm/ko/index.md` ZDM-CLI 섹션 갱신**:
+  - 헤더: `latest v2.0.0 (2026-04-17)` → `latest v2.0.2 (2026-05-29) · base v2.0.0 (2026-04-17) · patch v2.0.1 (2026-05-21)`
+  - v2.0.0 details summary 에 `patch v2.0.1`, `patch v2.0.2` 배지 병기
+  - 메인 문서 링크에 `[v2.0.2 문서 바로가기]` 병기 (재사용 패치가 latest 일 때 latest intro 로 가도록 — CLAUDE.md 167~168 규정)
+  - changelog include 3개(`2.0.2.md` / `2.0.1.md` / `2.0.0.md`) 시간 역순 노출
+- **`zdm/ko/cli/index.md` 리다이렉트 갱신** — `redirect_to` / `window.location.href` / `<meta refresh>` / 하단 링크 모두 `/zdm/ko/cli/2.0.0/index` → `/zdm/ko/cli/2.0.2/index` (6단계).
+- **`/project/zdm-cli-v2/CHANGELOG.md` 헤더 표기 통일** — `[2.0.2_edit_*]` 형식 4개 헤더(`_edit_delete-uniform`, `_edit_arch`, `_edit_C3`, `_edit_C2`) 를 모두 `[2.0.2]` 로 변경.
+
+### Notes
+- CLI docs 본문(`_includes/zdm/ko/cli/docs/**`)은 변경 없음 — v2.0.1/v2.0.2 모두 docs 재사용 패치. `backup monit --log` 등 신규 옵션의 docs 본문 반영은 별도 작업 필요 시 분리.
+- 다운로드 바이너리도 v2.0.0 빌드 재사용 — v2.0.2 별도 빌드 산출물이 배치되면 `versions.yml` 의 `downloads[].file` 경로만 갱신.
+
+### Improved (자동화)
+- **6단계 리다이렉트 라우터 Liquid 자동화** — `zdm/ko/cli/index.md`, `zdm/ko/api/index.md` 의 latest 버전 URL 을 Liquid 변수(`latest = ... | where: "status","latest" | first`) 로 자동 추출하도록 재작성. frontmatter `redirect_to:` 제거 (jekyll-redirect-from 플러그인 미사용으로 사실상 메타데이터일 뿐). **이제 새 버전 출시 시 두 파일은 갱신 불필요 — `versions.yml` 만 갱신하면 4곳(JS 리다이렉트 / meta refresh / 하단 링크 / 과거 frontmatter) 모두 자동 반영.**
+- CLAUDE.md 6단계 가이드 업데이트 — "갱신 필요" → "자동 (별도 갱신 불필요)" 로 변경, 새 라우터 템플릿과 jekyll-redirect-from 도입 시 주의사항 명시.
+
+### Fixed (후속 누락 보정)
+- **`_data/navigation.yml` `ko-zdm` 메인 사이드바의 "ZDM-CLI 문서" 링크** — `/zdm/ko/cli/2.0.0/index` → `/zdm/ko/cli/2.0.2/index` 로 갱신. 사이드바에서 클릭 시 v2.0.0 으로 빠지던 문제 정정. (API 메인 링크는 이전 작업에서 v2.0.2 로 이미 갱신된 상태였음 — CLI 만 누락)
+- **`zdm/ko/index.md` ZDM-CLI 헤더 표기 단순화** — `latest v2.0.2 (2026-05-29) · base v2.0.0 (2026-04-17) · patch v2.0.1 (2026-05-21)` → `latest v2.0.2 (2026-05-29)` 로 단순화. ZDM-API 헤더(`latest v2.0.2 (2026-06-01)`) 와 표기 일관성 통일. patch 이력은 details summary 의 배지로 그대로 보존.
+- **CLI v2.0.2 전용 사이드바 + docs wrapper 신설 (UX 정정)** — v2.0.2 intro 에서 사이드바 항목 클릭 시 `/zdm/ko/cli/2.0.0/docs/...` 로 빠지던 문제 정정 (CLAUDE.md 재사용 패치 정책 그대로의 결과였으나 사용자 입장에서 최신 버전 URL 로 가는 게 자연스럽다는 판단).
+  - **`_data/navigation.yml`** — `ko-cli-2.0.2` 섹션 신설 (`ko-cli-2.0.0` 복제 + URL 일괄 `/cli/2.0.0/` → `/cli/2.0.2/`)
+  - **`zdm/ko/cli/2.0.2/docs/`** — 64개 wrapper 신설 (2.0.0/docs 복제 + frontmatter `navigation: ko-cli-2.0.0` → `ko-cli-2.0.2`). 실제 본문은 `_includes/zdm/ko/cli/docs/...` 동일 include 재사용으로 0줄 중복
+  - **`zdm/ko/cli/2.0.2/index.md`** — `navigation: ko-cli-2.0.0` → `ko-cli-2.0.2`
+  - v2.0.1 은 patch stable 이라 그대로 base v2.0.0 사이드바 공유 — v2.0.2 (latest) 만 처리
+
+### Improved (절차서 보강)
+- **CLAUDE.md 3단계 (D-2) 신설 — "latest 인 재사용 패치 시 사이드바·wrapper 분리"** — 본 작업(v2.0.2 nav 섹션 + 64개 wrapper 신설) 의 트리거 조건/자동화 명령/검증 항목을 절차서로 명문화. 적용 조건 표(메이저·마이너 / stable patch / latest patch) 로 어디까지 적용하는지 명확화. stable patch 는 base 사이드바 공유 유지 정책 명시. 향후 latest patch 출시 시 명령 복붙으로 처리 가능.
+- **CLAUDE.md 3단계 (D) 박스 보조 안내 추가** — "단, 재사용 패치가 `status: latest` 인 경우는 예외 — (D-2) 절차로 분리" 한 줄로 (D) 와 (D-2) 의 분기 트리거 환기.
+
+---
+
 ## [Documentation] - 2026-05-19
 
 ### Fixed
@@ -37,11 +86,23 @@
   - **smart 거부 케이스 명시**: schedule type 7~11(smart) 동봉 시 거부 응답 (정확한 HTTP 코드 + 메시지)
   - 일반 검증 실패: basic 필수 필드 누락, 잘못된 type 범위, Center NOT_FOUND
   - 동작 안내: **Recovery는 smart schedule 미지원** (basic 타입 0~6만 허용), schedule 미동봉 시 즉시 1회 실행 동작, `autoStart` 옵션과의 상호작용
+- **`POST /backups` 혼합 schedule ID 참조 예시 4건 추가** — 객체 + basic·advanced 부분 ID 조합 지원 케이스
+  - 정상 케이스 3건: basic만 ID(`{ "type": 1, "basic": 15 }`) / smart 양쪽 모두 ID(`{ "type": 7, "basic": 15, "advanced": 16 }`) / smart basic 새 객체 + advanced ID
+  - 검증 실패 1건: 부분 ID 미존재 시 응답
+  - 동작 안내: 부분 ID도 전체 ID와 동일하게 참조 schedule 데이터를 새 schedule 레코드로 INSERT (응답 schedule ID는 입력 ID와 다른 새 ID)
+- **`POST /recoveries` 부분 schedule ID 참조 예시 3건 추가** — basic만 ID 조합 지원 케이스
+  - 정상 케이스 1건: basic만 ID(`{ "type": 3, "basic": 15 }`) — basic type 0~6 모두 동일 동작 (type 1·3·5 등은 같은 코드 경로라 단일 예시로 통합)
+  - 검증 실패 1건: basic ID 미존재 시 응답
+  - 동작 안내: Recovery는 smart 미지원이므로 `advanced` 필드 자체 사용 안 함, 부분 ID는 `basic`에만 적용
+- **공개 에러 코드 정정 — 부분 ID 미존재 경로** (backup / recovery 양쪽)
+  - 코드 검증 결과 전체 ID(`"schedule": 999`) 경로는 `JOB-ERROR-100` / 404를 그대로 노출하지만, 부분 ID(`schedule.basic: 999`) 경로는 **`SCHEDULE-ERROR-01` / 404** (`Schedule ID '999' not found.`)가 정확한 코드. 두 경로의 차이를 에러 코드 표·예시에 분리 명시
+  - `JOB-ERROR-108` (`INVALID_SCHEDULE_MODE`)도 smart 부분 ID에서 selection-bit 불일치 시 발생 가능 — backup 안내 박스에 흡수
 
 ### Notes
 - 이전 2026-05-15 schedule 항목들은 모두 반영 완료 확인 (외부 응답 변경 없음)
 - backup/recovery의 schedule 동봉 흐름은 schedule 도메인의 type 0~11 정책을 그대로 따르되, recovery는 smart 타입(7~11) 거부 정책이 별도 적용
-- 총 변경량 124건 (patch 42 + schedule 예시 47 + backup schedule 예시 20 + recovery schedule 예시 15), 실패 0건. 변경량이 크므로 빌드 후 시각적 검증 권장
+- schedule ID는 전체 / 부분 어느 형태든 참조 시 새 schedule 레코드로 INSERT — 응답에 입력 ID와 다른 새 ID 노출되는 동작은 의도된 동작이며 양 도메인 공통
+- 총 변경량 131건 (patch 42 + schedule 예시 47 + backup schedule 예시 20 + recovery schedule 예시 15 + backup 혼합 ID 예시 4 + recovery 부분 ID 예시 3), 실패 0건. 변경량이 크므로 빌드 후 시각적 검증 권장
 
 ---
 
