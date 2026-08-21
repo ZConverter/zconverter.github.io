@@ -6,6 +6,98 @@
 
 ---
 
+## [Documentation] - 2026-08-21 (zdm-api 2.0.2 브랜치 최신 코드 동기화 — 보안 변경 반영 · 끊긴 링크 정정)
+
+### Context
+- `zdm-api-v2` `origin/2.0.2` HEAD(`00153e7`, 2026-08-20) 기준으로 gitpage 문서 전수 대조.
+- 직전 문서 반영 시점(2026-06-01) 이후의 커밋 중 **2026-07-28 보안 강화 커밋(`d6f5112`)** 이 문서에 미반영 상태였음.
+- 2026-08-19~20 로깅 개선 커밋군은 응답 status·본문 무변경 → 문서 영향 없음(확인 완료).
+- `src/domain/*/schemas/*`, `src/domain/*/dto/*` 78개 파일 전수 diff 대조로 잔여 계약 변경 2건 추가 발굴.
+
+### Added
+- `_includes/zdm/ko/api/docs/user/get.md` · `user/update.md` — **403 Forbidden** 신규. 토큰 주체와 `:identifier` 불일치 시 본인 리소스만 접근 허용
+- `_includes/zdm/ko/api/docs/cloud-auth/region-list.md` — 에러 응답 · 에러 코드 섹션 신규(401 / 400 platform 화이트리스트)
+- `_includes/zdm/ko/api/docs/cloud-auth/zos-download.md` — 에러 응답 · 에러 코드 섹션 신규(401 / 400 `FILE-ERROR-11` / 404 / 500 stream)
+- `_includes/zdm/ko/api/docs/file/download.md` — `FILE-ERROR-11` 에러 코드 행 추가
+- `_includes/zdm/ko/api/changelog/2.0.2.md` — `Security — 인증·인가 강화` 섹션 + `신규 에러코드` 표(`FILE-ERROR-11`, `RATE-LIMIT-01`) + `PUT /backups/:identifier` schema extension 섹션 신규
+
+### Fixed
+- **HTTP 메서드 오기 정정** — `_includes/zdm/ko/api/changelog/2.0.2.md` 의 `PATCH /replications/:id` · `PATCH /os-replications/:id` · `PATCH /recoveries/:id` (총 7곳) → 실제 라우트인 **`PUT`** 으로 정정. 문서대로 PATCH 호출 시 404
+- **끊긴 상대 링크 7건 정정**
+  - `backup/regist.md` (2곳) — `../overview` → `../schedule/overview`
+  - `schedule/regist.md` (2곳) — `../overview` → `./overview`
+  - `backup/update.md` · `replication/delete.md` · `os-replication/delete.md` — `./{page}/2.0.1.md`(include 원본, 렌더 페이지 아님) → `../../../2.0.0/docs/...`
+  - `changelog/2.0.2.md` — 랜딩페이지에서도 include 되므로 상대 링크를 절대 경로로 전환
+- **`PUT /backups/:identifier` 요청 스키마** — `repository.id` 필수 → **선택**. 생략 시 기존 repository 유지, `path` 만 변경 가능 (등록 흐름은 기존대로 필수)
+- **`PUT /backups/:identifier` 응답** — `notices?: string[]` 필드 문서화. schedule 을 ID 로만 지정한 경우 안내 메시지 포함, 비어 있으면 키 생략
+- **검증 실패(400/422) 응답 예시 4건 정정** — `recovery/regist.md` 3건 · `file/download.md` 1건. 실제 응답은 `error` 에 메시지가 이어붙지 않고 `error` + `detail.validationErrors` 로 분리됨
+- **`GET /files/download/:fileName` 404 응답 형식 정정** — `error.code` 가 문자열이 아닌 `{ code, httpCode, message }` 객체로 내려가는 실제 동작 반영 + 공통 형식 미준수 사항 명시
+- **Kramdown 렌더 버그** — `file/download.md` 에러 표의 백틱 없는 `<fileName>` 이 HTML 태그로 파싱되어 사라지던 문제 정정
+- **랜딩 include 엔드포인트 오기** — `_includes/zdm/ko/api/index.md` 의 `GET /zdm-centers` → `GET /zdms`, `POST /auth/issue` → v2.0.0 이상은 `POST /token/issue` 로 버전 분기
+- **CLI os-replication 모드 값 잔재** — `_includes/zdm/ko/cli/docs/os-replication/{list,regist,update,overview}.md` 의 `incremental` → `increment` (총 9곳). 2026-07-08 감사에서 API 측만 정정되고 CLI 측이 누락되어 있었음. 문서대로 호출 시 API 400
+- `zdm/ko/api/2.0.2/index.md` — include 인자 `version="2.0.0"` → `version="2.0.2"` (자체 docs 보유 버전이므로 릴리즈 절차 3단계 (B) 기준)
+
+### 참고 (스킵)
+- 이전 버전 스냅샷(`_includes/zdm/ko/{api,cli}/docs/**/1.3.1.md`, `**/2.0.1.md`)은 사용자 참조 보존 원칙에 따라 미변경
+- 추가 변경은 공용 include 에 `v2.0.2` 인라인 표기로 반영(기존 관행 — 응답 양식 BREAKING 변경만 5단계 버전 분리 적용)
+- 배포·환경변수(`ENABLE_SWAGGER`, `CORS_ALLOWED_ORIGINS`, `LOG_LEVEL` 등) 전용 문서 페이지는 사이트에 부재 — 신설 여부 별도 결정 필요
+
+---
+
+## [Fix] - 2026-07-08 (Replication mode 값 `incremental` → `increment` 정정 · License 응답 `id` 필드 보강)
+
+### Context
+- 2026-07-08 gitpage sync audit (`zdm-api-v2/orgs/docwriter/reports/2026-07-08-gitpage-sync-audit.md`) 결과 발견.
+- v2.0.2 에서 API 는 `increment` 로 엄격 검증 (`VALID_REPLICATION_MODE_VALUES = ["full","increment","sync"]`, `VALID_OS_REPLICATION_MODE_VALUES = ["full","increment"]`, `VALID_REPLICATION_MODE_V1_VALUES = ["full","increment"]`). gitpage docs 는 v2.0.2 스냅샷 이전의 `incremental` 잔재 존재.
+- **사용자 impact (GAP-0008)**: 문서 예시대로 호출 시 API 400 리턴.
+- **사용자 impact (GAP-0010)**: License get/list/regist 응답에 실제로는 `id: number` 존재 (`src/domain/license/dto/response/license-get-response-base.dto.ts` line 8) 하나 문서 예시 · 필드 표에 누락 → 사용자가 후속 API 호출 (assign / delete) 시 id 취득 방법 불분명.
+
+### Fixed
+- `_data/zdm/common/enums.yml` — `replication-v1-modes` (line 133) 와 `replication-modes` (line 149) 의 `incremental` → `increment` (root cause)
+- `_includes/zdm/ko/api/docs/replication/regist.md` — 요청 예시 mode 값 2개 치환 (line 50 · line 158 V1 예시)
+- `_includes/zdm/ko/api/docs/replication/update.md` — 요청 예시 (line 33) 및 `updatedFields[].new` (line 148) 치환
+- `_includes/zdm/ko/api/docs/os-replication/regist.md` — 파라미터 표 mode 선택값 치환
+- `_includes/zdm/ko/api/docs/os-replication/list.md` — 쿼리 파라미터 mode 필터 선택값 치환
+- `_includes/zdm/ko/api/docs/os-replication/update.md` — 요청 예시 uploadMode + uploadMode/downloadMode 선택값 3곳 치환
+- `_includes/zdm/ko/api/docs/license/get.md` — 응답 예시 JSON + 응답 필드 표에 `id: number` (라이선스 ID) 필드 신규 추가
+- `_includes/zdm/ko/api/docs/license/list.md` — 페이지네이션 미적용 / 적용 양쪽 응답 예시 + 응답 필드 표에 `id` 필드 추가
+- `_includes/zdm/ko/api/docs/license/regist.md` — 응답 예시 + 응답 필드 표에 `id` 필드 추가
+
+### 참고 (스킵)
+- 이전 버전 스냅샷 (`_includes/zdm/ko/api/docs/*/1.3.1.md` 등) 은 사용자 참조 보존 원칙 (별도 조사 · GAP-0011)
+- v2.0.3 Observability (`X-Trace-Id`, PII 마스킹 등) 은 v2.0.3 릴리스 sign-off 시점에 반영 (GAP-0009)
+
+### 관련 자료
+- QA 리포트: `zdm-api-v2/orgs/qa/reports/2026-07-08-cli-api-dto-consistency.md`
+- Docwriter 리포트: `zdm-api-v2/orgs/docwriter/reports/2026-07-08-gitpage-sync-audit.md`
+- 도메인 파일 (zdm-api): `src/domain/replication/data/const-value.ts`, `src/domain/os-replication/data/const-value.ts`, `src/domain/license/dto/response/license-get-response-base.dto.ts`
+
+---
+
+## [Documentation] - 2026-06-10
+
+### Changed
+- **ZDM-API v2.0.2 changelog 갱신** — `_includes/zdm/ko/api/changelog/2.0.2.md` 에 os-replication 통합 + id 보강 반영:
+  - summary 라인에 "OS-Replication schedule 지원 신설" 추가
+  - **Schedule 응답 형식 통일 표** — 도메인별 응답 위치 표 에 `POST /os-replications` + `PATCH /os-replications/:id` 행 신규 추가 → **5 endpoint → 7 endpoint**
+  - **Replication / OS-Replication schedule 처리 신설** 섹션 — 기존 "Replication schedule 신설" 만 있던 것을 OS-Replication 도 함께 안내. os-replication 의 jobMode 차이 (sync 미지원) 표시
+  - **4 도메인 완전 일관성** 안내 — backup / recovery / replication / os-replication 모두 동일 schedule 처리 + 응답 형식
+- **사실 정정** — 이전 안내가 4 도메인 통일이라 했으나 실제로는 os-replication 이 미구현 상태였음. 본 갱신으로 4 도메인 일관성 진정 확보.
+
+---
+
+## [Documentation] - 2026-06-09
+
+### Changed
+- **ZDM-API v2.0.2 changelog 갱신** — `_includes/zdm/ko/api/changelog/2.0.2.md` 에 본 세션의 사용자 facing 변경 4건 추가. summary 라인도 갱신:
+  - **Schedule 응답 형식 4 도메인 통일** — backup-regist / recovery-regist / replication-regist / backup-update 모두 동일 객체 형식 `{ id, type, description }`. 응답 형식 통일을 위해 공용 `describeSchedule` (`src/domain/schedule/utils/schedule-describer.utils.ts`) 도입. type 출처는 `displayMappings` (`"Daily"` / `"Smart Weekly (...)"` 등 PascalCase 영문), description 은 `processScheduleInfo` (`[Basic] Start working at ...` 영문). 4 endpoint 별 응답 위치 표 + 클라이언트 영향도 표 정리. **ScheduleChangeValue 의 type 값 기존 안내(`"daily"` lowercase alias) → `"Daily"` displayMappings 로 정정**, description 기존 안내("매일 03:00 실행" 한국어) → `"[Basic] Start working at 03:00 every day."` 영문으로 정정.
+  - **Replication schedule 처리 신설** — `POST /replications` / `PATCH /replications/:id` 의 body schema 에 정의되어 있던 schedule 필드가 그동안 service 에서 무시되던 문제 해결. basic schedule 지원, 모든 jobMode (full/increment/sync) 허용, smart 차단(400). 응답에 schedule 객체 노출 (이전엔 정보 부재).
+  - **Recovery 등록 시 backup 없는 partition 자동 skip + notices** — `POST /recoveries` 호출 시 source 의 partition 중 backup 없는 partition 자동 skip + 응답 `notices` 안내. silent skip 대상은 `Job.Common.NOT_FOUND` 만 (BAD_REQUEST / Zdm.Repository.NOT_FOUND 는 throw). 전체 skip 시 NOT_FOUND throw. listOnly true/false 모두 적용. Windows source C/D/E 중 C만 backup 케이스 예시 동봉.
+  - **Backup/Recovery Update Status diff `previous` 정확화** — `PUT /backups/:id` / `PATCH /recoveries/:id` 응답의 Job Status 변경 detail 의 `previous` 가 DB raw 값("Complete") 이 아닌 UI 와 동일한 `calculateJobStatus()` 결과("Registered" 등) 로 표시되도록 정정. current 는 사용자가 보낸 status 문자열 그대로 echo.
+- **운영 개선 섹션 확장** — 공용 schedule describer / Replication diff-builder + field-mutator 패턴 / schedule-verify replication 분기 신설 (단일 진실원) 항목 추가.
+
+---
+
 ## [Documentation] - 2026-06-01
 
 ### Added

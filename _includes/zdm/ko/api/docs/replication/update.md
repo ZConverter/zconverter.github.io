@@ -30,7 +30,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
   -d '{
     "center": "1",
     "changeName": "weekly-replication",
-    "replicationMode": "incremental",
+    "replicationMode": "increment",
     "compression": "use"
   }'
 
@@ -122,6 +122,8 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
+> **v2.0.2 신설**: schedule 변경 시 `updatedFields[]` 에 `{ field: "schedule", previous: <객체>, new: <객체> }` 형식으로 노출. 이전엔 service 가 schedule 입력을 무시했으나 본 버전부터 정상 처리.
+
 **성공 응답 (200 OK)**
 
 ```json
@@ -143,12 +145,38 @@ curl -X PUT "https://api.example.com/api/replications/1" \
         {
           "field": "replicationMode",
           "previous": "full",
-          "new": "incremental"
+          "new": "increment"
         },
         {
           "field": "compression",
           "previous": "not use",
           "new": "use"
+        }
+      ]
+    }
+  },
+  "message": "Replication job updated",
+  "timestamp": "2026-03-20 10:30:00"
+}
+```
+
+**성공 응답 (200 OK) — schedule 변경 (v2.0.2)**
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "replicationInfo": {
+      "id": "1",
+      "name": "daily-repl"
+    },
+    "summary": {
+      "updatedFields": [
+        {
+          "field": "schedule",
+          "previous": { "id": 5,  "type": "Daily",  "description": "[Basic] Start working at 03:00 every day." },
+          "new":      { "id": 10, "type": "Weekly", "description": "[Basic] Start working at 03:00 Monday, Wednesday every week." }
         }
       ]
     }
@@ -168,8 +196,16 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 | `replicationInfo.id` | number | 작업 ID |
 | `replicationInfo.name` | string | 작업 이름 |
 | `summary.updatedFields[].field` | string | 수정된 필드명 |
-| `summary.updatedFields[].previous` | any | 수정 전 값 |
-| `summary.updatedFields[].new` | any | 수정 후 값 |
+| `summary.updatedFields[].previous` | string \| number \| ScheduleChangeValue | 수정 전 값. 일반 필드는 `string \| number`, **`schedule` 필드는 `{ id, type, description }` 객체** (v2.0.2 신설) |
+| `summary.updatedFields[].new` | string \| number \| ScheduleChangeValue | 수정 후 값. 일반 필드는 `string \| number`, **`schedule` 필드는 `{ id, type, description }` 객체** (v2.0.2 신설) |
+
+**ScheduleChangeValue 구조** (v2.0.2 신규 — `field === "schedule"` 인 경우):
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `id` | number | schedule ID |
+| `type` | string | schedule 타입 (displayMappings PascalCase 영문 — 예: `"Once"`, `"Every Minute"`, `"Hourly"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`, `"Smart Weekly (Specific Day of the Week)"`, 그 외 SMART_* 값들, 조회 실패 시 `"Unknown"`) |
+| `description` | string | schedule 영문 설명 (`processScheduleInfo` 결과 — 예: `"[Basic] Start working at 03:00 every day."`, `"[Basic] Start working at 03:00 Monday, Wednesday every week."`, `"[Basic] Start working at 03:00 on the 1, 15 of every month."`, `"[Basic] Start working at 00:00 every 2 Hour."`, 조회 실패 시 `"Schedule lookup failed"`) |
 
 </details>
 

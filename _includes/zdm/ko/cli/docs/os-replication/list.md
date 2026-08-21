@@ -51,7 +51,7 @@ zdm-cli os-replication list --output json
 | --name | - | string | Optional | - | job name (단건 조회) | - |
 | --server | - | string | Optional | - | 서버 필터 | - |
 | --type | - | string | Optional | - | 복제 타입 필터 | `upload`, `download` |
-| --mode | - | string | Optional | - | 복제 모드 필터 | `full`, `incremental` |
+| --mode | - | string | Optional | - | 복제 모드 필터 | `full`, `increment` |
 | --status | - | string | Optional | - | 작업 상태 필터 | `running`, `stopped`, `error`, `waiting`, `scheduled`, `disabled` |
 | --detail | - | boolean | Optional | false | 상세 정보 포함 | - |
 | --page | - | number | Optional | 1 | 페이지 번호 | - |

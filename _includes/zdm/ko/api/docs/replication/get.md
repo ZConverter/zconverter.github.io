@@ -104,7 +104,9 @@ curl -X GET "https://api.example.com/api/replications/1?detail=true" \
         "target": {
           "id": "1",
           "type": "NFS",
-          "path": "/replication/target"
+          "path": "/replication/target",
+          "ip": "192.168.1.100",
+          "port": 2049
         }
       },
       "option": {
@@ -144,7 +146,9 @@ curl -X GET "https://api.example.com/api/replications/1?detail=true" \
 | `job.server.source[].id` | string | 소스 서버 ID (unitType=server, 문자열) |
 | `job.server.source[].name` | string | 소스 서버 이름 (unitType=server) |
 | `job.repository.source` | object | 소스 레포지토리 정보 (unitType=repository) — `{id, path}` 만 반환 |
-| `job.repository.target` | object | 타겟 레포지토리 정보 |
+| `job.repository.target` | object | 타겟 레포지토리 정보 (`{id, type, path, ip, port}`) |
+| `job.repository.target.ip` | string | 타겟 레포지토리 IP (기본 `-`) |
+| `job.repository.target.port` | number | 타겟 레포지토리 포트 (기본 `0`) |
 | `job.option.compression` | string | 압축 사용 여부 (`Use`/`Not Use`/`Unknown`) |
 | `job.option.encryption` | string | 암호화 사용 여부 (`Use`/`Not Use`/`Unknown`) |
 | `job.option.networkLimit` | number | 네트워크 제한 속도 (0: 무제한) |

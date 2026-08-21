@@ -49,7 +49,7 @@ curl -X DELETE "https://api.example.com/api/replications/backup-replication-01?c
 
 **성공 응답 (200 OK)**
 
-> **v2.0.2 변경 사항**: 응답 양식이 backup/recovery 와 통일되었습니다. 기존 `deletedJob` / `deletedRelations` 키는 제거되고 `jobInfo[]` + `summary` 구조로 교체되었습니다. 이전 양식은 [v2.0.1](./delete/2.0.1.md) 문서를 참고하세요.
+> **v2.0.2 변경 사항**: 응답 양식이 backup/recovery 와 통일되었습니다. 기존 `deletedJob` / `deletedRelations` 키는 제거되고 `jobInfo[]` + `summary` 구조로 교체되었습니다. 이전 양식은 [v2.0.1](../../../2.0.0/docs/replication/delete) 문서를 참고하세요.
 
 ```json
 {

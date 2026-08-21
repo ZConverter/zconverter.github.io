@@ -73,3 +73,47 @@ curl -X GET "https://api.example.com/api/os-replications/1" \
 ```
 
 </details>
+
+<details markdown="1" open>
+<summary><strong>응답 예시 (Download)</strong></summary>
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "requestID": "...",
+  "success": true,
+  "data": {
+    "system": { "name": "center-01" },
+    "job": {
+      "info": {
+        "id": "2",
+        "name": "os_repl_download_1712345678902",
+        "replicationType": "Download",
+        "status": {
+          "current": "Scheduled",
+          "time": { "start": "-", "elapsed": "-", "end": "-" }
+        },
+        "lastUpdated": "2026-04-08 12:00:00"
+      },
+      "cloudKeyId": 1,
+      "sourceRepository": { "id": "-", "path": "-" },
+      "downloadInfo": {
+        "mode": "Full",
+        "type": "Entire Bucket",
+        "folderName": "-",
+        "networkLimit": 0,
+        "fileFilter": "-",
+        "repositoryId": "5",
+        "repositoryPath": "/download/path"
+      }
+    }
+  },
+  "message": "Os Replication retrieved",
+  "timestamp": "2026-04-08 12:00:00"
+}
+```
+
+> `replicationType` 이 `Upload` 이면 `uploadInfo`, `Download` 이면 `downloadInfo` 가 포함됩니다. `downloadInfo.type` 은 `Entire Bucket` 또는 `Specific Folder`. (필드 상세는 `GET /os-replications` 목록 조회 문서의 응답 필드 표 참고)
+
+</details>

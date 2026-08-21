@@ -183,6 +183,8 @@ curl -X POST "https://api.example.com/api/backups" \
 
 **성공 응답 (201 Created)**
 
+> **v2.0.2 변경 사항**: `schedule.basic` / `schedule.advanced` 객체에 `id` 필드가 신규 추가되었습니다. (그 외 type/description 형식은 기존 그대로)
+
 ```json
 {
   "requestID": "46f53c9a-86f7-4c8f-9947-1e3ac642e27f",
@@ -203,6 +205,7 @@ curl -X POST "https://api.example.com/api/backups" \
         "autoStart": "not use",
         "schedule": {
           "basic": {
+            "id": 7,
             "type": "Monthly on Specific Date",
             "description": "[Basic] Start working at 12:00 25, 28 every month."
           }
@@ -216,6 +219,7 @@ curl -X POST "https://api.example.com/api/backups" \
         "autoStart": "not use",
         "schedule": {
           "basic": {
+            "id": 8,
             "type": "Monthly on Specific Date",
             "description": "[Basic] Start working at 12:00 25, 28 every month."
           }
@@ -244,9 +248,11 @@ curl -X POST "https://api.example.com/api/backups" \
 | `results[].autoStart` | string | 자동 시작 여부 (`use` / `not use`) |
 | `results[].schedule` | object | 스케줄 정보 (설정시에만 포함) |
 | `results[].schedule.basic` | object | 기본 스케줄 정보 |
+| `results[].schedule.basic.id` | number | 기본 스케줄 ID (**v2.0.2 신규**) |
 | `results[].schedule.basic.type` | string | 스케줄 타입 이름 (예: `Daily`, `Monthly on Specific Date`) |
 | `results[].schedule.basic.description` | string | 스케줄 설명 (예: `[Basic] Start working at 12:00 25, 28 every month.`) |
 | `results[].schedule.advanced` | object | 고급 스케줄 정보 (Smart 스케줄 type 7~11 설정시에만 포함) |
+| `results[].schedule.advanced.id` | number | 고급 스케줄 ID (**v2.0.2 신규**) |
 | `results[].schedule.advanced.type` | string | 고급 스케줄 타입 이름 |
 | `results[].schedule.advanced.description` | string | 고급 스케줄 설명 |
 | `results[].scriptPath` | string | 스크립트 경로 (설정시에만 포함) |
@@ -374,6 +380,7 @@ curl -X POST "https://api.example.com/api/backups" \
         "autoStart": "not use",
         "schedule": {
           "basic": {
+            "id": 10,
             "type": "Daily",
             "description": "[Basic] Start working at 02:00 every day."
           }
@@ -422,6 +429,7 @@ curl -X POST "https://api.example.com/api/backups" \
         "autoStart": "not use",
         "schedule": {
           "basic": {
+            "id": 11,
             "type": "Weekly",
             "description": "[Basic] Start working at 01:30 Monday, Wednesday, Friday every week."
           }
@@ -459,6 +467,7 @@ curl -X POST "https://api.example.com/api/backups" \
 ```json
 "schedule": {
   "basic": {
+    "id": 12,
     "type": "Monthly on Specific Date",
     "description": "[Basic] Start working at 12:00 1, 15 every month."
   }
@@ -495,10 +504,12 @@ curl -X POST "https://api.example.com/api/backups" \
 ```json
 "schedule": {
   "basic": {
+    "id": 13,
     "type": "Smart Weekly (Specific Day of the Week)",
     "description": "[Basic] Start working every Monday at 10:00"
   },
   "advanced": {
+    "id": 14,
     "type": "Smart Weekly (Specific Day of the Week)",
     "description": "[Advanced] Start working every Tuesday, Wednesday, Thursday, Friday at 12:00"
   }
@@ -537,10 +548,12 @@ curl -X POST "https://api.example.com/api/backups" \
 ```json
 "schedule": {
   "basic": {
+    "id": 15,
     "type": "Smart Custom (Specific Month and Date)",
     "description": "[Basic] Start working on March 1 at 03:00"
   },
   "advanced": {
+    "id": 16,
     "type": "Smart Custom (Specific Month and Date)",
     "description": "[Advanced] Start working at 04:00 on the 15, 30 of June, September, December"
   }
@@ -567,6 +580,7 @@ curl -X POST "https://api.example.com/api/backups" \
 ```json
 "schedule": {
   "basic": {
+    "id": 17,
     "type": "Daily",
     "description": "[Basic] Start working at 02:00 every day."
   }
@@ -609,6 +623,7 @@ inline 객체의 `basic` 또는 `advanced` 자리에 number를 넣으면 해당 
         "autoStart": "not use",
         "schedule": {
           "basic": {
+            "id": 18,
             "type": "Once",
             "description": "[Basic] Start working on 2026-06-01 at 02:00"
           }
@@ -644,10 +659,12 @@ inline 객체의 `basic` 또는 `advanced` 자리에 number를 넣으면 해당 
 ```json
 "schedule": {
   "basic": {
+    "id": 19,
     "type": "Smart Weekly (Specific Day of the Week)",
     "description": "[Basic] Start working every Monday at 10:00"
   },
   "advanced": {
+    "id": 20,
     "type": "Smart Weekly (Specific Day of the Week)",
     "description": "[Advanced] Start working every Tuesday, Wednesday, Thursday, Friday at 12:00"
   }
@@ -681,10 +698,12 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 ```json
 "schedule": {
   "basic": {
+    "id": 21,
     "type": "Smart Weekly (Specific Day of the Week)",
     "description": "[Basic] Start working every Monday at 02:00"
   },
   "advanced": {
+    "id": 22,
     "type": "Smart Weekly (Specific Day of the Week)",
     "description": "[Advanced] Start working every Tuesday, Wednesday, Thursday, Friday at 12:00"
   }
@@ -997,13 +1016,13 @@ regist 단계에서는 mode와 schedule type이 정합하지 않으면 즉시 40
 
 - 요청 입력: 짧은 표기(`mon`, `tue`, `wed`, …) 또는 콤마로 묶은 다중 표기(`"mon,wed,fri"`).
 - 응답 `description`: 풀네임(`Monday`, `Wednesday`, …)으로 변환되어 출력.
-- 자세한 변환 규칙: [요일 입력 ↔ DB 저장 형식 (binary) 변환](../overview#요일-입력--db-저장-형식-binary-변환).
+- 자세한 변환 규칙: [요일 입력 ↔ DB 저장 형식 (binary) 변환](../schedule/overview#요일-입력--db-저장-형식-binary-변환).
 
 #### 5. Smart 스케줄 basic 필드 단일값 제약
 
 Smart 타입(7~11)의 `basic`에서는 `day`/`week`/`month`가 모두 **단일 값만 허용**됩니다. 복수 값이 필요하면 `advanced` 쪽에 명시하세요.
 
-자세한 규칙: [Smart 스케줄 basic 필드 제한사항](../overview#smart-스케줄-basic-필드-제한사항).
+자세한 규칙: [Smart 스케줄 basic 필드 제한사항](../schedule/overview#smart-스케줄-basic-필드-제한사항).
 
 </details>
 

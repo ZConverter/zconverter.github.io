@@ -126,6 +126,10 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
+> **v2.0.2 변경 사항**:
+> - Job Status 변경 detail 의 `previous` 가 DB raw 값 (`"Complete"`) 이 아닌 UI 와 동일한 calculated 결과 (`"Registered"` / `"Processing"` / `"Scheduled"` / `"Complete"` 등) 로 표시됩니다.
+> - Schedule 변경 detail (`Schedule(Basic)` 필드) 의 `previous`/`new` 가 단순 ID 가 아닌 `{ id, type, description }` 객체로 확장되었습니다. (Recovery 는 `basic` only — `advanced` 없음)
+
 <details markdown="1" open>
 <summary>공통 필드만 변경 (200 OK)</summary>
 
@@ -159,6 +163,76 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
   "timestamp": "2025-01-15 10:30:00"
 }
 ```
+
+</details>
+
+<details markdown="1">
+<summary>Schedule 변경 (200 OK) — v2.0.2 양식</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "jobInfo": {
+      "id": "1",
+      "name": "daily-recovery"
+    },
+    "summary": {
+      "state": "success",
+      "commonUpdatedFields": [
+        {
+          "field": "Schedule(Basic)",
+          "previous": null,
+          "new": {
+            "id": 7,
+            "type": "Daily",
+            "description": "[Basic] Start working at 03:00 every day."
+          }
+        }
+      ],
+      "eachUpdatedFields": []
+    }
+  },
+  "message": "Recovery job Update completed",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+> `previous` 가 `null` 인 경우는 기존 schedule 이 없었거나 (id ≤ 0) 모드 전환으로 schedule 이 reset 된 경우입니다.
+
+</details>
+
+<details markdown="1">
+<summary>Job Status 변경 (200 OK) — v2.0.2 calculated previous</summary>
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "jobInfo": {
+      "id": "1",
+      "name": "daily-recovery"
+    },
+    "summary": {
+      "state": "success",
+      "commonUpdatedFields": [
+        {
+          "field": "Job Status",
+          "previous": "Registered",
+          "new": "start"
+        }
+      ],
+      "eachUpdatedFields": []
+    }
+  },
+  "message": "Recovery job Update completed",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+> `previous` 는 DB raw enum 값 (`"Complete"` 등) 이 아닌 UI 와 동일한 calculated 결과 (`"Registered"` / `"Processing"` / `"Scheduled"` / `"Complete"` 등) 로 표시됩니다. `new` 는 요청 body 의 `status` 입력값을 그대로 반영합니다.
 
 </details>
 
@@ -310,11 +384,21 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 | `jobInfo.errorMessage` | string | 실패 시 오류 메시지 |
 | `summary.state` | string | 수정 결과 (`success` / `fail`) |
 | `summary.commonUpdatedFields[].field` | string | 수정된 공통 필드명 |
-| `summary.commonUpdatedFields[].previous` | any | 수정 전 값 |
-| `summary.commonUpdatedFields[].new` | any | 수정 후 값 |
+| `summary.commonUpdatedFields[].previous` | any \| ScheduleChangeValue \| null | 수정 전 값. **Schedule 계열** (`Schedule(Basic)`) 인 경우 `{ id, type, description }` 객체 또는 `null` (이전 schedule 없음 / 모드 전환 reset). **Job Status** 인 경우 UI 와 동일한 calculated 결과 (`"Registered"` / `"Processing"` / `"Scheduled"` / `"Complete"` 등 — v2.0.2 부터 DB raw enum 이 아님). 그 외 단순 값. |
+| `summary.commonUpdatedFields[].new` | any \| ScheduleChangeValue \| null | 수정 후 값. Schedule 계열은 동일 객체 구조. Job Status 는 요청 body 의 `status` 입력값 그대로. |
 | `summary.eachUpdatedFields[].partition` | string | 파티션 (Linux) |
 | `summary.eachUpdatedFields[].drive` | string | 드라이브 (Windows) |
 | `summary.eachUpdatedFields[].summary` | object | 파티션별 수정 결과 |
+
+**ScheduleChangeValue 구조** (v2.0.2 신규):
+
+| 하위 필드 | 타입 | 설명 |
+|------|------|------|
+| `id` | number | schedule ID |
+| `type` | string | schedule 타입 — displayMappings PascalCase 영문 (예: `"Once"`, `"Every Minute"`, `"Hourly"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`, `"Smart Weekly (Specific Day of the Week)"`, `"Smart Monthly (Specific Week and Day of the Week)"`, `"Smart Monthly (Specific Date)"`, `"Smart Custom (Specific Month, Week and Day of the Week)"`, `"Smart Custom (Specific Month and Date)"`). 조회 실패 시 `"Unknown"` |
+| `description` | string | `processScheduleInfo` 영문 결과 (예: `"[Basic] Start working at 03:00 every day."`, `"[Basic] Start working at 03:00 Monday, Wednesday every week."`). 조회 실패 시 `"Schedule lookup failed"` |
+
+> **참고**: id ≤ 0 (이전 schedule 없음) 인 경우 해당 필드는 `null` 로 반환됩니다. Recovery 는 `basic` 스케줄만 지원하므로 `Schedule(Advanced)` 필드는 발생하지 않습니다 (응답 발생 위치는 `Schedule(Basic)` 한 곳).
 
 </details>
 

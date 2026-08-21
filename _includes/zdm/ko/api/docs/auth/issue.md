@@ -92,6 +92,7 @@ curl -X POST "https://api.example.com/api/token/issue" \
 | `DTO-VALIDATION-01` | 422 | Request body validation failed. | email/password 누락 또는 이메일 형식 오류 |
 | `USER-ERROR-01` | 404 | User not found. | 등록되지 않은 이메일이거나 비밀번호 불일치 (보안상 동일 코드로 응답) |
 | `DTO-CREATION-01` | 500 | DTO creation error. | 응답 DTO 변환 실패 (내부 오류) |
+| `RATE-LIMIT-01` | 429 | Too many authentication attempts. Please try again later. | IP 기준 토큰 발급 시도 초과 (기본 15분당 20회) |
 | `INTERNAL_SERVER_ERROR` | 500 | Internal server error. | 사용자 조회 / 토큰 저장 timeout, DB 트랜잭션 실패 등 예외 |
 
 </details>
@@ -123,6 +124,18 @@ curl -X POST "https://api.example.com/api/token/issue" \
     }
   },
   "timestamp": "2026-01-17 15:14:09"
+}
+```
+
+**요청 횟수 초과 (429 Too Many Requests)**
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "RATE-LIMIT-01",
+    "message": "Too many authentication attempts. Please try again later."
+  }
 }
 ```
 

@@ -116,7 +116,9 @@ curl -X GET "https://api.example.com/api/replications?page=1&limit=10" \
           "target": {
             "id": "1",
             "type": "NFS",
-            "path": "/replication/target"
+            "path": "/replication/target",
+            "ip": "192.168.1.100",
+            "port": 2049
           }
         },
         "option": {
@@ -171,7 +173,9 @@ curl -X GET "https://api.example.com/api/replications?page=1&limit=10" \
           "target": {
             "id": "2",
             "type": "SMB",
-            "path": "//192.168.1.100/replication"
+            "path": "//192.168.1.100/replication",
+            "ip": "192.168.1.100",
+            "port": 445
           }
         },
         "option": {
@@ -230,7 +234,9 @@ curl -X GET "https://api.example.com/api/replications?page=1&limit=10" \
           "target": {
             "id": "3",
             "type": "NFS",
-            "path": "/replication/server"
+            "path": "/replication/server",
+            "ip": "192.168.1.200",
+            "port": 2049
           }
         },
         "option": {
@@ -287,7 +293,9 @@ curl -X GET "https://api.example.com/api/replications?page=1&limit=10" \
           "target": {
             "id": "1",
             "type": "NFS",
-            "path": "/replication/target"
+            "path": "/replication/target",
+            "ip": "192.168.1.100",
+            "port": 2049
           }
         },
         "option": {
@@ -402,6 +410,8 @@ curl -X GET "https://api.example.com/api/replications?page=1&limit=10" \
 | `job.repository.target.id` | string | 타겟 레포지토리 ID (문자열) |
 | `job.repository.target.type` | string | 타겟 레포지토리 타입 |
 | `job.repository.target.path` | string | 타겟 레포지토리 경로 |
+| `job.repository.target.ip` | string | 타겟 레포지토리 IP (기본 `-`) |
+| `job.repository.target.port` | number | 타겟 레포지토리 포트 (기본 `0`) |
 | `job.option.compression` | string | 압축 사용 여부 (`Use`/`Not Use`/`Unknown`) |
 | `job.option.encryption` | string | 암호화 사용 여부 (`Use`/`Not Use`/`Unknown`) |
 | `job.option.networkLimit` | number | 네트워크 제한 속도 (0: 무제한) |

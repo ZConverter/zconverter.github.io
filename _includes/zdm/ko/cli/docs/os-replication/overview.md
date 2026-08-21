@@ -35,7 +35,9 @@ OS Replication 기능에 대한 개요입니다.
 | 모드 | 설명 |
 |------|------|
 | `full` | 전체 복제 |
-| `incremental` | 증분 복제 (변경된 데이터만) |
+| `increment` | 증분 복제 (변경된 데이터만) |
+
+> **v2.0.2 변경 사항**: 모드 값이 `incremental` 에서 `increment` 로 변경되었습니다 (backup/recovery 와 통일). 이전 버전은 `incremental` 을 사용합니다.
 
 </details>
 

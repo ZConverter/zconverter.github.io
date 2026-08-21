@@ -151,6 +151,8 @@ curl -X GET "https://api.example.com/api/zdms?detail=true&repository=true" \
 }
 ```
 
+> 각 ZDM 항목의 `disk`, `network`, `partition`, `repository`, `zosRepository` 는 옵션 미지정 시에도 항상 빈 배열(`[]`)로 포함됩니다. 옵션(`disk=true` 등)을 지정하면 해당 배열만 채워지고 나머지는 `[]`로 유지됩니다.
+
 </details>
 
 <details markdown="1">

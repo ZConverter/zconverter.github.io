@@ -21,10 +21,12 @@
 
 ```bash
 # 파일 목록 조회
-curl -X GET "https://api.example.com/api/files/list"
+curl -X GET "https://api.example.com/api/files/list" \
+  -H "Authorization: Bearer <token>"
 
 # 페이지네이션 적용 조회
-curl -X GET "https://api.example.com/api/files/list?page=1&limit=10"
+curl -X GET "https://api.example.com/api/files/list?page=1&limit=10" \
+  -H "Authorization: Bearer <token>"
 ```
 
 </details>
@@ -34,6 +36,7 @@ curl -X GET "https://api.example.com/api/files/list?page=1&limit=10"
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
+| `Authorization` | Header | string | Required | - | Bearer 토큰 | - |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |

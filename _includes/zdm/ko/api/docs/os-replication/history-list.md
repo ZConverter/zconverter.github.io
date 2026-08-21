@@ -42,3 +42,48 @@ curl -X GET "https://api.example.com/api/os-replications/histories?page=1&limit=
 | `sort` | Query | string | Optional | 정렬 방향 | `asc`, `desc` |
 
 </details>
+
+<details markdown="1" open>
+<summary><strong>응답 예시</strong></summary>
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": [
+    {
+      "id": 1,
+      "system": { "name": "server-01" },
+      "job": {
+        "name": "os_repl_upload_server-01",
+        "id": 10,
+        "sourcePath": "/source",
+        "targetPath": "/target",
+        "unitType": "Upload"
+      },
+      "result": { "status": "COMPLETE", "description": "OS replication completed successfully" },
+      "size": { "total": 0, "replicated": 0 },
+      "count": { "total": 0, "replicated": 0 },
+      "time": { "start": "2025-01-15 10:00:00", "end": "2025-01-15 10:30:00", "elapsed": "00:30:00" }
+    }
+  ],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "itemsPerPage": 20,
+    "hasNextPage": false,
+    "hasPreviousPage": false
+  },
+  "message": "OS Replication histories retrieved",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+> 각 항목 구조는 단건 조회(`GET /os-replications/histories/:identifier`)와 동일합니다. `size` / `count` 는 현재 항상 `0` 이며, `pagination` 은 `page`/`limit` 지정 시에만 포함됩니다.
+
+</details>
+
+---

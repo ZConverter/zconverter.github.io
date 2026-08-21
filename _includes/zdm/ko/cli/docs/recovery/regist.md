@@ -164,6 +164,12 @@ zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky8
 <details markdown="1" open>
 <summary><strong>출력 예시</strong></summary>
 
+> **v2.0.2 변경 사항**:
+> - `schedule.basic` 객체에 `id` 필드 신규 추가 (type/description 은 기존 형식 그대로 — displayMappings PascalCase 영문 + `processScheduleInfo` 영문 결과)
+> - 응답에 `notices?: string[]` 신규 필드 — backup 없는 partition 자동 skip 안내 (값이 있을 때만 포함). text 양식은 `[Notices]` 섹션으로, table 양식은 별도 단일 `message` 컬럼 테이블로 표시됨
+
+> **자동 partition skip (v2.0.2)**: source 서버의 partition 중 backup 작업·이미지가 없는 partition 은 자동으로 jobList 에서 제외됩니다 (silent skip). skip 된 partition 은 `notices` 에 안내 메시지로 포함됩니다. 전체 partition 이 skip 되면 `JOB-ERROR-01` (NOT_FOUND) 응답이 반환됩니다. `excludePartition` 옵션을 명시하지 않아도 동일하게 동작합니다.
+
 **Text 형식 (--output text, 기본값):**
 
 ```
@@ -185,14 +191,18 @@ successful : 2
 failed     : 0
 
 [Common Information]
-state             : registered
+state             : success
 jobName           : recovery-ubuntu22-to-rhel8
 autoStart         : use
 platform          : aws
-bootMode          : uefi
+bootMode          : reboot
 scriptPath        : /scripts/post-recovery.sh
-scriptRunTiming   : after
-schedule.basic    : type: once, description: One-time execution
+scriptRunTiming   : after job
+
+[Schedule - Basic]
+id          : 7
+type        : Daily
+description : [Basic] Start working at 03:00 every day.
 
 [Partition Details]
 
@@ -200,7 +210,7 @@ schedule.basic    : type: once, description: One-time execution
 sourcePartition   : /
 targetPartition   : /dev/sda1
 jobMode           : full
-overwrite         : true
+overwrite         : allow
 fileSystem        : ext4
 backup.useLast    : true
 backup.backupFile : backup-2025-01-01.img
@@ -213,7 +223,7 @@ repository.type   : nfs
 sourcePartition   : /boot
 targetPartition   : /dev/sda2
 jobMode           : full
-overwrite         : true
+overwrite         : allow
 fileSystem        : ext4
 backup.useLast    : true
 backup.backupFile : backup-boot-2025-01-01.img
@@ -222,7 +232,35 @@ repository.id     : 1
 repository.path   : /mnt/backup
 repository.type   : nfs
 
+[Notices]
+  - Partition/drive 'D:' was skipped — no backup available: Backup job not found for partition 'D:' on server 'src-win01'
+  - Partition/drive 'E:' was skipped — no backup available: Backup job not found for partition 'E:' on server 'src-win01'
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+> `[Schedule - Basic]` 블록은 응답에 `schedule.basic` 이 포함될 때만 출력됩니다 (요청에 `--schedule` / `--schedule-id` / `--schedule-file` 동봉 시).
+> `[Notices]` 섹션은 응답에 `notices` 가 포함될 때만 출력됩니다 (자동 partition skip 발생 시).
+
+**Table 형식 (--output table):**
+
+table 출력은 partitions 를 행 단위 표로 표시하고, schedule 은 별도 단일 행 테이블로 출력합니다. `notices` 가 있을 때 `[Notices]` 섹션 아래에 단일 `message` 컬럼 테이블이 추가로 출력됩니다.
+
+```
+[Schedule - Basic]
+┌────┬───────┬───────────────────────────────────────────────┐
+│ id │ type  │ description                                   │
+├────┼───────┼───────────────────────────────────────────────┤
+│ 7  │ Daily │ [Basic] Start working at 03:00 every day.     │
+└────┴───────┴───────────────────────────────────────────────┘
+
+[Notices]
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ message                                                                                                                 │
+├─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Partition/drive 'D:' was skipped — no backup available: Backup job not found for partition 'D:' on server 'src-win01'   │
+│ Partition/drive 'E:' was skipped — no backup available: Backup job not found for partition 'E:' on server 'src-win01'   │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 **JSON 형식 (--output json):**
@@ -239,17 +277,18 @@ repository.type   : nfs
       "failed": 0
     },
     "common": {
-      "state": "registered",
+      "state": "success",
       "jobName": "recovery-ubuntu22-to-rhel8",
       "autoStart": "use",
       "platform": "aws",
-      "bootMode": "uefi",
+      "bootMode": "reboot",
       "scriptPath": "/scripts/post-recovery.sh",
-      "scriptRunTiming": "after",
+      "scriptRunTiming": "after job",
       "schedule": {
         "basic": {
-          "type": "once",
-          "description": "One-time execution"
+          "id": 7,
+          "type": "Daily",
+          "description": "[Basic] Start working at 03:00 every day."
         }
       }
     },
@@ -258,7 +297,7 @@ repository.type   : nfs
         "sourcePartition": "/",
         "targetPartition": "/dev/sda1",
         "jobMode": "full",
-        "overwrite": true,
+        "overwrite": "allow",
         "fileSystem": "ext4",
         "backup": {
           "useLast": "true",
@@ -275,7 +314,7 @@ repository.type   : nfs
         "sourcePartition": "/boot",
         "targetPartition": "/dev/sda2",
         "jobMode": "full",
-        "overwrite": true,
+        "overwrite": "allow",
         "fileSystem": "ext4",
         "backup": {
           "useLast": "true",
@@ -288,11 +327,19 @@ repository.type   : nfs
           "type": "nfs"
         }
       }
+    ],
+    "notices": [
+      "Partition/drive 'D:' was skipped — no backup available: Backup job not found for partition 'D:' on server 'src-win01'",
+      "Partition/drive 'E:' was skipped — no backup available: Backup job not found for partition 'E:' on server 'src-win01'"
     ]
   },
   "timestamp": "2025-01-01 10:00:00"
 }
 ```
+
+> `data.notices` 는 자동 skip 된 partition 이 있을 때만 응답에 포함됩니다. 모든 partition 이 정상이면 필드 자체가 응답에 포함되지 않습니다.
+> `common.schedule.basic.type` 값은 displayMappings PascalCase 영문 — `"Once"`, `"Every Minute"`, `"Hourly"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`. 조회 실패 시 `"Unknown"`.
+> `common.schedule.basic.description` 값은 `processScheduleInfo` 영문 결과 — 예: `"[Basic] Start working at 03:00 every day."` (Daily), `"[Basic] Start working at 03:00 Monday, Wednesday every week."` (Weekly), `"[Basic] Start working at 00:00 every 2 Hour."` (Hourly), `"[Basic] Start working on 15/06/2026 03:00."` (Once). 조회 실패 시 `"Schedule lookup failed"`.
 
 </details>
 

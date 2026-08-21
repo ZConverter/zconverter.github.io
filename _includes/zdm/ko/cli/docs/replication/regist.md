@@ -10,6 +10,8 @@ Replication 작업을 등록하는 명령어입니다.
 > * `--unit-type`에 따라 필요한 추가 파라미터가 다릅니다.
 > * `--schedule`, `--schedule-id`, `--schedule-file` 중 하나로 스케줄을 설정할 수 있습니다.
 
+> **v2.0.2 신설**: 이전엔 replication 의 schedule 처리가 미구현이었으나 본 버전부터 schedule 입력 시 처리 + 응답에 `schedule: { id, type, description }` 객체 노출. basic schedule 만 지원 (smart 차단). 모든 replicationMode (`full` / `increment` / `sync`) 에서 허용.
+
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
 
@@ -38,8 +40,11 @@ zdm-cli replication regist --sc srcconm --tc destconm --ut server -s 91 --tri 44
 # increment 모드 및 압축 활성화
 zdm-cli replication regist --sc srcconm --tc destconm --ut backup -j 91 --tri 44 --mode increment --comp
 
-# 스케줄과 자동 시작 설정
+# 스케줄과 자동 시작 설정 (기존 스케줄 ID 재사용)
 zdm-cli replication regist --sc srcconm --tc destconm --ut backup -j 91 --tri 44 --schedule-id 1234 --start
+
+# 스케줄 객체로 신규 등록 (Daily 03:00 — basic only, smart 미지원)
+zdm-cli replication regist --sc srcconm --tc destconm --ut backup -j 91 --tri 44 --schedule '{"type":3,"basic":{"time":"03:00"}}'
 
 # 여러 백업 작업을 한번에 등록 (콤마 구분)
 zdm-cli replication regist --sc srcconm --tc destconm --ut backup -j "91,92,93" --tri 44
@@ -75,7 +80,7 @@ zdm-cli replication regist --sc srcconm --tc destconm --ut backup -j 91 --tri 44
 | --job-name | --jn | string | Optional | - | 작업 이름 | - |
 | --ip | - | string | Optional | - | 타겟 IP 주소 | - |
 | --port | - | number | Optional | 22 | 타겟 SSH 포트 (0 입력 시 비활성화) | - |
-| --mode | - | string | Optional | full | Replication 모드 | `full`, `increment`, `sync` |
+| --mode | - | string | Optional | full | Replication 모드 (모든 모드에서 schedule 허용 — v2.0.2) | `full`, `increment`, `sync` |
 
 **unit-type=backup 전용**
 
@@ -107,9 +112,11 @@ zdm-cli replication regist --sc srcconm --tc destconm --ut backup -j 91 --tri 44
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --schedule | - | string | Optional | - | 스케줄 JSON 문자열 | - |
+| --schedule | - | string | Optional | - | 스케줄 JSON 문자열 (basic only — smart 입력 시 `INVALID_SCHEDULE_JOB_MODE_FOR_BASIC` 응답) | - |
 | --schedule-id | - | number | Optional | - | 기존 스케줄 ID | - |
-| --schedule-file | - | string | Optional | - | 스케줄 JSON 파일 경로 | - |
+| --schedule-file | - | string | Optional | - | 스케줄 JSON 파일 경로 (basic only) | - |
+
+> **v2.0.2 정책**: replication 의 schedule 은 basic schedule 만 허용 (smart 차단). jobMode `full` / `increment` / `sync` 모두 허용. 지정 시 응답에 `schedule: { id, type, description }` 객체가 포함됩니다.
 
 **출력**
 
@@ -149,10 +156,28 @@ jobName         : repl_job_01
 unitType        : backup
 replicationMode : full
 autoStart       : use
-schedule        : 0 2 * * *
+
+[Schedule]
+id          : 7
+type        : Daily
+description : [Basic] Start working at 03:00 every day.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+> `[Schedule]` 블록은 요청에 `--schedule*` 를 지정한 경우에만 출력됩니다 (v2.0.2 신설). 미지정 시 해당 블록은 생략됩니다.
+
+**Table 형식 (--output table)**
+
+```
++----+---------------------+-------------+-----------------+-----------+--------------------------------------------------+
+| #  | jobName             | unitType    | replicationMode | autoStart | schedule                                         |
++----+---------------------+-------------+-----------------+-----------+--------------------------------------------------+
+| 1  | repl_job_01         | backup      | full            | use       | Daily (#7)                                       |
++----+---------------------+-------------+-----------------+-----------+--------------------------------------------------+
+```
+
+> `schedule` 컬럼은 요청에 `--schedule*` 를 지정한 경우에만 `<type> (#<id>)` 형식으로 표시됩니다 (v2.0.2 신설).
 
 **JSON 형식**
 ```json
@@ -173,13 +198,37 @@ schedule        : 0 2 * * *
         "unitType": "backup",
         "replicationMode": "full",
         "autoStart": "use",
-        "schedule": "0 2 * * *"
+        "schedule": {
+          "id": 7,
+          "type": "Daily",
+          "description": "[Basic] Start working at 03:00 every day."
+        }
       }
     ]
   },
   "timestamp": "2025-01-15 10:30:00"
 }
 ```
+
+> `results[].schedule` 객체는 요청에 `--schedule*` 를 지정한 경우에만 응답에 포함됩니다 (v2.0.2 신설). 미지정 시 필드가 생략됩니다.
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>응답 필드</strong></summary>
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `results[].state` | string | 등록 결과 (`success` / `fail`) |
+| `results[].jobName` | string | 작업 이름 |
+| `results[].unitType` | string | 복제 단위 유형 |
+| `results[].replicationMode` | string | 복제 모드 |
+| `results[].autoStart` | string | 자동 시작 여부 |
+| `results[].schedule` | object | 스케줄 정보 (요청에 `--schedule*` 지정 시에만 포함, 미지정 시 응답에 미포함) — v2.0.2 신설 |
+| `results[].schedule.id` | number | 등록된 schedule ID |
+| `results[].schedule.type` | string | schedule 타입 (displayMappings PascalCase 영문 — 예: `"Once"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`, `"Smart Weekly (Specific Day of the Week)"`, 조회 실패 시 `"Unknown"`) |
+| `results[].schedule.description` | string | schedule 영문 설명 (`processScheduleInfo` 결과 — 예: `"[Basic] Start working at 03:00 every day."`, `"[Basic] Start working at 03:00 Monday, Wednesday every week."`, 조회 실패 시 `"Schedule lookup failed"`) |
+| `results[].errorMessage` | string | 실패 시 오류 메시지 |
 
 </details>
 

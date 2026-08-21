@@ -29,7 +29,7 @@ ZDM-API는 백업, 복구, 시스템 관리를 위한 **API 서버**입니다.
 
 | 기능 | 설명 | 엔드포인트 |
 |------|------|------------|
-| **인증** | 안전한 API 접근 제어 | `POST /auth/issue` |
+| **인증** | 안전한 API 접근 제어 | {% if include.version >= "2.0.0" %}`POST /token/issue`{% else %}`POST /auth/issue`{% endif %} |
 | **사용자** | 사용자 계정 및 권한 관리 | `GET /users`, `PUT /users/:id` |
 | **서버** | 시스템 리소스 통합 관리 | `GET /servers`, `DELETE /servers/:id` |
 | **백업** | 자동화된 데이터 보호 | `GET /backups`, `POST /backups`, `PUT`, `DELETE` |
@@ -41,7 +41,7 @@ ZDM-API는 백업, 복구, 시스템 관리를 위한 **API 서버**입니다.
 {% endif %}| **스케줄** | 정기적인 백업 작업 예약 | `GET /schedules`, `POST /schedules` |
 | **파일** | 백업 파일 업로드/다운로드 | `POST /files/upload`, `GET /files/download` |
 | **라이선스** | 라이선스 발급 및 할당 | `GET /licenses`, `POST /licenses`, `PUT /licenses/assign` |
-| **ZDM 센터** | 멀티 센터 환경 관리 | `GET /zdm-centers` |
+| **ZDM 센터** | 멀티 센터 환경 관리 | `GET /zdms` |
 
 ---
 
@@ -57,5 +57,5 @@ ZDM-API는 백업, 복구, 시스템 관리를 위한 **API 서버**입니다.
 
 ## 참고사항
 
-- 모든 API 호출에는 `POST /auth/issue`로 발급받은 인증 토큰이 필요합니다
+- 모든 API 호출에는 {% if include.version >= "2.0.0" %}`POST /token/issue`{% else %}`POST /auth/issue`{% endif %}로 발급받은 인증 토큰이 필요합니다
 - 요청 헤더에 `Authorization: Bearer <token>` 형식으로 토큰을 포함해야 합니다

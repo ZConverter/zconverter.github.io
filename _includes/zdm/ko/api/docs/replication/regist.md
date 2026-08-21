@@ -47,7 +47,7 @@ curl -X POST "https://api.example.com/api/replications" \
     "sourceCenter": "1",
     "targetCenter": "2",
     "replicationUnitType": "repository",
-    "replicationMode": "incremental",
+    "replicationMode": "increment",
     "sourceRepository": "39,40",
     "targetRepository": "41",
     "networkLimit": 1024
@@ -155,7 +155,7 @@ curl -X POST "https://api.example.com/api/replications" \
     "sourceCenter": "1",
     "targetCenter": "2",
     "replicationUnitType": "repository",
-    "replicationMode": "incremental",
+    "replicationMode": "increment",
     "sourceRepository": "39",
     "targetRepository": "//192.168.1.100/replication"
   }'
@@ -182,7 +182,9 @@ curl -X POST "https://api.example.com/api/replications" \
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
-**성공 응답 (201 Created)**
+> **v2.0.2 신설**: 이전엔 schedule 처리가 미구현이었으나 본 버전부터 schedule 입력 시 처리 + 응답에 `schedule: { id, type, description }` 객체 노출. basic schedule 만 지원 (smart 차단). 모든 replicationMode (full / increment / sync) 에서 허용.
+
+**성공 응답 (201 Created) — schedule 미지정**
 
 ```json
 {
@@ -209,6 +211,38 @@ curl -X POST "https://api.example.com/api/replications" \
 }
 ```
 
+**성공 응답 (201 Created) — schedule 지정 (v2.0.2)**
+
+```json
+{
+  "success": true,
+  "requestID": "req-abc123",
+  "data": {
+    "summary": {
+      "total": 1,
+      "successful": 1,
+      "failed": 0
+    },
+    "results": [
+      {
+        "state": "success",
+        "jobName": "daily-repl",
+        "unitType": "repository",
+        "replicationMode": "increment",
+        "autoStart": "use",
+        "schedule": {
+          "id": 7,
+          "type": "Daily",
+          "description": "[Basic] Start working at 03:00 every day."
+        }
+      }
+    ]
+  },
+  "message": "Replication job registration completed",
+  "timestamp": "2026-04-17 10:30:00"
+}
+```
+
 </details>
 
 <details markdown="1" open>
@@ -224,7 +258,10 @@ curl -X POST "https://api.example.com/api/replications" \
 | `results[].unitType` | string | 복제 단위 유형 |
 | `results[].replicationMode` | string | 복제 모드 |
 | `results[].autoStart` | string | 자동 시작 여부 |
-| `results[].schedule` | object | 스케줄 정보 (설정시에만 포함) |
+| `results[].schedule` | object | 스케줄 정보 (요청에 `schedule` 지정 시에만 포함, 미지정 시 응답에 미포함) — v2.0.2 신설 |
+| `results[].schedule.id` | number | 등록된 schedule ID |
+| `results[].schedule.type` | string | schedule 타입 (displayMappings PascalCase 영문 — 예: `"Once"`, `"Every Minute"`, `"Hourly"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`, `"Smart Weekly (Specific Day of the Week)"`, 그 외 SMART_* 값들, 조회 실패 시 `"Unknown"`) |
+| `results[].schedule.description` | string | schedule 영문 설명 (`processScheduleInfo` 결과 — 예: `"[Basic] Start working at 03:00 every day."`, `"[Basic] Start working at 03:00 Monday, Wednesday every week."`, `"[Basic] Start working at 03:00 on the 1, 15 of every month."`, `"[Basic] Start working at 00:00 every 2 Hour."`, 조회 실패 시 `"Schedule lookup failed"`) |
 | `results[].errorMessage` | string | 실패 시 오류 메시지 |
 
 </details>

@@ -38,7 +38,7 @@ curl -X POST "https://api.example.com/api/cloud-auth/zos" \
 |---------|------|------|------|------|--------|
 | `Authorization` | Header | string | Required | Bearer 토큰 | |
 | `file` | Body (form-data) | file | Required | 인증 키 파일 | |
-| `center` | Body (form-data) | string | Required | 센터 ID 또는 이름 | |
+| `center` | Body (form-data) | string \| number | Required | 센터 ID 또는 이름 | |
 | `displayName` | Body (form-data) | string | Optional | 표시 이름 (미입력 시 자동생성: `{PLATFORM}_{timestamp}`) | |
 | `cloudPlatform` | Body (form-data) | string | Required | 클라우드 플랫폼 | `oci`, `nhn`, `ncp`, `aws`, `azure`, `minio` |
 
@@ -67,3 +67,14 @@ curl -X POST "https://api.example.com/api/cloud-auth/zos" \
 ```
 
 </details>
+
+<details markdown="1">
+<summary><strong>에러 코드</strong></summary>
+
+| 코드 | HTTP | 메시지 | 발생 상황 |
+|------|------|--------|-----------|
+| `DTO-VALIDATION-01` | 422 | Request body validation failed. | `center` 누락, `cloudPlatform` 미입력 또는 허용 enum(`oci`, `nhn`, `ncp`, `aws`, `azure`, `minio`) 외 값 |
+
+</details>
+
+---

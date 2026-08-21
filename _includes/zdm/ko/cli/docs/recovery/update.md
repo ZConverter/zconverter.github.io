@@ -45,8 +45,9 @@ zdm-cli recovery update --center 9 --id 123 --schedule-id 1234
 # 스케줄 변경 (JSON 파일 사용)
 zdm-cli recovery update --center 9 --id 123 --schedule-file "schedule.json"
 
-# 스케줄 변경 (JSON 문자열 사용)
-zdm-cli recovery update --center 9 --id 123 --schedule '{"type":"daily","time":"02:00"}'
+# 스케줄 변경 (JSON 문자열 사용) — type 은 정수 0 ~ 6 (Recovery 는 basic only)
+# 예: type 3 = Daily, type 4 = Weekly. 상세는 recovery regist 문서의 schedule 동봉 예시 참조
+zdm-cli recovery update --center 9 --id 123 --schedule '{"type":3,"basic":{"time":"03:00"}}'
 
 # 메일 알림 수신자 변경
 zdm-cli recovery update --center 9 --id 123 --mail-event "admin@example.com"
@@ -93,6 +94,10 @@ zdm-cli recovery update --center 9 --id 123 --change-name "MyRecovery" --platfor
 <details markdown="1" open>
 <summary><strong>출력 예시</strong></summary>
 
+> **v2.0.2 변경 사항**:
+> - Schedule(Basic) 변경 detail 의 `previous`/`new` 가 `{ id, type, description }` 객체로 확장. 이전 schedule 없음은 `null` 로 표시. CLI 는 `formatChangeValue` 로 한 줄 변환 (`- -> Daily ([Basic] Start working at 03:00 every day.)` 형식).
+> - Job Status 변경 detail 의 `previous` 가 DB raw enum 이 아닌 UI 와 동일한 calculated 결과 (`Registered` / `Processing` / `Scheduled` / `Complete` 등). `new` 는 요청 입력값 (`start` / `stop`) 그대로.
+
 **Text 형식 (--output text, 기본값):**
 
 ```
@@ -113,29 +118,41 @@ id                : 123
 name              : new-recovery-name
 
 [Update Summary]
-state             : updated
+state             : success
 
 [Common Fields Changed]
 [Change 1]
-field             : name
-value             : old-recovery-name -> new-recovery-name
+field : Recovery Mode
+value : full -> increment
 
 [Change 2]
-field             : platform
-value             : vmware -> aws
+field : After Reboot
+value : shutdown -> reboot
 
 [Change 3]
-field             : afterReboot
-value             : shutdown -> reboot
+field : Schedule(Basic)
+value : - -> Daily ([Basic] Start working at 03:00 every day.)
+
+[Change 4]
+field : Job Status
+value : Registered -> start
 
 [Partition-specific Changes]
 [Partition 1]
-partition         : /
-field             : mode
-value             : full -> inc
+partition : /
+[Change 1]
+field : Recovery Mode
+value : increment -> full
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+> `Schedule(Basic)` 변경 detail 은 `formatChangeValue` 가 객체를 한 줄로 변환합니다. `previous` 가 `null` 이면 `-`, 그렇지 않으면 `<type> (<description>)` 형식. (Recovery 는 `basic` 만 지원 — `Schedule(Advanced)` 필드는 발생하지 않음)
+> `Job Status` 변경 detail 의 `previous` 는 UI 와 동일한 calculated 값 (`Registered` / `Processing` / `Scheduled` / `Complete` 등) 으로 표시됩니다.
+
+**Table 형식 (--output table):**
+
+table 출력은 commonUpdatedFields / eachUpdatedFields 를 각각 행 단위 표로 표시하며, `previous`/`new` 컬럼은 `formatChangeValue` 결과를 표시합니다. Schedule(Basic) / Job Status 도 동일하게 한 줄 변환되어 셀에 들어갑니다.
 
 **JSON 형식 (--output json):**
 
@@ -150,35 +167,46 @@ value             : full -> inc
       "name": "new-recovery-name"
     },
     "summary": {
-      "state": "updated",
+      "state": "success",
       "commonUpdatedFields": [
         {
-          "field": "name",
-          "previous": "old-recovery-name",
-          "new": "new-recovery-name"
+          "field": "Recovery Mode",
+          "previous": "full",
+          "new": "increment"
         },
         {
-          "field": "platform",
-          "previous": "vmware",
-          "new": "aws"
-        },
-        {
-          "field": "afterReboot",
+          "field": "After Reboot",
           "previous": "shutdown",
           "new": "reboot"
+        },
+        {
+          "field": "Schedule(Basic)",
+          "previous": null,
+          "new": {
+            "id": 7,
+            "type": "Daily",
+            "description": "[Basic] Start working at 03:00 every day."
+          }
+        },
+        {
+          "field": "Job Status",
+          "previous": "Registered",
+          "new": "start"
         }
       ],
       "eachUpdatedFields": [
         {
           "partition": "/",
           "summary": {
+            "state": "success",
             "commonUpdatedFields": [
               {
-                "field": "mode",
-                "previous": "full",
-                "new": "inc"
+                "field": "Recovery Mode",
+                "previous": "increment",
+                "new": "full"
               }
-            ]
+            ],
+            "eachUpdatedFields": []
           }
         }
       ]
@@ -187,6 +215,10 @@ value             : full -> inc
   "timestamp": "2025-01-01 10:30:00"
 }
 ```
+
+> JSON 응답은 서버 응답을 그대로 직렬화합니다 (text/table 양식은 CLI 측에서 `formatChangeValue` 로 한 줄 변환).
+> `Schedule(Basic)` 의 `previous`/`new` 가 `null` 인 경우는 이전 schedule 이 없었거나 (id ≤ 0) 모드 전환으로 schedule 이 reset 된 경우입니다.
+> `Job Status` 의 `previous` 는 UI 와 동일한 calculated 값 (`"Registered"` / `"Processing"` / `"Scheduled"` / `"Complete"` 등) 이고, `new` 는 요청 body 의 `status` 입력값 (`"start"` / `"stop"`) 그대로입니다.
 
 </details>
 

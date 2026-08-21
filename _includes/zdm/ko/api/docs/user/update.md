@@ -7,6 +7,7 @@
 
 > * 사용자 ID 또는 이메일로 특정 사용자의 정보를 업데이트합니다.
 > * 최소 하나 이상의 필드가 요청 본문에 포함되어야 합니다.
+> * 토큰 주체 본인의 사용자 리소스만 수정할 수 있습니다. (v2.0.2 신규)
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -171,6 +172,21 @@ curl -X PUT "https://api.example.com/api/users/user@example.com" \
   "timestamp": "2025-01-15 10:30:00"
 }
 ```
+
+**권한 없음 (403 Forbidden)**
+
+> **v2.0.2 신규**: 토큰 주체 본인의 사용자 리소스만 수정할 수 있습니다. `identifier`가 토큰 주체의 사용자 ID 또는 이메일(이메일은 대소문자 구분 없음)과 일치하지 않으면 반환됩니다.
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "You can only access your own user resource.",
+  "timestamp": "2025-01-15 10:30:00"
+}
+```
+
+`identifier` 파라미터 검증이 먼저 수행되므로, 형식이 올바르지 않거나 비어 있는 `identifier`는 403이 아닌 400 (유효성 검사 실패)이 반환됩니다.
 
 </details>
 

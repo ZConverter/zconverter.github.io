@@ -88,12 +88,19 @@ curl -X GET "https://api.example.com/api/zdms/1?detail=true&repository=true" \
       "logFile": "/var/log/zdm",
       "install": "/opt/zdm"
     },
+    "disk": [],
+    "network": [],
+    "partition": [],
+    "repository": [],
+    "zosRepository": [],
     "lastUpdated": "2025-01-15 10:30:00"
   },
   "message": "ZDM information retrieved",
   "timestamp": "2025-01-15 10:30:00"
 }
 ```
+
+> `disk`, `network`, `partition`, `repository`, `zosRepository` 는 옵션 미지정 시에도 항상 빈 배열(`[]`)로 포함됩니다. 옵션(`disk=true` 등)을 지정하면 해당 배열만 채워지고 나머지는 `[]`로 유지됩니다.
 
 </details>
 

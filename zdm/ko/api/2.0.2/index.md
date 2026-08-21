@@ -10,4 +10,4 @@ lang: ko
 {% include zdm/ko/api/changelog/2.0.2.md %}
 {% endcapture %}
 
-{% include zdm/ko/api/index.md version="2.0.0" changelog=changelog changelog_title="변경 사항" %}
+{% include zdm/ko/api/index.md version="2.0.2" changelog=changelog changelog_title="변경 사항" %}

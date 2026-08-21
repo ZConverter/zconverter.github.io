@@ -127,6 +127,13 @@ zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --individual 
 </details>
 
 <details markdown="1" open>
+<summary><strong>v2.0.2 변경 사항</strong></summary>
+
+> **v2.0.2 변경 사항**: schedule 응답 객체에 `id` 필드 신규 추가 (text 양식 `id` 줄, table 양식 `Daily (#7)` 형식). type 은 displayMappings PascalCase 영문, description 은 `processScheduleInfo` 영문.
+
+</details>
+
+<details markdown="1" open>
 <summary><strong>출력 예시 (Text format)</strong></summary>
 
 ```
@@ -137,7 +144,7 @@ zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --individual 
 
 status    : success
 message   : Success
-timestamp : 2025-01-01 12:00:00
+timestamp : 2026-05-19 10:30:00
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [data]
@@ -153,26 +160,57 @@ failed     : 0
 state           : success
 jobName         : root_backup
 partition       : /
-jobMode         : full
+jobMode         : Full Backup
 autoStart       : use
 scriptPath      : -
 scriptRunTiming : -
-schedule.basic  : type: daily, description: Daily backup at 2AM
-schedule.advanced: -
+
+[Schedule - Basic]
+id          : 7
+type        : Daily
+description : [Basic] Start working at 03:00 every day.
 
 [Job 2]
 state           : success
 jobName         : home_backup
 partition       : /home
-jobMode         : full
+jobMode         : Smart Backup
 autoStart       : use
 scriptPath      : -
 scriptRunTiming : -
-schedule.basic  : -
-schedule.advanced: -
+
+[Schedule - Basic]
+id          : 13
+type        : Smart Weekly (Specific Day of the Week)
+description : [Basic] Start working every Monday at 10:00
+
+[Schedule - Advanced]
+id          : 14
+type        : Smart Weekly (Specific Day of the Week)
+description : [Advanced] Start working every Tuesday, Wednesday, Thursday, Friday at 12:00
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+> schedule 미지정으로 등록된 작업은 `[Schedule - Basic]` 블록이 출력되지 않습니다. smart 모드가 아닌 경우 `[Schedule - Advanced]` 블록은 출력되지 않습니다.
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>출력 예시 (Table format)</strong></summary>
+
+`--output table` 사용 시 schedule 컬럼은 `type (#id)` 형식으로 표시됩니다.
+
+```
+┌────────────┬─────────────┬───────────┬────────────────┬────────────┬───────────────────────────────────────────────┐
+│ state      │ jobName     │ partition │ jobMode        │ autoStart  │ schedule                                      │
+├────────────┼─────────────┼───────────┼────────────────┼────────────┼───────────────────────────────────────────────┤
+│ success    │ root_backup │ /         │ Full Backup    │ use        │ Daily (#7)                                    │
+│ success    │ home_backup │ /home     │ Smart Backup   │ use        │ Smart Weekly (Specific Day of the Week) (#13) │
+└────────────┴─────────────┴───────────┴────────────────┴────────────┴───────────────────────────────────────────────┘
+```
+
+> table 양식에서는 basic schedule 만 한 줄로 표시되며 (`type (#id)`), advanced 는 별도 컬럼으로 노출되지 않습니다. 상세는 text 또는 JSON 양식을 사용하세요.
 
 </details>
 
@@ -195,36 +233,46 @@ schedule.advanced: -
         "state": "success",
         "jobName": "root_backup",
         "partition": "/",
-        "jobMode": "full",
+        "jobMode": "Full Backup",
         "autoStart": "use",
         "scriptPath": "-",
         "scriptRunTiming": "-",
         "schedule": {
           "basic": {
-            "type": "daily",
-            "description": "Daily backup at 2AM"
-          },
-          "advanced": "-"
+            "id": 7,
+            "type": "Daily",
+            "description": "[Basic] Start working at 03:00 every day."
+          }
         }
       },
       {
         "state": "success",
         "jobName": "home_backup",
         "partition": "/home",
-        "jobMode": "full",
+        "jobMode": "Smart Backup",
         "autoStart": "use",
         "scriptPath": "-",
         "scriptRunTiming": "-",
         "schedule": {
-          "basic": "-",
-          "advanced": "-"
+          "basic": {
+            "id": 13,
+            "type": "Smart Weekly (Specific Day of the Week)",
+            "description": "[Basic] Start working every Monday at 10:00"
+          },
+          "advanced": {
+            "id": 14,
+            "type": "Smart Weekly (Specific Day of the Week)",
+            "description": "[Advanced] Start working every Tuesday, Wednesday, Thursday, Friday at 12:00"
+          }
         }
       }
     ]
   },
-  "timestamp": "2025-01-01 12:00:00"
+  "timestamp": "2026-05-19 10:30:00"
 }
 ```
+
+> `schedule.advanced` 는 smart 모드(type 7~11)일 때만 응답에 포함되며, 미설정 시 필드 자체가 누락됩니다 (이전 양식의 `"-"` 문자열 표시는 폐기).
 
 </details>
 

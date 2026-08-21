@@ -69,6 +69,7 @@ curl -X GET "https://api.example.com/api/licenses?page=1&limit=10" \
   "requestID": "req-abc123",
   "data": [
     {
+      "id": 1,
       "name": "Enterprise License",
       "key": "XXXX-XXXX-XXXX-XXXX",
       "category": "zdm(backup)",
@@ -102,6 +103,7 @@ curl -X GET "https://api.example.com/api/licenses?page=1&limit=10" \
   "requestID": "req-abc123",
   "data": [
     {
+      "id": 1,
       "name": "Enterprise License",
       "key": "XXXX-XXXX-XXXX-XXXX",
       "category": "zdm(backup)",
@@ -141,6 +143,7 @@ curl -X GET "https://api.example.com/api/licenses?page=1&limit=10" \
 
 | 필드 | 타입 | 설명 |
 |------|------|------|
+| `id` | number | 라이선스 ID |
 | `name` | string | 라이선스 이름 |
 | `key` | string | 라이선스 키 |
 | `category` | string | 라이선스 카테고리 |

@@ -113,6 +113,16 @@ zdm-cli backup update --id 123 --mode increment --output json
 </details>
 
 <details markdown="1" open>
+<summary><strong>v2.0.2 변경 사항</strong></summary>
+
+> **v2.0.2 변경 사항**:
+> - Schedule 변경 detail 의 `previous`/`new` 가 `{ id, type, description }` 객체로 확장. CLI 는 `formatChangeValue` 로 `Daily ([Basic] Start working at ...)` 한 줄 변환 표시.
+> - Job Status 변경 detail 의 `previous` 가 DB raw 가 아닌 UI 와 동일한 calculated 결과 (`Registered` / `Processing` / `Scheduled` / `Complete` 등).
+> - notices 신규 필드 — schedule 자동 복제 등 안내.
+
+</details>
+
+<details markdown="1" open>
 <summary><strong>출력 예시 (Text format)</strong></summary>
 
 ```
@@ -123,7 +133,7 @@ zdm-cli backup update --id 123 --mode increment --output json
 
 status    : success
 message   : Success
-timestamp : 2025-01-01 12:00:00
+timestamp : 2026-05-19 10:30:00
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [data]
@@ -133,18 +143,49 @@ state : success
 
 [Changed Fields]
 [Change 1]
+field : Schedule
+value : Daily ([Basic] Start working at 03:00 every day.) -> Weekly ([Basic] Start working at 03:00 Monday, Wednesday every week.)
+
+[Change 2]
+field : Job Status
+value : Registered -> start
+
+[Change 3]
 field : mode
 value : increment -> full
 
-[Change 2]
+[Change 4]
 field : compression
 value : not use -> use
 
-[Change 3]
+[Change 5]
 field : networkLimit
 value : 0 -> 1000
 
+[Notices]
+- Schedule was duplicated (1 schedule = 1 job principle). Source schedule ID: 5, new schedule ID: 10.
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+> `[Notices]` 블록은 schedule 자동 복제 등 부가 안내가 있을 때만 출력됩니다.
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>출력 예시 (Table format)</strong></summary>
+
+`--output table` 사용 시 변경 필드는 표 형태로 표시되며, Schedule/Job Status 의 previous/new 컬럼은 `formatChangeValue` 결과로 출력됩니다.
+
+```
+┌───┬────────────┬─────────────────────────────────────────────────────────────────────┬───────────────────────────────────────────────────────────────────────────────────┐
+│ # │ field      │ previous                                                            │ new                                                                               │
+├───┼────────────┼─────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+│ 1 │ Schedule   │ Daily ([Basic] Start working at 03:00 every day.)                   │ Weekly ([Basic] Start working at 03:00 Monday, Wednesday every week.)             │
+│ 2 │ Job Status │ Registered                                                          │ start                                                                             │
+│ 3 │ mode       │ increment                                                           │ full                                                                              │
+│ 4 │ rotation   │ 7                                                                   │ 14                                                                                │
+└───┴────────────┴─────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 </details>
@@ -158,9 +199,26 @@ value : 0 -> 1000
   "message": "Success",
   "success": true,
   "data": {
+    "jobInfo": [
+      {
+        "id": "123",
+        "name": "weekly-backup",
+        "partition": "/"
+      }
+    ],
     "summary": {
       "state": "success",
       "updatedFields": [
+        {
+          "field": "Schedule",
+          "previous": { "id": 5, "type": "Daily", "description": "[Basic] Start working at 03:00 every day." },
+          "new":      { "id": 10, "type": "Weekly", "description": "[Basic] Start working at 03:00 Monday, Wednesday every week." }
+        },
+        {
+          "field": "Job Status",
+          "previous": "Registered",
+          "new": "start"
+        },
         {
           "field": "mode",
           "previous": "increment",
@@ -177,11 +235,16 @@ value : 0 -> 1000
           "new": 1000
         }
       ]
-    }
+    },
+    "notices": [
+      "Schedule was duplicated (1 schedule = 1 job principle). Source schedule ID: 5, new schedule ID: 10."
+    ]
   },
-  "timestamp": "2025-01-01 12:00:00"
+  "timestamp": "2026-05-19 10:30:00"
 }
 ```
+
+> `Schedule` / `Schedule(Basic)` / `Schedule(Advanced)` 필드의 `previous` / `new` 는 v2.0.2 부터 `{ id, type, description }` 객체로 확장됩니다. CLI text/table 양식은 이를 `formatChangeValue` 로 `type (description)` 한 줄로 변환합니다. `notices` 는 schedule 자동 복제 등 부가 안내가 있을 때만 응답에 포함됩니다.
 
 </details>
 

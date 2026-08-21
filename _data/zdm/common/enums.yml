@@ -130,7 +130,7 @@ replication-v1-unit-types:
 replication-v1-modes:
   - value: "full"
     description: "전체 복제"
-  - value: "incremental"
+  - value: "increment"
     description: "증분 복제"
 
 # 복제 단위 유형
@@ -146,7 +146,7 @@ replication-unit-types:
 replication-modes:
   - value: "full"
     description: "전체 복제"
-  - value: "incremental"
+  - value: "increment"
     description: "증분 복제"
   - value: "sync"
     description: "동기화"

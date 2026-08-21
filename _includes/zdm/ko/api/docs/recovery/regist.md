@@ -128,6 +128,12 @@ curl -X POST "https://api.example.com/api/recoveries" \
 
 **성공 응답 (201 Created)**
 
+> **v2.0.2 변경 사항**:
+> - `schedule.basic` 객체에 `id` 필드 신규 추가 (type/description 은 기존 형식 그대로 — displayMappings PascalCase 영문 + `processScheduleInfo` 영문 결과)
+> - 응답에 `notices?: string[]` 필드 신규 — backup 없는 partition 자동 skip 안내 (값이 있을 때만 포함)
+
+> **자동 partition skip 동작 (v2.0.2)**: source 서버의 partition 중 backup 작업·이미지가 없는 partition 은 자동으로 jobList 에서 제외됩니다 (silent skip). skip 된 partition 은 `notices` 에 안내 메시지로 포함됩니다. 전체 partition 이 skip 되면 `JOB-ERROR-01` (NOT_FOUND) 응답이 반환됩니다. `excludePartition` 옵션을 명시하지 않아도 동일하게 동작합니다.
+
 ```json
 {
   "success": true,
@@ -141,8 +147,9 @@ curl -X POST "https://api.example.com/api/recoveries" \
       "bootMode": "reboot",
       "schedule": {
         "basic": {
-          "type": "daily",
-          "description": "Every day at 10:00"
+          "id": 7,
+          "type": "Daily",
+          "description": "[Basic] Start working at 03:00 every day."
         }
       },
       "scriptPath": "/opt/scripts/post-recovery.sh",
@@ -207,7 +214,10 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `common.autoStart` | string | 자동 시작 여부 |
 | `common.platform` | string | 타겟 플랫폼 |
 | `common.bootMode` | string | 작업 후 부팅 모드 (`reboot` / `shutdown` / `maintain`) |
-| `common.schedule.basic` | object/string | 기본 스케줄 정보 (설정시에만 포함) |
+| `common.schedule.basic` | object | 기본 스케줄 정보 (설정시에만 포함) — `{ id, type, description }` 객체 |
+| `common.schedule.basic.id` | number | 스케줄 ID (v2.0.2 신규) |
+| `common.schedule.basic.type` | string | 스케줄 타입 — displayMappings PascalCase 영문 (예: `"Once"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`, `"Smart Weekly (Specific Day of the Week)"` 등). 조회 실패 시 `"Unknown"` |
+| `common.schedule.basic.description` | string | `processScheduleInfo` 영문 결과 (예: `"[Basic] Start working at 03:00 every day."`). 조회 실패 시 `"Schedule lookup failed"` |
 | `common.scriptPath` | string | 스크립트 경로 (설정시에만 포함) |
 | `common.scriptRunTiming` | string | 스크립트 실행 타이밍 (`before job` / `after job`, 설정시에만 포함) |
 | `common.errorMessage` | string | 실패 시 오류 메시지 |
@@ -225,6 +235,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `summary.total` | number | 총 파티션 수 |
 | `summary.successful` | number | 성공한 파티션 수 |
 | `summary.failed` | number | 실패한 파티션 수 |
+| `notices` | string[] (optional) | 사용자 안내 메시지 배열 (v2.0.2 신규). backup 작업·이미지가 없는 partition 이 자동 skip 되었을 때만 응답에 포함. 예: `"Partition/drive 'D:' was skipped — no backup available: Backup job not found for partition 'D:' on server 'src-win01'"` |
 
 </details>
 
@@ -252,7 +263,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 > * Recovery 작업은 **`basic` 스케줄만** 지원합니다. (`mode`는 `full` / `increment`만 허용 — `smart` 모드 없음)
 > * 스케줄 `type`은 **0 ~ 6** 만 허용됩니다. (Smart 타입 7~11 불가 — 아래 거부 케이스 참조)
 > * `schedule` 필드를 생략하면 별도 예약 없이 등록되며, `autoStart=use` 와 함께 사용하면 즉시 1회 실행됩니다.
-> * 응답의 `common.schedule` 은 `schedule` 이 동봉되었을 때만 포함되며, `{ basic: { type, description } }` 형태로 직렬화됩니다. (`type` 은 문자열 표기, `description` 은 `[Basic]` prefix 포함)
+> * 응답의 `common.schedule` 은 `schedule` 이 동봉되었을 때만 포함되며, `{ basic: { id, type, description } }` 형태로 직렬화됩니다 (v2.0.2 — `id` 신규). `type` 은 displayMappings PascalCase 영문(`"Once"`, `"Daily"`, `"Weekly"` 등), `description` 은 `processScheduleInfo` 영문 결과(`[Basic]` prefix 포함).
 > * `schedule` 동봉 여부와 `autoStart` 는 **독립적**입니다. `autoStart=use` 는 등록 직후 1회 즉시 실행을, `schedule` 은 이후 반복/예약 실행을 각각 제어합니다.
 
 ---
@@ -335,6 +346,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
     "bootMode": "reboot",
     "schedule": {
       "basic": {
+        "id": 5,
         "type": "Once",
         "description": "[Basic] Start working on 01/06/2026 10:00."
       }
@@ -372,6 +384,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 ```json
 {
   "basic": {
+    "id": 6,
     "type": "Every Minute",
     "description": "[Basic] Start working at 10:00 every 5 Minute."
   }
@@ -407,6 +420,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 ```json
 {
   "basic": {
+    "id": 7,
     "type": "Hourly",
     "description": "[Basic] Start working at 10:00 every 2 Hour."
   }
@@ -440,6 +454,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 ```json
 {
   "basic": {
+    "id": 8,
     "type": "Daily",
     "description": "[Basic] Start working at 10:00 every day."
   }
@@ -475,6 +490,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 ```json
 {
   "basic": {
+    "id": 9,
     "type": "Weekly",
     "description": "[Basic] Start working at 10:00 Monday, Wednesday, Friday every week."
   }
@@ -583,6 +599,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
     "bootMode": "reboot",
     "schedule": {
       "basic": {
+        "id": 16,
         "type": "Daily",
         "description": "[Basic] Start working at 10:00 every day."
       }
@@ -664,8 +681,13 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": "Request body validation failed: schedule.basic: basic/advanced must be a schedule object or an existing schedule ID (number)",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": "Request body validation failed.",
+  "timestamp": "2025-01-15 10:30:00",
+  "detail": {
+    "validationErrors": {
+      "schedule.basic": ["basic/advanced must be a schedule object or an existing schedule ID (number)"]
+    }
+  }
 }
 ```
 
@@ -690,8 +712,13 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": "Request body validation failed: schedule.basic: basic schedule validation failed (type: 3): time: time is required",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": "Request body validation failed.",
+  "timestamp": "2025-01-15 10:30:00",
+  "detail": {
+    "validationErrors": {
+      "schedule.basic": ["basic schedule validation failed (type: 3): time: time is required"]
+    }
+  }
 }
 ```
 
@@ -720,8 +747,13 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 {
   "success": false,
   "requestID": "req-abc123",
-  "error": "Request body validation failed: schedule.type: invalid schedule type (must be 0 ~ 11)",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": "Request body validation failed.",
+  "timestamp": "2025-01-15 10:30:00",
+  "detail": {
+    "validationErrors": {
+      "schedule.type": ["invalid schedule type (must be 0 ~ 11)"]
+    }
+  }
 }
 ```
 

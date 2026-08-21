@@ -82,3 +82,44 @@ curl -X GET "https://api.example.com/api/cloud-auth/regions/gcp" \
 ```
 
 </details>
+
+<details markdown="1">
+<summary><strong>에러 응답</strong></summary>
+
+**인증 실패 (401 Unauthorized)**
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "Authentication required.",
+  "timestamp": "2026-03-20 10:30:00"
+}
+```
+
+**지원하지 않는 플랫폼 (400 Bad Request)**
+
+> **v2.0.2 신규**: 파일 시스템에 접근하기 전에 플랫폼 허용 목록(`aws`, `gcp`)을 먼저 검사합니다. `platform` 경로 파라미터를 이용한 path traversal 시도를 파일 접근 이전 단계에서 차단합니다.
+
+```json
+{
+  "success": false,
+  "requestID": "req-abc123",
+  "error": "Unsupported platform: azure. Supported platforms: aws, gcp",
+  "timestamp": "2026-03-20 10:30:00"
+}
+```
+
+> 지원되는 플랫폼인데 서버에 리전 파일이 없는 경우는 에러가 아닙니다. 내장된 기본 데이터로 대체되어 `200 OK`로 응답합니다.
+
+</details>
+
+<details markdown="1">
+<summary><strong>에러 코드</strong></summary>
+
+| 코드 | HTTP | 메시지 | 발생 시점 |
+|------|------|--------|-----------|
+| `UNAUTHORIZED` | 401 | Authentication required. | 토큰이 없거나 유효하지 않음 |
+| `BAD_REQUEST` | 400 | `Unsupported platform: <platform>. Supported platforms: aws, gcp` | `platform` 값이 `aws`, `gcp` 가 아님 (대소문자 무시) |
+
+</details>
