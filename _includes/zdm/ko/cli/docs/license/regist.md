@@ -60,7 +60,7 @@ zdm-cli license regist -c "zdm-center-01" -k "XXXX-XXXX-XXXX-XXXX" --output json
 **Text 형식 (기본)**
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* License Registration Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* License Registration Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -90,7 +90,7 @@ dates.daysRemaining : 365
 **JSON 형식**
 ```json
 {
-  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "License registered successfully",
   "success": true,
   "data": {
@@ -110,7 +110,7 @@ dates.daysRemaining : 365
       "daysRemaining": 365
     }
   },
-  "timestamp": "2024-01-15 10:30:00"
+  "timestamp": "2024-01-15T10:30:00.000+09:00"
 }
 ```
 

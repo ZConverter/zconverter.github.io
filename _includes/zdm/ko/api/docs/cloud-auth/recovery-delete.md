@@ -42,14 +42,14 @@ curl -X DELETE "https://api.example.com/api/cloud-auth/recovery/1" \
 
 ```json
 {
-  "requestID": "...",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": true,
   "data": {
     "id": 1,
     "displayName": "AWS_RECOVERY_1712345678901"
   },
   "message": "Cloud Auth Recovery deleted",
-  "timestamp": "2026-04-07 12:00:00"
+  "timestamp": "2026-04-07T12:00:00.000+09:00"
 }
 ```
 

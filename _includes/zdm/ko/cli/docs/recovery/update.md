@@ -102,7 +102,7 @@ zdm-cli recovery update --center 9 --id 123 --change-name "MyRecovery" --platfor
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Recovery Update Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* Recovery Update Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -158,7 +158,7 @@ table 출력은 commonUpdatedFields / eachUpdatedFields 를 각각 행 단위 �
 
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Recovery updated successfully",
   "success": true,
   "data": {
@@ -212,7 +212,7 @@ table 출력은 commonUpdatedFields / eachUpdatedFields 를 각각 행 단위 �
       ]
     }
   },
-  "timestamp": "2025-01-01 10:30:00"
+  "timestamp": "2025-01-01T10:30:00.000+09:00"
 }
 ```
 

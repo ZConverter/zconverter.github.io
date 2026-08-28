@@ -6,4 +6,4 @@ navigation: ko-api-2.0.0
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/server/list.md %}
+{% include zdm/ko/api/docs/server/list/2.0.2.md %}

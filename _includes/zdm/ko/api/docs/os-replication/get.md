@@ -41,7 +41,7 @@ curl -X GET "https://api.example.com/api/os-replications/1" \
 
 ```json
 {
-  "requestID": "...",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": true,
   "data": {
     "system": { "name": "center-01" },
@@ -68,7 +68,7 @@ curl -X GET "https://api.example.com/api/os-replications/1" \
     }
   },
   "message": "Os Replication retrieved",
-  "timestamp": "2026-04-08 12:00:00"
+  "timestamp": "2026-04-08T12:00:00.000+09:00"
 }
 ```
 
@@ -81,7 +81,7 @@ curl -X GET "https://api.example.com/api/os-replications/1" \
 
 ```json
 {
-  "requestID": "...",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": true,
   "data": {
     "system": { "name": "center-01" },
@@ -110,7 +110,7 @@ curl -X GET "https://api.example.com/api/os-replications/1" \
     }
   },
   "message": "Os Replication retrieved",
-  "timestamp": "2026-04-08 12:00:00"
+  "timestamp": "2026-04-08T12:00:00.000+09:00"
 }
 ```
 

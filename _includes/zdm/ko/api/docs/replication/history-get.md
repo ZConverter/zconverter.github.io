@@ -66,7 +66,7 @@ curl -X GET "https://api.example.com/api/replications/histories/backup-replicati
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "id": 1,
     "system": {
@@ -99,7 +99,7 @@ curl -X GET "https://api.example.com/api/replications/histories/backup-replicati
     }
   },
   "message": "Replication history retrieved",
-  "timestamp": "2026-03-20 10:30:00"
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 
@@ -113,7 +113,7 @@ curl -X GET "https://api.example.com/api/replications/histories/backup-replicati
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": [
     {
       "id": 1,
@@ -148,7 +148,7 @@ curl -X GET "https://api.example.com/api/replications/histories/backup-replicati
     }
   ],
   "message": "Replication history list",
-  "timestamp": "2026-03-20 10:30:00"
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 
@@ -191,9 +191,12 @@ curl -X GET "https://api.example.com/api/replications/histories/backup-replicati
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Replication history not found for ID '999'",
-  "timestamp": "2026-03-20 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "Replication history not found for ID '999'"
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 

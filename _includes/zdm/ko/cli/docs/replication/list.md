@@ -77,7 +77,7 @@ zdm-cli replication list --asc --output json
 **Text 형식 (기본)**
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Replication Info Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* Replication Info Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -109,7 +109,7 @@ lastUpdated             : 2025-01-15T10:15:00Z
 **JSON 형식**
 ```json
 {
-  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Success",
   "success": true,
   "data": [
@@ -141,7 +141,7 @@ lastUpdated             : 2025-01-15T10:15:00Z
       }
     }
   ],
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

@@ -52,7 +52,7 @@ curl -X GET "https://api.example.com/api/schedules/15" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "id": "1",
     "center": {
@@ -66,7 +66,7 @@ curl -X GET "https://api.example.com/api/schedules/15" \
     "description": "[Basic] Start working at 10:00 every day."
   },
   "message": "Schedule information retrieved",
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -77,7 +77,7 @@ curl -X GET "https://api.example.com/api/schedules/15" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc124",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "id": "15",
     "center": {
@@ -91,7 +91,7 @@ curl -X GET "https://api.example.com/api/schedules/15" \
     "description": "[Advanced] Start working every Monday, Wednesday, Friday at 10:00"
   },
   "message": "Schedule information retrieved",
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -102,7 +102,7 @@ curl -X GET "https://api.example.com/api/schedules/15" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc125",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "id": "21",
     "center": {
@@ -116,7 +116,7 @@ curl -X GET "https://api.example.com/api/schedules/15" \
     "description": "[Basic] Start working at 10:00 every day."
   },
   "message": "Schedule information retrieved",
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -150,9 +150,12 @@ curl -X GET "https://api.example.com/api/schedules/15" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Schedule with ID '999' not found",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE_NOT_FOUND",
+    "message": "Schedule with ID '999' not found"
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -163,9 +166,12 @@ curl -X GET "https://api.example.com/api/schedules/15" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc124",
-  "error": "Schedule description conversion failed.",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE_DESCRIPTION_CONVERSION_FAILED",
+    "message": "Schedule description conversion failed."
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 

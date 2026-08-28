@@ -129,7 +129,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "replicationInfo": {
       "id": 1,
@@ -156,7 +156,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
     }
   },
   "message": "Replication job updated",
-  "timestamp": "2026-03-20 10:30:00"
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 
@@ -165,7 +165,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "replicationInfo": {
       "id": "1",
@@ -182,7 +182,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
     }
   },
   "message": "Replication job updated",
-  "timestamp": "2026-03-20 10:30:00"
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 
@@ -217,9 +217,12 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Replication not found (identifier: 999, center: 1)",
-  "timestamp": "2026-03-20 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "Replication not found (identifier: 999, center: 1)"
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 

@@ -93,7 +93,7 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": [
     {
       "image": {
@@ -163,7 +163,7 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
     }
   ],
   "message": "Backup images retrieved successfully",
-  "timestamp": "2026-01-09 10:30:00"
+  "timestamp": "2026-01-09T10:30:00.000+09:00"
 }
 ```
 
@@ -175,7 +175,7 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": [
     {
       "image": {
@@ -211,7 +211,7 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
     }
   ],
   "message": "Backup images retrieved successfully",
-  "timestamp": "2026-01-24 08:00:00"
+  "timestamp": "2026-01-24T08:00:00.000+09:00"
 }
 ```
 
@@ -223,7 +223,7 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": [
     {
       "image": {
@@ -268,7 +268,7 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
     "hasPreviousPage": false
   },
   "message": "Backup images retrieved successfully",
-  "timestamp": "2026-01-09 10:30:00"
+  "timestamp": "2026-01-09T10:30:00.000+09:00"
 }
 ```
 
@@ -280,10 +280,10 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": [],
   "message": "Backup images retrieved successfully",
-  "timestamp": "2026-01-09 10:30:00"
+  "timestamp": "2026-01-09T10:30:00.000+09:00"
 }
 ```
 
@@ -363,9 +363,12 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "요청한 Center '6'을(를) 찾을 수 없습니다",
-  "timestamp": "2026-01-28 08:42:51"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "요청한 Center '6'을(를) 찾을 수 없습니다"
+  },
+  "timestamp": "2026-01-28T08:42:51.000+09:00"
 }
 ```
 
@@ -376,9 +379,12 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "요청한 Repository ID 14를 찾을 수 없습니다",
-  "timestamp": "2026-01-28 08:42:51"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "요청한 Repository ID 14를 찾을 수 없습니다"
+  },
+  "timestamp": "2026-01-28T08:42:51.000+09:00"
 }
 ```
 
@@ -387,9 +393,12 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "등록된 Repository가 없습니다",
-  "timestamp": "2026-01-28 08:42:51"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "ZDM-REPOSITORY-ERROR-01",
+    "message": "등록된 Repository가 없습니다"
+  },
+  "timestamp": "2026-01-28T08:42:51.000+09:00"
 }
 ```
 
@@ -400,9 +409,12 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "서버 'invalid-server'을(를) 찾을 수 없습니다",
-  "timestamp": "2026-01-09 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "서버 'invalid-server'을(를) 찾을 수 없습니다"
+  },
+  "timestamp": "2026-01-09T10:30:00.000+09:00"
 }
 ```
 
@@ -413,9 +425,12 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "백업 이미지가 존재하지 않음 (Center: CenterName, Repository ID: 13)",
-  "timestamp": "2026-01-28 08:42:51"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "백업 이미지가 존재하지 않음 (Center: CenterName, Repository ID: 13)"
+  },
+  "timestamp": "2026-01-28T08:42:51.000+09:00"
 }
 ```
 
@@ -426,9 +441,12 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "백업 이미지 조회 작업 시간 초과 (10초 경과, Center: CenterName, Repository ID: 13)",
-  "timestamp": "2026-01-28 08:42:51"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-68",
+    "message": "백업 이미지 조회 작업 시간 초과 (10초 경과, Center: CenterName, Repository ID: 13)"
+  },
+  "timestamp": "2026-01-28T08:42:51.000+09:00"
 }
 ```
 
@@ -437,9 +455,12 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "서버 이름(serverName)이 필요합니다.",
-  "timestamp": "2026-01-09 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "서버 이름(serverName)이 필요합니다."
+  },
+  "timestamp": "2026-01-09T10:30:00.000+09:00"
 }
 ```
 

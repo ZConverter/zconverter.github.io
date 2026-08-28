@@ -138,7 +138,7 @@ zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --individual 
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Backup Registration Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* Backup Registration Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -219,7 +219,7 @@ description : [Advanced] Start working every Tuesday, Wednesday, Thursday, Frida
 
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Success",
   "success": true,
   "data": {
@@ -268,7 +268,7 @@ description : [Advanced] Start working every Tuesday, Wednesday, Thursday, Frida
       }
     ]
   },
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 

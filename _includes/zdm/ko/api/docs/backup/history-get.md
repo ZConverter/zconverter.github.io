@@ -65,7 +65,7 @@ curl -X GET "https://api.example.com/api/backups/histories/daily-backup?result=s
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "id": 1,
     "system": {
@@ -89,7 +89,7 @@ curl -X GET "https://api.example.com/api/backups/histories/daily-backup?result=s
     }
   },
   "message": "Backup history retrieved",
-  "timestamp": "2026-03-03 10:30:00"
+  "timestamp": "2026-03-03T10:30:00.000+09:00"
 }
 ```
 
@@ -103,7 +103,7 @@ curl -X GET "https://api.example.com/api/backups/histories/daily-backup?result=s
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": [
     {
       "id": 1,
@@ -129,7 +129,7 @@ curl -X GET "https://api.example.com/api/backups/histories/daily-backup?result=s
     }
   ],
   "message": "Backup history list",
-  "timestamp": "2026-03-03 10:30:00"
+  "timestamp": "2026-03-03T10:30:00.000+09:00"
 }
 ```
 
@@ -167,9 +167,12 @@ curl -X GET "https://api.example.com/api/backups/histories/daily-backup?result=s
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Backup history not found for ID '999'",
-  "timestamp": "2026-03-03 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "Backup history not found for ID '999'"
+  },
+  "timestamp": "2026-03-03T10:30:00.000+09:00"
 }
 ```
 

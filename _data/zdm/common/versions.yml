@@ -22,8 +22,14 @@
 #     `site.data.zdm.common.doc_mtimes[prod][version]`에 주입.
 
 api:
-  - version: "2.0.2"
+  - version: "3.0.0"
     status: latest
+    docs: "3.0.0"           # 자체 docs (응답 봉투 BREAKING: error 객체화 · requestID→traceId · timestamp ISO 8601 + Image Recovery 신설)
+    downloads:
+      - os: "Linux"
+        file: "/downloads/zdm-api/3.0.0/zdm-api-linux.tar.gz"
+  - version: "2.0.2"
+    status: stable
     docs: "2.0.2"           # 자체 docs (replication/os-replication delete 응답 양식 통일 + backup-update Schedule detail 구조 확장 BREAKING)
     downloads:
       - os: "Linux"
@@ -74,8 +80,16 @@ api:
         file: "/downloads/zdm-api/1.0.3/zdm-api-linux.tar.gz"
 
 cli:
-  - version: "2.0.2"
+  - version: "3.0.0"
     status: latest
+    docs: "3.0.0"           # 자체 docs (API 3.0.0 응답 봉투 대응 — 출력 헤더 traceId + recovery image-regist 신설)
+    downloads:
+      - os: "Windows"
+        file: "/downloads/zdm-cli/3.0.0/zdm-cli-windows.zip"
+      - os: "Linux"
+        file: "/downloads/zdm-cli/3.0.0/zdm-cli-linux.tar.gz"
+  - version: "2.0.2"
+    status: stable
     docs: "2.0.0"           # 재사용 패치: v2.0.0 문서 그대로 사용 (사용자 facing 변경은 changelog/2.0.2.md 로 표시)
     docs_updated: "2026-05-29"   # changelog 는 intro 만 include 하므로 generator 자동 추출 대상 외 → 수동 명시
     downloads:

@@ -50,7 +50,7 @@ curl -X POST "https://api.example.com/api/files/upload" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "file": {
       "filename": "file-1705312200000-123456789-document.txt",
@@ -61,7 +61,7 @@ curl -X POST "https://api.example.com/api/files/upload" \
     }
   },
   "message": "File upload result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -87,10 +87,13 @@ curl -X POST "https://api.example.com/api/files/upload" \
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "File size exceeds the limit.",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": {
+    "code": "FILE-ERROR-04",
+    "message": "File size exceeds the limit."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -98,10 +101,13 @@ curl -X POST "https://api.example.com/api/files/upload" \
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "An error occurred during file upload.",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": {
+    "code": "FILE-ERROR-05",
+    "message": "An error occurred during file upload."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

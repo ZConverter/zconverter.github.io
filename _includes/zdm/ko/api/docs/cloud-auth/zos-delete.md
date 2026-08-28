@@ -47,7 +47,7 @@ curl -X DELETE "https://api.example.com/api/cloud-auth/zos/config.conf" \
 
 ```json
 {
-  "requestID": "...",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": true,
   "data": {
     "id": 1,
@@ -55,7 +55,7 @@ curl -X DELETE "https://api.example.com/api/cloud-auth/zos/config.conf" \
     "fileName": "config.conf"
   },
   "message": "Cloud Auth ZOS deleted",
-  "timestamp": "2026-04-07 12:00:00"
+  "timestamp": "2026-04-07T12:00:00.000+09:00"
 }
 ```
 

@@ -53,7 +53,7 @@ zdm-cli token i -p mypassword
 **Text 형식 출력:**
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Token Issue Result [requestID: 912ba6eb-c160-4613-8574-c3cf47ea22a5] [output: text]
+* Token Issue Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -73,14 +73,14 @@ expiresAt : 2026-04-17 11:30:00
 **JSON 형식 출력:**
 ```json
 {
-  "requestID": "912ba6eb-c160-4613-8574-c3cf47ea22a5",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Token issued successfully.",
   "success": true,
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
     "expiresAt": "2026-04-17 11:30:00"
   },
-  "timestamp": "2026-04-17 10:30:00",
+  "timestamp": "2026-04-17T10:30:00.000+09:00",
   "userMail": "admin@example.com"
 }
 ```

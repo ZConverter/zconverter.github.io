@@ -132,12 +132,12 @@ curl -X POST "https://api.example.com/api/recoveries" \
 > - `schedule.basic` 객체에 `id` 필드 신규 추가 (type/description 은 기존 형식 그대로 — displayMappings PascalCase 영문 + `processScheduleInfo` 영문 결과)
 > - 응답에 `notices?: string[]` 필드 신규 — backup 없는 partition 자동 skip 안내 (값이 있을 때만 포함)
 
-> **자동 partition skip 동작 (v2.0.2)**: source 서버의 partition 중 backup 작업·이미지가 없는 partition 은 자동으로 jobList 에서 제외됩니다 (silent skip). skip 된 partition 은 `notices` 에 안내 메시지로 포함됩니다. 전체 partition 이 skip 되면 `JOB-ERROR-01` (NOT_FOUND) 응답이 반환됩니다. `excludePartition` 옵션을 명시하지 않아도 동일하게 동작합니다.
+> **자동 partition skip 동작**: source 서버의 partition 중 backup 작업·이미지가 없는 partition 은 자동으로 jobList 에서 제외됩니다 (silent skip). skip 된 partition 은 `notices` 에 안내 메시지로 포함됩니다. 전체 partition 이 skip 되면 `JOB-ERROR-14` (400 Bad Request) 응답이 반환되며, 각 partition 이 왜 제외됐는지가 메시지에 함께 담깁니다. `excludePartition` 옵션을 명시하지 않아도 동일하게 동작합니다.
 
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "common": {
       "state": "success",
@@ -198,7 +198,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
     }
   },
   "message": "Recovery job registration completed",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -247,9 +247,12 @@ curl -X POST "https://api.example.com/api/recoveries" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "platform은 oci, ncp, gcp, aws, azure, vmware, scp, openstack, cloudstack, kt, nhn, nutanix, proxmox, kvm, hyperv, xenserver중 하나여야 합니다",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "platform은 oci, ncp, gcp, aws, azure, vmware, scp, openstack, cloudstack, kt, nhn, nutanix, proxmox, kvm, hyperv, xenserver중 하나여야 합니다"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -278,7 +281,9 @@ curl -X POST "https://api.example.com/api/recoveries" \
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "full",
   "jobName": "daily-recovery",
   "autoStart": "use"
@@ -290,7 +295,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "common": {
       "state": "success",
@@ -303,7 +308,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
     "summary": { "total": 1, "successful": 1, "failed": 0 }
   },
   "message": "Recovery job registration completed",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -319,7 +324,9 @@ curl -X POST "https://api.example.com/api/recoveries" \
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "full",
   "jobName": "once-recovery",
   "schedule": {
@@ -367,13 +374,17 @@ curl -X POST "https://api.example.com/api/recoveries" \
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "increment",
   "schedule": {
     "type": 1,
     "basic": {
       "time": "10:00",
-      "interval": { "minute": "5" }
+      "interval": {
+        "minute": "5"
+      }
     }
   }
 }
@@ -403,13 +414,17 @@ curl -X POST "https://api.example.com/api/recoveries" \
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "increment",
   "schedule": {
     "type": 2,
     "basic": {
       "time": "10:00",
-      "interval": { "hour": "2" }
+      "interval": {
+        "hour": "2"
+      }
     }
   }
 }
@@ -439,12 +454,16 @@ curl -X POST "https://api.example.com/api/recoveries" \
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "full",
   "jobName": "daily-recovery",
   "schedule": {
     "type": 3,
-    "basic": { "time": "10:00" }
+    "basic": {
+      "time": "10:00"
+    }
   }
 }
 ```
@@ -473,7 +492,9 @@ curl -X POST "https://api.example.com/api/recoveries" \
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "full",
   "schedule": {
     "type": 4,
@@ -509,7 +530,9 @@ curl -X POST "https://api.example.com/api/recoveries" \
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "full",
   "schedule": {
     "type": 5,
@@ -534,7 +557,9 @@ curl -X POST "https://api.example.com/api/recoveries" \
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "full",
   "schedule": {
     "type": 6,
@@ -558,7 +583,9 @@ curl -X POST "https://api.example.com/api/recoveries" \
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "full",
   "schedule": 42
 }
@@ -578,7 +605,9 @@ curl -X POST "https://api.example.com/api/recoveries" \
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "full",
   "schedule": {
     "type": 3,
@@ -633,11 +662,16 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "full",
   "schedule": {
     "type": 7,
-    "basic": { "day": "mon", "time": "10:00" }
+    "basic": {
+      "day": "mon",
+      "time": "10:00"
+    }
   }
 }
 ```
@@ -647,9 +681,12 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "For full/increment job types, schedule must contain only basic.",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-101",
+    "message": "For full/increment job types, schedule must contain only basic."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -669,9 +706,13 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "full",
-  "schedule": { "type": 3 }
+  "schedule": {
+    "type": 3
+  }
 }
 ```
 
@@ -680,14 +721,17 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Request body validation failed.",
-  "timestamp": "2025-01-15 10:30:00",
-  "detail": {
-    "validationErrors": {
-      "schedule.basic": ["basic/advanced must be a schedule object or an existing schedule ID (number)"]
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "Request body validation failed.",
+    "details": {
+      "schedule.basic": [
+        "basic/advanced must be a schedule object or an existing schedule ID (number)"
+      ]
     }
-  }
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -711,14 +755,17 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Request body validation failed.",
-  "timestamp": "2025-01-15 10:30:00",
-  "detail": {
-    "validationErrors": {
-      "schedule.basic": ["basic schedule validation failed (type: 3): time: time is required"]
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "Request body validation failed.",
+    "details": {
+      "schedule.basic": [
+        "basic schedule validation failed (type: 3): time: time is required"
+      ]
     }
-  }
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -736,7 +783,9 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 {
   "schedule": {
     "type": 12,
-    "basic": { "time": "10:00" }
+    "basic": {
+      "time": "10:00"
+    }
   }
 }
 ```
@@ -746,14 +795,17 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Request body validation failed.",
-  "timestamp": "2025-01-15 10:30:00",
-  "detail": {
-    "validationErrors": {
-      "schedule.type": ["invalid schedule type (must be 0 ~ 11)"]
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "Request body validation failed.",
+    "details": {
+      "schedule.type": [
+        "invalid schedule type (must be 0 ~ 11)"
+      ]
     }
-  }
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -771,7 +823,9 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "full",
   "schedule": 99999
 }
@@ -782,9 +836,12 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Schedule ID '99999' not found",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-100",
+    "message": "Schedule ID '99999' not found"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -800,9 +857,16 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "full",
-  "schedule": { "type": 3, "basic": { "time": "10:00" } }
+  "schedule": {
+    "type": 3,
+    "basic": {
+      "time": "10:00"
+    }
+  }
 }
 ```
 
@@ -811,9 +875,12 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Zdm with ID '999' not found",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "ZDM-ERROR-01",
+    "message": "Zdm with ID '999' not found"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -829,7 +896,9 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
   "source": "source-server",
   "target": "target-server",
   "platform": "vmware",
-  "repository": { "id": 13 },
+  "repository": {
+    "id": 13
+  },
   "mode": "full",
   "schedule": {
     "type": 3,
@@ -843,9 +912,12 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Schedule ID '999' not found.",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-01",
+    "message": "Schedule ID '999' not found."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

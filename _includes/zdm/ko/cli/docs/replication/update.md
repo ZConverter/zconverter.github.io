@@ -106,7 +106,7 @@ zdm-cli replication update --id 123 --mode full --output json
 **Text 형식 (기본)**
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Replication Update Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* Replication Update Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -150,7 +150,7 @@ value : Daily ([Basic] Start working at 03:00 every day.) -> Weekly ([Basic] Sta
 
 ```json
 {
-  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Replication updated successfully",
   "success": true,
   "data": {
@@ -173,7 +173,7 @@ value : Daily ([Basic] Start working at 03:00 every day.) -> Weekly ([Basic] Sta
       ]
     }
   },
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

@@ -45,7 +45,7 @@ zdm-cli file upload -f "./backup.tar.gz"
 **Text 형식 (기본값)**
 ```text
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* File Upload Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* File Upload Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -69,7 +69,7 @@ timestamp : 2025-01-01 10:00:00
 **JSON 형식**
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "File uploaded successfully",
   "success": true,
   "data": {
@@ -81,7 +81,7 @@ timestamp : 2025-01-01 10:00:00
       "path": "/uploads/backup_20250101_123456.tar.gz"
     }
   },
-  "timestamp": "2025-01-01 10:00:00"
+  "timestamp": "2025-01-01T10:00:00.000+09:00"
 }
 ```
 

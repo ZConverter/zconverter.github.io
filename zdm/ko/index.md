@@ -109,7 +109,16 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 
 ## 업데이트 목록
 
-### ZDM-API <span class="badge badge-latest">latest v2.0.2</span> <span class="update-date">(2026-06-01)</span>
+### ZDM-API <span class="badge badge-latest">latest v3.0.0</span> <span class="update-date">(2026-08-28)</span>
+
+<details markdown="1">
+<summary><strong>v3.0.0</strong> <span class="update-date">(2026-08-28)</span></summary>
+
+[v3.0.0 문서 바로가기](/zdm/ko/api/3.0.0/index)
+
+{% include zdm/ko/api/changelog/3.0.0.md %}
+
+</details>
 
 <details markdown="1">
 <summary><strong>v2.0.2</strong> <span class="update-date">(2026-06-01)</span></summary>
@@ -169,7 +178,16 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 
 </details>
 
-### ZDM-CLI <span class="badge badge-latest">latest v2.0.2</span> <span class="update-date">(2026-05-29)</span>
+### ZDM-CLI <span class="badge badge-latest">latest v3.0.0</span> <span class="update-date">(2026-08-28)</span>
+
+<details markdown="1">
+<summary><strong>v3.0.0</strong> <span class="update-date">(2026-08-28)</span></summary>
+
+[v3.0.0 문서 바로가기](/zdm/ko/cli/3.0.0/index)
+
+{% include zdm/ko/cli/changelog/3.0.0.md %}
+
+</details>
 
 <details markdown="1">
 <summary><strong>v2.0.0</strong> <span class="update-date">(2026-04-17)</span> · <span class="badge badge-patch">patch v2.0.1</span> <span class="update-date">(2026-05-21)</span> · <span class="badge badge-patch">patch v2.0.2</span> <span class="update-date">(2026-05-29)</span></summary>

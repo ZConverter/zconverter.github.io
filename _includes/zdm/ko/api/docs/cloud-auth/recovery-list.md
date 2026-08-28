@@ -52,7 +52,7 @@ curl -X GET "https://api.example.com/api/cloud-auth/recovery?cloudType=aws&page=
 
 ```json
 {
-  "requestID": "...",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": true,
   "data": [
     {
@@ -66,7 +66,7 @@ curl -X GET "https://api.example.com/api/cloud-auth/recovery?cloudType=aws&page=
     }
   ],
   "message": "Cloud Auth Recovery list",
-  "timestamp": "2026-04-07 12:00:00"
+  "timestamp": "2026-04-07T12:00:00.000+09:00"
 }
 ```
 
@@ -77,7 +77,7 @@ curl -X GET "https://api.example.com/api/cloud-auth/recovery?cloudType=aws&page=
 
 ```json
 {
-  "requestID": "...",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": true,
   "data": [
     {
@@ -94,7 +94,7 @@ curl -X GET "https://api.example.com/api/cloud-auth/recovery?cloudType=aws&page=
     }
   ],
   "message": "Cloud Auth Recovery list",
-  "timestamp": "2026-04-07 12:00:00"
+  "timestamp": "2026-04-07T12:00:00.000+09:00"
 }
 ```
 

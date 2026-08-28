@@ -97,7 +97,7 @@ curl -X POST "https://api.example.com/api/cloud-auth/recovery" \
 
 ```json
 {
-  "requestID": "...",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": true,
   "data": {
     "state": "success",
@@ -108,7 +108,7 @@ curl -X POST "https://api.example.com/api/cloud-auth/recovery" \
     }
   },
   "message": "Cloud Auth Recovery registered",
-  "timestamp": "2026-04-07 12:00:00"
+  "timestamp": "2026-04-07T12:00:00.000+09:00"
 }
 ```
 

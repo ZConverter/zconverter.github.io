@@ -62,7 +62,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "system": {
       "name": "linux-server-01"
@@ -88,7 +88,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
     }
   },
   "message": "Backup monitoring info",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -100,7 +100,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "system": {
       "name": "windows-server-01"
@@ -125,7 +125,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
     }
   },
   "message": "Backup monitoring info",
-  "timestamp": "2025-01-15 10:20:00"
+  "timestamp": "2025-01-15T10:20:00.000+09:00"
 }
 ```
 
@@ -161,10 +161,13 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "Name이 'daily-backup'인 조건에 맞는 Backup 작업을 찾을 수 없습니다.",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "Name이 'daily-backup'인 조건에 맞는 Backup 작업을 찾을 수 없습니다."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -174,10 +177,13 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "작업 데이터가 불완전합니다. backup 정보가 누락되었습니다.",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": {
+    "code": "JOB-ERROR-20",
+    "message": "작업 데이터가 불완전합니다. backup 정보가 누락되었습니다."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

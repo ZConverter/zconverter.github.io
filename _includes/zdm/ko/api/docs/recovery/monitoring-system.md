@@ -64,7 +64,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "system": {
       "source": {
@@ -117,7 +117,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
     }
   },
   "message": "Server recovery monitoring info",
-  "timestamp": "2025-01-15 10:45:00"
+  "timestamp": "2025-01-15T10:45:00.000+09:00"
 }
 ```
 
@@ -129,7 +129,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "system": {
       "source": {
@@ -182,7 +182,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
     }
   },
   "message": "Server recovery monitoring info",
-  "timestamp": "2025-01-15 10:45:00"
+  "timestamp": "2025-01-15T10:45:00.000+09:00"
 }
 ```
 
@@ -194,7 +194,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "system": {
       "source": {
@@ -244,7 +244,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
     }
   },
   "message": "Server recovery monitoring info",
-  "timestamp": "2025-01-15 10:45:00"
+  "timestamp": "2025-01-15T10:45:00.000+09:00"
 }
 ```
 
@@ -293,10 +293,13 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "서버 'target-server'에 파티션 '/data'에 해당하는 Recovery 작업을 찾을 수 없습니다.",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "서버 'target-server'에 파티션 '/data'에 해당하는 Recovery 작업을 찾을 수 없습니다."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -304,10 +307,13 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "서버 'target-server'에 등록된 Recovery 작업을 찾을 수 없습니다.",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "서버 'target-server'에 등록된 Recovery 작업을 찾을 수 없습니다."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -317,10 +323,13 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "작업 데이터가 불완전합니다. 파티션 '/' 에 대한 recovery 또는 recoveryInfo 작업 정보를 찾을 수 없습니다.",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "작업 데이터가 불완전합니다. 파티션 '/' 에 대한 recovery 또는 recoveryInfo 작업 정보를 찾을 수 없습니다."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

@@ -57,7 +57,7 @@ zdm-cli recovery delete --center 9 --name "my-recovery" --output table
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Recovery Delete Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* Recovery Delete Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -99,7 +99,7 @@ logData deleted       : Yes
 
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Recovery deleted successfully",
   "success": true,
   "data": {
@@ -138,7 +138,7 @@ logData deleted       : Yes
       }
     ]
   },
-  "timestamp": "2025-01-01 11:00:00"
+  "timestamp": "2025-01-01T11:00:00.000+09:00"
 }
 ```
 

@@ -96,7 +96,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "1",
@@ -106,7 +106,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -115,7 +115,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "1",
@@ -131,7 +131,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -161,9 +161,12 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "유효한 스케줄 타입이 아닙니다. (0 ~ 11 만 가능)",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "유효한 스케줄 타입이 아닙니다. (0 ~ 11 만 가능)"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -172,9 +175,12 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "basic schedule data is required",
-  "timestamp": "2026-05-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-02",
+    "message": "basic schedule data is required"
+  },
+  "timestamp": "2026-05-15T10:30:00.000+09:00"
 }
 ```
 
@@ -183,9 +189,12 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "ID가 '999'인 Center를 찾을 수 없습니다",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "ZDM-ERROR-01",
+    "message": "ID가 '999'인 Center를 찾을 수 없습니다"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -194,9 +203,12 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Smart Weekly (Specific Day of the Week) 타입의 스케줄은 basic 부분에서 여러 요일을 선택할 수 없습니다. ( 현재 선택된 요일: mon, tue )",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-20",
+    "message": "Smart Weekly (Specific Day of the Week) 타입의 스케줄은 basic 부분에서 여러 요일을 선택할 수 없습니다. ( 현재 선택된 요일: mon, tue )"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -205,9 +217,12 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "time은 'HH:mm' (00:00 ~ 23:59)이어야 합니다.",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "time은 'HH:mm' (00:00 ~ 23:59)이어야 합니다."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -262,7 +277,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "1",
@@ -272,7 +287,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -313,7 +328,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "2",
@@ -323,7 +338,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -364,7 +379,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "3",
@@ -374,7 +389,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -400,7 +415,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "4",
@@ -410,7 +425,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -451,7 +466,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "5",
@@ -461,7 +476,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -503,7 +518,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "6",
@@ -513,7 +528,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -554,7 +569,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "7",
@@ -564,7 +579,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -612,7 +627,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "8",
@@ -628,7 +643,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -678,7 +693,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "10",
@@ -694,7 +709,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -742,7 +757,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "12",
@@ -758,7 +773,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -810,7 +825,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "14",
@@ -826,7 +841,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -876,7 +891,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "16",
@@ -892,7 +907,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -921,9 +936,12 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "basic schedule data is required",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-02",
+    "message": "basic schedule data is required"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -948,9 +966,12 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Smart Schedule requires advanced data.",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-02",
+    "message": "Smart Schedule requires advanced data."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -976,9 +997,12 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Smart Weekly (Specific Day of the Week) type schedule does not allow multiple weekday selections in basic. (Currently selected weekdays: Monday, Tuesday)",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-20",
+    "message": "Smart Weekly (Specific Day of the Week) type schedule does not allow multiple weekday selections in basic. (Currently selected weekdays: Monday, Tuesday)"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -1004,9 +1028,12 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Request body validation failed.",
-  "timestamp": "2025-01-15 10:30:00",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "Request body validation failed."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00",
   "detail": {
     "validationErrors": {
       "basic": ["basic schedule validation failed (type: 7): time: time is required"]
@@ -1040,9 +1067,12 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "month must be between 1 and 12.",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "month must be between 1 and 12."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -1067,9 +1097,12 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Request body validation failed.",
-  "timestamp": "2025-01-15 10:30:00",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "Request body validation failed."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00",
   "detail": {
     "validationErrors": {
       "type": ["invalid schedule type (must be 0 ~ 11)"]
@@ -1099,9 +1132,12 @@ curl -X POST "https://api.example.com/api/schedules" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Zdm with ID '999' not found",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "ZDM-ERROR-01",
+    "message": "Zdm with ID '999' not found"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

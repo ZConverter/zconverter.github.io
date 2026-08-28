@@ -45,7 +45,7 @@ curl -X DELETE "https://api.example.com/api/zdms/repositories/1" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "id": 1,
     "centerName": "Main-Center",
@@ -53,7 +53,7 @@ curl -X DELETE "https://api.example.com/api/zdms/repositories/1" \
     "localPath": "/mnt/backup"
   },
   "message": "Repository가 성공적으로 삭제되었습니다",
-  "timestamp": "2026-01-23 10:30:00"
+  "timestamp": "2026-01-23T10:30:00.000+09:00"
 }
 ```
 
@@ -79,9 +79,12 @@ curl -X DELETE "https://api.example.com/api/zdms/repositories/1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "ID가 '999'인 Repository를 찾을 수 없습니다",
-  "timestamp": "2026-01-23 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "ZDM-REPOSITORY-ERROR-01",
+    "message": "ID가 '999'인 Repository를 찾을 수 없습니다"
+  },
+  "timestamp": "2026-01-23T10:30:00.000+09:00"
 }
 ```
 
@@ -90,9 +93,12 @@ curl -X DELETE "https://api.example.com/api/zdms/repositories/1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "identifier는 숫자(Repository ID)만 허용됩니다",
-  "timestamp": "2026-01-23 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-02",
+    "message": "identifier는 숫자(Repository ID)만 허용됩니다"
+  },
+  "timestamp": "2026-01-23T10:30:00.000+09:00"
 }
 ```
 
@@ -103,9 +109,12 @@ curl -X DELETE "https://api.example.com/api/zdms/repositories/1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Repository does not belong to center 'Main-Center'",
-  "timestamp": "2026-01-23 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "CENTER-ERROR-01",
+    "message": "Repository does not belong to center 'Main-Center'"
+  },
+  "timestamp": "2026-01-23T10:30:00.000+09:00"
 }
 ```
 

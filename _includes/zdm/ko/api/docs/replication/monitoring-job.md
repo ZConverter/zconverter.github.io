@@ -61,7 +61,7 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/1?status=ru
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "system": {
       "name": "center-01"
@@ -91,7 +91,7 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/1?status=ru
     }
   },
   "message": "Replication monitoring info",
-  "timestamp": "2026-03-20 02:20:00"
+  "timestamp": "2026-03-20T02:20:00.000+09:00"
 }
 ```
 
@@ -103,7 +103,7 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/1?status=ru
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "system": {
       "name": "center-01"
@@ -133,7 +133,7 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/1?status=ru
     }
   },
   "message": "Replication monitoring info",
-  "timestamp": "2026-03-20 10:30:00"
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 
@@ -169,10 +169,13 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/1?status=ru
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "Name이 'backup-replication-01'인 조건에 맞는 Replication 작업을 찾을 수 없습니다.",
-  "timestamp": "2026-03-20 10:30:00"
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "Name이 'backup-replication-01'인 조건에 맞는 Replication 작업을 찾을 수 없습니다."
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 

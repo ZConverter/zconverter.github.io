@@ -99,7 +99,7 @@ zdm-cli recovery monit --server-id 456 --output table
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Recovery Monit Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* Recovery Monit Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -153,7 +153,7 @@ end               : 2025-01-01T10:02:15Z
 
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Recovery monitoring info retrieved successfully",
   "success": true,
   "data": {
@@ -204,7 +204,7 @@ end               : 2025-01-01T10:02:15Z
       ]
     }
   },
-  "timestamp": "2025-01-01 10:10:30"
+  "timestamp": "2025-01-01T10:10:30.000+09:00"
 }
 ```
 
@@ -214,7 +214,7 @@ end               : 2025-01-01T10:02:15Z
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Recovery Monit Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* Recovery Monit Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -270,7 +270,7 @@ name              : recovery-job-2
 
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Recovery monitoring info retrieved successfully",
   "success": true,
   "data": {
@@ -329,7 +329,7 @@ name              : recovery-job-2
       }
     ]
   },
-  "timestamp": "2025-01-01 10:20:00"
+  "timestamp": "2025-01-01T10:20:00.000+09:00"
 }
 ```
 
@@ -339,7 +339,7 @@ name              : recovery-job-2
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Recovery Monit Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* Recovery Monit Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -417,7 +417,7 @@ repository.path   : /mnt/backup
 
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Recovery monitoring info retrieved successfully",
   "success": true,
   "data": {
@@ -504,7 +504,7 @@ repository.path   : /mnt/backup
       ]
     }
   },
-  "timestamp": "2025-01-01 10:10:30"
+  "timestamp": "2025-01-01T10:10:30.000+09:00"
 }
 ```
 
@@ -514,7 +514,7 @@ repository.path   : /mnt/backup
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Recovery Monit Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* Recovery Monit Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -596,7 +596,7 @@ mode              : full
 
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Recovery monitoring info retrieved successfully",
   "success": true,
   "data": {
@@ -693,7 +693,7 @@ mode              : full
       }
     ]
   },
-  "timestamp": "2025-01-01 10:20:00"
+  "timestamp": "2025-01-01T10:20:00.000+09:00"
 }
 ```
 

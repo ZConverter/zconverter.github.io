@@ -113,7 +113,7 @@ zdm-cli schedule regist -p /path/to/schedule.json --output table
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Schedule Registration Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* Schedule Registration Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -137,7 +137,7 @@ description : Daily schedule
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Schedule Registration Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* Schedule Registration Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -167,7 +167,7 @@ description : Smart weekly advanced schedule
 
 ```json
 {
-  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Schedule registered successfully",
   "success": true,
   "data": {
@@ -178,7 +178,7 @@ description : Smart weekly advanced schedule
       "description": "Daily schedule"
     }
   },
-  "timestamp": "2025-01-06 12:00:00"
+  "timestamp": "2025-01-06T12:00:00.000+09:00"
 }
 ```
 
@@ -186,7 +186,7 @@ description : Smart weekly advanced schedule
 
 ```json
 {
-  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Schedule registered successfully",
   "success": true,
   "data": {
@@ -203,7 +203,7 @@ description : Smart weekly advanced schedule
       "description": "Smart weekly advanced schedule"
     }
   },
-  "timestamp": "2025-01-06 12:00:00"
+  "timestamp": "2025-01-06T12:00:00.000+09:00"
 }
 ```
 

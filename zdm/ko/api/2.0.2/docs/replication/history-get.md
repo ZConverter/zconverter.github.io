@@ -6,4 +6,4 @@ navigation: ko-api-2.0.2
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/replication/history-get.md %}
+{% include zdm/ko/api/docs/replication/history-get/2.0.2.md %}

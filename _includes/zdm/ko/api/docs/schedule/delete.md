@@ -58,7 +58,7 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "id": 1,
     "name": "daily-backup",
@@ -66,7 +66,7 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
     "description": "[Basic] Start working at 03:00 every day."
   },
   "message": "Schedule has been successfully deleted",
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -75,7 +75,7 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc124",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "id": 15,
     "name": "Schedule-15",
@@ -83,7 +83,7 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
     "description": "[Advanced] Start working on the second Monday of every month at 02:30."
   },
   "message": "Schedule has been successfully deleted",
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -109,9 +109,12 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "ID가 '999'인 Schedule을 찾을 수 없습니다",
-  "timestamp": "2026-01-23 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-01",
+    "message": "ID가 '999'인 Schedule을 찾을 수 없습니다"
+  },
+  "timestamp": "2026-01-23T10:30:00.000+09:00"
 }
 ```
 
@@ -120,9 +123,12 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc125",
-  "error": "Schedule with ID '999' not found",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "Schedule with ID '999' not found"
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -131,9 +137,12 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Schedule ID '1' is referenced by: backup(2), recovery(1)",
-  "timestamp": "2026-01-23 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-51",
+    "message": "Schedule ID '1' is referenced by: backup(2), recovery(1)"
+  },
+  "timestamp": "2026-01-23T10:30:00.000+09:00"
 }
 ```
 
@@ -142,9 +151,12 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Schedule does not belong to center '1'",
-  "timestamp": "2026-05-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "CENTER-ERROR-01",
+    "message": "Schedule does not belong to center '1'"
+  },
+  "timestamp": "2026-05-15T10:30:00.000+09:00"
 }
 ```
 
@@ -153,9 +165,12 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "identifier는 숫자(Schedule ID)만 허용됩니다",
-  "timestamp": "2026-01-23 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-02",
+    "message": "identifier는 숫자(Schedule ID)만 허용됩니다"
+  },
+  "timestamp": "2026-01-23T10:30:00.000+09:00"
 }
 ```
 

@@ -100,7 +100,7 @@ zdm-cli recovery list --output table
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Recovery Info Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* Recovery Info Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -144,7 +144,7 @@ lastUpdated       : 2025-01-01T10:15:30Z
 
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Recovery info retrieved successfully",
   "success": true,
   "data": [
@@ -200,7 +200,7 @@ lastUpdated       : 2025-01-01T10:15:30Z
       }
     }
   ],
-  "timestamp": "2025-01-01 10:15:30"
+  "timestamp": "2025-01-01T10:15:30.000+09:00"
 }
 ```
 
@@ -210,7 +210,7 @@ lastUpdated       : 2025-01-01T10:15:30Z
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Recovery Info Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* Recovery Info Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -271,7 +271,7 @@ lastUpdated           : 2025-01-01T10:15:30Z
 
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Recovery info retrieved successfully",
   "success": true,
   "data": [
@@ -354,7 +354,7 @@ lastUpdated           : 2025-01-01T10:15:30Z
       }
     }
   ],
-  "timestamp": "2025-01-01 10:15:30"
+  "timestamp": "2025-01-01T10:15:30.000+09:00"
 }
 ```
 

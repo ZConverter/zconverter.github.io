@@ -62,13 +62,13 @@ curl -X POST "https://api.example.com/api/token/issue" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
     "expiresAt": "2026-01-17 16:14:09"
   },
   "message": "Token issued successfully.",
-  "timestamp": "2026-01-17 15:14:09"
+  "timestamp": "2026-01-17T15:14:09.000+09:00"
 }
 ```
 
@@ -105,9 +105,12 @@ curl -X POST "https://api.example.com/api/token/issue" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "User not found.",
-  "timestamp": "2026-01-17 15:14:09"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "User not found."
+  },
+  "timestamp": "2026-01-17T15:14:09.000+09:00"
 }
 ```
 
@@ -116,14 +119,16 @@ curl -X POST "https://api.example.com/api/token/issue" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Request body validation failed.",
-  "detail": {
-    "validationErrors": {
-      "email": ["invalid email format"]
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "Request body validation failed.",
+    "details": {
+    "email": ["invalid email format"]
+    }
     }
   },
-  "timestamp": "2026-01-17 15:14:09"
+  "timestamp": "2026-01-17T15:14:09.000+09:00"
 }
 ```
 
@@ -144,9 +149,12 @@ curl -X POST "https://api.example.com/api/token/issue" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "[Token creation] - An unexpected error occurred during token creation",
-  "timestamp": "2026-01-17 15:14:09"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "INTERNAL_SERVER_ERROR",
+    "message": "[Token creation] - An unexpected error occurred during token creation"
+  },
+  "timestamp": "2026-01-17T15:14:09.000+09:00"
 }
 ```
 

@@ -127,7 +127,7 @@ zdm-cli backup update --id 123 --mode increment --output json
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Backup Update Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* Backup Update Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -195,7 +195,7 @@ value : 0 -> 1000
 
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Success",
   "success": true,
   "data": {
@@ -240,7 +240,7 @@ value : 0 -> 1000
       "Schedule was duplicated (1 schedule = 1 job principle). Source schedule ID: 5, new schedule ID: 10."
     ]
   },
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 

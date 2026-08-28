@@ -50,7 +50,7 @@ curl -X DELETE "https://api.example.com/api/recoveries/daily-recovery" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "jobInfo": [
       {
@@ -77,7 +77,7 @@ curl -X DELETE "https://api.example.com/api/recoveries/daily-recovery" \
     }
   },
   "message": "Recovery job deleted",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -113,9 +113,12 @@ curl -X DELETE "https://api.example.com/api/recoveries/daily-recovery" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "ID가 '999'인 Recovery를 찾을 수 없습니다",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "ID가 '999'인 Recovery를 찾을 수 없습니다"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

@@ -50,7 +50,7 @@ curl -X DELETE "https://api.example.com/api/zdms/Main-Center" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "id": 1,
     "name": "Main-Center",
@@ -62,7 +62,7 @@ curl -X DELETE "https://api.example.com/api/zdms/Main-Center" \
     }
   },
   "message": "ZDM이 성공적으로 삭제되었습니다",
-  "timestamp": "2026-01-23 10:30:00"
+  "timestamp": "2026-01-23T10:30:00.000+09:00"
 }
 ```
 
@@ -90,9 +90,12 @@ curl -X DELETE "https://api.example.com/api/zdms/Main-Center" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "'Main-Center'에 해당하는 ZDM을 찾을 수 없습니다",
-  "timestamp": "2026-01-23 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "'Main-Center'에 해당하는 ZDM을 찾을 수 없습니다"
+  },
+  "timestamp": "2026-01-23T10:30:00.000+09:00"
 }
 ```
 
@@ -103,9 +106,12 @@ curl -X DELETE "https://api.example.com/api/zdms/Main-Center" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "ZDM does not belong to center 'Main-Center'",
-  "timestamp": "2026-01-23 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "CENTER-ERROR-01",
+    "message": "ZDM does not belong to center 'Main-Center'"
+  },
+  "timestamp": "2026-01-23T10:30:00.000+09:00"
 }
 ```
 

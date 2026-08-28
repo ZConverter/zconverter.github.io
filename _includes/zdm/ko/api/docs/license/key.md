@@ -43,7 +43,7 @@ curl -X GET "https://api.example.com/api/licenses/key/ABCDEFGH12345678IJKLMN" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "id": 1,
     "name": "Enterprise License",
@@ -63,7 +63,7 @@ curl -X GET "https://api.example.com/api/licenses/key/ABCDEFGH12345678IJKLMN" \
     }
   },
   "message": "License information retrieved",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -97,9 +97,12 @@ curl -X GET "https://api.example.com/api/licenses/key/ABCDEFGH12345678IJKLMN" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Key가 'ABCDEFGH12345678IJKLMN'인 License를 찾을 수 없습니다",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "Key가 'ABCDEFGH12345678IJKLMN'인 License를 찾을 수 없습니다"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

@@ -6,4 +6,4 @@ navigation: ko-api-2.0.0
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/recovery/delete.md %}
+{% include zdm/ko/api/docs/recovery/delete/2.0.2.md %}

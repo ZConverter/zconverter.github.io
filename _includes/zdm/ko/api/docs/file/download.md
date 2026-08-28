@@ -55,18 +55,16 @@ curl -X GET "https://api.example.com/api/files/download/file-1705312200000-12345
 ```json
 {
   "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": {
-      "code": "FILE-ERROR-01",
-      "httpCode": 404,
-      "message": "File not found."
-    },
+    "code": "FILE-ERROR-01",
     "message": "File '<fileName>' not found."
-  }
+  },
+  "timestamp": "2026-08-28T10:30:00.000+09:00"
 }
 ```
 
-> **참고**: 본 404 응답은 공통 에러 응답 형식을 따르지 않습니다 (`requestID` / `timestamp` 없음). 또한 `error.code` 가 문자열이 아닌 `{ code, httpCode, message }` 객체로 그대로 내려갑니다. 다른 엔드포인트와 다른 알려진 불일치 사항입니다.
+> v3.0.0 부터 다운로드 404 도 다른 엔드포인트와 **동일한 응답 형식**을 사용합니다. 이전 버전에서는 `traceId` / `timestamp` 가 없고 `error.code` 에 에러 정의 객체 전체가 실리는 불일치가 있었습니다.
 
 **유효성 검사 실패 (400 Bad Request)**
 
@@ -75,9 +73,12 @@ curl -X GET "https://api.example.com/api/files/download/file-1705312200000-12345
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "URL parameter validation failed.",
-  "timestamp": "2025-01-15 10:30:00",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "URL parameter validation failed."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00",
   "detail": {
     "validationErrors": {
       "fileName": ["fileName must not contain path separators or '..'"]

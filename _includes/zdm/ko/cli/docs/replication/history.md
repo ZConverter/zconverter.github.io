@@ -68,7 +68,7 @@ zdm-cli replication history --output json
 **Text 형식 (기본)**
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Replication History Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* Replication History Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 

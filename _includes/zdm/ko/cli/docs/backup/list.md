@@ -88,7 +88,7 @@ zdm-cli backup list --center 9 --server ca-rocky810_172.25.0.48 --detail
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Backup Info Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* Backup Info Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -123,7 +123,7 @@ lastUpdated      : 2025-01-01T10:30:00Z
 
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Success",
   "success": true,
   "data": [
@@ -163,7 +163,7 @@ lastUpdated      : 2025-01-01T10:30:00Z
       }
     }
   ],
-  "timestamp": "2025-01-01 12:00:00"
+  "timestamp": "2025-01-01T12:00:00.000+09:00"
 }
 ```
 
@@ -173,7 +173,7 @@ lastUpdated      : 2025-01-01T10:30:00Z
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Backup Info Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* Backup Info Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -216,7 +216,7 @@ lastUpdated           : 2025-01-01T10:30:00Z
 
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Success",
   "success": true,
   "data": [
@@ -270,7 +270,7 @@ lastUpdated           : 2025-01-01T10:30:00Z
       }
     }
   ],
-  "timestamp": "2025-01-01 12:00:00"
+  "timestamp": "2025-01-01T12:00:00.000+09:00"
 }
 ```
 

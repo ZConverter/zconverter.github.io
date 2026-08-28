@@ -63,7 +63,7 @@ curl -X GET "https://api.example.com/api/replications/histories?page=1&limit=10"
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": [
     {
       "id": 1,
@@ -129,7 +129,7 @@ curl -X GET "https://api.example.com/api/replications/histories?page=1&limit=10"
     }
   ],
   "message": "Replication history list",
-  "timestamp": "2026-03-20 10:30:00"
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 
@@ -141,7 +141,7 @@ curl -X GET "https://api.example.com/api/replications/histories?page=1&limit=10"
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": [
     {
       "id": 1,
@@ -184,7 +184,7 @@ curl -X GET "https://api.example.com/api/replications/histories?page=1&limit=10"
     "hasPreviousPage": false
   },
   "message": "Replication history list",
-  "timestamp": "2026-03-20 10:30:00"
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 
@@ -232,10 +232,13 @@ curl -X GET "https://api.example.com/api/replications/histories?page=1&limit=10"
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "Token has expired.",
-  "timestamp": "2026-03-20 10:30:00"
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Token has expired."
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 
@@ -245,10 +248,13 @@ curl -X GET "https://api.example.com/api/replications/histories?page=1&limit=10"
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "Invalid enum value. Expected 'success' | 'failed', received 'unknown'",
-  "timestamp": "2026-03-20 10:30:00"
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "Invalid enum value. Expected 'success' | 'failed', received 'unknown'"
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 

@@ -54,7 +54,7 @@ zdm-cli schedule delete --center 9 --id 123 --output table
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Schedule Delete Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* Schedule Delete Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -77,7 +77,7 @@ description : [Basic] Start working at 12:00 every 5 Minute.
 
 ```json
 {
-  "requestID": "0e57462f-cfc1-4223-927e-28be37ae9b6f",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Schedule has been successfully deleted",
   "success": true,
   "data": {
@@ -86,7 +86,7 @@ description : [Basic] Start working at 12:00 every 5 Minute.
     "type": 1,
     "description": "[Basic] Start working at 12:00 every 5 Minute."
   },
-  "timestamp": "2026-04-13 16:15:52"
+  "timestamp": "2026-04-13T16:15:52.000+09:00"
 }
 ```
 

@@ -132,7 +132,7 @@ zdm-cli replication regist --sc srcconm --tc destconm --ut backup -j 91 --tri 44
 **Text 형식 (기본)**
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Replication Registration Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* Replication Registration Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -182,7 +182,7 @@ description : [Basic] Start working at 03:00 every day.
 **JSON 형식**
 ```json
 {
-  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Replication registered successfully",
   "success": true,
   "data": {
@@ -206,7 +206,7 @@ description : [Basic] Start working at 03:00 every day.
       }
     ]
   },
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

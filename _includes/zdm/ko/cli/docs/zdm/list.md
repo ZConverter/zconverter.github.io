@@ -79,7 +79,7 @@ zdm-cli zdm list --output json
 **Text 형식:**
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* ZDM Info Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* ZDM Info Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -124,7 +124,7 @@ lastUpdated     : 2026-04-17T10:30:00Z
 **JSON 형식:**
 ```json
 {
-  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Success",
   "success": true,
   "data": [
@@ -181,7 +181,7 @@ lastUpdated     : 2026-04-17T10:30:00Z
       "lastUpdated": "2026-04-17T10:30:00Z"
     }
   ],
-  "timestamp": "2026-04-17 10:30:00"
+  "timestamp": "2026-04-17T10:30:00.000+09:00"
 }
 ```
 
@@ -190,7 +190,7 @@ lastUpdated     : 2026-04-17T10:30:00Z
 **Text 형식:**
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* ZDM Info Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* ZDM Info Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -231,7 +231,7 @@ repository      :
 **JSON 형식:**
 ```json
 {
-  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Success",
   "success": true,
   "data": [
@@ -286,7 +286,7 @@ repository      :
       "lastUpdated": "2026-04-17T10:30:00Z"
     }
   ],
-  "timestamp": "2026-04-17 10:30:00"
+  "timestamp": "2026-04-17T10:30:00.000+09:00"
 }
 ```
 

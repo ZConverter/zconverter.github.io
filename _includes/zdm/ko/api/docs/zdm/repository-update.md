@@ -87,7 +87,7 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "repositoryInfo": {
       "id": 1,
@@ -110,7 +110,7 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
     }
   },
   "message": "Repository가 성공적으로 수정되었습니다",
-  "timestamp": "2026-02-05 10:30:00"
+  "timestamp": "2026-02-05T10:30:00.000+09:00"
 }
 ```
 
@@ -119,7 +119,7 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "repositoryInfo": {
       "id": 1,
@@ -137,7 +137,7 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
     }
   },
   "message": "Repository가 성공적으로 수정되었습니다",
-  "timestamp": "2026-02-05 10:30:00"
+  "timestamp": "2026-02-05T10:30:00.000+09:00"
 }
 ```
 
@@ -169,9 +169,12 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "ID가 '999'인 Repository를 찾을 수 없습니다",
-  "timestamp": "2026-02-05 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "ZDM-REPOSITORY-ERROR-01",
+    "message": "ID가 '999'인 Repository를 찾을 수 없습니다"
+  },
+  "timestamp": "2026-02-05T10:30:00.000+09:00"
 }
 ```
 
@@ -180,9 +183,12 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "ID가 '999'인 Center를 찾을 수 없습니다",
-  "timestamp": "2026-02-05 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "ZDM-ERROR-01",
+    "message": "ID가 '999'인 Center를 찾을 수 없습니다"
+  },
+  "timestamp": "2026-02-05T10:30:00.000+09:00"
 }
 ```
 
@@ -191,9 +197,12 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Repository가 지정된 Center에 속하지 않습니다",
-  "timestamp": "2026-02-05 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "FORBIDDEN",
+    "message": "Repository가 지정된 Center에 속하지 않습니다"
+  },
+  "timestamp": "2026-02-05T10:30:00.000+09:00"
 }
 ```
 
@@ -202,9 +211,12 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "NFS 타입의 remotePath는 '/'로 시작해야 합니다",
-  "timestamp": "2026-02-05 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "NFS 타입의 remotePath는 '/'로 시작해야 합니다"
+  },
+  "timestamp": "2026-02-05T10:30:00.000+09:00"
 }
 ```
 
@@ -213,9 +225,12 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "유효한 IPv4 주소 형식이 아닙니다",
-  "timestamp": "2026-02-05 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "유효한 IPv4 주소 형식이 아닙니다"
+  },
+  "timestamp": "2026-02-05T10:30:00.000+09:00"
 }
 ```
 
@@ -224,9 +239,12 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "IP '192.168.1.200'은(는) 이미 등록되어 있습니다",
-  "timestamp": "2026-02-05 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "BAD_REQUEST",
+    "message": "IP '192.168.1.200'은(는) 이미 등록되어 있습니다"
+  },
+  "timestamp": "2026-02-05T10:30:00.000+09:00"
 }
 ```
 
@@ -235,9 +253,12 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "identifier는 숫자(Repository ID)만 허용됩니다",
-  "timestamp": "2026-02-05 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-02",
+    "message": "identifier는 숫자(Repository ID)만 허용됩니다"
+  },
+  "timestamp": "2026-02-05T10:30:00.000+09:00"
 }
 ```
 

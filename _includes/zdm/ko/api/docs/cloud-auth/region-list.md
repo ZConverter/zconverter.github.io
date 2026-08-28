@@ -49,14 +49,14 @@ curl -X GET "https://api.example.com/api/cloud-auth/regions/gcp" \
 
 ```json
 {
-  "requestID": "...",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": true,
   "data": [
     { "code": "us-east-1", "name": "US East (N. Virginia)" },
     { "code": "ap-northeast-2", "name": "Asia Pacific (Seoul)" }
   ],
   "message": "AWS region list",
-  "timestamp": "2026-04-07 12:00:00"
+  "timestamp": "2026-04-07T12:00:00.000+09:00"
 }
 ```
 
@@ -67,7 +67,7 @@ curl -X GET "https://api.example.com/api/cloud-auth/regions/gcp" \
 
 ```json
 {
-  "requestID": "...",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": true,
   "data": [
     {
@@ -77,7 +77,7 @@ curl -X GET "https://api.example.com/api/cloud-auth/regions/gcp" \
     }
   ],
   "message": "GCP region list",
-  "timestamp": "2026-04-07 12:00:00"
+  "timestamp": "2026-04-07T12:00:00.000+09:00"
 }
 ```
 
@@ -91,9 +91,12 @@ curl -X GET "https://api.example.com/api/cloud-auth/regions/gcp" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Authentication required.",
-  "timestamp": "2026-03-20 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Authentication required."
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 
@@ -104,9 +107,12 @@ curl -X GET "https://api.example.com/api/cloud-auth/regions/gcp" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Unsupported platform: azure. Supported platforms: aws, gcp",
-  "timestamp": "2026-03-20 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "BAD_REQUEST",
+    "message": "Unsupported platform: azure. Supported platforms: aws, gcp"
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 

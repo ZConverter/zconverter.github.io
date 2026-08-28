@@ -67,7 +67,10 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 ```json
 {
   "success": false,
-  "error": "Smart Weekly (Specific Day of the Week) 타입의 스케줄은 basic 부분에서 여러 요일을 선택할 수 없습니다. ( 현재 선택된 요일: mon, tue )"
+  "error": {
+    "code": "SCHEDULE-ERROR-20",
+    "message": "Smart Weekly (Specific Day of the Week) 타입의 스케줄은 basic 부분에서 여러 요일을 선택할 수 없습니다. ( 현재 선택된 요일: mon, tue )"
+  }
 }
 ```
 
@@ -511,7 +514,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "1",
@@ -521,7 +524,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -549,7 +552,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "12",
@@ -559,7 +562,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -590,7 +593,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "21",
@@ -606,7 +609,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -639,7 +642,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "basic": {
       "id": "31",
@@ -655,7 +658,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
     }
   },
   "message": "Schedule data regist result",
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -682,9 +685,12 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 // 응답
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Smart Weekly (Specific Day of the Week) type schedule does not allow multiple weekday selections in basic. (Currently selected weekdays: mon, tue)",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-20",
+    "message": "Smart Weekly (Specific Day of the Week) type schedule does not allow multiple weekday selections in basic. (Currently selected weekdays: mon, tue)"
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -704,9 +710,12 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 // 응답
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Smart Monthly (Specific Week and Day of the Week) type schedule does not allow multiple week selections in basic. (Currently selected weeks: 1, 2)",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-20",
+    "message": "Smart Monthly (Specific Week and Day of the Week) type schedule does not allow multiple week selections in basic. (Currently selected weeks: 1, 2)"
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -726,9 +735,12 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 // 응답
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Smart Custom (Specific Month and Date) type schedule does not allow multiple month selections in basic. (Currently selected months: 1, 3)",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-20",
+    "message": "Smart Custom (Specific Month and Date) type schedule does not allow multiple month selections in basic. (Currently selected months: 1, 3)"
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -747,9 +759,12 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 // 응답
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "basic schedule validation failed (type: 7): time: time is required",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "basic schedule validation failed (type: 7): time: time is required"
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -768,9 +783,12 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 // 응답
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "basic schedule validation failed (type: 11): month: month is required",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "basic schedule validation failed (type: 11): month: month is required"
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -789,9 +807,12 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 // 응답
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Invalid day value. (day must be one of: mon, tue, wed, thu, fri, sat, sun)",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-18",
+    "message": "Invalid day value. (day must be one of: mon, tue, wed, thu, fri, sat, sun)"
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 

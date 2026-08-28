@@ -51,7 +51,7 @@ curl -X GET "https://api.example.com/api/os-replications/histories?page=1&limit=
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": [
     {
       "id": 1,
@@ -78,7 +78,7 @@ curl -X GET "https://api.example.com/api/os-replications/histories?page=1&limit=
     "hasPreviousPage": false
   },
   "message": "OS Replication histories retrieved",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

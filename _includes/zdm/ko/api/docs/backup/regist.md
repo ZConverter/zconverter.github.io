@@ -187,7 +187,7 @@ curl -X POST "https://api.example.com/api/backups" \
 
 ```json
 {
-  "requestID": "46f53c9a-86f7-4c8f-9947-1e3ac642e27f",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Backup job registration completed",
   "success": true,
   "data": {
@@ -227,7 +227,7 @@ curl -X POST "https://api.example.com/api/backups" \
       }
     ]
   },
-  "timestamp": "2026-01-17 21:03:52"
+  "timestamp": "2026-01-17T21:03:52.000+09:00"
 }
 ```
 
@@ -269,9 +269,12 @@ curl -X POST "https://api.example.com/api/backups" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "type은 full, increment, smart중 하나여야 합니다",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "type은 full, increment, smart중 하나여야 합니다"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -280,9 +283,12 @@ curl -X POST "https://api.example.com/api/backups" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "JOB_NAME_ALREADY_EXISTS",
-  "timestamp": "2026-02-05 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-07",
+    "message": "JOB_NAME_ALREADY_EXISTS"
+  },
+  "timestamp": "2026-02-05T10:30:00.000+09:00"
 }
 ```
 
@@ -327,7 +333,7 @@ curl -X POST "https://api.example.com/api/backups" \
 
 ```json
 {
-  "requestID": "46f53c9a-86f7-4c8f-9947-1e3ac642e27f",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Backup job registration completed",
   "success": true,
   "data": {
@@ -342,7 +348,7 @@ curl -X POST "https://api.example.com/api/backups" \
       }
     ]
   },
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -366,7 +372,7 @@ curl -X POST "https://api.example.com/api/backups" \
 
 ```json
 {
-  "requestID": "req-001",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Backup job registration completed",
   "success": true,
   "data": {
@@ -388,7 +394,7 @@ curl -X POST "https://api.example.com/api/backups" \
       }
     ]
   },
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -415,7 +421,7 @@ curl -X POST "https://api.example.com/api/backups" \
 
 ```json
 {
-  "requestID": "req-002",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Backup job registration completed",
   "success": true,
   "data": {
@@ -437,7 +443,7 @@ curl -X POST "https://api.example.com/api/backups" \
       }
     ]
   },
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -609,7 +615,7 @@ inline 객체의 `basic` 또는 `advanced` 자리에 number를 넣으면 해당 
 
 ```json
 {
-  "requestID": "req-008",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Backup job registration completed",
   "success": true,
   "data": {
@@ -631,7 +637,7 @@ inline 객체의 `basic` 또는 `advanced` 자리에 number를 넣으면 해당 
       }
     ]
   },
-  "timestamp": "2026-05-19 10:30:00"
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -736,9 +742,12 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 ```json
 {
   "success": false,
-  "requestID": "req-err-001",
-  "error": "Schedule is required for Smart Backup.",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-107",
+    "message": "Schedule is required for Smart Backup."
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -765,9 +774,12 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 ```json
 {
   "success": false,
-  "requestID": "req-err-002",
-  "error": "For smart job type, schedule must contain both basic and advanced.",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-102",
+    "message": "For smart job type, schedule must contain both basic and advanced."
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -794,9 +806,12 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 ```json
 {
   "success": false,
-  "requestID": "req-err-003",
-  "error": "Smart 작업 모드에는 basic + advanced schedule이 모두 필요합니다.",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-102",
+    "message": "Smart 작업 모드에는 basic + advanced schedule이 모두 필요합니다."
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -823,9 +838,12 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 ```json
 {
   "success": false,
-  "requestID": "req-err-004",
-  "error": "For full/increment job types, schedule must contain only basic.",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-101",
+    "message": "For full/increment job types, schedule must contain only basic."
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -852,9 +870,12 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 ```json
 {
   "success": false,
-  "requestID": "req-err-005",
-  "error": "Request body validation failed.",
-  "timestamp": "2026-05-19 10:30:00",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "Request body validation failed."
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00",
   "detail": {
     "validationErrors": {
       "schedule.type": ["invalid schedule type (must be 0 ~ 11)"]
@@ -887,9 +908,12 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 ```json
 {
   "success": false,
-  "requestID": "req-err-006",
-  "error": "Request body validation failed.",
-  "timestamp": "2026-05-19 10:30:00",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "Request body validation failed."
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00",
   "detail": {
     "validationErrors": {
       "schedule.basic": ["basic schedule validation failed (type: 7): time: time is required"]
@@ -918,9 +942,12 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 ```json
 {
   "success": false,
-  "requestID": "req-err-007",
-  "error": "Schedule ID '999' not found",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-100",
+    "message": "Schedule ID '999' not found"
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -943,9 +970,12 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 ```json
 {
   "success": false,
-  "requestID": "req-err-008",
-  "error": "Center '999' not found.",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-03",
+    "message": "Center '999' not found."
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -975,9 +1005,12 @@ inline 객체의 `basic` 또는 `advanced`에 number를 넣었으나 해당 ID�
 ```json
 {
   "success": false,
-  "requestID": "req-err-009",
-  "error": "Schedule ID '999' not found.",
-  "timestamp": "2026-05-19 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-01",
+    "message": "Schedule ID '999' not found."
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 

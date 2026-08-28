@@ -53,9 +53,12 @@ curl -X GET "https://api.example.com/api/cloud-auth/zos/download/config.conf" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Authentication required.",
-  "timestamp": "2026-03-20 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Authentication required."
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 
@@ -66,9 +69,12 @@ curl -X GET "https://api.example.com/api/cloud-auth/zos/download/config.conf" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Invalid file path (traversal detected): ../../etc/passwd",
-  "timestamp": "2026-03-20 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "FILE-ERROR-11",
+    "message": "Invalid file path (traversal detected): ../../etc/passwd"
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
 
@@ -77,24 +83,25 @@ curl -X GET "https://api.example.com/api/cloud-auth/zos/download/config.conf" \
 ```json
 {
   "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": {
-      "code": "FILE-ERROR-01",
-      "httpCode": 404,
-      "message": "File not found."
-    },
+    "code": "FILE-ERROR-01",
     "message": "File 'config.conf' not found."
-  }
+  },
+  "timestamp": "2026-08-28T10:30:00.000+09:00"
 }
 ```
 
-> 이 404 응답은 표준 에러 응답 형식을 따르지 않습니다(`requestID`, `timestamp` 없음). 또한 `error.code` 가 문자열이 아니라 에러 정의 객체 전체로 직렬화됩니다 — 다른 엔드포인트와의 알려진 불일치 사항입니다.
+> v3.0.0 부터 다운로드 404 도 다른 엔드포인트와 **동일한 응답 형식**을 사용합니다. 이전 버전에서는 `traceId` / `timestamp` 가 없고 `error.code` 에 에러 정의 객체 전체가 실리는 불일치가 있었습니다.
 
 **다운로드 전송 중 오류 (500 Internal Server Error)**
 
 ```json
 {
-  "error": "An error occurred during file download."
+  "error": {
+    "code": "INTERNAL_SERVER_ERROR",
+    "message": "An error occurred during file download."
+  }
 }
 ```
 

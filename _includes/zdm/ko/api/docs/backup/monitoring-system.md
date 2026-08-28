@@ -66,7 +66,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "system": {
       "name": "linux-server-01"
@@ -113,7 +113,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
     ]
   },
   "message": "Server backup monitoring info",
-  "timestamp": "2025-01-15 11:15:00"
+  "timestamp": "2025-01-15T11:15:00.000+09:00"
 }
 ```
 
@@ -125,7 +125,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "system": {
       "name": "windows-server-01"
@@ -172,7 +172,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
     ]
   },
   "message": "Server backup monitoring info",
-  "timestamp": "2025-01-15 11:15:00"
+  "timestamp": "2025-01-15T11:15:00.000+09:00"
 }
 ```
 
@@ -184,7 +184,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "system": {
       "name": "linux-server-01"
@@ -224,7 +224,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
     }
   },
   "message": "Server backup monitoring info",
-  "timestamp": "2025-01-15 11:15:00"
+  "timestamp": "2025-01-15T11:15:00.000+09:00"
 }
 ```
 
@@ -272,10 +272,13 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "서버 'server-01'에 파티션 '/data'에 해당하는 Backup 작업을 찾을 수 없습니다.",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "서버 'server-01'에 파티션 '/data'에 해당하는 Backup 작업을 찾을 수 없습니다."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -283,10 +286,13 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "서버 'server-01'에 등록된 Backup 작업을 찾을 수 없습니다.",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "서버 'server-01'에 등록된 Backup 작업을 찾을 수 없습니다."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -296,10 +302,13 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "작업 데이터가 불완전합니다. 파티션 '/' 에 대한 backup 또는 backupInfo 작업 정보를 찾을 수 없습니다.",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "작업 데이터가 불완전합니다. 파티션 '/' 에 대한 backup 또는 backupInfo 작업 정보를 찾을 수 없습니다."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

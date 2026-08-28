@@ -189,7 +189,7 @@ curl -X POST "https://api.example.com/api/replications" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "summary": {
       "total": 1,
@@ -207,7 +207,7 @@ curl -X POST "https://api.example.com/api/replications" \
     ]
   },
   "message": "Replication job registration completed",
-  "timestamp": "2026-04-17 10:30:00"
+  "timestamp": "2026-04-17T10:30:00.000+09:00"
 }
 ```
 
@@ -216,7 +216,7 @@ curl -X POST "https://api.example.com/api/replications" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "summary": {
       "total": 1,
@@ -239,7 +239,7 @@ curl -X POST "https://api.example.com/api/replications" \
     ]
   },
   "message": "Replication job registration completed",
-  "timestamp": "2026-04-17 10:30:00"
+  "timestamp": "2026-04-17T10:30:00.000+09:00"
 }
 ```
 
@@ -274,9 +274,12 @@ curl -X POST "https://api.example.com/api/replications" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "replicationUnitType은 backup, repository, server 중 하나여야 합니다",
-  "timestamp": "2026-04-17 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "replicationUnitType은 backup, repository, server 중 하나여야 합니다"
+  },
+  "timestamp": "2026-04-17T10:30:00.000+09:00"
 }
 ```
 
@@ -285,9 +288,12 @@ curl -X POST "https://api.example.com/api/replications" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "JOB_NAME_ALREADY_EXISTS",
-  "timestamp": "2026-04-17 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-07",
+    "message": "JOB_NAME_ALREADY_EXISTS"
+  },
+  "timestamp": "2026-04-17T10:30:00.000+09:00"
 }
 ```
 

@@ -44,7 +44,7 @@ curl -X GET "https://api.example.com/api/os-replications/monitoring/job/1" \
 
 ```json
 {
-  "requestID": "...",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": true,
   "data": {
     "system": { "name": "center-01" },
@@ -68,7 +68,7 @@ curl -X GET "https://api.example.com/api/os-replications/monitoring/job/1" \
     }
   },
   "message": "Os Replication monitoring",
-  "timestamp": "2026-04-08 12:01:00"
+  "timestamp": "2026-04-08T12:01:00.000+09:00"
 }
 ```
 

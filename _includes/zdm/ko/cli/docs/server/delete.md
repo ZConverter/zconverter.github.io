@@ -57,7 +57,7 @@ zdm-cli server delete --center 9 --id 123 --output json
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Server Delete Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* Server Delete Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -83,7 +83,7 @@ message   : Server has been successfully deleted
 
 ```json
 {
-  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Server deleted successfully",
   "success": true,
   "data": {
@@ -96,7 +96,7 @@ message   : Server has been successfully deleted
       "message": "Server has been successfully deleted"
     }
   },
-  "timestamp": "2026-04-17 10:30:00"
+  "timestamp": "2026-04-17T10:30:00.000+09:00"
 }
 ```
 
@@ -104,7 +104,7 @@ message   : Server has been successfully deleted
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Server Delete Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: table]
+* Server Delete Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: table]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 

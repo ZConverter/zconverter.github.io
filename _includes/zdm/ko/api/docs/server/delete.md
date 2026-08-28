@@ -51,7 +51,7 @@ curl -X DELETE "https://api.example.com/api/servers/server-01" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "result": "success",
     "server": {
@@ -61,7 +61,7 @@ curl -X DELETE "https://api.example.com/api/servers/server-01" \
     "message": "Server 및 관련 데이터가 성공적으로 삭제되었습니다. (disk: 2, network: 3, partition: 5, repository: 1)"
   },
   "message": "Server deletion completed",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -87,9 +87,12 @@ curl -X DELETE "https://api.example.com/api/servers/server-01" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "ID가 '999'인 Server를 찾을 수 없습니다",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SERVER-ERROR-01",
+    "message": "ID가 '999'인 Server를 찾을 수 없습니다"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -100,9 +103,12 @@ curl -X DELETE "https://api.example.com/api/servers/server-01" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Server does not belong to center 'center-01'",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "CENTER-ERROR-01",
+    "message": "Server does not belong to center 'center-01'"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

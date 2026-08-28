@@ -90,7 +90,7 @@ curl -X PUT "https://api.example.com/api/users/user@example.com" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "userInfo": {
       "id": "1",
@@ -113,7 +113,7 @@ curl -X PUT "https://api.example.com/api/users/user@example.com" \
     }
   },
   "message": "User information updated successfully",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -143,9 +143,12 @@ curl -X PUT "https://api.example.com/api/users/user@example.com" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "ID가 '999'인 User를 찾을 수 없습니다",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "USER-ERROR-01",
+    "message": "ID가 '999'인 User를 찾을 수 없습니다"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -154,9 +157,12 @@ curl -X PUT "https://api.example.com/api/users/user@example.com" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "username은 최소 2자 이상이어야 합니다",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "username은 최소 2자 이상이어야 합니다"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -167,9 +173,12 @@ curl -X PUT "https://api.example.com/api/users/user@example.com" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "No fields changed",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "BAD_REQUEST",
+    "message": "No fields changed"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -180,9 +189,12 @@ curl -X PUT "https://api.example.com/api/users/user@example.com" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "You can only access your own user resource.",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "FORBIDDEN",
+    "message": "You can only access your own user resource."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

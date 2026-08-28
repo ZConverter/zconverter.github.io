@@ -103,7 +103,7 @@ curl -X POST "https://api.example.com/api/os-replications" \
 
 ```json
 {
-  "requestID": "...",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": true,
   "data": {
     "results": [
@@ -123,7 +123,7 @@ curl -X POST "https://api.example.com/api/os-replications" \
     "summary": { "total": 1, "successful": 1, "failed": 0 }
   },
   "message": "Os Replication registered",
-  "timestamp": "2026-04-08 12:00:00"
+  "timestamp": "2026-04-08T12:00:00.000+09:00"
 }
 ```
 

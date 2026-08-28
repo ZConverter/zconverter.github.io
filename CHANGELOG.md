@@ -6,6 +6,39 @@
 
 ---
 
+## [Documentation] - 2026-08-28 (ZDM-API 3.0.0 릴리즈 — 구조 생성)
+
+### Context
+- `zdm-api-v2` 3.0.0 은 **응답 봉투 breaking** 릴리즈. `error` 가 문자열 → `{code, message, details?}` 객체,
+  `requestID` → `traceId` 개명, `timestamp` → ISO 8601. 공용 include 75파일 중 **74파일**의 응답 예시가 영향받는다.
+- 신규 엔드포인트 `POST /recoveries/image` (Image Recovery) 추가.
+- 계획: `zdm-api-v2/orgs/dev/plans/3.0.0-gitpage-문서-릴리즈-계획.md` (표준 릴리즈 판정).
+
+### Added
+- `_data/zdm/common/versions.yml` — api `3.0.0` 엔트리(`status: latest`, `docs: "3.0.0"`). 기존 `2.0.2` 는 `stable` 로 강등.
+  `downloads` 는 **Linux 단독**(API 는 Windows 바이너리를 배포하지 않는다).
+- `_data/navigation.yml` — `ko-api-3.0.0` 섹션 신설(2.0.2 블록 복제 + 버전 치환).
+  신규 항목 2건: Recovery 의 "[POST] Image Recovery 등록", API Documentation 의 "에러 코드".
+- `zdm/ko/api/3.0.0/` wrapper 75파일 (2.0.2 복제 → `navigation:` 키·intro 의 title/changelog include/`version=` 치환).
+- `_includes/zdm/ko/api/changelog/3.0.0.md` — 스켈레톤(본문 미작성).
+- `downloads/zdm-api/3.0.0/` 디렉토리 (바이너리는 추후 직접 투입).
+
+### Changed
+- `_data/navigation.yml` `ko-zdm:` 메인 링크 → `/zdm/ko/api/3.0.0/index`.
+- `zdm/ko/index.md` — ZDM-API 헤더 배지 `latest v3.0.0`, 업데이트 목록 최상단에 v3.0.0 블록 추가.
+
+### 미완 — 후속 작업
+- **5단계(문서 본문) 미수행**: 공용 include 74파일의 응답 예시 치환 + 보존본 분리 + 구버전 wrapper 리타겟.
+- 신규 본문 3건 미작성: `docs/recovery/image-regist.md`, `docs/error-codes.md`, changelog 본문.
+- `regist.md` 의 "전체 partition skip 시 `JOB-ERROR-01`(404)" 서술은 3.0.0 에서 `JOB-ERROR-14`(400) 로 정정 필요.
+
+### Notes
+- 6단계(리다이렉트) **불필요** — `zdm/ko/api/index.md` 가 `versions.yml` 의 latest 를 Liquid 로 자동 반영한다
+  (파일 주석에 명시). skill 본문의 6단계 지시는 현행 구조와 어긋나 CLAUDE.md 우선 원칙으로 스킵.
+- 기존 `ko-api-1.3.1` 블록의 링크 74건이 `1.3.0` 을 가리키는 불일치가 있으나 **본 작업 이전부터 존재**. 미조치.
+
+---
+
 ## [Documentation] - 2026-08-21 (zdm-api 2.0.2 브랜치 최신 코드 동기화 — 보안 변경 반영 · 끊긴 링크 정정)
 
 ### Context

@@ -72,7 +72,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": [
     {
       "system": {
@@ -113,7 +113,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
     }
   ],
   "message": "Backup job list",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -125,7 +125,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": [
     {
       "system": {
@@ -166,7 +166,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
     }
   ],
   "message": "Backup job list",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -178,7 +178,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": [
     {
       "system": {
@@ -227,7 +227,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
     "hasPreviousPage": false
   },
   "message": "Backup job list",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -239,7 +239,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": [
     {
       "system": {
@@ -296,7 +296,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
     }
   ],
   "message": "Backup job list",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -356,10 +356,13 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "토큰이 만료되었습니다.",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "토큰이 만료되었습니다."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -369,10 +372,13 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
 
 ```json
 {
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
-  "error": "유효하지 않은 'mode' 값입니다. 허용된 값: full, increment, smart",
-  "timestamp": "2025-01-15 10:30:00"
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "유효하지 않은 'mode' 값입니다. 허용된 값: full, increment, smart"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

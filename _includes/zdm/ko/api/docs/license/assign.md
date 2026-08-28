@@ -71,7 +71,7 @@ curl -X PUT "https://api.example.com/api/licenses/assign" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "server": {
       "id": "1",
@@ -86,7 +86,7 @@ curl -X PUT "https://api.example.com/api/licenses/assign" \
     }
   },
   "message": "License Assignment Results",
-  "timestamp": "2025-01-15 10:30:00"
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -129,9 +129,12 @@ curl -X PUT "https://api.example.com/api/licenses/assign" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "ID가 '999'인 Server를 찾을 수 없습니다",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SERVER-ERROR-01",
+    "message": "ID가 '999'인 Server를 찾을 수 없습니다"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -140,9 +143,12 @@ curl -X PUT "https://api.example.com/api/licenses/assign" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "ID가 '999'인 License를 찾을 수 없습니다",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "LICENSE-ERROR-01",
+    "message": "ID가 '999'인 License를 찾을 수 없습니다"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -153,9 +159,12 @@ License의 center와 Server의 center가 다르거나, 요청 body의 `center`�
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "License (center 1) and Server 'server-01' (center 2) belong to different centers",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "CENTER-ERROR-01",
+    "message": "License (center 1) and Server 'server-01' (center 2) belong to different centers"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -166,9 +175,12 @@ License의 center와 Server의 center가 다르거나, 요청 body의 `center`�
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Server 'server-01' already has a license assigned (nLicenseID: 5)",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "LICENSE-ERROR-02",
+    "message": "Server 'server-01' already has a license assigned (nLicenseID: 5)"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -179,9 +191,12 @@ License의 center와 Server의 center가 다르거나, 요청 body의 `center`�
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "License (id 5) is already assigned to server 'server-01' in center 1",
-  "timestamp": "2025-01-15 10:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "LICENSE-ERROR-02",
+    "message": "License (id 5) is already assigned to server 'server-01' in center 1"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

@@ -54,7 +54,7 @@ curl -X GET "https://api.example.com/api/files/list?page=1&limit=10" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "files": [
       {
@@ -79,7 +79,7 @@ curl -X GET "https://api.example.com/api/files/list?page=1&limit=10" \
     "totalCount": 2
   },
   "message": "File list retrieved successfully",
-  "timestamp": "2025-01-15 10:40:00"
+  "timestamp": "2025-01-15T10:40:00.000+09:00"
 }
 ```
 
@@ -91,7 +91,7 @@ curl -X GET "https://api.example.com/api/files/list?page=1&limit=10" \
 ```json
 {
   "success": true,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "data": {
     "files": [
       {
@@ -115,7 +115,7 @@ curl -X GET "https://api.example.com/api/files/list?page=1&limit=10" \
     "hasPreviousPage": false
   },
   "message": "File list retrieved successfully",
-  "timestamp": "2025-01-15 10:40:00"
+  "timestamp": "2025-01-15T10:40:00.000+09:00"
 }
 ```
 

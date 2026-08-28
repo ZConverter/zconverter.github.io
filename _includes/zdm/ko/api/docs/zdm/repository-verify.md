@@ -70,10 +70,10 @@ curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
 
 ```json
 {
-  "requestID": "cc7d5af3-50b2-4ebd-a2f6-62c57614bbb7",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Repository Verify Results",
   "success": true,
-  "timestamp": "2026-02-05 14:30:00"
+  "timestamp": "2026-02-05T14:30:00.000+09:00"
 }
 ```
 
@@ -84,7 +84,7 @@ curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
 
 | 필드 | 타입 | 설명 |
 |------|------|------|
-| `requestID` | string | 요청 ID |
+| `traceId` | string | 요청 추적 ID (서버 로그와 동일) |
 | `message` | string | 결과 메시지 |
 | `success` | boolean | 성공 여부 |
 | `timestamp` | string | 응답 시간 |
@@ -99,7 +99,7 @@ curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "message": "Request body validation failed",
     "details": {
@@ -107,7 +107,7 @@ curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
       "account": ["SMB 타입일 경우 account는 필수입니다"]
     }
   },
-  "timestamp": "2026-02-05 14:30:00"
+  "timestamp": "2026-02-05T14:30:00.000+09:00"
 }
 ```
 
@@ -116,9 +116,12 @@ curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "SMB path format is invalid. Expected UNC path (e.g., \\\\server\\share)",
-  "timestamp": "2026-02-05 14:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-01",
+    "message": "SMB path format is invalid. Expected UNC path (e.g., \\\\server\\share)"
+  },
+  "timestamp": "2026-02-05T14:30:00.000+09:00"
 }
 ```
 
@@ -127,9 +130,12 @@ curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "ID가 '999'인 Center를 찾을 수 없습니다",
-  "timestamp": "2026-02-05 14:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "ZDM-ERROR-01",
+    "message": "ID가 '999'인 Center를 찾을 수 없습니다"
+  },
+  "timestamp": "2026-02-05T14:30:00.000+09:00"
 }
 ```
 
@@ -138,9 +144,12 @@ curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Repository verify failed (result: FAIL)",
-  "timestamp": "2026-02-05 14:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "INTERNAL_SERVER_ERROR",
+    "message": "Repository verify failed (result: FAIL)"
+  },
+  "timestamp": "2026-02-05T14:30:00.000+09:00"
 }
 ```
 
@@ -149,9 +158,12 @@ curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
 ```json
 {
   "success": false,
-  "requestID": "req-abc123",
-  "error": "Repository verify timed out (10s elapsed)",
-  "timestamp": "2026-02-05 14:30:00"
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "INTERNAL_SERVER_ERROR",
+    "message": "Repository verify timed out (10s elapsed)"
+  },
+  "timestamp": "2026-02-05T14:30:00.000+09:00"
 }
 ```
 

@@ -174,7 +174,7 @@ zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky8
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Recovery Registration Result [requestID: a1b2c3d4-e5f6-7890-abcd-ef1234567890] [output: text]
+* Recovery Registration Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -267,7 +267,7 @@ table 출력은 partitions 를 행 단위 표로 표시하고, schedule 은 별�
 
 ```json
 {
-  "requestID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Recovery registered successfully",
   "success": true,
   "data": {
@@ -333,7 +333,7 @@ table 출력은 partitions 를 행 단위 표로 표시하고, schedule 은 별�
       "Partition/drive 'E:' was skipped — no backup available: Backup job not found for partition 'E:' on server 'src-win01'"
     ]
   },
-  "timestamp": "2025-01-01 10:00:00"
+  "timestamp": "2025-01-01T10:00:00.000+09:00"
 }
 ```
 

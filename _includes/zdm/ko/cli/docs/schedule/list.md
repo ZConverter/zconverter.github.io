@@ -91,7 +91,7 @@ zdm-cli schedule list --asc
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Schedule Info Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* Schedule Info Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -129,7 +129,7 @@ description : Weekly backup schedule
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Schedule Info Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* Schedule Info Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -156,7 +156,7 @@ description : Daily backup schedule
 
 ```json
 {
-  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "Schedule list retrieved successfully",
   "success": true,
   "data": [
@@ -185,7 +185,7 @@ description : Daily backup schedule
       "description": "Weekly backup schedule"
     }
   ],
-  "timestamp": "2025-01-06 12:00:00"
+  "timestamp": "2025-01-06T12:00:00.000+09:00"
 }
 ```
 

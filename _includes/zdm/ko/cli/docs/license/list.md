@@ -86,7 +86,7 @@ zdm-cli license list --asc
 **Text 형식 (기본)**
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* License Info Result [requestID: 550e8400-e29b-41d4-a716-446655440000] [output: text]
+* License Info Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [request info]
 
@@ -129,7 +129,7 @@ dates.daysRemaining : 180
 **JSON 형식**
 ```json
 {
-  "requestID": "550e8400-e29b-41d4-a716-446655440000",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "message": "License list retrieved successfully",
   "success": true,
   "data": [
@@ -168,7 +168,7 @@ dates.daysRemaining : 180
       }
     }
   ],
-  "timestamp": "2024-01-15 10:30:00"
+  "timestamp": "2024-01-15T10:30:00.000+09:00"
 }
 ```
 
