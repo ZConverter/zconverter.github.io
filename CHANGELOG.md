@@ -6,36 +6,84 @@
 
 ---
 
-## [Documentation] - 2026-08-28 (ZDM-API 3.0.0 릴리즈 — 구조 생성)
-
-### Context
-- `zdm-api-v2` 3.0.0 은 **응답 봉투 breaking** 릴리즈. `error` 가 문자열 → `{code, message, details?}` 객체,
-  `requestID` → `traceId` 개명, `timestamp` → ISO 8601. 공용 include 75파일 중 **74파일**의 응답 예시가 영향받는다.
-- 신규 엔드포인트 `POST /recoveries/image` (Image Recovery) 추가.
-- 계획: `zdm-api-v2/orgs/dev/plans/3.0.0-gitpage-문서-릴리즈-계획.md` (표준 릴리즈 판정).
-
-### Added
-- `_data/zdm/common/versions.yml` — api `3.0.0` 엔트리(`status: latest`, `docs: "3.0.0"`). 기존 `2.0.2` 는 `stable` 로 강등.
-  `downloads` 는 **Linux 단독**(API 는 Windows 바이너리를 배포하지 않는다).
-- `_data/navigation.yml` — `ko-api-3.0.0` 섹션 신설(2.0.2 블록 복제 + 버전 치환).
-  신규 항목 2건: Recovery 의 "[POST] Image Recovery 등록", API Documentation 의 "에러 코드".
-- `zdm/ko/api/3.0.0/` wrapper 75파일 (2.0.2 복제 → `navigation:` 키·intro 의 title/changelog include/`version=` 치환).
-- `_includes/zdm/ko/api/changelog/3.0.0.md` — 스켈레톤(본문 미작성).
-- `downloads/zdm-api/3.0.0/` 디렉토리 (바이너리는 추후 직접 투입).
+## [Documentation] - 2026-08-31 (recovery 수정 계약 변경 반영 · 에러 코드 총람 정정)
 
 ### Changed
-- `_data/navigation.yml` `ko-zdm:` 메인 링크 → `/zdm/ko/api/3.0.0/index`.
-- `zdm/ko/index.md` — ZDM-API 헤더 배지 `latest v3.0.0`, 업데이트 목록 최상단에 v3.0.0 블록 추가.
+- `api/docs/recovery/update.md` — `jobList` 항목 지목이 **파티션 → backup image 기준**으로 바뀐 것을 반영.
+  필드 표를 `backupFile`(필수) + `targetPartition`(선택) 로 교체하고, 왜 바뀌었는지(1:N 매핑에서 파티션만으로는
+  복구 단위가 특정되지 않음)와 미매칭 시 실패 동작(이전에는 조용히 무시)을 콜아웃으로 명시. 요청 예시 3곳 갱신.
+- `cli/docs/recovery/update.md` — `--partition` → `--backup-file` + `--target-partition`. 옵션 표·예시 갱신.
+  **Windows 용 옵션이 없어 파티션별 수정이 불가능하던 것**이 단일 옵션 도입으로 해소됨을 반영.
 
-### 미완 — 후속 작업
-- **5단계(문서 본문) 미수행**: 공용 include 74파일의 응답 예시 치환 + 보존본 분리 + 구버전 wrapper 리타겟.
-- 신규 본문 3건 미작성: `docs/recovery/image-regist.md`, `docs/error-codes.md`, changelog 본문.
-- `regist.md` 의 "전체 partition skip 시 `JOB-ERROR-01`(404)" 서술은 3.0.0 에서 `JOB-ERROR-14`(400) 로 정정 필요.
+### Fixed
+- `api/docs/error-codes.md` — **설명이 `-` 로 비어 있던 10건 정정.**
+  원인은 코드가 아니라 **문서 생성 파서**였다. `error-code.ts` 의 `message` 는 전부 채워져 있는데,
+  파서가 필드 순서에 취약해 10건을 놓쳤다. 파서를 블록 단위 추출로 고쳐 재생성했고 한국어 설명도 채웠다.
+  → 총 150개 코드 전부 설명 보유 (`-` 0건).
+
+### Verified
+- `./run.sh --build` 성공.
+
+---
+
+## [Documentation] - 2026-08-28 (ZDM-API 3.0.0 · ZDM-CLI 3.0.0 릴리즈)
+
+### Context
+- `zdm-api-v2` / `zdm-cli-v2` 3.0.0 동시 릴리즈. **응답 봉투 breaking** 이 핵심이다 —
+  `error` 가 문자열 → `{code, message, details?}` 객체, `requestID` → `traceId`, `timestamp` → ISO 8601.
+- 계획: `zdm-api-v2/orgs/dev/plans/3.0.0-gitpage-문서-릴리즈-계획.md`.
+  릴리즈 유형은 API **표준**(공용 75파일 중 74파일 영향) / CLI **부분 갱신**(64파일 중 30파일).
+
+### Added — 버전 구조
+- `versions.yml` — api·cli `3.0.0` 을 `latest` 로, 기존 `2.0.2` 는 `stable` 로 강등.
+  **API 는 Linux 단독**, CLI 는 Windows + Linux (제품별 실제 배포 산출물에 맞춤).
+- `navigation.yml` — `ko-api-3.0.0`(13섹션) · `ko-cli-3.0.0` 신설. 메인 링크도 3.0.0 intro 로.
+- wrapper — `zdm/ko/api/3.0.0/` 75파일, `zdm/ko/cli/3.0.0/` 65파일.
+- 바이너리 3종 배치 — `downloads/zdm-{api,cli}/3.0.0/`. `versions.yml` 이 참조하는 **전 버전 25개 경로 실존 확인**.
+
+### Added — 신규 문서
+- `api/docs/recovery/image-regist.md` — `POST /recoveries/image`. 일반 복구와의 차이, 파티션 매핑 규칙, 실제 응답 예시, 에러 4종.
+- `api/docs/error-codes.md` — **에러 코드 총람 150개 / 16개 그룹**. `src/error/error-code.ts` 파싱으로 생성.
+  응답에 나가지 않는 `DATABASE-ERROR-*` 는 마스킹 정책대로 제외하고 그 사실을 명시.
+  **설명은 한국어**(ko 트리 일관성), 단 `error.message` 는 영문 반환임을 상단에 안내.
+- `cli/docs/recovery/image-regist.md` — 실제 플래그를 CLI 소스에서 추출.
+- `api/changelog/3.0.0.md` · `cli/changelog/3.0.0.md` — 사용자 체감 변경만 게재(내부 리팩터 제외).
+
+### Changed — 문서 본문 (봉투 전환)
+- **API 공용 74파일 · CLI 공용 30파일** 을 3.0.0 봉투로 전환.
+  `traceId` 326곳 · ISO `timestamp` 326곳 · `error` 객체화 156곳 · `detail` → `error.details` 흡수 4건 (API 기준).
+- 버전별 분리 절차 적용 — 공용을 `{page}/2.0.2.md` 로 보존 → 공용을 3.0.0 내용으로 → **구버전 wrapper 197개를 보존본으로 리타겟**.
+  결과: 3.0.0 만 새 봉투, 2.0.2 이하는 기존 봉투 유지. 기존에 구버전 보존본을 가리키던 wrapper(1.3.1 등)는 미변경.
+- **에러 코드 배정 156곳** — 추측 없이 세 경로로 확정: ① 문서 제목에 이미 적힌 코드 표기 ② 메시지 리터럴로 API 소스 역추적 후 `error-code.ts` 대조 ③ zod 메시지는 검증 계층(body/param/query)으로 `DTO-VALIDATION-01/02/03`.
+- `recovery/regist.md` — 전량 skip 응답을 `JOB-ERROR-01`(404) → **`JOB-ERROR-14`(400)** 로 정정.
+- `file/download.md` · `cloud-auth/zos-download.md` — "404 가 공통 형식을 따르지 않는다" 는 서술이 **낡은 정보가 됨**.
+  API 3.0.0 이 표준 봉투로 고쳤으므로 현행 동작으로 갱신하고, 이전 버전에 그 불일치가 있었음을 함께 남김.
+- `zdm/repository-{regist,verify}.md` — 응답 필드 표의 `requestID` → `traceId`.
+
+### Fixed — 빌드 환경
+- `Gemfile.lock` — `sass-embedded` 의 플랫폼 변종 3개(`arm64-darwin`/`x86_64-darwin`/`x86_64-linux-gnu`) 제거.
+  **lock 이 모순 상태였다**: `PLATFORMS` 는 `x86_64-linux` 인데 변종은 `-gnu` 로만 기록돼, bundler 가 존재하지 않는
+  `sass-embedded-1.69.5-x86_64-linux` 를 요구해 `bundle exec` 가 전부 실패했다. 남은 ruby 플랫폼 스펙은 전 OS 에서 동작한다.
+- `run.sh` — 용도 주석, `set -euo pipefail`, 경로 독립(스크립트 위치 기준), `HOST`/`PORT` 환경변수,
+  **의존성 자동 확인·설치**(같은 실패 시 원인과 대처 안내), **`--build` 모드**(서버 없이 빌드만 — 배포 전 검증용).
+
+### Verified
+- `./run.sh --build` 성공. `DocMtime: 9 api + 10 cli entries`.
+- 공용 파일의 구 봉투 잔존 0 · `CODE_TODO` 0 · 구버전 보존본 오염 0 · 죽은 nav 링크 0 · 깨진 include 0.
+- 불변식(`docs` 값 ↔ wrapper·nav·changelog 1:1) api·cli 모두 충족. 각 버전 블록의 링크가 자기 버전만 참조함을 전수 확인.
+- 신규/변경 문서의 JSON 예시 파싱 검증 (기존 `/* ... */` 생략 주석 1건 제외).
 
 ### Notes
-- 6단계(리다이렉트) **불필요** — `zdm/ko/api/index.md` 가 `versions.yml` 의 latest 를 Liquid 로 자동 반영한다
+- 6단계(리다이렉트) **불필요** — `zdm/ko/{api,cli}/index.md` 가 `versions.yml` 의 latest 를 Liquid 로 자동 반영한다
   (파일 주석에 명시). skill 본문의 6단계 지시는 현행 구조와 어긋나 CLAUDE.md 우선 원칙으로 스킵.
 - 기존 `ko-api-1.3.1` 블록의 링크 74건이 `1.3.0` 을 가리키는 불일치가 있으나 **본 작업 이전부터 존재**. 미조치.
+- `backup/history-{get,list}` 는 wrapper 가 아니라 **본문 인라인**이었고, 정작 공용 include 는 아무도 참조하지 않는
+  고아 상태였다(인라인본보다 최신 — `center` 필터 행 추가분 보유). 3.0.0 만 정상 패턴(include)으로 전환.
+- 총람의 설명 10건이 `-` 인 것은 `error-code.ts` 의 `message` 가 비어 있기 때문이다(`SCHEDULE-ERROR-{22,39,44,47,49,50}`,
+  `JOB-ERROR-{101,102,103,104}`). 임의로 채우지 않았다 — 근본 해결은 코드 쪽 `message` 보강.
+
+### 남은 작업 — 사용자 몫
+- Jekyll 빌드 결과 확인 후 커밋·푸시.
 
 ---
 

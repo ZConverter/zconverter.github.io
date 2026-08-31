@@ -56,7 +56,7 @@ zdm-cli recovery update --center 9 --id 123 --mail-event "admin@example.com"
 zdm-cli recovery update --center 9 --id 123 --status stop
 
 # 특정 파티션의 모드 변경
-zdm-cli recovery update --center 9 --id 123 --partition "/" --mode inc
+zdm-cli recovery update --center 9 --id 123 --backup-file "server01_ROOT_0262.ZIA" --mode inc
 
 # 복합 설정 변경
 zdm-cli recovery update --center 9 --id 123 --change-name "MyRecovery" --platform aws --after-reboot reboot --network-limit 500
@@ -84,7 +84,8 @@ zdm-cli recovery update --center 9 --id 123 --change-name "MyRecovery" --platfor
 | --script-path | -sp | string | Optional | - | 작업 스크립트 경로 | - |
 | --script-run | -sr | string | Optional | - | 작업 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 | --status | - | string | Optional | - | 작업 상태 | `start`, `stop` |
-| --partition | -pt | string | Optional | - | 변경할 작업 대상 파티션 | - |
+| --backup-file | -bf | string | Optional | - | 수정할 항목을 지목할 backup image 파일 이름 | - |
+| --target-partition | -tp | string | Optional | - | 같은 이미지가 여러 파티션에 복구된 경우 그중 하나로 좁힘 (Linux `/data`, Windows `C:`) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 > <span class="required-note">*</span> --id 또는 --name 중 하나는 필수로 입력해야 합니다.

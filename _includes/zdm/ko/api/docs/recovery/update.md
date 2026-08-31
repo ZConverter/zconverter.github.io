@@ -40,7 +40,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
     "center": "1",
     "jobList": [
       {
-        "partition": "/",
+        "backupFile": "server01_ROOT_0262.ZIA",
         "mode": "increment"
       }
     ]
@@ -57,7 +57,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
     "afterReboot": "reboot",
     "jobList": [
       {
-        "partition": "/",
+        "backupFile": "server01_ROOT_0262.ZIA",
         "mode": "full"
       }
     ]
@@ -71,7 +71,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
     "center": "1",
     "jobList": [
       {
-        "drive": "C:",
+        "backupFile": "server01_C_0262.ZIA",
         "mode": "increment"
       }
     ]
@@ -111,9 +111,16 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 
 | 필드 | 타입 | 필수 | 설명 |
 |------|------|------|------|
-| `partition` | string | Conditional | 대상 파티션 - Linux (partition 또는 drive 중 하나 필수) |
-| `drive` | string | Conditional | 대상 드라이브 - Windows (partition 또는 drive 중 하나 필수). 입력값은 대문자 변환 및 `:` 자동 추가됨 (`c` → `C:`, `c:` → `C:`) |
+| `backupFile` | string | Required | 수정할 항목을 지목할 **backup image 파일 이름**. 조회 응답의 `job[].backup.fileName` 값을 그대로 사용합니다 |
+| `targetPartition` | string | Optional | 같은 이미지가 여러 파티션에 복구되는 경우 그중 하나로 좁힙니다. OS 구분 없이 한 필드이며 값만 다릅니다 (Linux `/data`, Windows `C:`) |
 | `mode` | string | Optional | 변경할 작업 모드 |
+
+> **대상 지목이 파티션 → 이미지 기준으로 바뀌었습니다.** 하나의 원본 파티션을 여러 대상 파티션으로 복구할 수 있게 되면서(1:N), 파티션 이름만으로는 어느 복구 단위를 고칠지 특정되지 않기 때문입니다.
+>
+> - `backupFile` 만 지정 → 그 이미지를 사용하는 **모든 항목**에 적용
+> - `backupFile` + `targetPartition` → **그 항목 하나**에만 적용
+>
+> 지목한 이미지가 작업에 없으면 `JOB-ERROR-01`(404), 대상 서버에 없는 파티션을 지정하면 `JOB-ERROR-13`(404)로 실패합니다. 이전에는 매칭되지 않아도 조용히 무시돼 수정이 반영된 것처럼 보였습니다.
 
 > **mode와 jobList 동시 사용 시 처리 순서:**
 > 1. `mode` 필드가 먼저 적용되어 **모든 파티션**의 모드가 변경됩니다.

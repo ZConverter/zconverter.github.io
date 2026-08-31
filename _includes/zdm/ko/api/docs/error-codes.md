@@ -34,7 +34,6 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 
 </details>
 
-
 <details markdown="1">
 <summary><strong>공통</strong> (17건)</summary>
 
@@ -143,7 +142,7 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 | `SCHEDULE-ERROR-19` | 400 | day 는 1 ~ 31 사이여야 합니다. |
 | `SCHEDULE-ERROR-20` | 409 | 이 스케줄 타입은 day 를 복수로 선택할 수 없습니다. |
 | `SCHEDULE-ERROR-21` | 400 | day 값이 누락됐습니다. |
-| `SCHEDULE-ERROR-22` | 422 | - |
+| `SCHEDULE-ERROR-22` | 422 | day 값이 유효하지 않습니다. (mon, tue, wed, thu, fri, sat, sun 중 하나) |
 | `SCHEDULE-ERROR-23` | 409 | 이 스케줄 타입은 요일을 복수로 선택할 수 없습니다. |
 | `SCHEDULE-ERROR-24` | 400 | week 값이 누락됐습니다. |
 | `SCHEDULE-ERROR-25` | 422 | week 값이 유효하지 않습니다. |
@@ -160,18 +159,18 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 | `SCHEDULE-ERROR-36` | 422 | minute 값이 유효하지 않습니다. |
 | `SCHEDULE-ERROR-37` | 400 | hour 값이 누락됐습니다. |
 | `SCHEDULE-ERROR-38` | 422 | hour 값이 유효하지 않습니다. |
-| `SCHEDULE-ERROR-39` | 422 | - |
+| `SCHEDULE-ERROR-39` | 422 | ONCE 타입의 필수 필드가 누락됐습니다. (sYear, sMonth, sDay) |
 | `SCHEDULE-ERROR-40` | 422 | EVERY_MINUTE 타입의 필수 필드가 누락됐습니다. (nPeriodMinute) |
 | `SCHEDULE-ERROR-41` | 422 | HOURLY 타입의 필수 필드가 누락됐습니다. (nPeriodHour) |
 | `SCHEDULE-ERROR-42` | 422 | DAILY 타입에 불필요한 필드가 포함돼 있습니다. |
 | `SCHEDULE-ERROR-43` | 422 | WEEKLY 타입의 필수 필드가 누락됐습니다. (sDayweek) |
-| `SCHEDULE-ERROR-44` | 422 | - |
+| `SCHEDULE-ERROR-44` | 422 | MONTHLY_BY_WEEK 타입의 필수 필드가 누락됐습니다. (sDayweek, sWeek) |
 | `SCHEDULE-ERROR-45` | 422 | MONTHLY_BY_DAY 타입의 필수 필드가 누락됐습니다. (sDate) |
 | `SCHEDULE-ERROR-46` | 422 | SMART_WEEKLY 타입의 필수 필드가 누락됐습니다. (sDayweek) |
-| `SCHEDULE-ERROR-47` | 422 | - |
+| `SCHEDULE-ERROR-47` | 422 | SMART_MONTHLY_BY_WEEKDAY 타입의 필수 필드가 누락됐습니다. (sDayweek, sWeek) |
 | `SCHEDULE-ERROR-48` | 422 | SMART_MONTHLY_BY_DATE 타입의 필수 필드가 누락됐습니다. (sDate) |
-| `SCHEDULE-ERROR-49` | 422 | - |
-| `SCHEDULE-ERROR-50` | 422 | - |
+| `SCHEDULE-ERROR-49` | 422 | SMART_CUSTOM_MONTHLY_BY_WEEKDAY 타입의 필수 필드가 누락됐습니다. (sDayweek, sWeek, sMonths) |
+| `SCHEDULE-ERROR-50` | 422 | SMART_CUSTOM_MONTHLY_BY_DATE 타입의 필수 필드가 누락됐습니다. (sDate, sMonths) |
 | `SCHEDULE-ERROR-51` | 409 | 사용 중인 스케줄이라 삭제할 수 없습니다. |
 
 </details>
@@ -249,10 +248,10 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 | 코드 | HTTP | 설명 |
 |------|------|------|
 | `JOB-ERROR-100` | 404 | 지정한 스케줄을 찾을 수 없습니다. |
-| `JOB-ERROR-101` | 400 | - |
-| `JOB-ERROR-102` | 400 | - |
-| `JOB-ERROR-103` | 400 | - |
-| `JOB-ERROR-104` | 400 | - |
+| `JOB-ERROR-101` | 400 | full/increment 작업은 스케줄에 basic 만 포함해야 합니다. |
+| `JOB-ERROR-102` | 400 | smart 작업은 스케줄에 basic 과 advanced 를 모두 포함해야 합니다. |
+| `JOB-ERROR-103` | 400 | full/increment 작업의 스케줄 타입은 0 ~ 6 이어야 합니다. |
+| `JOB-ERROR-104` | 400 | smart 작업의 스케줄 타입은 7 ~ 11 이어야 합니다. |
 | `JOB-ERROR-105` | 400 | basic 과 advanced 의 스케줄 타입이 일치하지 않습니다. |
 | `JOB-ERROR-106` | 500 | 스케줄 수정에 실패했습니다. |
 | `JOB-ERROR-107` | 400 | Smart Backup 은 스케줄이 필수입니다. |
