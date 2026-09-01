@@ -37,6 +37,10 @@ curl -X GET "https://api.example.com/api/recoveries/histories?server=source-serv
 curl -X GET "https://api.example.com/api/recoveries/histories?partition=C:&result=failed" \
   -H "Authorization: Bearer <token>"
 
+# 다중 센터 필터 (comma-separated; ID 또는 이름 혼용 가능)
+curl -X GET "https://api.example.com/api/recoveries/histories?center=1,zdm-b" \
+  -H "Authorization: Bearer <token>"
+
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/recoveries/histories?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
@@ -57,12 +61,15 @@ curl -X GET "https://api.example.com/api/recoveries/histories?page=1&limit=10" \
 | `result` | Query | string | Optional | - | 작업 결과 필터 | `success`, `failed` |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
+| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 > **참고:**
 > - `serverType`이 `target`(기본값)이면 `server`는 복구 대상 서버(`sRecoverySystemName`)를, `source`이면 소스 서버(`sSystemName`)를 기준으로 필터링합니다.
 > - `partition` 파라미터는 콤마 구분된 `sRecoverDrive` 필드에서 개별 항목을 정확히 매칭합니다.
-> - `partition` + `server` 사용 시, 해당 서버가 Windows이면 `:` 누락 시 자동으로 추가됩니다. (예: `C` → `C:`)
+> - `partition` 값 형식은 API가 정규화하므로 `C`, `C:`, `/data`를 모두 그대로 쓸 수 있습니다. **OS에 따라 골라 쓸 필요 없이 하나만 사용**하면 됩니다. (예: `C` → `C:`)
+> - `?center=`, `?server=`, `?partition=`처럼 **키만 보내고 값이 비어 있으면 400**입니다. 파라미터를 아예 **생략**하는 것(필터 없음)과는 다릅니다.
+> - `center`는 ID와 이름을 콤마로 섞어 여러 개 지정할 수 있습니다 (예: `?center=1,zdm-b`).
 
 </details>
 
@@ -165,6 +172,24 @@ curl -X GET "https://api.example.com/api/recoveries/histories?page=1&limit=10" \
     "hasNextPage": true,
     "hasPreviousPage": false
   },
+  "message": "Recovery history list",
+  "timestamp": "2026-03-03T10:30:00.000+09:00"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary>빈 결과 응답 (200 OK)</summary>
+
+> 일치하는 결과가 없거나 `center` 필터가 어떤 센터에도 매칭되지 않으면 빈 배열을 반환합니다 (에러가 아님).
+> 단건 조회(`GET /recoveries/histories/:identifier`)는 지목한 히스토리 자체가 없는 것이므로 종전대로 404를 반환합니다.
+
+```json
+{
+  "success": true,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "data": [],
   "message": "Recovery history list",
   "timestamp": "2026-03-03T10:30:00.000+09:00"
 }

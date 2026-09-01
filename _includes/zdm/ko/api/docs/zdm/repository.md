@@ -7,6 +7,8 @@
 
 > * 특정 ZDM의 레포지토리 목록을 조회합니다.
 > * ZDM ID 또는 ZDM 이름으로 조회할 수 있습니다.
+> * `center` 는 ID 또는 이름을 콤마로 여러 개 지정할 수 있습니다. 파라미터를 **생략**하면 종전대로 center 필터 없이 조회하지만, `?center=` 처럼 **키만 보내고 값이 비면 400**입니다.
+> * ZDM은 존재하지만 조건에 맞는 레포지토리가 없으면 **200과 빈 배열**을 반환합니다. 지목한 **ZDM 자체가 없을 때의 404 는 종전대로**입니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -46,7 +48,7 @@ curl -X GET "https://api.example.com/api/zdms/1/repositories?page=1&limit=10" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | ZDM ID (숫자) 또는 ZDM 이름 | - |
-| `center` | Query | string | Optional | - | 센터 식별자 추가 필터 (path identifier와 별도) | - |
+| `center` | Query | string | Optional | - | 센터 식별자 추가 필터 (path identifier와 별도). ID/이름을 comma-separated로 다중 지정 가능. 값이 빈 `?center=` 는 400 | - |
 | `type` | Query | string | Optional | - | 레포지토리 타입 필터 | {% include zdm/repository-types.md %} |
 | `os` | Query | string | Optional | - | OS 필터 (`win` → Windows, `lin` → Linux) | `win`, `lin` |
 | `path` | Query | string | Optional | - | 경로 필터 | - |
@@ -168,6 +170,23 @@ curl -X GET "https://api.example.com/api/zdms/1/repositories?page=1&limit=10" \
 
 </details>
 
+<details markdown="1">
+<summary>빈 결과 응답 (200 OK)</summary>
+
+> 조건에 맞는 레포지토리가 없으면 빈 배열을 반환합니다 (에러가 아님). ZDM 자체를 찾을 수 없을 때의 404 와는 다릅니다.
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": true,
+  "data": [],
+  "message": "Repository information retrieved",
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+</details>
+
 </details>
 
 <details markdown="1" open>
@@ -210,7 +229,26 @@ curl -X GET "https://api.example.com/api/zdms/1/repositories?page=1&limit=10" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "ZDM-ERROR-01",
-    "message": "ID가 '999'인 ZDM을 찾을 수 없습니다"
+    "message": "Zdm with ID '999' not found"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+**`center` 빈 값 (400 Bad Request)**
+
+`?center=` 처럼 키만 보내고 값이 비면 반환됩니다. 파라미터를 **생략**한 경우는 종전대로 "필터 없음"이며 동작 변화가 없습니다.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "Query parameter validation failed.",
+    "details": {
+      "center": ["center must contain at least one identifier"]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

@@ -132,6 +132,10 @@ curl -X POST "https://api.example.com/api/recoveries" \
 >
 > 자동 선택 경로(`backupJob`·`backupFile` 모두 미지정)는 애초에 **사용 가능한 작업만** 후보로 삼습니다.
 
+> **필수 식별자의 공백 값 (since 2026-09-01)**
+>
+> `center` / `source` / `target` 등 필수 식별자 필드는 **공백만 있거나 빈 문자열이면 거부**됩니다. 값은 앞뒤 공백을 제거한 뒤 사용됩니다. (예: `"center": " "` → 400, 메시지는 기존 `center is required`와 동일)
+
 > **Windows 파티션 정규화 (since 2026-05-15)**
 >
 > Windows 서버 대상으로 등록 시 `sourcePartition` / `targetPartition` 입력값은 비교 단계에서 자동으로 대문자 변환 및 `:` 보정이 적용됩니다. 입력 `c`, `C`, `c:`, `C:` 모두 동일하게 `C:`로 취급되어 서버 파티션 정보와 매칭됩니다. (Linux는 정규화 없음 — 원본 그대로 비교)
@@ -273,7 +277,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 <details markdown="1">
 <summary><strong>에러 응답</strong></summary>
 
-**유효성 검사 실패 (400 Bad Request)**
+**유효성 검사 실패 (422 Unprocessable Entity)**
 
 ```json
 {
@@ -281,7 +285,12 @@ curl -X POST "https://api.example.com/api/recoveries" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "platform은 oci, ncp, gcp, aws, azure, vmware, scp, openstack, cloudstack, kt, nhn, nutanix, proxmox, kvm, hyperv, xenserver중 하나여야 합니다"
+    "message": "Request body validation failed.",
+    "details": {
+      "platform": [
+        "platform must be one of: oci, ncp, gcp, aws, azure, vmware, scp, openstack, cloudstack, kt, nhn, nutanix, proxmox, kvm, hyperv, xenserver"
+      ]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

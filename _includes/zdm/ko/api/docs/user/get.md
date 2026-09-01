@@ -90,8 +90,8 @@ curl -X GET "https://api.example.com/api/users/user@example.com" \
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "USER-ERROR-01",
-    "message": "ID가 '999'인 User를 찾을 수 없습니다"
+    "code": "USER-ERROR-03",
+    "message": "User with ID '999' not found"
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
@@ -107,7 +107,7 @@ curl -X GET "https://api.example.com/api/users/user@example.com" \
   "success": false,
   "error": {
     "code": "UNAUTHORIZED",
-    "message": "토큰이 만료되었습니다."
+    "message": "Token expired."
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

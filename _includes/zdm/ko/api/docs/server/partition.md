@@ -8,6 +8,10 @@
 > * 특정 서버의 파티션 정보만 조회합니다.
 > * 서버 ID 또는 서버 이름으로 조회할 수 있습니다.
 > * 작업 대상이 될 수 없는 파티션(swap, `/media/cdrom*`, `/mnt/cdrom` 등 `free` 용량이 0인 파티션)은 응답에서 자동 제외됩니다.
+> * `partition` 과 `drive` 는 **같은 컬럼을 가리키는 하나의 필터**입니다. 둘을 함께 지정하면 400이므로 **둘 중 하나만** 사용하세요. `?partition=` · `?drive=` 처럼 키만 보내고 값이 비어도 400입니다.
+> * 값 형식은 API가 정규화하므로 `C`, `C:`, `/data` 를 그대로 쓸 수 있습니다. OS에 따라 파라미터를 갈라 쓸 필요가 없습니다.
+> * 여기의 `partition` 은 **파티션 하나를 지목하는 값**입니다. `GET /servers` · `GET /servers/:identifier` 의 `partition` 은 "파티션 정보를 응답에 포함할지" 를 묻는 **포함 플래그(`true`/`false`)** 로 의미가 다릅니다. `?partition=true` 관용구를 이 API에 그대로 옮겨 쓰면 조용히 0건이 됩니다.
+> * `center` 는 ID 또는 이름을 콤마로 여러 개 지정할 수 있습니다. 파라미터를 **생략**하면 종전대로 center 필터 없이 조회하지만, `?center=` 처럼 **키만 보내고 값이 비면 400**입니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -34,6 +38,14 @@ curl -X GET "https://api.example.com/api/servers/server-01/partitions" \
 curl -X GET "https://api.example.com/api/servers/1/partitions?fileSystem=ext4" \
   -H "Authorization: Bearer <token>"
 
+# 파티션 지목 필터 (값 형식은 API가 정규화 - "/home", "C", "C:" 모두 허용)
+curl -X GET "https://api.example.com/api/servers/1/partitions?partition=/home" \
+  -H "Authorization: Bearer <token>"
+
+# drive는 partition과 같은 컬럼을 가리키는 별칭 - 둘 중 하나만 사용 (동시 지정 시 400)
+curl -X GET "https://api.example.com/api/servers/1/partitions?drive=C" \
+  -H "Authorization: Bearer <token>"
+
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/servers/1/partitions?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
@@ -47,13 +59,13 @@ curl -X GET "https://api.example.com/api/servers/1/partitions?page=1&limit=10" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 서버 ID (숫자) 또는 서버 이름 | - |
-| `partition` | Query | string | Optional | - | 마운트 포인트 필터 (Linux) | - |
-| `drive` | Query | string | Optional | - | 드라이브 문자 필터 (Windows) | - |
+| `partition` | Query | string | Optional | - | 파티션 지목 필터 (`/home`, `C`, `C:` 모두 허용 - API가 정규화). `drive` 와 동시 지정 불가, 값이 빈 `?partition=` 는 400 | - |
+| `drive` | Query | string | Optional | - | `partition` 과 **같은 컬럼**을 가리키는 별칭. 동시 지정 시 400, 값이 빈 `?drive=` 도 400 | - |
 | `device` | Query | string | Optional | - | 디바이스 경로 필터 | - |
 | `fileSystem` | Query | string | Optional | - | 파일 시스템 타입 필터 | - |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
-| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
+| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`). 값이 빈 `?center=` 는 400 | - |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 </details>
@@ -161,6 +173,23 @@ curl -X GET "https://api.example.com/api/servers/1/partitions?page=1&limit=10" \
 
 </details>
 
+<details markdown="1">
+<summary>빈 결과 응답 (200 OK)</summary>
+
+> 서버는 존재하지만 필터에 맞는 파티션이 없으면 빈 배열을 반환합니다 (에러가 아님). 지목한 **서버 자체가 없을 때의 404 는 종전대로**입니다.
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": true,
+  "data": [],
+  "message": "Partition information retrieved",
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+</details>
+
 </details>
 
 <details markdown="1" open>
@@ -200,7 +229,45 @@ curl -X GET "https://api.example.com/api/servers/1/partitions?page=1&limit=10" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "SERVER-ERROR-01",
-    "message": "ID가 '999'인 Server를 찾을 수 없습니다"
+    "message": "Server with ID '999' not found"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+**`partition` 과 `drive` 동시 지정 (400 Bad Request)**
+
+두 파라미터는 같은 컬럼을 가리키는 하나의 필터이므로 함께 사용할 수 없습니다. 값 형식은 API가 정규화하므로 하나만 쓰면 됩니다. `?partition=` 처럼 값이 비어 쓸 수 있는 식별자가 하나도 남지 않는 경우에도 같은 400이 반환됩니다.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "Query parameter validation failed.",
+    "details": {
+      "partition": ["partition and drive filter the same column and cannot be used together. Use one of them — 'C', 'C:' and '/data' are all accepted."]
+    }
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+**`center` 빈 값 (400 Bad Request)**
+
+`?center=` 처럼 키만 보내고 값이 비면 반환됩니다. 파라미터를 **생략**한 경우는 종전대로 "필터 없음"이며 동작 변화가 없습니다.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "Query parameter validation failed.",
+    "details": {
+      "center": ["center must contain at least one identifier"]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

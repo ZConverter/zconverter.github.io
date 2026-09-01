@@ -122,6 +122,10 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 >
 > 지목한 이미지가 작업에 없으면 `JOB-ERROR-01`(404), 대상 서버에 없는 파티션을 지정하면 `JOB-ERROR-13`(404)로 실패합니다. 이전에는 매칭되지 않아도 조용히 무시돼 수정이 반영된 것처럼 보였습니다.
 
+> **필수 식별자의 공백 값 (since 2026-09-01)**
+>
+> `center`는 **공백만 있거나 빈 문자열이면 거부**됩니다. 값은 앞뒤 공백을 제거한 뒤 소속 검증에 사용됩니다. (예: `"center": " "` → 400, 메시지는 기존 `center is required`와 동일)
+
 > **mode와 jobList 동시 사용 시 처리 순서:**
 > 1. `mode` 필드가 먼저 적용되어 **모든 파티션**의 모드가 변경됩니다.
 > 2. 이후 `jobList`가 적용되어 **지정된 파티션만** 개별적으로 재변경됩니다.
@@ -420,7 +424,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "JOB-ERROR-01",
-    "message": "ID가 '999'인 Recovery를 찾을 수 없습니다"
+    "message": "Recovery job with ID '999' not found"
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

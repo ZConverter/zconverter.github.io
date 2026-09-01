@@ -145,7 +145,7 @@ curl -X GET "https://api.example.com/api/users?page=1&limit=10" \
   "success": false,
   "error": {
     "code": "UNAUTHORIZED",
-    "message": "토큰이 만료되었습니다."
+    "message": "Token expired."
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

@@ -33,6 +33,14 @@ curl -X GET "https://api.example.com/api/recoveries?mode=full&status=complete" \
 curl -X GET "https://api.example.com/api/recoveries?detail=true" \
   -H "Authorization: Bearer <token>"
 
+# 파티션/드라이브 필터 (partition 과 drive 중 하나만 사용)
+curl -X GET "https://api.example.com/api/recoveries?partition=C" \
+  -H "Authorization: Bearer <token>"
+
+# 다중 센터 필터 (comma-separated; ID 또는 이름 혼용 가능)
+curl -X GET "https://api.example.com/api/recoveries?center=1,zdm-b" \
+  -H "Authorization: Bearer <token>"
+
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/recoveries?page=1&limit=10" \
   -H "Authorization: Bearer <token>"
@@ -50,8 +58,8 @@ curl -X GET "https://api.example.com/api/recoveries?page=1&limit=10" \
 | `server` | Query | string | Optional | - | 작업 대상 서버 이름/ID 필터 | - |
 | `serverType` | Query | string | Optional | - | 서버 타입 필터 | {% include zdm/server-modes.md %} |
 | `mode` | Query | string | Optional | - | 작업 모드 필터 | {% include zdm/job-modes.md %} |
-| `partition` | Query | string | Optional | - | 파티션 필터 (Linux) | - |
-| `drive` | Query | string | Optional | - | 드라이브 필터 (Windows) | - |
+| `partition` | Query | string | Optional | - | 파티션/드라이브 필터 (`drive`와 동시 지정 불가) | - |
+| `drive` | Query | string | Optional | - | `partition`과 같은 대상을 가리키는 별칭 (둘 중 하나만 사용) | - |
 | `status` | Query | string | Optional | - | 작업 상태 필터 | {% include zdm/job-status.md %} |
 | `repositoryID` | Query | number | Optional | - | 레포지토리 ID 필터 | - |
 | `repositoryType` | Query | string | Optional | - | 레포지토리 타입 필터 | {% include zdm/repository-types.md %} |
@@ -63,6 +71,12 @@ curl -X GET "https://api.example.com/api/recoveries?page=1&limit=10" \
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 | `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
+
+> **참고:**
+> - `partition`과 `drive`는 **같은 대상을 가리키는 하나의 필터**입니다. 두 파라미터를 함께 지정하면 400으로 거부됩니다.
+> - 값 형식은 API가 정규화하므로 `C`, `C:`, `/data`를 모두 그대로 쓸 수 있습니다. **OS에 따라 골라 쓸 필요 없이 하나만 사용**하면 됩니다.
+> - `?center=`, `?server=`처럼 **키만 보내고 값이 비어 있으면 400**입니다. 파라미터를 아예 **생략**하는 것(필터 없음)과는 다릅니다.
+> - `center`는 ID와 이름을 콤마로 섞어 여러 개 지정할 수 있습니다 (예: `?center=1,zdm-b`). `server`도 서버 ID와 이름을 모두 받습니다.
 
 </details>
 
@@ -388,6 +402,49 @@ curl -X GET "https://api.example.com/api/recoveries?page=1&limit=10" \
 
 </details>
 
+<details markdown="1">
+<summary>빈 결과 응답 (200 OK) - 페이지네이션 미적용</summary>
+
+> 일치하는 결과가 없거나 `center` 필터가 어떤 센터에도 매칭되지 않으면 빈 배열을 반환합니다 (에러가 아님).
+> 단건 조회(`GET /recoveries/:identifier`)는 지목한 복구 작업 자체가 없는 것이므로 종전대로 404를 반환합니다.
+
+```json
+{
+  "success": true,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "data": [],
+  "message": "Recovery job list",
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+</details>
+
+<details markdown="1">
+<summary>빈 결과 응답 (200 OK) - 페이지네이션 적용</summary>
+
+> `page` 또는 `limit`을 지정한 상태에서 결과가 0건이면 `data: []`와 빈 페이지네이션 메타가 함께 반환됩니다.
+
+```json
+{
+  "success": true,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "data": [],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 0,
+    "totalItems": 0,
+    "itemsPerPage": 10,
+    "hasNextPage": false,
+    "hasPreviousPage": false
+  },
+  "message": "Recovery job list",
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+</details>
+
 </details>
 
 <details markdown="1" open>
@@ -459,7 +516,7 @@ curl -X GET "https://api.example.com/api/recoveries?page=1&limit=10" \
   "success": false,
   "error": {
     "code": "UNAUTHORIZED",
-    "message": "토큰이 만료되었습니다."
+    "message": "Token expired."
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
@@ -475,7 +532,31 @@ curl -X GET "https://api.example.com/api/recoveries?page=1&limit=10" \
   "success": false,
   "error": {
     "code": "DTO-VALIDATION-03",
-    "message": "유효하지 않은 'mode' 값입니다. 허용된 값: full, increment"
+    "message": "Query parameter validation failed.",
+    "details": {
+      "mode": [
+        "mode must be one of: full, increment"
+      ]
+    }
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+`partition`과 `drive`를 함께 지정한 경우에도 400으로 거부됩니다.
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": false,
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "Query parameter validation failed.",
+    "details": {
+      "partition": [
+        "partition and drive filter the same column and cannot be used together. Use one of them — 'C', 'C:' and '/data' are all accepted."
+      ]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

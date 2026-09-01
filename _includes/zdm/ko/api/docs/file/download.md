@@ -75,15 +75,13 @@ curl -X GET "https://api.example.com/api/files/download/file-1705312200000-12345
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "DTO-VALIDATION-01",
-    "message": "URL parameter validation failed."
-  },
-  "timestamp": "2025-01-15T10:30:00.000+09:00",
-  "detail": {
-    "validationErrors": {
+    "code": "DTO-VALIDATION-02",
+    "message": "URL parameter validation failed.",
+    "details": {
       "fileName": ["fileName must not contain path separators or '..'"]
     }
-  }
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

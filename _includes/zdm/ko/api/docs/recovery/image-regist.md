@@ -62,6 +62,10 @@ source 서버 없이 backup image 파일만으로 복구 작업을 등록합니�
 | `scriptPath` / `scriptRun` | string | Optional | 작업 전후 실행할 스크립트 |
 | `mailEvent` | string | Optional | 작업 로그 수신 이메일 |
 
+> **필수 식별자의 공백 값 (since 2026-09-01)**
+>
+> `center` / `target` 등 필수 식별자 필드는 **공백만 있거나 빈 문자열이면 거부**됩니다. 값은 앞뒤 공백을 제거한 뒤 사용됩니다. (예: `"center": " "` → 400, 메시지는 기존 `center is required`와 동일)
+
 </details>
 
 <details markdown="1" open>
@@ -242,8 +246,8 @@ curl -X POST "https://api.example.com/api/recoveries/image" \
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "JOB-ERROR-01",
-    "message": "백업 이미지가 존재하지 않음 (Center: center-01, Repository ID: 9)"
+    "code": "JOB-ERROR-52",
+    "message": "[Image recovery registration] - Backup image(s) not found in the specified repository: server01_ROOT_0261.ZIA"
   },
   "timestamp": "2026-08-28T10:30:00.000+09:00"
 }
@@ -272,6 +276,22 @@ curl -X POST "https://api.example.com/api/recoveries/image" \
   "error": {
     "code": "ZDM-REPOSITORY-ERROR-01",
     "message": "Repository with ID '99' does not exist in this center. Available repository IDs: 9, 10."
+  },
+  "timestamp": "2026-08-28T10:30:00.000+09:00"
+}
+```
+
+**등록할 파티션이 하나도 남지 않음 (400 Bad Request)**
+
+후보 파티션이 매핑 단계에서 전부 제외된 경우입니다. 메시지에 파티션별 제외 사유가 함께 담깁니다.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-14",
+    "message": "[Image recovery registration] No partitions left to register — every candidate was excluded. Reason(s): Partition/drive 'D:' was excluded from mapping — Drive D: does not exist on TARGET-01"
   },
   "timestamp": "2026-08-28T10:30:00.000+09:00"
 }

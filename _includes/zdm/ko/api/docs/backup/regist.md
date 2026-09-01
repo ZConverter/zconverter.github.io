@@ -264,7 +264,7 @@ curl -X POST "https://api.example.com/api/backups" \
 <details markdown="1">
 <summary><strong>에러 응답</strong></summary>
 
-**유효성 검사 실패 (400 Bad Request)**
+**유효성 검사 실패 (422 Unprocessable Entity)**
 
 ```json
 {
@@ -272,7 +272,10 @@ curl -X POST "https://api.example.com/api/backups" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "type은 full, increment, smart중 하나여야 합니다"
+    "message": "Request body validation failed.",
+    "details": {
+      "type": ["type must be one of: full, increment, smart"]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
@@ -286,7 +289,7 @@ curl -X POST "https://api.example.com/api/backups" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "JOB-ERROR-07",
-    "message": "JOB_NAME_ALREADY_EXISTS"
+    "message": "Job name 'daily-backup' already exists."
   },
   "timestamp": "2026-02-05T10:30:00.000+09:00"
 }
@@ -721,7 +724,7 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 <details markdown="1">
 <summary><strong>schedule 동봉 검증 실패 예시</strong></summary>
 
-> 모든 예시는 실제 코드의 errorCode/HTTP/메시지에 정합합니다. `error` 문자열은 영문/한글이 혼재하며, default message는 영문, customMessage가 지정된 경로는 한글일 수 있습니다.
+> 모든 예시는 실제 코드의 errorCode/HTTP/메시지에 정합합니다. `error.message` 는 모두 영문이며, customMessage 가 지정되지 않은 경로는 errorCode 의 default message 가 그대로 노출됩니다.
 
 #### 1. smart 모드인데 `schedule` 누락 (400 / `JOB-ERROR-107`)
 
@@ -801,7 +804,7 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 }
 ```
 
-응답 — `validateJobScheduleCompatibility`의 ProcessedSmart 가드에서 한국어 customMessage 노출:
+응답 — `validateJobScheduleCompatibility`의 ProcessedSmart 가드에서 customMessage 노출:
 
 ```json
 {
@@ -809,7 +812,7 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "JOB-ERROR-102",
-    "message": "Smart 작업 모드에는 basic + advanced schedule이 모두 필요합니다."
+    "message": "Smart job mode requires both a basic and an advanced schedule."
   },
   "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
@@ -873,14 +876,12 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "Request body validation failed."
-  },
-  "timestamp": "2026-05-19T10:30:00.000+09:00",
-  "detail": {
-    "validationErrors": {
+    "message": "Request body validation failed.",
+    "details": {
       "schedule.type": ["invalid schedule type (must be 0 ~ 11)"]
     }
-  }
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
@@ -911,14 +912,12 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "Request body validation failed."
-  },
-  "timestamp": "2026-05-19T10:30:00.000+09:00",
-  "detail": {
-    "validationErrors": {
+    "message": "Request body validation failed.",
+    "details": {
       "schedule.basic": ["basic schedule validation failed (type: 7): time: time is required"]
     }
-  }
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 

@@ -45,8 +45,8 @@ curl -X GET "https://api.example.com/api/recoveries/1?detail=true" \
 | `server` | Query | string | Optional | - | 작업 대상 서버 이름/ID 필터 | - |
 | `serverType` | Query | string | Optional | - | 서버 타입 필터 | {% include zdm/server-modes.md %} |
 | `mode` | Query | string | Optional | - | 작업 모드 필터 | {% include zdm/job-modes.md %} |
-| `partition` | Query | string | Optional | - | 파티션 필터 (Linux) | - |
-| `drive` | Query | string | Optional | - | 드라이브 필터 (Windows) | - |
+| `partition` | Query | string | Optional | - | 파티션/드라이브 필터 (`drive`와 동시 지정 불가) | - |
+| `drive` | Query | string | Optional | - | `partition`과 같은 대상을 가리키는 별칭 (둘 중 하나만 사용) | - |
 | `status` | Query | string | Optional | - | 작업 상태 필터 | {% include zdm/job-status.md %} |
 | `repositoryID` | Query | number | Optional | - | 레포지토리 ID 필터 | - |
 | `repositoryType` | Query | string | Optional | - | 레포지토리 타입 필터 | {% include zdm/repository-types.md %} |
@@ -54,7 +54,14 @@ curl -X GET "https://api.example.com/api/recoveries/1?detail=true" \
 | `platform` | Query | string | Optional | - | 플랫폼 필터 | {% include zdm/platforms.md inline=true %} |
 | `backupName` | Query | string | Optional | - | 백업 작업 이름 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
-| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능) | - |
+| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
+
+> **참고:**
+> - `partition`과 `drive`는 **같은 대상을 가리키는 하나의 필터**입니다. 두 파라미터를 함께 지정하면 400으로 거부됩니다.
+> - 값 형식은 API가 정규화하므로 `C`, `C:`, `/data`를 모두 그대로 쓸 수 있습니다. **OS에 따라 골라 쓸 필요 없이 하나만 사용**하면 됩니다.
+> - `?center=`, `?server=`처럼 **키만 보내고 값이 비어 있으면 400**입니다. 파라미터를 아예 **생략**하는 것(필터 없음)과는 다릅니다.
+> - `center`는 ID와 이름을 콤마로 섞어 여러 개 지정할 수 있습니다. 지정한 어떤 center에서도 해당 복구 작업을 찾지 못하면 404입니다.
+> - `server`는 서버 ID와 서버 이름을 모두 받습니다.
 
 </details>
 
@@ -376,6 +383,8 @@ curl -X GET "https://api.example.com/api/recoveries/1?detail=true" \
 **복구 작업을 찾을 수 없음 (404 Not Found)**
 
 지정한 ID 또는 Name의 복구 작업이 존재하지 않는 경우 반환됩니다.
+`center`를 지정했는데 해당 center에 그 복구 작업이 없는 경우(어떤 center로도 해석되지 않는 값을 준 경우 포함)도 동일한 404입니다.
+목록 조회(`GET /recoveries`)가 0건일 때 200 + 빈 배열을 반환하는 것과 달리, 단건 조회는 지목한 리소스가 실제로 없는 것이므로 404를 유지합니다.
 
 ```json
 {
@@ -383,7 +392,7 @@ curl -X GET "https://api.example.com/api/recoveries/1?detail=true" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "JOB-ERROR-01",
-    "message": "ID가 '999'인 Recovery 작업을 찾을 수 없습니다"
+    "message": "Recovery job with ID '999' not found"
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
@@ -399,7 +408,28 @@ curl -X GET "https://api.example.com/api/recoveries/1?detail=true" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "JOB-ERROR-01",
-    "message": "Name이 'daily-recovery'인 Recovery 작업은 존재하지만, 지정된 필터 조건과 일치하는 결과가 없습니다."
+    "message": "Recovery job with Name 'daily-recovery' exists, but no results match the specified filter conditions."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+**잘못된 요청 파라미터 (400 Bad Request)**
+
+`partition`과 `drive`를 함께 지정했거나, `center` / `server`를 키만 보내고 값이 비어 있는 경우 반환됩니다.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "Query parameter validation failed.",
+    "details": {
+      "partition": [
+        "partition and drive filter the same column and cannot be used together. Use one of them — 'C', 'C:' and '/data' are all accepted."
+      ]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

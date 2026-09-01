@@ -68,8 +68,8 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 {
   "success": false,
   "error": {
-    "code": "SCHEDULE-ERROR-20",
-    "message": "Smart Weekly (Specific Day of the Week) 타입의 스케줄은 basic 부분에서 여러 요일을 선택할 수 없습니다. ( 현재 선택된 요일: mon, tue )"
+    "code": "SCHEDULE-ERROR-23",
+    "message": "Smart Weekly (Specific Day of the Week) type schedule does not allow multiple weekday selections in basic. (Currently selected weekdays: mon, tue)"
   }
 }
 ```
@@ -687,7 +687,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "SCHEDULE-ERROR-20",
+    "code": "SCHEDULE-ERROR-23",
     "message": "Smart Weekly (Specific Day of the Week) type schedule does not allow multiple weekday selections in basic. (Currently selected weekdays: mon, tue)"
   },
   "timestamp": "2026-05-19T10:30:00.000+09:00"
@@ -712,7 +712,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "SCHEDULE-ERROR-20",
+    "code": "SCHEDULE-ERROR-27",
     "message": "Smart Monthly (Specific Week and Day of the Week) type schedule does not allow multiple week selections in basic. (Currently selected weeks: 1, 2)"
   },
   "timestamp": "2026-05-19T10:30:00.000+09:00"
@@ -737,14 +737,14 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "SCHEDULE-ERROR-20",
+    "code": "SCHEDULE-ERROR-31",
     "message": "Smart Custom (Specific Month and Date) type schedule does not allow multiple month selections in basic. (Currently selected months: 1, 3)"
   },
   "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
-**type 7에 `time` 필드 누락 (400 Bad Request — zod 스키마 검증 단계)**
+**type 7에 `time` 필드 누락 (422 Unprocessable Entity — zod 스키마 검증 단계)**
 
 ```json
 // 요청
@@ -762,13 +762,16 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "basic schedule validation failed (type: 7): time: time is required"
+    "message": "Request body validation failed.",
+    "details": {
+      "basic": ["basic schedule validation failed (type: 7): time: time is required"]
+    }
   },
   "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
-**type 11에 basic.month 누락 (400 Bad Request — zod 스키마 검증 단계)**
+**type 11에 basic.month 누락 (422 Unprocessable Entity — zod 스키마 검증 단계)**
 
 ```json
 // 요청
@@ -786,7 +789,10 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "basic schedule validation failed (type: 11): month: month is required"
+    "message": "Request body validation failed.",
+    "details": {
+      "basic": ["basic schedule validation failed (type: 11): month: month is required"]
+    }
   },
   "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
@@ -809,7 +815,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "SCHEDULE-ERROR-18",
+    "code": "SCHEDULE-ERROR-22",
     "message": "Invalid day value. (day must be one of: mon, tue, wed, thu, fri, sat, sun)"
   },
   "timestamp": "2026-05-19T10:30:00.000+09:00"

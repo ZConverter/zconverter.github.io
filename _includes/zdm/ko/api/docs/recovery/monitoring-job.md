@@ -39,13 +39,18 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/job/daily-recover
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 복구 ID (숫자) 또는 복구 이름 | - |
 | `mode` | Query | string | Optional | - | 작업 모드 필터 | {% include zdm/job-modes.md %} |
-| `partition` | Query | string | Optional | - | 파티션 필터 (Linux) | - |
-| `drive` | Query | string | Optional | - | 드라이브 필터 (Windows) | - |
+| `partition` | Query | string | Optional | - | 파티션/드라이브 필터 (`drive`와 동시 지정 불가) | - |
+| `drive` | Query | string | Optional | - | `partition`과 같은 대상을 가리키는 별칭 (둘 중 하나만 사용) | - |
 | `server` | Query | string | Optional | - | 서버 이름 또는 ID 필터 | - |
 | `serverType` | Query | string | Optional | - | 서버 타입 필터 | {% include zdm/server-modes.md %} |
 | `status` | Query | string | Optional | - | 작업 상태 필터 | {% include zdm/job-status.md %} |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
+
+> **참고:**
+> - `partition`과 `drive`는 **같은 대상을 가리키는 하나의 필터**입니다. 두 파라미터를 함께 지정하면 400으로 거부됩니다.
+> - 값 형식은 API가 정규화하므로 `C`, `C:`, `/data`를 모두 그대로 쓸 수 있습니다. **OS에 따라 골라 쓸 필요 없이 하나만 사용**하면 됩니다.
+> - `?server=`처럼 **키만 보내고 값이 비어 있으면 400**입니다. 파라미터를 아예 **생략**하는 것(필터 없음)과는 다릅니다.
 
 </details>
 
@@ -201,23 +206,44 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/job/daily-recover
   "success": false,
   "error": {
     "code": "JOB-ERROR-01",
-    "message": "Name이 'daily-recovery'인 조건에 맞는 Recovery 작업을 찾을 수 없습니다."
+    "message": "Recovery job with Name 'daily-recovery' not found."
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
-**작업 데이터 불완전 (400 Bad Request)**
+**필터 조건 불일치 (404 Not Found)**
 
-복구 작업 데이터가 불완전한 경우 반환됩니다.
+복구 작업은 존재하지만, 지정한 필터 조건과 일치하는 결과가 없는 경우 반환됩니다.
 
 ```json
 {
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
   "error": {
-    "code": "JOB-ERROR-20",
-    "message": "작업 데이터가 불완전합니다. recovery 정보가 누락되었습니다."
+    "code": "JOB-ERROR-01",
+    "message": "Recovery job with Name 'daily-recovery' exists, but no results match the specified filter conditions."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+**잘못된 요청 파라미터 (400 Bad Request)**
+
+`partition`과 `drive`를 함께 지정했거나, `server`를 키만 보내고 값이 비어 있는 경우 반환됩니다.
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": false,
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "Query parameter validation failed.",
+    "details": {
+      "partition": [
+        "partition and drive filter the same column and cannot be used together. Use one of them — 'C', 'C:' and '/data' are all accepted."
+      ]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

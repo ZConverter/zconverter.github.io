@@ -156,7 +156,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 <details markdown="1">
 <summary><strong>에러 응답</strong></summary>
 
-**유효성 검사 실패 (400 Bad Request)**
+**유효성 검사 실패 (422 Unprocessable Entity)**
 
 ```json
 {
@@ -164,7 +164,10 @@ curl -X POST "https://api.example.com/api/schedules" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "유효한 스케줄 타입이 아닙니다. (0 ~ 11 만 가능)"
+    "message": "Request body validation failed.",
+    "details": {
+      "type": ["invalid schedule type (must be 0 ~ 11)"]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
@@ -192,21 +195,21 @@ curl -X POST "https://api.example.com/api/schedules" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "ZDM-ERROR-01",
-    "message": "ID가 '999'인 Center를 찾을 수 없습니다"
+    "message": "Zdm with ID '999' not found"
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
-**Smart 스케줄 basic 필드 복수 선택 오류 (400 Bad Request)**
+**Smart 스케줄 basic 필드 복수 선택 오류 (409 Conflict)**
 
 ```json
 {
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "SCHEDULE-ERROR-20",
-    "message": "Smart Weekly (Specific Day of the Week) 타입의 스케줄은 basic 부분에서 여러 요일을 선택할 수 없습니다. ( 현재 선택된 요일: mon, tue )"
+    "code": "SCHEDULE-ERROR-23",
+    "message": "Smart Weekly (Specific Day of the Week) type schedule does not allow multiple weekday selections in basic. (Currently selected weekdays: mon, tue)"
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
@@ -219,8 +222,8 @@ curl -X POST "https://api.example.com/api/schedules" \
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "DTO-VALIDATION-01",
-    "message": "time은 'HH:mm' (00:00 ~ 23:59)이어야 합니다."
+    "code": "SCHEDULE-ERROR-16",
+    "message": "time must be in 'HH:mm' format (00:00 ~ 23:59)."
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
@@ -916,7 +919,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 <details markdown="1">
 <summary><strong>추가 검증 실패 예시 (분기별)</strong></summary>
 
-아래 예시는 코드 경로별 실제 응답을 반영합니다. (`Request body validation failed.` 케이스에는 `detail.validationErrors`가 함께 반환되며, 각 항목의 key는 점(`.`) 구분자로 정규화된 zod path입니다.)
+아래 예시는 코드 경로별 실제 응답을 반영합니다. (`Request body validation failed.` 케이스에는 `error.details`가 함께 반환되며, 각 항목의 key는 점(`.`) 구분자로 정규화된 zod path입니다.)
 
 ---
 
@@ -999,14 +1002,14 @@ curl -X POST "https://api.example.com/api/schedules" \
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "SCHEDULE-ERROR-20",
-    "message": "Smart Weekly (Specific Day of the Week) type schedule does not allow multiple weekday selections in basic. (Currently selected weekdays: Monday, Tuesday)"
+    "code": "SCHEDULE-ERROR-23",
+    "message": "Smart Weekly (Specific Day of the Week) type schedule does not allow multiple weekday selections in basic. (Currently selected weekdays: mon, tue)"
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
-> 코드 위치: `schedule-verify.service.ts:908-920` (`validateDayWeek` multiple=false). 출력의 요일 이름은 `formatDayWeekFromBinary`가 영문 풀네임(`Monday`, `Tuesday`, …)으로 변환합니다.
+> 코드 위치: `schedule-verify.service.ts:908-920` (`validateDayWeek` multiple=false). 에러 메시지의 요일 이름은 `formatDayWeekFromBinary`가 영문 약자(`mon`, `tue`, …)로 변환합니다. 영문 풀네임은 성공 응답의 `description`에서만 쓰입니다.
 
 ---
 
@@ -1023,7 +1026,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 }
 ```
 
-응답 (zod 단계에서 차단 → `Request body validation failed.` + `detail.validationErrors`):
+응답 (zod 단계에서 차단 → `Request body validation failed.` + `error.details`):
 
 ```json
 {
@@ -1031,14 +1034,12 @@ curl -X POST "https://api.example.com/api/schedules" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "Request body validation failed."
-  },
-  "timestamp": "2025-01-15T10:30:00.000+09:00",
-  "detail": {
-    "validationErrors": {
+    "message": "Request body validation failed.",
+    "details": {
       "basic": ["basic schedule validation failed (type: 7): time: time is required"]
     }
-  }
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
@@ -1069,7 +1070,7 @@ curl -X POST "https://api.example.com/api/schedules" \
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "DTO-VALIDATION-01",
+    "code": "SCHEDULE-ERROR-30",
     "message": "month must be between 1 and 12."
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
@@ -1100,14 +1101,12 @@ curl -X POST "https://api.example.com/api/schedules" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "Request body validation failed."
-  },
-  "timestamp": "2025-01-15T10:30:00.000+09:00",
-  "detail": {
-    "validationErrors": {
+    "message": "Request body validation failed.",
+    "details": {
       "type": ["invalid schedule type (must be 0 ~ 11)"]
     }
-  }
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 

@@ -38,6 +38,7 @@ curl -X GET "https://api.example.com/api/licenses/Enterprise-License" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 라이선스 ID (숫자) 또는 라이선스 이름 | - |
+| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`). 값이 빈 `?center=` 는 400 | - |
 | `category` | Query | string | Optional | - | 라이선스 카테고리 필터 | {% include zdm/license-categories.md %} |
 | `exp` | Query | string | Optional | - | 만료일 필터 (YYYY-MM-DD) | - |
 | `created` | Query | string | Optional | - | 생성일 필터 (YYYY-MM-DD) | - |

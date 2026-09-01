@@ -145,14 +145,14 @@ curl -X PUT "https://api.example.com/api/users/user@example.com" \
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "USER-ERROR-01",
-    "message": "ID가 '999'인 User를 찾을 수 없습니다"
+    "code": "USER-ERROR-03",
+    "message": "User with ID '999' not found"
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
-**유효성 검사 실패 (400 Bad Request)**
+**유효성 검사 실패 (422 Unprocessable Entity)**
 
 ```json
 {
@@ -160,7 +160,10 @@ curl -X PUT "https://api.example.com/api/users/user@example.com" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "username은 최소 2자 이상이어야 합니다"
+    "message": "Request body validation failed.",
+    "details": {
+      "username": ["username must be at least 2 characters"]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

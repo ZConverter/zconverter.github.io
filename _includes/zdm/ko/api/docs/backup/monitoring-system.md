@@ -43,8 +43,8 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 서버 ID (숫자) 또는 서버 이름 | - |
 | `mode` | Query | string | Optional | - | 작업 모드 필터 | {% include zdm/job-modes.md backup=true %} |
-| `partition` | Query | string | Optional | - | 파티션 필터 (Linux) | - |
-| `drive` | Query | string | Optional | - | 드라이브 필터 (Windows) | - |
+| `partition` | Query | string | Optional | - | 파티션/드라이브 필터 (`drive`와 택일) | - |
+| `drive` | Query | string | Optional | - | 파티션/드라이브 필터 (`partition`과 택일) | - |
 | `server` | Query | string | Optional | - | 서버 이름 또는 ID 필터 | - |
 | `repositoryType` | Query | string | Optional | - | 레포지토리 타입 필터 | {% include zdm/repository-types.md %} |
 | `repositoryPath` | Query | string | Optional | - | 레포지토리 경로 필터 | - |
@@ -54,6 +54,11 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
+
+> **참고:**
+> - `partition`과 `drive`는 같은 대상을 가리키는 **하나의 필터**입니다. 함께 지정하면 400을 반환하므로 **둘 중 하나만** 사용합니다.
+> - 값 형식은 API가 정규화하므로 `C`, `C:`, `/data`가 모두 허용됩니다. OS에 따라 파라미터를 구분해 고를 필요가 없습니다.
+> - `server`는 **키만 보내고 값이 비면**(`?server=`) 400입니다. 파라미터를 **생략**하는 것은 종전대로 "해당 필터 없음"이며 동작이 달라지지 않습니다.
 
 </details>
 
@@ -276,7 +281,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
   "success": false,
   "error": {
     "code": "JOB-ERROR-01",
-    "message": "서버 'server-01'에 파티션 '/data'에 해당하는 Backup 작업을 찾을 수 없습니다."
+    "message": "No Backup job found for partition '/data' on server 'server-01'."
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
@@ -290,7 +295,7 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
   "success": false,
   "error": {
     "code": "JOB-ERROR-01",
-    "message": "서버 'server-01'에 등록된 Backup 작업을 찾을 수 없습니다."
+    "message": "No registered Backup jobs found for server 'server-01'."
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
@@ -305,8 +310,27 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
   "error": {
-    "code": "JOB-ERROR-01",
-    "message": "작업 데이터가 불완전합니다. 파티션 '/' 에 대한 backup 또는 backupInfo 작업 정보를 찾을 수 없습니다."
+    "code": "JOB-ERROR-20",
+    "message": "Job data is incomplete. Could not find backup or backupInfo job info for partition '/'."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+**잘못된 요청 파라미터 (400 Bad Request)**
+
+`partition`과 `drive`를 함께 지정했거나, `server`를 키만 보내고 값을 비운 경우 반환됩니다.
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": false,
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "Query parameter validation failed.",
+    "details": {
+      "partition": ["partition and drive filter the same column and cannot be used together. Use one of them — 'C', 'C:' and '/data' are all accepted."]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

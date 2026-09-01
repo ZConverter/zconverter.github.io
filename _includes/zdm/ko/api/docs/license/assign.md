@@ -132,7 +132,7 @@ curl -X PUT "https://api.example.com/api/licenses/assign" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "SERVER-ERROR-01",
-    "message": "ID가 '999'인 Server를 찾을 수 없습니다"
+    "message": "Server '999' not found."
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
@@ -146,7 +146,7 @@ curl -X PUT "https://api.example.com/api/licenses/assign" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "LICENSE-ERROR-01",
-    "message": "ID가 '999'인 License를 찾을 수 없습니다"
+    "message": "License id '999' not found."
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

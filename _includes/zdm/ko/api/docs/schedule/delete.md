@@ -7,6 +7,7 @@
 
 > * 스케줄 ID로 특정 스케줄을 삭제합니다.
 > * 작업(Backup/Recovery/Replication)에서 참조 중인 스케줄은 삭제할 수 없습니다.
+> * `center` 는 **정확히 1개만** 지정할 수 있습니다. 콤마로 여러 개를 주면 400이고, `?center=` 처럼 키만 보내고 값이 비어도 400입니다. 파라미터를 **생략**하는 것은 종전대로 허용됩니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -46,7 +47,7 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 스케줄 ID (숫자만 허용) | - |
-| `center` | Query | string | Optional | - | 센터 식별자(ID 또는 이름). 지정 시 스케줄이 해당 센터 소속인지 검증 | - |
+| `center` | Query | string | Optional | - | 센터 식별자(ID 또는 이름). **정확히 1개만** 허용(여러 개·빈 값은 400). 지정 시 스케줄이 해당 센터 소속인지 검증 | - |
 
 </details>
 
@@ -112,23 +113,9 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "SCHEDULE-ERROR-01",
-    "message": "ID가 '999'인 Schedule을 찾을 수 없습니다"
-  },
-  "timestamp": "2026-01-23T10:30:00.000+09:00"
-}
-```
-
-**스케줄을 찾을 수 없음 (404 Not Found) — 코드 emit 영문 메시지**
-
-```json
-{
-  "success": false,
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "error": {
-    "code": "JOB-ERROR-01",
     "message": "Schedule with ID '999' not found"
   },
-  "timestamp": "2026-05-19T10:30:00.000+09:00"
+  "timestamp": "2026-01-23T10:30:00.000+09:00"
 }
 ```
 
@@ -168,7 +155,29 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-02",
-    "message": "identifier는 숫자(Schedule ID)만 허용됩니다"
+    "message": "URL parameter validation failed.",
+    "details": {
+      "identifier": ["identifier must be a number (Schedule ID only)"]
+    }
+  },
+  "timestamp": "2026-01-23T10:30:00.000+09:00"
+}
+```
+
+**`center` 다중 지정 / 빈 값 (400 Bad Request)**
+
+삭제는 대상이 모호하면 안 되므로 `center` 는 정확히 1개만 허용합니다. 콤마로 여러 개를 주거나 `?center=` 처럼 값이 비면 반환됩니다. 이전에도 같은 규칙이었으나 검증 위치가 서비스 계층에서 요청 스키마로 옮겨져 에러 형식이 `DTO-VALIDATION-03` 으로 바뀌었습니다.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "Query parameter validation failed.",
+    "details": {
+      "center": ["exactly one center must be specified"]
+    }
   },
   "timestamp": "2026-01-23T10:30:00.000+09:00"
 }

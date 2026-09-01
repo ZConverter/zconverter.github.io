@@ -50,12 +50,17 @@ curl -X GET "https://api.example.com/api/backups/histories?page=1&limit=10" \
 | `server` | Query | string | Optional | - | 작업 대상 서버 이름 필터 | - |
 | `partition` | Query | string | Optional | - | 드라이브/파티션 필터 (정확 매칭) | - |
 | `result` | Query | string | Optional | - | 작업 결과 필터 | `success`, `failed` |
-| `center` | Query | string | Optional | - | center 식별자 필터 (ID 또는 이름) | - |
+| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능) | - |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
-> **참고:** `partition` 파라미터 사용 시 `server`를 함께 지정하면, 해당 서버가 Windows인 경우 `:` 누락 시 자동으로 추가됩니다. (예: `C` → `C:`)
+> **참고:**
+> - `partition` 값 형식은 API가 정규화하므로 `C`, `C:`, `/data`가 모두 허용됩니다. 서버 OS나 `server` 지정 여부와 관계없이 값 자체로 판별해 저장 표기로 맞춥니다. (예: `C` → `C:`)
+> - `server`, `center`는 **키만 보내고 값이 비면**(`?center=`) 400입니다. 파라미터를 **생략**하는 것은 종전대로 "해당 필터 없음"이며 동작이 달라지지 않습니다.
+> - `center`는 ID/이름을 콤마로 여러 개 지정할 수 있습니다. (예: `?center=1,zdm-b`)
+> - `server`는 서버 **이름**으로만 필터링합니다.
+> - 조건에 맞는 이력이 없으면 **200 + 빈 배열**입니다. 404가 아닙니다.
 
 </details>
 
@@ -168,6 +173,23 @@ curl -X GET "https://api.example.com/api/backups/histories?page=1&limit=10" \
 
 </details>
 
+<details markdown="1">
+<summary>빈 결과 응답 (200 OK)</summary>
+
+> 일치하는 결과가 없거나 `center` 필터가 어떤 센터에도 매칭되지 않으면 빈 배열을 반환합니다 (에러가 아님).
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "message": "Backup history list",
+  "success": true,
+  "data": [],
+  "timestamp": "2026-03-03T10:30:00.000+09:00"
+}
+```
+
+</details>
+
 </details>
 
 <details markdown="1" open>
@@ -226,6 +248,23 @@ curl -X GET "https://api.example.com/api/backups/histories?page=1&limit=10" \
   "error": {
     "code": "DTO-VALIDATION-03",
     "message": "Invalid enum value. Expected 'success' | 'failed', received 'unknown'"
+  },
+  "timestamp": "2026-03-03T10:30:00.000+09:00"
+}
+```
+
+`server` 또는 `center`를 키만 보내고 값을 비운 경우에도 400입니다.
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": false,
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "Query parameter validation failed.",
+    "details": {
+      "center": ["center must contain at least one identifier"]
+    }
   },
   "timestamp": "2026-03-03T10:30:00.000+09:00"
 }

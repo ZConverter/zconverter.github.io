@@ -33,6 +33,9 @@ curl -X GET "https://api.example.com/api/os-replications/1" \
 |---------|------|------|------|------|
 | `Authorization` | Header | string | Required | Bearer 토큰 |
 | `identifier` | Path | string | Required | 작업 ID(숫자) 또는 작업 이름 |
+| `center` | Query | string | Optional | center 식별자(ID/이름, 콤마 다중 지정 가능). 요청 검증에만 사용되며 단건 조회 결과를 센터로 좁히지는 않습니다 |
+
+> `center` 는 **키를 보냈는데 값이 비어 있으면**(`?center=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 "필터 없음" 입니다.
 
 </details>
 

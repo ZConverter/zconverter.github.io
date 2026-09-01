@@ -44,11 +44,13 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/1?status=ru
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 복제 작업 ID (숫자) 또는 작업 이름 | - |
-| `server` | Query | string | Optional | - | 서버 이름 필터 | - |
-| `status` | Query | string | Optional | - | 작업 상태 필터 | {% include zdm/replication-job-status.md %} |
-| `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
-| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
-| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
+| `server` | Query | string | Optional | - | 서버 이름. 요청 검증만 수행하며 조회 결과에는 영향이 없습니다 | - |
+| `status` | Query | string | Optional | - | 작업 상태. 요청 검증만 수행하며 조회 결과에는 영향이 없습니다 | {% include zdm/replication-job-status.md %} |
+| `page` | Query | number | Optional | 1 | 페이지 번호 (단건 조회이므로 결과에 영향 없음) | - |
+| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 (단건 조회이므로 결과에 영향 없음) | - |
+| `sort` | Query | string | Optional | `desc` | 정렬 순서 (단건 조회이므로 결과에 영향 없음) | `asc`, `desc` |
+
+> * `server` · `status` 는 **키를 보냈는데 값이 비어 있으면**(`?server=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 동작 변화가 없습니다.
 
 </details>
 
@@ -172,8 +174,8 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/1?status=ru
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "success": false,
   "error": {
-    "code": "JOB-ERROR-01",
-    "message": "Name이 'backup-replication-01'인 조건에 맞는 Replication 작업을 찾을 수 없습니다."
+    "code": "NOT_FOUND",
+    "message": "Active replication not found (identifier: backup-replication-01)"
   },
   "timestamp": "2026-03-20T10:30:00.000+09:00"
 }

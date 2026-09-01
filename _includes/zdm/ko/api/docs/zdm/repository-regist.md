@@ -99,7 +99,7 @@ curl -X POST "https://api.example.com/api/zdms/repositories" \
 <details markdown="1">
 <summary><strong>에러 응답</strong></summary>
 
-**유효성 검사 실패 (400 Bad Request)**
+**유효성 검사 실패 (422 Unprocessable Entity)**
 
 ```json
 {
@@ -107,7 +107,10 @@ curl -X POST "https://api.example.com/api/zdms/repositories" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "SMB 타입일 경우 account는 필수입니다"
+    "message": "Request body validation failed.",
+    "details": {
+      "account": ["account is required for SMB type"]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
@@ -121,7 +124,7 @@ curl -X POST "https://api.example.com/api/zdms/repositories" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "ZDM-ERROR-01",
-    "message": "ID가 '999'인 Center를 찾을 수 없습니다"
+    "message": "Zdm with ID '999' not found"
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

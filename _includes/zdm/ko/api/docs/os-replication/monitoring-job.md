@@ -37,6 +37,8 @@ curl -X GET "https://api.example.com/api/os-replications/monitoring/job/1" \
 | `status` | Query | string | Optional | 작업 상태 필터. 활성 작업의 계산된 status와 불일치 시 404 | (job status enum) |
 | `server` | Query | string | Optional | 작업 대상 서버 이름 필터. 불일치 시 404 | |
 
+> `status` · `server` 는 **키를 보냈는데 값이 비어 있으면**(`?server=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 "필터 없음" 이므로 동작 변화가 없습니다.
+
 </details>
 
 <details markdown="1" open>

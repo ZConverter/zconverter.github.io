@@ -50,8 +50,10 @@ curl -X GET "https://api.example.com/api/replications/histories/backup-replicati
 | `result` | Query | string | Optional | - | 작업 결과 필터 | {% include zdm/replication-history-result.md %} |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
-| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
+| `center` | Query | string | Optional | - | center 식별자(ID/이름, 콤마 다중 지정 가능, 예: `destconm,9`). 요청 검증에만 사용되며 단건 조회 결과를 센터로 좁히지는 않습니다 | - |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
+
+> * `center` · `server` 는 **키를 보냈는데 값이 비어 있으면**(`?center=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 "필터 없음" 이므로 동작 변화가 없습니다.
 
 </details>
 

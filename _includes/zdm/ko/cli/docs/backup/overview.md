@@ -21,6 +21,7 @@
 | 명령어 | 설명 |
 |--------|------|
 | `list` | Backup 작업 목록 및 상세 정보 조회 |
+| `image list` | 저장소의 backup image 파일 목록 조회 (`recovery image-regist --backup-file` 용 파일명 조회) |
 | `history` | Backup 작업 실행 이력 조회 |
 | `regist` | 새로운 Backup 작업 등록 |
 | `delete` | Backup 작업 정보 삭제 |

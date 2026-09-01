@@ -52,10 +52,15 @@ curl -X GET "https://api.example.com/api/replications/histories?page=1&limit=10"
 | `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
+> * `center` 는 ID/이름을 콤마로 여러 개 지정할 수 있습니다 (예: `?center=1,zdm-b`). 조각 앞뒤 공백은 API 가 정규화합니다.
+> * `center` · `server` 는 **키를 보냈는데 값이 비어 있으면**(`?center=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 "필터 없음" 이므로 동작 변화가 없습니다.
+
 </details>
 
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
+
+> 일치하는 결과가 없거나 `center` 필터가 어떤 센터에도 매칭되지 않으면 빈 배열(`"data": []`)을 200 으로 반환합니다 (에러가 아님). 단건 조회의 404 는 종전대로이며, 지목한 리소스가 실제로 없다는 뜻이므로 의미가 다릅니다.
 
 <details markdown="1" open>
 <summary>기본 응답 (200 OK) - 페이지네이션 미적용</summary>

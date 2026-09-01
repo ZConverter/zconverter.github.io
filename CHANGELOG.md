@@ -6,6 +6,268 @@
 
 ---
 
+## [Documentation] - 2026-09-01 (CLI backup image list 신설 · 출력 스트림 분리 안내 보강)
+
+### Context
+- v3.0.0 CLI 문서에 누락돼 있던 두 항목 보강. `backup image list`(3단 커맨드, `backup > image > list`) 문서가 아예 없었고,
+  v3.0.0 changelog 에는 출력 스트림(stdout/stderr) 분리라는 사용자 영향 있는 변경이 빠져 있었다.
+
+### Added
+- `cli/docs/backup/image-list.md` — 신규 문서. cloud-auth 의 `zos-list` 등 기존 3단 커맨드 문서화 관례(`{group}/{action}.md` 평면 배치)를 따라 `backup/` 아래 `image-list.md` 로 배치. 옵션은 `zdm-cli-v2` 소스(`backup/subCommands/image/subCommands/list/options/index.ts`)에서 직접 확인.
+- `zdm/ko/cli/3.0.0/docs/backup/image-list.md` — wrapper.
+- `navigation.yml` — `ko-cli-3.0.0` Backup 섹션에 `backup image list` 항목 추가 (`backup list` 바로 아래 — 같은 "목록 조회" 계열, `recovery` 섹션에서 `image-regist` 가 `regist` 옆에 붙는 것과 같은 원리).
+- `cli/changelog/3.0.0.md` — `backup image list` 신규 항목(`recovery image-regist` 항목 바로 다음에 배치, 파일명을 찾을 방법이 없던 문제 해결로 이어지게) + 출력 스트림 분리(stdout/stderr) 항목 추가. summary 줄도 갱신.
+- `cli/docs/backup/overview.md` 하위 명령어 표에 `image list` 행 추가. 이 공용 파일은 2.0.0/2.0.2/3.0.0 이 함께 참조하고 있어 **버전별 문서 분리 절차**(CLAUDE.md 5단계) 적용 — 기존 내용을 `overview/2.0.2.md` 로 보존하고 2.0.0/2.0.2 wrapper 를 그쪽으로 리타겟, 공용 파일만 3.0.0 기준으로 갱신.
+
+### Changed
+- `cli/docs/recovery/image-regist.md` — `backup image list` 로의 상호 참조 링크 1줄 추가 (`--backup-file` 값을 어디서 찾는지).
+- `versions.yml` — cli 3.0.0 항목의 `docs:` 주석에 이번에 추가된 두 항목 반영.
+
+### Notes
+- `recovery/overview.md` 하위 커맨드 표에는 원래 `recovery image-regist` 도 빠져 있다(3.0.0 릴리즈 당시부터 그랬음). 이번 작업 범위 밖이라 미조치.
+- 신규 문서·changelog 의 크로스 링크 경로는 `/zdm/ko/cli/3.0.0/...` 로 하드코딩 — 기존 changelog 링크와 동일한 방식이라 그대로 따랐다. 다음 CLI 버전에서 이 페이지들이 버전별로 분리되면 갱신이 필요하다.
+
+### Verified
+- `bundle exec jekyll build` 성공 (신규 페이지 렌더링, 사이드바 링크, 상호 참조 링크, 랜딩페이지 changelog 반영 확인).
+
+### 남은 작업 — 사용자 몫
+- 빌드 결과 확인 후 커밋.
+
+---
+
+## [Documentation] - 2026-09-01 (에러 응답 예시 전면 정정 — 45파일)
+
+### Context
+- 문서의 에러 예시가 **실제 API 응답과 달랐다.** `"message"` 에 개별 사유를 직접 넣은 예시가
+  45개 파일에 걸쳐 있었다(버전 스냅샷 9개는 정책상 제외).
+- 착수 전 **dev 서버를 띄워 실제 응답을 측정**하고 그 원문을 기준으로 삼았다. 추론으로 쓰지 않았다.
+
+### Fixed — 응답 형식
+
+실측으로 확정한 형식:
+
+```
+error.message  = error-code.ts 의 고정 문자열 (개별 사유가 여기 오지 않는다)
+error.details  = { 필드명: [사유, ...] }        검증 에러에만 존재
+검증 외 에러(404·401 등)는 details 키 자체가 없다
+봉투 = {traceId, success, error, timestamp}     timestamp 는 오프셋 포함 ISO
+```
+
+- `DTO-VALIDATION-01` **422** `"Request body validation failed."`
+- `DTO-VALIDATION-02` **400** `"URL parameter validation failed."`
+- `DTO-VALIDATION-03` **400** `"Query parameter validation failed."`
+
+인증 문구도 실측 확보 — `"Authentication required."` / `"Invalid token."` / `"Token expired."`
+
+### Fixed — 형식보다 깊은 오류가 다수 나왔다
+
+단순 문구 정정으로 시작했으나 실제로는 아래가 함께 발견됐다.
+
+**에러 코드 자체가 틀린 것** — Center 미존재가 `JOB-ERROR-01` 이 아니라 `ZDM-ERROR-01`,
+저장소 소속 불일치가 `FORBIDDEN` 이 아니라 `CENTER-ERROR-01`, 사용자 미존재가 `USER-ERROR-01` 이 아니라
+`USER-ERROR-03`, replication 작업명 중복이 `JOB-ERROR-07`/409 가 아니라 `BAD_REQUEST`/**400** 등.
+
+**zod 가 던지지 않는 것을 zod 에러로 적어둔 것** — 저장소 경로 양식 검증은 `DTO-VALIDATION-01` 이 아니라
+유틸이 던지는 `BAD_REQUEST` 다. 원천적으로 나올 수 없는 코드였다.
+
+**HTTP 라벨 오류** — body 검증(`DTO-VALIDATION-01`)이 "400 Bad Request" 로 적힌 곳이 다수.
+정정 후 전 문서 대조 결과 **불일치 0건** (`-01`→422 17건 / `-02`→400 5건 / `-03`→400 46건).
+
+**옛 응답 봉투 잔재** — `"detail": { "validationErrors": {...} }` 형태가 남아 있었다.
+에러 객체화(`requestID`→`traceId`, `detail`→`error.details`) 때 따라오지 못한 것으로,
+전 문서에서 제거해 **잔여 0건**.
+
+**존재하지 않는 시나리오** — 모니터링 by-job 경로가 던지지 않는 에러가 예시로 실려 있었다.
+현행 시나리오로 교체했다.
+
+**상수명이 메시지 자리에** — `"message": "JOB_NAME_ALREADY_EXISTS"` 처럼 실제 문구가 아니라
+상수 이름이 들어간 블록이 있었다.
+
+**거짓 안내문** — "에러 문자열은 영문/한글이 혼재하며 customMessage 경로는 한글일 수 있습니다" 라는
+서두 설명이 있었으나, 2026-08-27 영문 규약 이후 사실이 아니다.
+
+### Added — 빠져 있던 에러 블록
+
+- image recovery 전용 전량 제외 에러(`JOB-ERROR-14`)가 문서에 없었다. 일반 recovery 와 **문구가 다른
+  별개 변종**(`every candidate was excluded` vs `every candidate partition was excluded`)임을 확인하고 추가
+
+### 손대지 않은 것 (판정 근거)
+
+- 본문 설명·표의 한글 — 문서 언어다
+- `docs/error-codes.md` 의 한국어 설명 컬럼 — 이 페이지는 한글 message 예시가 0건이고
+  "message 는 영문" 을 이미 명시하고 있다
+- 소스 라인 번호 참조 — 문서 전반에서 어긋나 있어 일부만 고치면 오히려 불균일해진다. 별건
+- 마침표 유무 비대칭(`Schedule ID '999' not found` vs `... not found.`) — 소스가 실제로 그렇다.
+  문서는 실제 응답을 적는 것이므로 통일하지 않았다
+
+### 남은 작업 — 사용자 몫
+- `./run.sh --build` 로 Jekyll 빌드 검증.
+
+---
+
+## [Documentation] - 2026-09-01 (이력 단건 center 스코프 · 서버별 이미지 부분 실패 반영)
+
+### Context
+- `zdm-api-v2` 에서 결함 2건이 수정되어 관련 문서를 현행에 맞췄다.
+  코드 변경 상세는 `zdm-api-v2/CHANGELOG.md`, 설계 근거는 `zdm-api-v2/orgs/dev/plans/DOC-01-02-03-수정계획.md`.
+
+### Changed — 이력 **단건** 조회 (`backup/history-get.md` · `recovery/history-get.md`)
+
+직전 갱신에서 넣었던 **"`center` 는 검증은 되지만 조회 범위를 좁히지 않는다"** 캐비앗이 낡았다 — 이제 동작한다.
+
+- `center` 가 이름·숫자 **양쪽 분기 모두**에 적용되며, 불일치·미존재 모두 **404**
+- 숫자 조회 시 **원인을 구분하는 진단 문구**가 나온다(행이 없음 / 다른 center 소속).
+  이름 조회는 평범한 not-found 이고, 지정한 center 자체가 없으면 진단 문구가 아니라 기본 문구다
+- 에러 코드 정정 — `JOB-ERROR-01` 이 아니라 **`NOT_FOUND`** 였다. 기존 문서의 코드·문구가 둘 다 틀렸다
+- `recovery/history-get.md` 에는 **파라미터 표에 `center` 행이 아예 없어** 추가했고, **400 예시 블록도 신설**했다
+
+**남아 있는 제약을 사실대로 적었다** — 숫자 조회는 `center` 외 필터(`server`·`partition`·`result` 등)를
+**무시하는데 이름 조회는 반영한다.** 같은 엔드포인트가 identifier 형태에 따라 다르게 동작한다(코드 미수정).
+`page`/`limit` 은 이 엔드포인트에서 **전혀 동작하지 않아** 기본값 표기와 예시를 정리했다.
+
+### Changed — 서버별 이미지 조회 (`backup/images.md`)
+
+저장소 하나가 비어 있어도 **나머지 저장소의 이미지를 200 으로 반환**한다. 이전에는 전체가 404 였다.
+
+- "백업 이미지 미존재 (404)" 블록을 통째로 교체 — `"Backup image does not exist"` 예시 삭제
+  (이 문구는 gitpage 전체에서 이 한 줄뿐이었고, 코드에서도 이 경로로 더 이상 나오지 않는다)
+- **"저장소가 비어 있음" 과 "조회 결과 0건" 을 명시적으로 구분**했다.
+  전자는 데몬이 스캔 후 이미지 파일이 0건이라고 회신한 **저장소 상태**로 요청한 서버와 무관하고,
+  후자는 데몬이 채웠는데 그 서버/작업/파티션 것이 없는 것이다. 후자는 원래부터 200 + 빈 배열이었다
+- 500 블록 헤딩을 `작업 시간 초과` → **`모든 저장소 스캔 실패`** 로 정정. 단일 조합 타임아웃은 이제
+  부분 실패로 흡수되어 클라이언트에 노출되지 않는다
+- 404 는 이제 **Center/Repository 자체를 못 찾은 경우에만** 남는다
+
+### 손대지 않은 것 (근거 있음)
+
+- `images-list.md` — "서버별 조회는 다르다" 취지의 대비 문구가 **애초에 없었다**(grep 0건)
+- `recovery/regist.md` — "저장소가 비어 있으면 404" 서술이 없고, 오히려 새 동작(파티션 skip → notices,
+  전량 skip 시 거절)이 **이미 정확히** 서술돼 있었다. 전량 거절 메시지는 소스와 축자 일치
+
+### 남은 작업 — 사용자 몫
+- `./run.sh --build` 로 Jekyll 빌드 검증 (이번 작업에서는 실행하지 않았다).
+
+---
+
+## [Documentation] - 2026-09-01 (ZDM-API 조회 계약 변경 — 3.0.0 API 문서 반영 완료)
+
+### Context
+- `zdm-api-v2` 에서 **조회 계열 공개 계약**이 바뀌어 gitpage 의 3.0.0 API 문서가 낡았던 것을 **반영 완료**했다.
+  (본 항목은 처음 "낡음 기록 · 본문 미수정" 으로 작성됐다가, 같은 날 본문 반영이 결정돼 갱신된 것이다.)
+  공용 include 52개 + `_data/navigation.yml` + 3.0.0 wrapper 를 수정했고, **버전 보존본은 무변경**이다.
+- 3.0.0 wrapper 는 전부 공용 include(`_includes/zdm/ko/api/docs/...`) 를 가리키므로, 아래 공용 경로를 고치면 3.0.0 에 그대로 반영된다.
+  구버전 보존본(`{page}/1.3.1.md` · `{page}/2.0.2.md`)은 **당시 계약 그대로이므로 미변경 대상**이다.
+
+### Outdated — 문서와 어긋난 지점
+
+**(1) backup 이미지 조회의 서버 식별자 — `serverName` → `server`, ID 도 허용**
+
+- 계약: `GET /api/backups/images` 의 query 파라미터가 `server`, `GET /api/backups/images/server/{serverName}` 의 path 표기가 **`{server}`** 로 바뀌었다.
+  숫자를 주면 **서버 ID** 로 보고 이름으로 해석한 뒤 이미지의 소유 서버명과 비교한다 — 이전에는 이름만 받았다.
+  `center` 가 ID/이름을 한 파라미터로 받고 `centerName` 이 따로 없는 것과 같은 규칙이다.
+- 고쳐야 할 곳 — `_includes/zdm/ko/api/docs/backup/images.md`
+  - 섹션 헤딩 `## GET /backups/images/server/:serverName` · 엔드포인트 카드 `GET /api/backups/images/server/:serverName` → `:server`
+  - 파라미터 표의 `serverName` 행 → `server`. 설명 "ZDM에 등록된 서버 이름" 도 **ID 또는 이름**으로 정정(같은 표의 `center` 행 표기와 맞춤)
+  - `DTO-VALIDATION-01` 400 예시 메시지 `"서버 이름(serverName)이 필요합니다."` — 파라미터명이 노출되는 자리라 함께 낡음
+  - **주의로 남길 것**: 고아 이미지(source 서버가 DB 에 없는 이미지)는 **이름으로만** 조회된다. 서버 행 자체가 없어 ID 가 존재하지 않기 때문.
+    파일 상단에 이미 "고아 이미지 지원" 안내 블록이 있으므로 그 자리에 붙이면 된다.
+- **문서 자체가 없는 엔드포인트** — `GET /api/backups/images`(서버 지정 없이 전체 조회)는 gitpage 에 **페이지가 없다.**
+  `images.md` 는 `/server/:serverName` 경로만 다루고, `_data/navigation.yml` 의 `ko-api-3.0.0` 도 "[GET] 백업 이미지 (서버별)" 한 항목뿐이다.
+  → 표 한 줄 정정이 아니라 **공용 include 신설 + nav 항목 추가 + `zdm/ko/api/3.0.0/docs/backup/` wrapper 신설**이 필요한 건이다. 아래 (2)(3)(5) 도 이 엔드포인트에 함께 걸린다.
+
+**(2) `partition` / `drive` 동시 지정 금지 (400)**
+
+- 계약: 두 파라미터는 **같은 컬럼을 가리키는 하나의 필터**다. 함께 주면 400.
+  값 형식은 API 가 정규화하므로 `C`, `C:`, `/data` 모두 허용되고 **하나만 쓰면 된다.**
+- 현재 문서는 두 행을 `Optional` 로 나란히 적어 **동시 사용이 가능한 것처럼 읽힌다.** 배타 관계와 값 정규화를 함께 적어야 한다.
+- 고쳐야 할 곳 (`_includes/zdm/ko/api/docs/` 기준)
+  - backup — `get.md` · `list.md` · `monitoring-job.md` · `monitoring-system.md` · `history-list.md` · `history-get.md` · `images.md`
+  - recovery — `get.md` · `list.md` · `monitoring-job.md` · `monitoring-system.md` · `history-list.md` · `history-get.md`
+  - server — `partitions.md` · `partition.md`
+  - `images.md` 의 필터링 동작 설명은 `partition` 과 `drive` 를 **별개 필터로 서술**하고 있어(“`drive`: Windows 서버의 드라이브 문자와…”) 특히 정정 대상이다.
+  - history 계열 4개는 표에 `partition` 행만 있고 `drive` 행이 없다 — 배타 안내만 추가하면 된다.
+
+**(3) 빈 값 거절 (400) · `center` 다중 지정 · 삭제 계열 단일 제한**
+
+- 계약: `?center=` · `?server=` 처럼 **키는 보냈는데 값이 빈 경우 400.** 이전에는 조용히 "필터 없음" 으로 처리돼 전체 범위를 조회했다.
+  파라미터를 **생략**하는 것은 종전대로 "필터 없음" 이다 — 동작 변화 없음.
+- `center` 는 콤마로 여러 개 지정 가능(`?center=1,zdm-b`)하며, 해석되지 않는 식별자가 있으면 **없는 것만 짚어 404** 를 낸다.
+  다중 지정 자체는 일부 문서에 이미 적혀 있으나(`backup/list.md` 등의 "comma-separated 다중 가능"), **빈 값 400 과 부분 미해석 404 는 어디에도 없다.**
+- **삭제 계열**(`DELETE /...?center=`)은 `center` 를 **정확히 1개만** 허용한다. 규칙 자체는 이전과 같으나 검증 위치가 서비스 → 스키마로 옮겨져 **에러 형식이 바뀌었다.**
+  - `recovery/delete.md` 의 `center` 행에 남아 있는 헤지 **"스키마 정의됨, routes 적용 여부 확인 필요"** 는 이제 해소됐다 — 정정 대상.
+- 고쳐야 할 곳 — **조회 계열과 삭제 계열이 규칙이 다르므로 나눠서** 손봐야 한다. (`_includes/zdm/ko/api/docs/` 기준)
+  - **빈 값 400 · 다중 지정 404 (조회 계열, `center` 행 보유 22개)**
+    backup(`get` · `list` · `history-get` · `history-list` · `images`) · recovery(`get` · `list`) ·
+    replication(`list` · `history-get` · `history-list`) · os-replication(`list` · `history-list`) ·
+    server(`get` · `list` · `partition` · `partitions`) · zdm(`repositories` · `repository`) ·
+    schedule(`list`) · cloud-auth(`recovery-list` · `zos-list`) · license(`list`)
+  - **빈 값 400 (`server` 행 보유 20개)** — backup · recovery · replication · os-replication 의 `list` / `get` / `monitoring-*` / `history-*` 계열
+  - **`center` 정확히 1개 (삭제 계열 10개)** — backup · recovery · replication · os-replication · server · schedule · zdm 의 `delete.md`,
+    `zdm/repository-delete.md`, `cloud-auth/recovery-delete.md` · `cloud-auth/zos-delete.md`
+    (cloud-auth 두 페이지는 API 쪽에서 같은 삭제 쿼리 규칙을 공유한다 — 문서는 두 곳 모두 손봐야 한다)
+  - 조회 계열과 삭제 계열에 **같은 문구를 복사하지 말 것** — 삭제는 다중 지정 자체가 400 이다.
+- 곁가지 — `recovery/history-list.md` · `recovery/history-get.md` · `replication/get.md` · `os-replication/get.md` 는
+  실제로 `center` 필터를 받는데 **파라미터 표에 `center` 행 자체가 없다.** 이번 변경 이전부터의 누락이지만, 위 (3) 반영 시 함께 보강하는 것이 자연스럽다.
+
+**(4) 목록 조회의 빈 결과 — 200 + 빈 배열**
+
+- 계약: `GET /api/recoveries` 등 **목록** 조회에서 필터에 맞는 항목이 없으면 **200 + 빈 배열**이다.
+  이전에는 일부 경우 전체 목록이 반환되는 결함이 있었다. **단건** 조회(`GET /api/recoveries/{identifier}`)의 404 는 종전대로 — 변경 없음.
+- 현재 이 동작을 적어 둔 문서는 `schedule/list.md` 하나뿐이다("일치하는 결과가 없거나 `center` 필터가 어떤 센터에도 매칭되지 않으면 빈 배열을 반환합니다 (에러가 아님)").
+  **이 문장을 모델로** 나머지 목록 페이지에 추가하면 된다.
+- 고쳐야 할 곳 — `recovery/list.md`(우선), `backup/list.md`, `replication/list.md`, `os-replication/list.md`, `server/list.md`,
+  각 도메인의 `history-list.md`, 그리고 (1) 에서 신설이 필요한 `GET /api/backups/images` 페이지
+
+**(5) 저장소 부분 실패 허용 (backup 이미지 목록)**
+
+- 계약: `GET /api/backups/images` 는 저장소 하나가 응답하지 않아도 **나머지 저장소의 이미지를 200 으로 반환**한다. 이전에는 전체가 500 이었다.
+  응답 스키마는 그대로이며 실패한 저장소는 서버 로그에만 남는다. **모든 저장소가 실패하면 종전대로 실패**한다.
+- 고쳐야 할 곳 — `backup/images.md` 의 에러 응답 섹션. 현재 저장소 관련 실패로는 `JOB-ERROR-68`(10초 초과 500) 과
+  `ZDM-REPOSITORY-ERROR-01` 만 있어, **일부 실패는 에러가 아니라는 사실이 어디에도 없다.** (1) 의 신설 페이지에도 같은 안내가 필요하다.
+
+### Notes
+- 본 변경은 **API 전용**이다. 다만 CLI 문서에도 `--partition` 과 `--drive` 를 **한 표에 나란히** 적은 곳이 두 군데 있어
+  (`_includes/zdm/ko/cli/docs/recovery/list.md` · `_includes/zdm/ko/cli/docs/recovery/monit.md`),
+  해당 플래그가 API 쿼리로 그대로 전달되는지에 따라 CLI 측 동반 정정이 필요한지는 **별도 확인 대상**이다.
+  backup 쪽은 `list.md` 가 `--partition` 만, `monit.md` 가 `--drive` 만 갖고 있어 동시 지정 표기 문제는 없다.
+- 반영을 결정할 때 **3.0.0 문서를 갱신할지, 신규 버전으로 분리할지**를 함께 판단해야 한다.
+  (1)(2)(3) 은 기존 호출이 400/404 로 깨질 수 있는 계약 변경이라, CLAUDE.md 5단계의 버전별 문서 분리 절차 대상인지 여부가 갈린다.
+
+### Added — 신규 페이지
+
+- **`GET /api/backups/images` 페이지가 아예 없었다.** 기존 `backup/images.md` 는 `/server/:serverName` 하나만
+  다뤘고 navigation 에도 "(서버별)" 만 있었다.
+  - `_includes/zdm/ko/api/docs/backup/images-list.md` 신설
+  - `zdm/ko/api/3.0.0/docs/backup/images-list.md` wrapper 신설
+  - `_data/navigation.yml` 의 **`ko-api-3.0.0` 블록에만** "[GET] 백업 이미지 (전체)" 추가
+    (다른 버전 블록 무변경 — diff 로 2줄 추가만 확인, YAML 파싱 통과)
+- 신규 페이지의 핵심: **스캔 범위가 곧 비용**(조합 1개 = 데몬 왕복 1회)이며, 왕복을 줄이는 파라미터
+  (`center`/`repositoryType`/`repositoryId`)와 줄이지 않는 필터(`server`/`jobName`/`repositoryPath`)를 표로 갈랐다.
+
+### Fixed — 기존 문서의 사실 오류 (계약 변경과 무관하게 틀려 있던 것)
+
+본문 반영 중 소스와 대조하며 발견한 것들. **계약이 바뀌어서가 아니라 원래 틀렸던 내용**이다.
+
+- **응답 DTO 형태 전면 불일치** — `size` 가 `{raw, formatted}` 가 아니라
+  `{original:{...}, compressed:{...}}`, `compression` 이 `{enabled, ratio}` 가 아니라
+  `{level, ratio:{percent, formatted}|null}`. `partition` 의 `size`/`filesystem` 은 실재하지 않는 필드였다.
+  `ratio` 는 절감률이라 **음수가 가능하고 원본 크기 0 이면 `null`** 이다.
+- **에러 코드** — Path 검증은 `DTO-VALIDATION-01`(body 용, 422)이 아니라 **`DTO-VALIDATION-02`**(400),
+  Query 는 **`DTO-VALIDATION-03`**. Center 미존재는 `JOB-ERROR-01` 이 아니라 **`ZDM-ERROR-01`**.
+  타임아웃은 `JOB-ERROR-68`/10초가 아니라 **500 / 기본 30초**.
+- **에러 메시지는 전부 영문이다.** `"서버 이름(serverName)이 필요합니다."` 같은 한글 메시지는 소스에 없다.
+- **서버 미존재는 더 이상 404 가 아니다** — `disableNotFound: true` 라 200 + 빈 배열이다.
+- `page`/`limit` 을 **둘 다 생략하면 페이지네이션 없이 전체 반환**된다(`pagination` 필드 없음).
+  "기본값 1/20" 은 하나라도 지정했을 때만 적용된다.
+- 바이트 포맷 예시 오류(`831622708` → `793.17 MB` 가 아니라 **`793.10 MB`**, 1024 기반).
+
+### 남은 작업 — 사용자 몫
+- `./run.sh --build` 로 Jekyll 빌드 검증 (이번 작업에서는 실행하지 않았다).
+- **`docs/error-codes` 등 다른 페이지에도 위와 같은 잘못된 에러 코드·한글 메시지가 남아 있을 수 있다.**
+  이번 범위 밖이라 확인만 하고 수정하지 않았다.
+
+---
+
 ## [Documentation] - 2026-08-31 (recovery 수정 계약 변경 반영 · 에러 코드 총람 정정)
 
 ### Changed

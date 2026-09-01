@@ -7,6 +7,7 @@
 
 > * ZDM ID 또는 ZDM 이름으로 특정 ZDM(센터)의 정보를 조회합니다.
 > * identifier가 숫자인 경우 ZDM ID로, 그 외에는 ZDM 이름으로 조회합니다.
+> * 여기의 `partition` 은 "파티션 정보를 응답에 포함할지" 를 묻는 **포함 플래그(`true`/`false`)** 입니다. 파티션 하나를 지목해 거르는 값 필터가 아닙니다 - 그 용도는 `GET /servers/:identifier/partitions` 의 `partition` 이며, 같은 이름이지만 의미가 다릅니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -46,7 +47,7 @@ curl -X GET "https://api.example.com/api/zdms/1?detail=true&repository=true" \
 | `activation` | Query | string | Optional | - | 활성화 상태 필터 | `ok`, `fail` |
 | `network` | Query | boolean | Optional | `false` | 네트워크 정보 포함 여부 | `true`, `false` |
 | `disk` | Query | boolean | Optional | `false` | 디스크 정보 포함 여부 | `true`, `false` |
-| `partition` | Query | boolean | Optional | `false` | 파티션 정보 포함 여부 | `true`, `false` |
+| `partition` | Query | boolean | Optional | `false` | 파티션 정보 **포함 여부** (파티션을 지목하는 값 필터가 아님) | `true`, `false` |
 | `repository` | Query | boolean | Optional | `false` | 레포지토리 정보 포함 여부 | `true`, `false` |
 | `zosRepository` | Query | boolean | Optional | `false` | ZOS 레포지토리 정보 포함 여부 | `true`, `false` |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 (현재 버전 미동작) | `true`, `false` |
@@ -514,7 +515,7 @@ curl -X GET "https://api.example.com/api/zdms/1?detail=true&repository=true" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "ZDM-ERROR-01",
-    "message": "ID가 '999'인 ZDM을 찾을 수 없습니다"
+    "message": "Zdm with ID '999' not found"
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

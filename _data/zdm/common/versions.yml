@@ -82,7 +82,7 @@ api:
 cli:
   - version: "3.0.0"
     status: latest
-    docs: "3.0.0"           # 자체 docs (API 3.0.0 응답 봉투 대응 — 출력 헤더 traceId + recovery image-regist 신설)
+    docs: "3.0.0"           # 자체 docs (API 3.0.0 응답 봉투 대응 — 출력 헤더 traceId + recovery image-regist/backup image list 신설 + 출력 스트림 분리)
     downloads:
       - os: "Windows"
         file: "/downloads/zdm-cli/3.0.0/zdm-cli-windows.zip"

@@ -94,17 +94,18 @@ curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
 <details markdown="1">
 <summary><strong>에러 응답</strong></summary>
 
-**유효성 검사 실패 (400 Bad Request)**
+**유효성 검사 실패 (422 Unprocessable Entity)**
 
 ```json
 {
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "message": "Request body validation failed",
+    "code": "DTO-VALIDATION-01",
+    "message": "Request body validation failed.",
     "details": {
-      "type": ["type은 smb와 nfs만 가능합니다"],
-      "account": ["SMB 타입일 경우 account는 필수입니다"]
+      "type": ["type must be either smb or nfs"],
+      "account": ["account is required for SMB type"]
     }
   },
   "timestamp": "2026-02-05T14:30:00.000+09:00"
@@ -118,8 +119,8 @@ curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "DTO-VALIDATION-01",
-    "message": "SMB path format is invalid. Expected UNC path (e.g., \\\\server\\share)"
+    "code": "BAD_REQUEST",
+    "message": "Invalid SMB path format: '//192.168.1.200/share'. Expected format: \\\\server\\share"
   },
   "timestamp": "2026-02-05T14:30:00.000+09:00"
 }
@@ -133,7 +134,7 @@ curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "ZDM-ERROR-01",
-    "message": "ID가 '999'인 Center를 찾을 수 없습니다"
+    "message": "Zdm with ID '999' not found"
   },
   "timestamp": "2026-02-05T14:30:00.000+09:00"
 }

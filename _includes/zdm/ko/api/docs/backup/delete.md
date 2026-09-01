@@ -38,8 +38,12 @@ curl -X DELETE "https://api.example.com/api/backups/daily-backup" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 백업 ID (숫자) 또는 백업 이름 | - |
-| `partition` | Query | string | Optional | - | 삭제할 작업 대상 파티션 필터 | - |
-| `center` | Query | string | Optional | - | center 식별자 필터 (ID 또는 이름) | - |
+| `center` | Query | string | Optional | - | center 식별자 (ID 또는 이름, **정확히 1개**) | - |
+
+> **참고:**
+> - 삭제는 대상이 모호하면 안 되므로 `center`는 **정확히 1개만** 지정할 수 있습니다. 콤마로 여러 개를 지정하면 400입니다.
+> - `center`는 **키만 보내고 값이 비면**(`?center=`) 400입니다. 파라미터를 **생략**하는 것은 종전대로 "해당 필터 없음"이며 동작이 달라지지 않습니다.
+> - 위 두 경우의 에러 형식은 `DTO-VALIDATION-03`입니다.
 
 </details>
 
@@ -113,7 +117,26 @@ curl -X DELETE "https://api.example.com/api/backups/daily-backup" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "JOB-ERROR-01",
-    "message": "ID가 '999'인 Backup을 찾을 수 없습니다"
+    "message": "Job information not found"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+**잘못된 요청 파라미터 (400 Bad Request)**
+
+`center`를 2개 이상 지정했거나, 키만 보내고 값을 비운 경우 반환됩니다.
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": false,
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "Query parameter validation failed.",
+    "details": {
+      "center": ["exactly one center must be specified"]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

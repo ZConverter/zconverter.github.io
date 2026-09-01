@@ -269,7 +269,7 @@ curl -X POST "https://api.example.com/api/replications" \
 <details markdown="1">
 <summary><strong>에러 응답</strong></summary>
 
-**유효성 검사 실패 (400 Bad Request)**
+**유효성 검사 실패 (422 Unprocessable Entity)**
 
 ```json
 {
@@ -277,21 +277,26 @@ curl -X POST "https://api.example.com/api/replications" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "replicationUnitType은 backup, repository, server 중 하나여야 합니다"
+    "message": "Request body validation failed.",
+    "details": {
+      "replicationUnitType": ["replicationUnitType must be one of: backup, repository, server"]
+    }
   },
   "timestamp": "2026-04-17T10:30:00.000+09:00"
 }
 ```
 
-**작업 이름 중복 (409 Conflict)**
+**작업 이름 중복 (400 Bad Request)**
+
+동일한 source center 안에 같은 `jobName` 의 복제 작업이 이미 존재하는 경우 반환됩니다.
 
 ```json
 {
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "JOB-ERROR-07",
-    "message": "JOB_NAME_ALREADY_EXISTS"
+    "code": "BAD_REQUEST",
+    "message": "Replication jobName already exists in the source center (jobName: repl-job-01, centerID: 1)"
   },
   "timestamp": "2026-04-17T10:30:00.000+09:00"
 }

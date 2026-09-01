@@ -7,6 +7,8 @@
 
 > * 시스템에 등록된 모든 라이선스 정보를 조회합니다.
 > * 필터 옵션을 통해 특정 조건의 라이선스만 조회할 수 있습니다.
+> * `center` 는 ID 또는 이름을 콤마로 여러 개 지정할 수 있습니다. 파라미터를 **생략**하면 종전대로 center 필터 없이 조회하지만, `?center=` 처럼 **키만 보내고 값이 비면 400**입니다.
+> * 필터에 맞는 항목이 없으면 **200과 빈 배열**을 반환합니다 (404가 아님).
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -52,7 +54,7 @@ curl -X GET "https://api.example.com/api/licenses?page=1&limit=10" \
 | `created` | Query | string | Optional | - | 생성일 필터 (YYYY-MM-DD) | - |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
-| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
+| `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`). 값이 빈 `?center=` 는 400 | - |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 </details>
@@ -136,6 +138,23 @@ curl -X GET "https://api.example.com/api/licenses?page=1&limit=10" \
 
 </details>
 
+<details markdown="1">
+<summary>빈 결과 응답 (200 OK)</summary>
+
+> 일치하는 결과가 없거나 `center` 필터가 어떤 센터에도 매칭되지 않으면 빈 배열을 반환합니다 (에러가 아님).
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": true,
+  "data": [],
+  "message": "License information list",
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+</details>
+
 </details>
 
 <details markdown="1" open>
@@ -177,7 +196,7 @@ curl -X GET "https://api.example.com/api/licenses?page=1&limit=10" \
   "success": false,
   "error": {
     "code": "UNAUTHORIZED",
-    "message": "토큰이 만료되었습니다."
+    "message": "Token expired."
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
@@ -193,7 +212,29 @@ curl -X GET "https://api.example.com/api/licenses?page=1&limit=10" \
   "success": false,
   "error": {
     "code": "DTO-VALIDATION-03",
-    "message": "유효하지 않은 'category' 값입니다."
+    "message": "Query parameter validation failed.",
+    "details": {
+      "category": ["category must be one of: zdm(backup), zdm(dr), zdm(migration)"]
+    }
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+**`center` 빈 값 (400 Bad Request)**
+
+`?center=` 처럼 키만 보내고 값이 비면 반환됩니다. 파라미터를 **생략**한 경우는 종전대로 "필터 없음"이며 동작 변화가 없습니다.
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": false,
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "Query parameter validation failed.",
+    "details": {
+      "center": ["center must contain at least one identifier"]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

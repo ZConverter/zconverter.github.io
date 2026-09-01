@@ -111,7 +111,7 @@ curl -X POST "https://api.example.com/api/licenses" \
 <details markdown="1">
 <summary><strong>에러 응답</strong></summary>
 
-**유효성 검사 실패 — 필수 필드 누락 (400 Bad Request)**
+**유효성 검사 실패 — 필수 필드 누락 (422 Unprocessable Entity)**
 
 ```json
 {
@@ -119,13 +119,16 @@ curl -X POST "https://api.example.com/api/licenses" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "key is required"
+    "message": "Request body validation failed.",
+    "details": {
+      "key": ["key is required"]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
-**유효성 검사 실패 — key 형식 위반 (400 Bad Request)**
+**유효성 검사 실패 — key 형식 위반 (422 Unprocessable Entity)**
 
 `key`에 영숫자 외 문자가 포함된 경우 (하이픈/공백/특수문자 등).
 
@@ -135,13 +138,16 @@ curl -X POST "https://api.example.com/api/licenses" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "key must contain only letters and digits"
+    "message": "Request body validation failed.",
+    "details": {
+      "key": ["key must contain only letters and digits"]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
-**유효성 검사 실패 — center 형식 위반 (400 Bad Request)**
+**유효성 검사 실패 — center 형식 위반 (422 Unprocessable Entity)**
 
 `center`에 허용 외 문자(공백·특수문자·한글 등)가 포함된 경우.
 
@@ -151,7 +157,10 @@ curl -X POST "https://api.example.com/api/licenses" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "DTO-VALIDATION-01",
-    "message": "center must contain only letters, digits, '_', or '-'"
+    "message": "Request body validation failed.",
+    "details": {
+      "center": ["center must contain only letters, digits, '_', or '-'"]
+    }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

@@ -8,6 +8,7 @@ Backup image 파일만으로 Recovery 작업을 등록합니다.
 > * Source 서버를 지정하지 않고 **backup image 파일명만으로** 복구 작업을 등록합니다.
 > * Source 서버가 ZDM 에서 삭제된 뒤에도 이미지가 저장소에 남아 있으면 복구할 수 있습니다.
 > * 각 이미지의 원본 파티션과 소속 백업 작업은 저장소의 이미지 정보에서 자동으로 읽습니다.
+> * `--backup-file` 에 넣을 파일명을 모른다면 [`backup image list`](/zdm/ko/cli/3.0.0/docs/backup/image-list) 로 먼저 조회하세요 (`--names-only` 로 조회하면 그대로 붙여넣을 수 있는 형식으로 나옵니다).
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
