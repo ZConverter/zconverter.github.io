@@ -2,7 +2,7 @@ source 서버 없이 backup image 파일만으로 복구 작업을 등록합니�
 
 ---
 
-## `POST /api/recoveries/image` {#post-recoveries-image}
+## `POST /recoveries/image` {#post-recoveries-image}
 
 > * 일반 복구 등록(`POST /api/recoveries`)은 source 서버를 지정해야 하지만, 이 엔드포인트는 **backup image 파일만으로** 등록합니다.
 > * source 서버가 ZDM 에서 이미 삭제된 경우에도 이미지가 저장소에 남아 있으면 복구할 수 있습니다.
@@ -12,7 +12,7 @@ source 서버 없이 backup image 파일만으로 복구 작업을 등록합니�
 <summary><strong>엔드포인트</strong></summary>
 
 <div class="command-card">
-  <code>POST /api/recoveries/image</code>
+  <code>POST /recoveries/image</code>
 </div>
 
 </details>

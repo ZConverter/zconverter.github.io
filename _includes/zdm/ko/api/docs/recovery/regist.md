@@ -109,13 +109,28 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `sourcePartition` | string | Required | 소스 파티션 |
 | `targetPartition` | string | Required | 타겟 파티션 |
 | `overwrite` | string | Optional | 덮어쓰기 허용 여부 (`allow`, `not allow`) |
-| `backupJob` | string | Optional | 사용할 백업 작업 이름 (미지정 시 최신 성공 작업 자동 선택) |
-| `backupFile` | string | Optional | 사용할 백업 이미지 파일명 (미지정 시 최신 이미지 자동 선택) |
+| `backupJob` | string | Optional | 사용할 백업 작업 이름 (미지정 시 최신 성공 작업 자동 선택). **마지막 실행이 실패한 작업을 지정하면 거부됩니다** — 아래 "백업 작업 사용 가능 조건" 참고 |
+| `backupFile` | string \| string[] | Optional | 사용할 백업 이미지 파일명 (미지정 시 최신 이미지 자동 선택). 배열로 여러 장 지정 시 순서가 곧 복구 순서입니다 |
 | `mode` | string | Optional | 작업 모드 (`full`, `increment`) |
 | `repository` | object | Optional | 레포지토리 정보 (미지정 시 공통 repository 사용) |
 | `repository.id` | number | Required | 레포지토리 ID |
 | `repository.type` | string | Optional | 레포지토리 타입 |
 | `repository.path` | string | Optional | 레포지토리 경로 |
+
+> **백업 작업 사용 가능 조건 (since 3.0.0)**
+>
+> 복구는 **success 상태인 백업 작업만** 참조할 수 있습니다. 진행 중이거나 마지막 실행이 실패한 작업은
+> 복구 대상이 될 수 없습니다.
+>
+> - **`backupJob` 지정**: 그 작업의 **마지막 실행 결과**로 갈립니다. 실패한 작업이면 `JOB-ERROR-67` (400) 으로 거부됩니다.
+> - **`backupFile` 지정**: 이미지가 속한 작업이 success 면 그대로 등록됩니다.
+>   작업이 사용 불가 상태여도 **지정한 이미지가 그 작업의 최신 이미지가 아니면 등록됩니다** —
+>   최신 이미지는 실패한 실행의 산출물일 수 있지만, 그보다 오래된 이미지는 성공한 실행이 남긴 완결된 파일이기 때문입니다.
+>   최신 이미지를 지정하면 `JOB-ERROR-67` (400) 으로 거부됩니다.
+> - **둘 다 지정**: `backupFile` 규칙이 우선합니다. 다만 이미지의 소속 작업명이 `backupJob` 과 다르면
+>   기존대로 `BAD_REQUEST` (400) 으로 거부됩니다.
+>
+> 자동 선택 경로(`backupJob`·`backupFile` 모두 미지정)는 애초에 **사용 가능한 작업만** 후보로 삼습니다.
 
 > **Windows 파티션 정규화 (since 2026-05-15)**
 >
@@ -132,7 +147,23 @@ curl -X POST "https://api.example.com/api/recoveries" \
 > - `schedule.basic` 객체에 `id` 필드 신규 추가 (type/description 은 기존 형식 그대로 — displayMappings PascalCase 영문 + `processScheduleInfo` 영문 결과)
 > - 응답에 `notices?: string[]` 필드 신규 — backup 없는 partition 자동 skip 안내 (값이 있을 때만 포함)
 
-> **자동 partition skip 동작**: source 서버의 partition 중 backup 작업·이미지가 없는 partition 은 자동으로 jobList 에서 제외됩니다 (silent skip). skip 된 partition 은 `notices` 에 안내 메시지로 포함됩니다. 전체 partition 이 skip 되면 `JOB-ERROR-14` (400 Bad Request) 응답이 반환되며, 각 partition 이 왜 제외됐는지가 메시지에 함께 담깁니다. `excludePartition` 옵션을 명시하지 않아도 동일하게 동작합니다.
+> **자동 partition skip 동작**: source 서버의 partition 중 복구에 쓸 수 있는 백업이 없는 partition 은 자동으로 jobList 에서 제외됩니다 (silent skip). skip 된 partition 은 `notices` 에 안내 메시지로 포함됩니다. 전체 partition 이 skip 되면 `JOB-ERROR-14` (400 Bad Request) 응답이 반환되며, 각 partition 이 왜 제외됐는지가 메시지에 함께 담깁니다. `excludePartition` 옵션을 명시하지 않아도 동일하게 동작합니다.
+
+> **skip 사유 분류 (since 3.0.0)**
+>
+> 제외 사유는 아래 여섯 가지로 구분되어 안내됩니다. 사유마다 필요한 조치가 다릅니다.
+>
+> | 사유 | 안내 | 조치 |
+> |------|------|------|
+> | 백업 작업 없음 | `Partition '/' has no backup job.` | 해당 파티션의 백업 작업을 먼저 등록·실행 |
+> | 마지막 실행 실패 | `... the last run failed for every backup job (jobs: ...)` | 백업 재실행, 또는 다른 이미지를 `backupFile` 로 직접 지정 |
+> | 진행 중 | `... a backup job is currently running (jobs: ...)` | 백업 완료 후 재시도 |
+> | 실행 이력 없음 | `... the backup job is registered but has never run (jobs: ...)` | 백업을 최초 실행 |
+> | 이미지 조회 실패 | `... backup job '...' succeeded, but no backup image was found in repository N.` | 저장소 상태 확인 |
+> | repository 불일치 | `... backup job '...' backs up to repository N, but this request specifies repository M.` | `repository.id` 를 맞추거나 `backupFile` 로 직접 지정 |
+>
+> 백업 작업 없음 · 진행 중 · 실행 이력 없음 세 가지에는 `backupFile` 지정 안내가 붙지 않습니다 —
+> 해당 파티션에 성공 이력이 없어 지정할 이미지 자체가 존재하지 않기 때문입니다.
 
 ```json
 {
@@ -255,6 +286,46 @@ curl -X POST "https://api.example.com/api/recoveries" \
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
+
+**사용할 수 없는 백업 작업 지정 (400 Bad Request) — since 3.0.0**
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-67",
+    "message": "[Recovery registration] - Backup job 'daily-backup-root' cannot be used for recovery because its last run failed (server: SOURCE-01, partition: /). Re-run the backup job, or specify an older image with 'backupFile'."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+**등록할 파티션이 하나도 남지 않음 (400 Bad Request)**
+
+전체 partition 이 skip 된 경우입니다. 메시지에 partition 별 제외 사유가 함께 담깁니다.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-14",
+    "message": "[Recovery registration] No partitions left to register — every candidate partition was excluded. Reason(s): Partition/drive '/' was skipped — no backup available: Partition '/' has no usable backup job — the last run failed for every backup job (jobs: daily-backup-root). Re-run the backup job, or check separately whether another usable image exists and specify it with 'backupFile'."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+**주요 에러 코드**
+
+| code | HTTP | 발생 조건 |
+|------|------|-----------|
+| `JOB-ERROR-14` | 400 | 등록 대상 partition 이 0건 — 전체 skip 또는 `excludePartition` 으로 전부 제외 |
+| `JOB-ERROR-67` | 400 | 지정한 `backupJob` 이 사용 불가 상태이거나, 사용 불가 작업의 **최신** 이미지를 `backupFile` 로 지정 |
+| `JOB-ERROR-63` | 400 | `listOnly: true` 인데 `jobList` 가 비었거나 없음 |
+| `JOB-ERROR-64` | 409 | 대상 서버에 진행 중인 복구 작업이 있음 (`autoStart` 요청 시) |
+| `BAD_REQUEST` | 400 | `backupFile` 의 파티션이 `sourcePartition` 과 불일치, 또는 이미지의 소속 작업명이 `backupJob` 과 불일치 |
 
 </details>
 

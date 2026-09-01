@@ -130,10 +130,25 @@ zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky8
 | targetPartition | string | Required | 작업 대상 Target 파티션 | - |
 | overwrite | boolean | Optional | 파티션 오버라이트 허용 여부 (미지정시 공용값 사용) | `true`, `false` |
 | mode | string | Optional | 작업 모드 (미지정시 공용값 사용) | {% include zdm/job-modes.md recovery=true %} |
-| backupFile | string | Optional | 복구에 사용할 백업 파일 (미지정시 최신 백업 사용) | - |
+| backupJob | string | Optional | 복구에 사용할 백업 작업 이름 (미지정시 최신 성공 작업 사용) | - |
+| backupFile | string \| string[] | Optional | 복구에 사용할 백업 이미지 파일 (미지정시 최신 이미지 사용). 배열로 여러 장 지정 시 순서가 곧 복구 순서 | - |
 | repository | object | Optional | 작업시 사용할 Repository (미지정시 공용값 사용) | - |
 | repository.id | number | Optional | Repository ID | - |
 | repository.path | string | Optional | Repository 경로 | - |
+
+> **백업 작업 사용 가능 조건 (since 3.0.0)**
+>
+> 복구는 **success 상태인 백업 작업만** 참조할 수 있습니다. 진행 중이거나 마지막 실행이 실패한 작업은 복구 대상이 될 수 없습니다.
+>
+> - `backupJob` 지정: 그 작업의 **마지막 실행 결과**로 갈립니다. 실패한 작업이면 `JOB-ERROR-67` (400) 으로 거부됩니다.
+> - `backupFile` 지정: 작업이 사용 불가 상태여도 **지정한 이미지가 그 작업의 최신 이미지가 아니면 등록됩니다.**
+>   최신 이미지는 실패한 실행의 산출물일 수 있지만, 그보다 오래된 이미지는 성공한 실행이 남긴 완결된 파일이기 때문입니다.
+> - 둘 다 지정하면 `backupFile` 규칙이 우선합니다.
+>
+> 자동 선택 경로(둘 다 미지정)는 애초에 사용 가능한 작업만 후보로 삼습니다.
+> 파티션별로 쓸 수 있는 백업이 없으면 그 파티션은 자동 제외되고 사유가 `notices` 로 안내됩니다
+> (백업 작업 없음 / 마지막 실행 실패 / 진행 중 / 실행 이력 없음 / 이미지 조회 실패 / repository 불일치).
+> 전체 파티션이 제외되면 `JOB-ERROR-14` (400) 으로 실패합니다.
 
 **사용 예시:**
 
