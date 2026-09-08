@@ -457,7 +457,36 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 > - **저장소가 비어 있음** — 데몬이 그 저장소를 훑었으나 이미지 파일이 하나도 없는 **저장소 상태**입니다. 요청한 서버와 무관하므로 그 저장소만 빈 기여로 처리되고, **나머지 저장소의 이미지는 200으로 반환**됩니다. 저장소 한 곳이 비었다고 조회 전체가 404가 되지 않습니다.
 > - **조회 결과 0건** — 데몬은 이미지를 찾아 채웠지만 요청한 서버 이름/ID · `jobName` · `partition`에 해당하는 것이 없는 경우입니다. 이것도 **200 + 빈 배열**입니다.
 >
-> 저장소 하나가 **스캔에 실패**해도(타임아웃 등) 나머지 저장소의 이미지는 그대로 200으로 반환되며, 실패한 저장소는 **서버 로그에만** 기록됩니다. 응답 스키마는 성공 시와 동일하므로 응답만 보고는 어느 저장소가 빠졌는지 알 수 없습니다 — `repositoryId`로 그 저장소만 지정해 다시 호출하면 원인을 확인할 수 있습니다.
+> 저장소 하나가 **스캔에 실패**해도(타임아웃 등) 나머지 저장소의 이미지는 그대로 200으로 반환되며,
+> **어느 저장소가 왜 빠졌는지는 응답의 `scan` 필드에 담깁니다.**
+>
+> ```json
+> "scan": {
+>   "total": 3,
+>   "succeeded": 2,
+>   "failed": 1,
+>   "failures": [
+>     {
+>       "centerName": "zdm-center-01",
+>       "repositoryId": 13,
+>       "code": "JOB-ERROR-68",
+>       "reason": "Backup image lookup timed out (30 seconds elapsed, Center: zdm-center-01, Repository ID: 13, last job status: Waiting(3))",
+>       "retryable": true
+>     }
+>   ]
+> }
+> ```
+>
+> | 필드 | 설명 |
+> |---|---|
+> | `total` / `succeeded` / `failed` | 스캔 대상 저장소 수와 성공·실패 건수 |
+> | `failures[].code` | 분기용 안정 식별자. 사유가 분류되지 않은 경우 생략됩니다 |
+> | `failures[].reason` | 사람이 읽는 실패 사유 |
+> | `failures[].retryable` | 다시 호출하면 풀릴 수 있는 실패인지. 타임아웃·락 경합은 `true`, 저장소 미존재 등은 `false` |
+>
+> **`scan` 은 실패가 없어도 항상 포함됩니다.** `failed: 0` 이 곧 "목록이 완전하다" 는 신호입니다 —
+> 실패했을 때만 실으면 이 필드를 모르는 클라이언트가 부분 결과를 전체로 오인합니다.
+> 부분 결과일 때는 `message` 도 `Backup images retrieved (2 of 3 repositories scanned)` 로 바뀝니다.
 
 **모든 저장소 스캔 실패 (500 Internal Server Error)**
 

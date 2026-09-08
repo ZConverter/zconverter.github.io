@@ -32,7 +32,11 @@ curl -X GET "https://api.example.com/api/replications/histories/backup-replicati
   -H "Authorization: Bearer <token>"
 
 # 작업 이름 + 필터 적용
-curl -X GET "https://api.example.com/api/replications/histories/backup-replication-01?result=success&page=1&limit=5" \
+curl -X GET "https://api.example.com/api/replications/histories/backup-replication-01?result=success" \
+  -H "Authorization: Bearer <token>"
+
+# center 로 좁혀서 조회 (다른 center 의 히스토리면 404)
+curl -X GET "https://api.example.com/api/replications/histories/10?center=destconm" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -48,12 +52,17 @@ curl -X GET "https://api.example.com/api/replications/histories/backup-replicati
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `server` | Query | string | Optional | - | 대상 서버 이름 필터 | - |
 | `result` | Query | string | Optional | - | 작업 결과 필터 | {% include zdm/replication-history-result.md %} |
-| `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
-| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
-| `center` | Query | string | Optional | - | center 식별자(ID/이름, 콤마 다중 지정 가능, 예: `destconm,9`). 요청 검증에만 사용되며 단건 조회 결과를 센터로 좁히지는 않습니다 | - |
-| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
+| `page` | Query | number | Optional | - | 값 검증만 하며 이 엔드포인트에서는 적용되지 않습니다 | - |
+| `limit` | Query | number | Optional | - | 값 검증만 하며 이 엔드포인트에서는 적용되지 않습니다 | - |
+| `center` | Query | string | Optional | - | center 식별자(ID/이름, 콤마 다중 지정 가능, 예: `destconm,9`). 조회 대상을 해당 center 로 좁힙니다 | - |
+| `sort` | Query | string | Optional | `desc` | 정렬 순서 (작업 이름 조회의 목록 응답에만 적용) | `asc`, `desc` |
 
 > * `center` · `server` 는 **키를 보냈는데 값이 비어 있으면**(`?center=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 "필터 없음" 이므로 동작 변화가 없습니다.
+> * `center` 는 **ID 조회·작업 이름 조회 양쪽 모두**에 적용됩니다. 지목한 히스토리가 다른 center 의 것이면 200 이 아니라 **404** 입니다.
+> * `jobId` · `jobName` · `server` · `result` 는 identifier 가 **숫자일 때도** 함께 걸립니다. ID 는 존재하지만 필터와 맞지 않으면 **404** 입니다 (예: 실패한 작업에 `?result=success`).
+> * 존재하지 않는 center 를 지정하면(예: `?center=no-such-center`) 조회 없이 **404** 입니다. 목록 조회(`GET /replications/histories`)가 빈 배열을 200 으로 돌려주는 것과 다릅니다.
+> * `page` · `limit` 은 이 엔드포인트에서 적용되지 않습니다. `sort` 는 작업 이름으로 조회할 때의 **목록 정렬**에만 쓰이고, ID 조회에서 어느 행이 선택되는지에는 영향을 주지 않습니다.
+> * `center` · 필터를 **아무것도 지정하지 않은 요청의 동작은 종전과 같습니다.**
 
 </details>
 
@@ -149,7 +158,7 @@ curl -X GET "https://api.example.com/api/replications/histories/backup-replicati
       }
     }
   ],
-  "message": "Replication history list",
+  "message": "Replication history retrieved",
   "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
@@ -188,15 +197,50 @@ curl -X GET "https://api.example.com/api/replications/histories/backup-replicati
 
 **히스토리를 찾을 수 없음 (404 Not Found)**
 
-지정한 ID 또는 작업 이름의 히스토리가 존재하지 않는 경우 반환됩니다.
+지정한 ID 의 히스토리가 없거나, `jobId` · `jobName` · `server` · `result` 필터와 맞지 않는 경우 반환됩니다.
 
 ```json
 {
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "JOB-ERROR-01",
-    "message": "Replication history not found for ID '999'"
+    "code": "NOT_FOUND",
+    "message": "Replication history not found (ID: 999)"
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
+}
+```
+
+**다른 center 의 히스토리 (404 Not Found)**
+
+ID 로 조회했고 그 히스토리가 실제로 존재하지만 지정한 `center` 에 속하지 않는 경우, 메시지가 "없는 ID" 와 구분됩니다.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Replication history ID '10' does not belong to Center 'destconm'"
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
+}
+```
+
+> * 이 전용 메시지는 **숫자 identifier(ID) 조회에서만** 나옵니다. 작업 이름으로 조회한 경우는 아래의 `JobName` 문구로 응답합니다.
+> * center 는 맞는데 `result` 등 다른 필터에서 걸러진 경우도 위의 `not found (ID: ...)` 문구입니다 — center 탓으로 표기하지 않습니다.
+
+**작업 이름에 해당하는 히스토리 없음 (404 Not Found)**
+
+작업 이름으로 조회했을 때 (지정한 `center` · 필터 조건까지 적용해) 한 건도 없으면 반환됩니다.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Replication history not found (JobName: backup-replication-01)"
   },
   "timestamp": "2026-03-20T10:30:00.000+09:00"
 }

@@ -6,6 +6,841 @@
 
 ---
 
+## [Documentation] - 2026-09-04 (backup 전수조사에 따른 API 계약 변경 반영)
+
+### Context
+- `backup` 도메인 전수조사(B1~B32)로 삭제·수정·등록·모니터링 경로의 계약이 바뀌었다.
+  코드는 반영됐으나 사용자 문서가 옛 계약을 그대로 설명하고 있었다.
+
+### Changed
+- **`backup/monitoring-system.md`** — server 기준 모니터링의 계약 변경을 반영
+  - 등록된 작업이 없거나 `status` 필터로 0건이 된 경우: **`404` → `200` + 빈 `job` 배열**.
+    기존 `JOB-ERROR-01` 404 예시 2개를 제거하고, 남는 404 는 **서버 자체를 못 찾은 경우**임을 분리해 명시
+  - **파티션당 한 건만 노출되던 것이 전 작업 반환**으로 바뀐 사실을 개요에 추가
+  - `job[].log` 는 **`detail=true` 일 때만** 채워짐을 응답 필드 표에 명시
+  - `summary.canceled` 필드 추가 (응답 필드 표 + 예시 3곳)
+  - `summary.overallProgress` 는 진행 중인 작업이 없으면 **`"-"`** — `"0%"` 를 쓰지 않는 이유 병기
+  - 400(데이터 불완전)은 **server 기준 조회에서 발생하지 않음**을 명시 — 결손 작업만 목록에서 빠진다
+- **`backup/monitoring-job.md`** — `job.log` 도 `detail=true` 전용임을 명시 (server 기준과 같은 규칙)
+- **`backup/delete.md`** — **409 `CONFLICT`** 신설. 이름으로 삭제할 때 같은 center 안에 동명 작업이
+  2개 이상이면 아무것도 지우지 않고 거부하며, 메시지의 작업 ID 목록으로 재요청하도록 안내
+- **`backup/update.md`** — 작업 **ID** 로 수정할 때도 `center` 를 대조해 불일치 시 404 임을 404 절에 병기.
+  종전에는 ID 경로가 `center` 를 받기만 하고 조회에 쓰지 않아 다른 center 의 작업이 수정됐다
+- **`backup/regist.md`** — 이름 중복 검사가 **등록 직전에 한 번 더** 수행되며, 같은 이름을 동시에
+  등록하려는 요청이 겹치면 뒤의 요청이 409 를 받는다는 설명 추가
+
+- **`backup/list.md`** — ① **center 가 다른 동명 작업이 각각 나온다**는 사실을 개요에 추가.
+  종전에는 목록을 작업 이름으로 묶어 같은 이름의 작업 하나가 빠지고 남은 하나에 다른 작업의 상세가 붙을 수 있었다
+  ② `job.info.status.current` 에 잔존 진행 행 보정 설명 병기
+- **`backup/delete.md`** — `summary.state` 의 값에 **`not_found`** 추가. 예전부터 나가던 값인데 문서에만 빠져 있었다
+- **`backup/monitoring-system.md`** (추가분) — ① `server` 파라미터가 **이 경로에서는 무시된다**는 사실과,
+  **존재하지 않는 서버 값을 넣어도 더 이상 404 가 아니라는 점** 명시 ② `progressInfo.status` 에
+  잔존 진행 행 보정(종전엔 영구 `Processing`) 설명 병기
+- **`cli/docs/backup/monit.md`** — 파라미터 표에 **`--log`(`-l`)** 추가. 문서에 아예 빠져 있던 옵션이다.
+  **`--log` 는 표시 토글이 아니라 서버에서 로그를 받아올지까지 결정한다**는 점을 주석으로 명시
+  (미지정 시 API 가 `detail` 을 못 받아 로그 구간이 빈다). text·json 출력 예시에 `canceled` 반영
+
+### Notes
+- `backup/list.md` 의 `repositoryID` 필터는 **문서 변경 없음** — 문서는 원래 맞았고 코드가 무시하고 있었다.
+  이제 실제로 동작한다.
+- `monitoring-system.md` 의 `sort` 미지원 안내는 종전 그대로다 — 스키마에서도 제거됐다.
+
+---
+
+## [Documentation] - 2026-09-04 (진행률 100% 인데 상태가 Processing 인 것은 모순이 아님을 모니터링 문서에 명시)
+
+### Context
+- 같은 작업을 웹은 `Processing`, API 는 `Complete` 로 표시하던 제보가 있었다. 대상 VM 은 복구가 끝나고
+  **재부팅 이전** 단계였고 작업은 아직 끝나지 않았다 — **웹이 맞았다.**
+- 원인은 진행 행의 의미다. 데몬은 복구에서 **파티션마다 진행 행을 하나씩** 두는데, 그 행이 종료 단계여도
+  그건 **그 파티션의 복사가 끝났다**는 뜻이지 작업 전체의 종료가 아니다. 복사 뒤에 재부팅 같은 후속 단계가
+  남는다.
+- 구현을 정본으로 삼아 `zdm-api-v2/src/utils/job/calculate-job-status.utils.ts` 를 먼저 읽었다. 종료 단계
+  분기(백업 306·307 / 복구 404 / 이미지 복제 502)가 본체(`sJobResult`/`nJobStatus`)가 진행 중이라고 말하면
+  완료를 선언하지 않고 본체 기반 판정으로 내려간다. 본체가 실패로 종결된 경우도 같은 분기에서 걸러 `Error`
+  로 나간다.
+
+### Changed — `api/docs/recovery/monitoring-job.md` · `monitoring-system.md`
+- 응답 필드 표의 `job.progress.status` / `job[].progress.status` 행 설명에 **작업 본체가 정한다**는 점과,
+  행이 종료 단계에 들어가도 본체가 진행 중이면 `Processing` 이라는 점을 덧붙였다. "행은 완료를 선언하지
+  않는다" 라고 넓게 쓰지 않았다 — 같은 문서의 `partitions[].status` 판정 규칙 표가 "작업 전체에 진행 정보가
+  하나도 없으면 행의 상태 = 작업 상태" 라고 적고 있고, 구현도 본체가 진행 중·실패가 아닐 때는 종료 단계 행이
+  그대로 완료를 낸다. 본체는 **덮어쓸 뿐**이므로 그만큼만 적었다.
+- 두 문서에 이미 있던 **"`partitions[]` 는 파티션마다 다른 값을 냅니다"** 문단을 확장했다. 종전에는 "끝난
+  파티션과 시작하지 않은 파티션이 함께 나오는 것이 정상" 까지만 적혀 있었는데, 그 반대 방향 — 행이 전부
+  `Complete` 여도 작업이 끝난 것은 아니라는 점 — 을 이어서 적었다.
+- 작업 단위 `percent` 표기 규칙 아래의 참고 blockquote 에 한 문단을 더했다.
+  **`percent` 가 `"100%"` 인데 `status` 가 `Processing` 인 것은 모순이 아니라는 것**, 진행률과 상태의
+  출처가 다르다는 것, 완료 판정은 `status` 로만 하라는 것을 적었다. 바로 아래 파티션 단위 참고가 쓰는
+  "…모순이 아닙니다" 어법을 그대로 맞춰 두 참고가 형제로 읽히게 했다.
+- **작업 단위 `percent` 를 파티션 행으로 설명하지 않았다.** 같은 문서가 세 곳에서 그 값은 데몬이 세어 둔
+  복구 완료 개수에서 나오며 `partitions[]` 로는 재현되지 않는다고 못 박고 있다. "파티션이 전부 100% 라서
+  작업 진행률이 100%" 라고 쓰면 몇 줄 옆의 서술과 정면으로 어긋난다. 두 사실을 **본체가 잇는** 형태로 적었다.
+
+### Changed — `api/docs/backup/monitoring-job.md` · `monitoring-system.md`
+- 응답 필드 표의 `progressInfo.status` 행에 진행 정보가 종료 단계여도 본체가 진행 중이면 `Processing` 이라는
+  점을, `progressInfo.percent` 행에 `"100%"` + `Processing` 이 모순이 아니라는 점을 넣었다. 두 문서에는 응답 필드 표 뒤에 참고 blockquote 를
+  두는 관례가 없어 **없는 절을 새로 만들지 않고 표 행 설명을 확장**했다.
+- 백업 문서에는 **파티션 어휘를 쓰지 않았다.** 백업은 작업당 진행 행이 하나이고 응답에 `partitions[]` 가
+  없다 (`percent` 는 그 행의 `nPercent` 를 그대로 쓴다). "진행 정보" 로 부르고, 후속 단계도 **이름을 붙이지
+  않고** "후속 단계" 로만 적었다 — 재부팅은 제보로 확인된 복구 쪽 사실이라 백업에 옮겨 적을 근거가 없다.
+
+### Changed — `api/changelog/3.0.0.md`
+- 기존 **응답 값 변경** 블록에 두 줄을 더했다. 새 `BREAKING` · `동작 변경` 절을 만들지 않은 것은 두 항목 모두
+  필드 하나의 값이 달라지는 변화(`Complete` → `Processing`, `Complete` → `Error`)이고, 같은 블록에 이미
+  버그 수정 성격의 항목(`dates.created` 가 실제 생성일을 반환)이 같은 형식으로 들어 있기 때문이다.
+- 2.x 대비 델타로 본 근거는 **코드 변경 자체**다. 본체를 보는 가드가 이번에 새로 들어갔으므로 그 이전에는
+  종료 단계 행이면 무조건 완료로 나갔다. (2.0.2 스냅샷이 이 동작을 적지 않았다는 사실은 근거로 쓰지 않았다 —
+  문서의 침묵은 동작의 증거가 아니다.)
+- 요약 줄(`<summary>`)은 건드리지 않았다. 그 줄은 BREAKING·신규 항목만 싣고 응답 값 변경 항목은 싣지 않는다.
+
+### Notes
+- **넣지 않은 문서**: `api/docs/{backup,recovery}/get.md` · `list.md`. 네 문서 모두 `job.info.status.current`
+  는 싣지만 **작업 단위 `percent` 를 싣지 않는다** (`percent` grep 결과 0건). 진행률이 없는 화면에서는
+  "100% 인데 Processing" 이라는 오해가 생길 자리가 없어 제외했다.
+- **`replication` · `os-replication` 모니터링 문서도 넣지 않았다.** 이미지 복제 종료 단계(502)가 같은 가드
+  아래 있지만, 두 도메인의 monit 응답 DTO 는 `calculateJobStatus` 를 부르면서 `jobResult` · `jobStatus` 를
+  **명시적으로 `undefined` 로 넘긴다.** 유틸은 본체 정보가 없는 호출의 동작을 바꾸지 않으므로 두 경로의
+  동작은 종전과 같다 — 적을 델타가 없다.
+- **공유 include 확인 결과: 누수 없음.** `_includes/zdm/ko/api/docs/{backup,recovery}/monitoring-*.md` 의
+  맨 경로를 참조하는 wrapper 는 `zdm/ko/api/3.0.0/docs/...` 뿐이고, 1.0.3 ~ 2.0.2 wrapper 는
+  `monitoring-job/<버전>.md` · `monitoring-system/<버전>.md` 스냅샷을 가리킨다. `changelog/3.0.0.md` 도
+  `zdm/ko/index.md` 의 3.0.0 섹션과 3.0.0 index 에서만 include 된다.
+- **JSON 파싱 검증**: 손댄 네 문서의 ` ```json ` 블록 28개(복구 8+8, 백업 5+7) 전부 파싱 통과. 예시는 하나도
+  건드리지 않았고 산문만 더했다. `changelog/3.0.0.md` 의 블록 하나(`scan` 절의 키-값 발췌)는 원래부터 완전한
+  문서가 아닌 조각이며 이번 편집과 무관한 자리다.
+
+---
+
+## [Documentation] - 2026-09-04 (단건 모니터링 `--status` 정리와 backup 작업 기준 파라미터 표 정정)
+
+### Context
+- API 가 단건 모니터링 경로에서 `status` 를 제거한 데 맞춰 CLI 도 정리됐다. 구현을 정본으로 삼아
+  `commands/{backup,replication,os-replication,recovery}/subCommands/monit/` 의 옵션 정의와
+  요청 query 빌더를 모두 읽어 확인했다.
+- `replication monit` 은 `--status` 가 **제거**됐다. CLI 는 yargs `.strict()` 라 그대로 둔 스크립트는
+  조용히 무시되지 않고 파싱 단계에서 즉시 실패한다 (도움말 출력 + 종료 코드 1).
+- `backup monit` 은 옵션을 **유지하되 서버 기준 조회에서만 전송**한다. 작업 기준 조회는 경로 식별자로
+  작업 하나를 지목한 단건 조회라 작업을 다시 고르는 필터를 보내지 않는다. `recovery monit` 은 원래부터
+  서버 기준 전용이라 기준으로 삼았다.
+
+### Changed — CLI 문서
+- `cli/docs/replication/monit.md` 에서 `--status` 를 세 곳 지웠다 — 사용 예시의
+  `--jn repl01 --status processing` 줄, 파라미터 표의 `--status` 행, 404 계약을 설명하던 각주 문단.
+  각주를 지우면서 바로 앞 줄에 붙어 있던 `<br>` 도 함께 떼어 blockquote 의 마지막 줄이 되도록 되돌렸다.
+- 같은 문서 `##` 제목 아래 안내 blockquote 에 BREAKING 항목을 하나 더했다. 같은 파일의 `--server` 제거
+  안내와 **같은 형식**(`**v3.0.0 (BREAKING)** — ...`)을 쓰고, 파싱 단계 즉시 실패 · 종료 코드 1 ·
+  대체 수단(응답의 `job.progress.status` 를 읽는다)을 적었다.
+- `cli/docs/backup/monit.md` 의 `--status` 행 설명을 `작업 상태` 에서
+  `작업 상태로 목록을 거름 (서버 기준 조회 전용)` 으로 바꿨다. `recovery/monit.md` 와 **한 글자까지
+  같은 문구**다 — 같은 성격의 옵션을 두 문서가 다르게 부르지 않게 한다.
+- 같은 문서 표 아래 각주에 두 줄을 더했다 (앞 줄에 `<br>` 추가). 첫 줄은 `recovery/monit.md` 의 각주와
+  같은 어법으로 "서버 기준 조회 전용이며 작업 기준 조회에서는 전송되지 않습니다", 둘째 줄은 작업 기준
+  조회에서 **조용히 무시된다**는 점과 그것이 종전(작업 기준에서도 동작해 불일치 시 404)에 비해 **실제로
+  잃는 동작**이라는 점, 그리고 상태를 읽을 자리(`--output json` 의 `job.progressInfo.status`)를 적었다.
+  사용 예시는 이미 `--server-name` 을 쓰고 있어 그대로 뒀다.
+
+### Fixed — `api/docs/backup/monitoring-job.md` 파라미터 표
+- `backupMonitByJobQuerySchema` 와 표를 전수 대조했다. 스키마가 받는 키는
+  `mode` · `partition` · `drive` · `repositoryType` · `repositoryPath` · `detail` · `server` ·
+  `jobName` · `center` · `page` · `limit` 뿐이다 (`.strict()`).
+- `sort` 행을 제거했다 — 스키마에 없는 이름이라 보내면 400 이다. 표에서 지우기만 하면 "왜 없어졌는지"
+  를 알 수 없으므로 참고 항목에 400 이라는 사실을 남겼다.
+- `center` 행을 추가했다. 설명 문구와 표 안에서의 위치는 형제 문서(`backup/get.md` ·
+  `backup/list.md` · `backup/history-list.md`)의 `center` 행을 그대로 따랐다.
+- `page` · `limit` 의 기본값 칸이 `1` · `20` 으로 적혀 있었으나 스키마에 기본값이 없고, 이 경로에는
+  페이지네이션 자체가 없다 (자를 목록이 없는 단건 조회다). 기본값을 `-` 로 고치고 설명에 "이 경로에서는
+  적용되지 않음" 을 달았다. 행을 지우지는 않았다 — `license/get.md` 의 `center` 행과 같은 판단으로,
+  조회 파라미터 검증 강화 이후 표에 없는 이름은 400 으로 읽히기 때문이다.
+
+### Notes
+- **`os-replication monit` 의 `--status` 는 처음부터 없던 옵션이었다.** 어제 이 문서에 들어간 `--status`
+  세 곳(사용 예시 · 표 행 · 404 각주)은 실제로 존재한 적 없는 옵션을 문서화한 것이라 모두 지웠고,
+  BREAKING 안내는 넣지 않았다 — 제거된 적 없는 것을 제거됐다고 적을 수 없다. 근거는 두 가지다.
+  (1) 그 커맨드의 옵션 정의 파일을 건드린 커밋은 두 개뿐이며 어느 쪽에도 `status` 가 없다.
+  (2) 커맨드가 만드는 요청 query 에는 `center` 하나뿐이고 CLI 는 `.strict()` 라 다른 옵션은 애초에
+  통과하지 못한다. `replication monit` 쪽은 반대로 옵션 정의에 `status` 가 실재했으므로 BREAKING 이 맞다.
+- 위 판단에는 부수 효과도 있다. `cli/docs/os-replication/monit.md` 는 3.0.0 뿐 아니라 **2.0.0 · 2.0.2
+  wrapper 도 함께 참조**한다. 어제 추가된 `--status` 는 그 두 버전 페이지에도 노출되고 있었고, 이번에
+  지우면서 함께 사라진다. 반대로 v3.0.0 안내를 넣었다면 v2.0.x 페이지에 3.0.0 이야기가 실렸을 것이다.
+  이 파일은 편집 결과가 어제 편집이 들어가기 이전 내용과 동일함을 파일 해시로 확인했다.
+- 나머지 세 문서는 **3.0.0 wrapper 만** 공용 include 를 참조한다 (`replication/monit`,
+  `backup/monit`, `api/.../monitoring-job` 모두 1.3.1 · 2.0.2 보존본이 이미 있다). 그래서 버전 보존본을
+  새로 만들지 않았다. 버전 스냅샷과 `_site/` 는 손대지 않았다.
+- 편집한 네 문서의 JSON 예시를 모두 파싱해 검증했고 (backup CLI 2 · os-replication 1 · backup API 5,
+  replication CLI 는 JSON 예시 없음), `<details>` 개폐 수와 `markdown="1"` 도 확인했다. 출력 예시는
+  새로 만들 필요가 없어 만들지 않았다.
+- 이번 범위 밖이라 두었다: `cli/changelog/3.0.0.md` 에는 CLI 쪽 `--status` 제거 항목이 아직 없다.
+  `api/docs/backup/monitoring-system.md` 의 표에도 같은 `sort` 행이
+  있고 `center` 행이 빠져 있어 서버 기준 경로에서도 같은 대조가 필요하다. `partition` 은 스키마가
+  `string | string[]` 인데 표는 `string` 이며, 이는 형제 문서들도 마찬가지라 문서 전반의 관례로 보인다.
+  작업 기준 경로의 `detail` 은 스키마가 받지만 서비스에 아직 상세 DTO 분기가 없어 현재로서는 응답이
+  달라지지 않는다.
+
+---
+
+## [Documentation] - 2026-09-04 (CLI `recovery monit` text 출력 예시 채움)
+
+### Context
+- 2026-09-03 모니터링 재구성 반영 시 CLI 렌더러가 동시 수정 중이라 text 출력을 **구조 서술로만** 두었다.
+  렌더러가 확정돼 실제 실행 출력으로 채운다.
+
+### Added — `cli/docs/recovery/monit.md`
+- Text 블록 4곳을 실제 출력 형식으로 채웠다: 작업 기준 기본 / 작업 기준 `--detail`(신규) /
+  서버 기준 기본 / 서버 기준 `--detail`(신규). `--detail` 두 절에는 종전에 Text 블록 자체가 없었다.
+- 값은 문서의 기존 예시 데이터를 유지하고 **형식만** 실행 출력에 맞췄다 — 같은 절의 JSON 예시와 짝이 어긋나지 않게 한다.
+- 캐비앗 명시: `role` 은 작업 기준에서 `-`(JSON 은 키 자체를 싣지 않음), Windows 는 `[Drive N]` / `drive` 키,
+  서버 기준 `--detail` 에는 `[Job Logs]` 가 없음.
+
+### Fixed — 파티션 `message` 의 접두어 규칙
+- JSON 예시 2곳이 `"Processed Size: …"` 로 돼 있어, 바로 위 작업 단위 메시지
+  (`"[source-server_home] 62%, Processed Size: …"`)와 대조하면 **진행률 표기까지 사라진 것처럼** 읽혔다.
+  실제로는 `[백업작업명] ` 접두어만 제거된다. `"62%, Processed Size: …"` 로 정정했다.
+
+---
+
+## [Documentation] - 2026-09-04 (단건 모니터링의 `status` 조회 파라미터 제거)
+
+### Context
+- API 가 작업 기준 모니터링 네 경로에서 `status` 를 제거했다 — `backups` · `replications`(v1 경로도 같은
+  스키마를 re-export 한다) · `os-replications`. 구현을 정본으로 삼아
+  `domain/{backup,replication,os-replication}/schemas/query/*monit*.schema.ts` 를 직접 읽어 확인했다.
+  backup 은 경로별로 스키마가 갈려 있어 job 기준에는 `status` 가 없고 server 기준에만 남아 있다.
+- `GET /resource/{id}` 는 "그 리소스를 달라" 이지 "조건에 맞으면 달라" 가 아니다. 상태 불일치 404 는
+  "없다" 와 "있는데 상태가 다르다" 를 한 응답에 뭉개 소비자가 재시도 여부를 판단할 수 없었다.
+- **breaking 이다.** 세 스키마 모두 `.strict()` 라 `?status=` 를 그대로 두면 조용히 무시되지 않고
+  400 (`DTO-VALIDATION-03`) 으로 거절된다. 종전에는 불일치 시 404 였다.
+
+### Changed — API 문서
+- `api/docs/backup/monitoring-job.md` · `api/docs/replication/monitoring-job.md` ·
+  `api/docs/os-replication/monitoring-job.md` 의 파라미터 표에서 `status` 행을 제거했다.
+- 세 문서 모두 표 아래 기존 주석 blockquote 에 항목을 더했다 — 제거 사실, 보내면 400
+  (`DTO-VALIDATION-03`), 종전 404 와의 대비, 그리고 상태는 응답의 `job.progressInfo.status`(backup) ·
+  `job.progress.status`(replication · os-replication) 를 읽으면 된다는 안내. 없는 절을 새로 만들지 않고
+  각 문서에 이미 있던 주석 자리를 썼다.
+- `replication/monitoring-job.md` 의 `?status=running` curl 예시를 삭제했다. 이제 그대로 실행하면 400 이다.
+  대체 예시를 넣지 않은 것은 이 경로에 후속 파라미터가 없고 `page` · `limit` · `sort` 는 문서에 이미
+  "결과에 영향 없음" 으로 적혀 있어 무엇으로 바꿔도 오해를 부르기 때문이다.
+- `replication/monitoring-job.md` 의 에러 응답 절에 400 `DTO-VALIDATION-03` 예시를 더했다. 메시지는
+  검증 미들웨어의 실제 문구를 그대로 썼다. `os-replication/monitoring-job.md` 는 에러 코드 표 형식이라
+  `DTO-VALIDATION-03` 행을 더하고, `NOT_FOUND` 행 설명에서 `status` 를 뺐다.
+- backup 문서는 400 절이 이미 있어 발생 조건 문장에 "제거된 `status` 처럼 지원하지 않는 query 파라미터"
+  를 더했다.
+
+### Changed — 버전 changelog
+- `api/changelog/3.0.0.md` 에 **BREAKING — 단건 모니터링에서 `status` 조회 파라미터 제거** 항목을
+  신설하고 `<summary>` 요약 줄에도 추가했다. 2.0.2 스냅샷 세 개가 모두 `status` 를 받는 파라미터로
+  문서화하고 있었고 (replication 스냅샷은 `?status=running` curl 예시까지 실었다) 협력사가 그 문서를
+  읽고 연동했을 수 있으므로 2.x→3.0.0 델타로 판단했다. 기존 "조회 파라미터 검증 강화" 항목과 합치지
+  않은 것은 그쪽이 메커니즘(선언되지 않은 키 거부) 이고 이번 것은 이름이 있는 개별 파라미터의
+  제거라 이전/이후 대비와 이행 안내가 따로 필요하기 때문이다.
+
+### Notes
+- **부수 효과를 함께 적었다.** replication · os-replication 의 이 경로는 상태를 활성 작업에서
+  `hasSchedule: false` 로 계산하고 active 행이 있을 때만 응답을 만들므로 `scheduled` · `registered` 가
+  나올 수 없었다. 즉 그 두 값으로 걸면 **원래부터 항상 404** 였고, 파라미터가 사라지면서 함정도 없어진다.
+  backup 은 같은 경로에서 `hasSchedule` 을 실제 스케줄로 계산하므로 해당하지 않아 그 문서에는 적지 않았다.
+- `api/docs/backup/monitoring-system.md` 의 `status` 는 손대지 않았다. 서버 기준 조회에서는 job 배열을
+  거르는 진짜 필터이고 0 건이면 404 가 아니라 빈 배열이다. 편집 전후로 파일 해시가 같은 것을 확인했다.
+- 세 공용 include 를 참조하는 wrapper 는 3.0.0 하나뿐이라 (1.3.1 · 2.0.x wrapper 는 각각
+  `monitoring-job/1.3.1.md` · `2.0.2.md` 를 본다) 버전 보존본을 새로 만들지 않았다. 버전 스냅샷과
+  `_site/` 는 손대지 않았다.
+- 편집한 세 문서의 JSON 예시를 모두 파싱해 검증했고 (backup 5 · replication 4 · os-replication 1),
+  `<details>` 개폐 수와 `markdown="1"` 도 확인했다.
+- 이번 범위 밖이라 두었지만 같은 결함 부류를 발견했다: `backup/monitoring-job.md` 파라미터 표의 `sort`
+  행은 `backupMonitByJobQuerySchema` 에 없는 이름이라 이제 그대로 보내면 400 이고, 반대로 스키마가 받는
+  `center` 는 표에 없다. replication 응답 필드 표와 os-replication `progress.status 값` 표가 여전히
+  `Scheduled` · `Registered` 를 싣고 있는 것도 같은 이유로 실제로는 나올 수 없는 값이다.
+
+---
+
+## [Documentation] - 2026-09-04 (`GET /licenses/{identifier}` 단건 조회 실제 동작 반영)
+
+### Context
+- API 가 `GET /api/licenses/{identifier}` 를 실제로 단건 조회로 처리하게 됐다. 종전에는 라우트가 목록
+  핸들러에 걸려 경로 식별자가 무시되고 **200 + 전체 배열**이 나갔다. 구현을 정본으로 삼아 라우터 ·
+  컨트롤러 · 서비스 · 응답 DTO · 조회 쿼리 스키마를 읽어 확인했다.
+- **breaking 이다.** 응답 `data` 가 배열에서 단건 객체가 되고, 없는 식별자는 200 + 전체 목록 대신 404 다.
+  v2.0.2 문서가 "식별자는 서버에서 무시되며 전체 목록을 반환한다" 고 **명시**하고 있었으므로, 그 문구를
+  읽고 연동한 협력사가 존재할 수 있는 2.x→3.0.0 델타로 판단했다.
+
+### Changed — API 문서
+- `api/docs/license/get.md` 의 제목 아래 안내 blockquote 에서 "식별자 무시 · 전체 목록 반환" 주의와
+  "단건이 필요하면 `key`/쿼리를 쓰라" 는 우회 안내를 제거하고, 단건 조회 문서의 관례대로 ID/이름 자동
+  판별 설명으로 바꿨다 (숫자면 ID, 그 외에는 이름).
+- 200 응답 예시의 `data` 를 배열에서 단건 객체로 바꾸고 `message` 를 `License information list` 에서
+  `License information retrieved` 로 고쳤다. 두 값 모두 구현에서 확인한 실제 값이다. 응답 필드 표는
+  DTO 와 일치해 그대로 뒀다.
+- 에러 응답 절을 신설했다 — 404 `LICENSE-ERROR-01`. 메시지는 구현의 실제 문구(`License with ID '999'
+  not found`)를 쓰고, 이름으로 조회했을 때의 문구도 함께 적었다. 형식은 같은 단건 조회 문서인
+  `license/key.md` 를 따랐다.
+- 파라미터 표의 `center` 행을 "단건 조회에는 적용되지 않는다" 로 정정했다. 라우팅이 목록 핸들러로
+  빠져 있던 동안에는 실제로 걸리던 필터인데, 단건 경로에서는 조회 조건으로 들어가지 않는다. 행을
+  지우지 않은 것은 조회 파라미터 검증 강화(3.0.0) 이후 표에 없는 이름은 400 으로 읽히기 때문이다.
+  값이 빈 `?center=` 가 400 인 것은 스키마 검증이라 종전대로다. 표 아래에 `category` · `exp` ·
+  `created` 는 이 경로에서도 적용되며 조건과 맞지 않으면 빈 200 이 아니라 404 라는 주석을 더했다.
+
+### Changed — 에러 코드 총람
+- `api/docs/error-codes.md` 의 `LICENSE-ERROR-01` 행 설명을 다듬었다. 행 자체는 이미 있었고 HTTP 상태도
+  맞아 발생 지점만 덧붙였다 — 단건 조회 두 경로와 라이선스 할당, 그리고 `GET /licenses/:identifier` 는
+  조회 조건과 맞지 않을 때도 같은 코드라는 점.
+
+### Changed — 버전 changelog
+- `api/changelog/3.0.0.md` 에 **BREAKING — 라이선스 단건 조회가 실제로 단건을 반환** 항목을 신설했다.
+  v2.0.2 대비 표(`data` · `message` · 없는 식별자)와 `data[0]` 을 꺼내 쓰던 클라이언트가 깨진다는 점을
+  명시했다. `<summary>` 요약 줄에도 항목을 추가했다.
+
+### Notes
+- 공용 include `api/docs/license/get.md` 를 참조하는 wrapper 는 3.0.0 하나뿐이라 (1.x 계열은
+  `get/1.3.1.md`, 2.0.x 는 `get/2.0.2.md` 를 본다) 버전 보존본을 새로 만들지 않았다. 버전 스냅샷과
+  `_site/` 는 손대지 않았다.
+- CLI 는 이 엔드포인트를 호출하는 커맨드가 없어 CLI 문서는 건드리지 않았다.
+- 편집한 `get.md` 의 JSON 예시 2개를 모두 파싱해 검증했고, `<details>` 개폐와 `markdown="1"` 도 맞다.
+
+---
+
+## [Documentation] - 2026-09-03 (`replication` · `os-replication` 조회 커맨드의 `--server` 제거)
+
+### Context
+- CLI 가 `replication list` · `replication history` · `replication monit` · `os-replication list` ·
+  `os-replication history` 다섯 커맨드에서 `--server` 를 제거했다. 구현을 정본으로 삼아 여섯 커맨드의
+  옵션 정의를 모두 읽어 확인했으며, `os-replication monit` 에는 애초에 그 옵션이 없었다.
+- `replication` 계열 작업 테이블에는 서버 컬럼이 없다. 작업 등록 시 시스템 이름 컬럼(`sSystemName`)에
+  center 이름이 들어가므로 `--server` 는 이름과 달리 **실제로는 center 이름 필터**였다. 같은 커맨드의
+  `--center` 가 ID·이름·콤마 다중을 모두 받으므로 대체 경로가 이미 존재한다.
+- **breaking 이다.** CLI 는 yargs `.strict()` 로 알 수 없는 옵션을 거부하고 `.fail()` 에서
+  `process.exit(1)` 한다. 기존 스크립트의 `--server` 는 무시되지 않고 파싱 단계에서 즉시 실패한다.
+
+### Changed — CLI 문서
+- `cli/docs/replication/list.md` · `history.md` · `monit.md`, `cli/docs/os-replication/list.md` ·
+  `history.md` 의 파라미터 표에서 `--server` 행을 제거했다.
+- 예시는 지우지 않고 `--center` 를 쓰는 예시로 바꿨다. `replication history` 는 커맨드 정의의
+  `--center center01 --result success` 와 일대일로 맞췄고, `list` · `monit` 은 기존 예시가 이미
+  `--center 9` · `--center 9,10` 으로 ID 형태를 보여주고 있어 중복되지 않도록 **이름 형태**
+  (`--center center01`) 로 뒀다. 커맨드 정의에도 있는 형태다.
+- 다섯 문서 모두 `##` 제목 아래 안내 blockquote 에 항목을 하나 더했다 — 제거 사실, `--center` 로의
+  대체, 그리고 조용히 무시되지 않고 즉시 실패한다는 점. 네 문서에는 표 아래 주석 블록이 없어 없는 절을
+  새로 만들지 않고 기존 blockquote 를 썼다.
+
+### Changed — 버전 changelog
+- `cli/changelog/3.0.0.md` 에 **BREAKING — `replication` · `os-replication` 조회 커맨드의 `--server`
+  제거** 항목을 신설했다. 이전/이후 명령 대비와 함께, 유지되는 `--server` 가 무엇인지도 명시했다.
+- `<summary>` 요약 줄에 해당 항목을 추가했다.
+
+### Added — 버전 보존본
+- `cli/docs/os-replication/list/2.0.2.md` · `history/2.0.2.md` 를 신설하고 v2.0.0 · v2.0.2 wrapper 를
+  그쪽으로 돌렸다. 이 두 공용 include 는 3.0.0 뿐 아니라 **2.0.0 · 2.0.2 wrapper 도 함께 참조**하고
+  있어서, 그대로 편집하면 `--server` 가 실제로 존재하던 릴리즈의 문서에서까지 옵션이 사라진다.
+  `replication` 쪽 세 문서는 3.0.0 wrapper 만 참조하므로 (2.0.2 보존본이 이미 있다) 공용 파일을
+  바로 편집했다. 보존본에는 breaking 안내를 넣지 않았다 — 3.0.0 의 이야기다.
+- 두 보존본은 편집 직전 공용 파일을 **그대로 복사**한 것이라 v2.0.0 · v2.0.2 페이지의 렌더 결과는
+  이번 작업 전후로 달라지지 않는다.
+
+### Notes
+- 의미가 다른 `--server` 는 건드리지 않았다. `replication/regist.md` · `regist/2.0.2.md` ·
+  `overview.md` 의 `--server` 는 `unit-type=server` 등록 시 **진짜 서버**를 가리키며 구현
+  (`describe: "server ID or name, comma separated for multiple (for unit-type=server)"`) 에도 그대로
+  남아 있다. `backup` · `recovery` 의 `--server` · `--server-name` 도 진짜 서버다. `--unit` 선택지
+  문자열의 `server` 는 옵션이 아니라 선택값이라 그대로 뒀다. 버전 스냅샷과 `_site/` 도 손대지 않았다.
+- 문서 표와 구현이 어긋난 부분을 발견했으나 이번 변경 범위 밖이라 두었다: `replication` 세 문서의
+  `--center` 별칭 칸이 `-` 인데 구현에는 `alias: "c"` 가 있다 (os-replication 쪽은 `-c` 로 맞다).
+  또 `replication/monit.md` 는 별칭을 `--ji`/`--jn`, `os-replication/monit.md` 는 `-ji`/`-jn` 로
+  표기해 서로 다르다.
+
+---
+
+## [Documentation] - 2026-09-03 (복구 모니터링 응답의 `progress` 재구성 · 파티션별 진행률 기본 노출)
+
+### Context
+- ZDM-API v3.0.0 의 복구 모니터링 응답이 재구성된다. 작업 객체에 평면으로 놓여 있던 `status` · `percent` ·
+  `message` 가 **`job.progress` 안으로** 들어가고, `details[]` 가 **`progress.partitions[]`** 로 이름과 위치를
+  함께 바꾼다. 두 경로(`/recoveries/monitoring/job/:identifier` · `/recoveries/monitoring/system/:identifier`)
+  모두 해당한다.
+- **경계가 이동한 것이 이번 변경의 핵심이다.** 파티션별 진행률(`partition`/`drive` · `backupFile` ·
+  `status` · `percent` · `message` · `timeInfo`)이 **기본 응답**으로 올라오고, `detail=true` 는 파티션
+  **메타데이터**(`targetDisk` · `size` · `mode` · `diskNumber` · `overwrite`)와 **작업 로그**만 담당한다.
+  종전에는 파티션 배열 전체가 `detail=true` 뒤에 있었다.
+- v3.0.0 은 미릴리즈이므로 3.0.0 changelog 는 v2.0.2 → v3.0.0 하나의 델타를 기술한다. 기존
+  "`detail` 과 필터" 항목이 `details[]` · `progressInfo` 를 전제로 쓰여 있어 그대로 두면 문서가 자기모순이 된다.
+
+### Changed — API 문서
+- `api/docs/recovery/monitoring-job.md` · `api/docs/recovery/monitoring-system.md` 의 응답 예시를 전부 새
+  구조로 다시 썼다. 기본 응답 예시에 `progress.partitions[]` 가 들어가고, `detail=true` 예시는 **같은 행에
+  메타데이터만 더해진** 모습으로 보이도록 맞췄다 — 행 수와 진행 값이 달라지지 않는다는 점이 읽는 쪽에
+  중요하다.
+- 두 문서에 `job` 구조 트리와 **기본 응답 / `detail=true` 대조표**를 신설했다. 어느 필드가 어느 쪽에
+  실리는지를 표 하나로 확인할 수 있어야 이번 경계 이동이 전달된다.
+- 필터 관련 안내를 다시 썼다. 종전 문구 "필터 효과는 `detail=true` 응답에서 관찰됩니다" ·
+  "`detail=false` 면 `details` 키 자체가 없습니다" 는 거짓이 됐다. 이제 필터는 **항상 실리는 배열**을
+  좁히므로 `detail` 없이도 효과가 그대로 보이고, `detail` 은 **각 행에 어떤 필드를 실을지**만 정한다.
+- `mode` 필터에 캐비앗을 추가했다 — `mode` 는 기본 응답에 실리지 않는 필드로 거르므로, `detail` 없이
+  `?mode=` 를 쓰면 행이 줄어든 근거가 응답에 드러나지 않는다.
+- 파티션 `message` 가 **작업명 접두어(`[source-server_home] `)가 제거된 형태**이고 작업 단위
+  `progress.message` 는 원문 그대로라는 점을 필드 표와 예시 양쪽에 넣었다. 예시의 두 값을 실제로 다르게
+  적어 표 설명이 예시에서 확인되도록 했다.
+- monitoring-job 의 "필터에 맞는 파티션 없음" 예시를 **기본 응답**으로 바꿨다. 이제 `detail` 없이도
+  도달하는 상태이며, `partitions` 는 키가 사라지는 것이 아니라 **빈 배열**이다.
+- monitoring-system 의 페이지네이션 예시에 "페이지네이션은 `job` 배열만 자르고 각 작업의 파티션 행은
+  전부 실린다" 는 안내를 덧붙였다. 대시보드 연동 가이드도 "파티션 진행률 막대는 폴링 1단계만으로
+  그린다" 는 쪽으로 고쳤다.
+- `percent` · `status` 판정 규칙 표의 참조 경로를 `job.status` → `job.progress.status`,
+  `details[]` → `progress.partitions[]` 로 정정했다. 규칙 자체는 변경 없다.
+
+### Changed — CLI 문서
+- `cli/docs/recovery/monit.md` 의 `--detail` 설명이 "파티션별 진행 상태 포함" 으로 돼 있어 사실과
+  어긋났다. **파티션별 진행률은 기본 출력**이고 `--detail` 은 메타데이터와 작업 로그를 더한다는 것으로
+  바꿨다. 표 아래 안내에도 같은 취지의 항목을 신설했다.
+- **출력 구조** 절을 신설해 `data.job` 트리와 기본 출력 / `--detail` 대조표를 넣었다. 파티션 원소가
+  (파티션, 백업 작업, 백업 이미지) 조합이라는 설명도 이 절로 옮겼다.
+- `--output json` 예시는 API 응답 그대로이므로 새 구조로 전부 갱신했다.
+- **text 출력 예시는 축자 재현을 피했다.** CLI 렌더러가 함께 수정 중이라 블록 이름·정렬 폭이 확정
+  전이다. 파티션 행을 담던 `[Detail N]` 축자 블록을 걷어내고 "어떤 정보가 어떤 순서로 나오는지" 를
+  서술로 대체했으며, 출력 예시 절 머리에 그 사실을 명시했다. 렌더러가 확정되면 text 예시를 다시 채운다.
+- `--mode` 가 `--detail` 에서만 보이는 필드로 행을 거른다는 캐비앗을 추가했다.
+
+### Changed — 버전 changelog
+- `api/changelog/3.0.0.md` 에 **BREAKING — 복구 모니터링 응답이 `progress` 로 묶이고 파티션별 진행률이
+  기본 응답으로** 항목을 신설했다. 구조 트리와 v2.0.2 대비 표(작업 상태 경로 / 파티션 배열 이름 /
+  각 필드가 기본인지 `detail` 인지)를 함께 넣었다.
+- 기존 **BREAKING — 복구 모니터링의 `detail` 과 필터** 항목에서 이번 재구성으로 거짓이 된 문장을
+  고쳤다: "`detail` 없이 호출하면 `details` · `log` 키가 아예 없습니다" 는 이제 메타데이터와 `log` 에만
+  해당하고, "`details[].progressInfo` 안에서 올라옵니다" 는 `progress.message` 로 바뀌며, 3행 대조표의
+  캡션 `(detail=true)` 는 **기본 응답**이 됐다.
+- `<summary>` 요약 줄의 "복구 모니터링 재설계 (BREAKING)" 를 "복구 모니터링 재설계 — 작업 목록 ·
+  `progress` 묶음 · 파티션별 진행률 기본 노출 (BREAKING)" 로 넓혔다.
+
+### Notes
+- 두 항목은 **구조 변경 / 동작 변경**으로 나눠 두었다. 신규 항목이 배치와 경계를, 기존 항목이 값의
+  출처·필터·제거된 파라미터를 다룬다. 한쪽에 몰면 v2.0.2 사용자가 무엇을 고쳐야 하는지가 흐려진다.
+- 편집 대상은 공용 include 4개뿐이다. v1.x · v2.0.x wrapper 는 이미 보존본
+  (`monitoring-job/2.0.2.md` · `monit/2.0.2.md` 등)을 include 하고 있어 이번 변경이 이전 버전 문서에
+  번지지 않는다 — 확인 후 편집했다. 버전 스냅샷은 손대지 않았다.
+- 파티션마다 진행 값이 실제로 다르다는 점(끝난 파티션과 시작 전 파티션이 한 작업에 공존)은 예시 데이터로
+  계속 드러나게 뒀다. 시작 전 행이 `0%` 가 아니라 `-` 라는 구분도 유지했다.
+- 서버 기준 조회는 `detail=true` 여도 `log` 를 싣지 않는다는 현행 정책을 두 API 문서와 changelog 양쪽에
+  다시 못박았다. 파티션 메타데이터는 붙는다.
+
+---
+
+## [Documentation] - 2026-09-03 (replication · os-replication 모니터링의 `--status` 옵션 반영)
+
+### Context
+- `replication monit` 의 `--status` 가 CLI 파싱 단계에서 8개 값(`preparing` · `processing` · `complete` ·
+  `scheduled` · `canceling` · `canceled` · `error` · `registered`)으로 제한됐고, `os-replication monit` 에는
+  같은 옵션이 **새로 생겼다**.
+- 두 도메인의 모니터링은 **단건 조회**다. `--status` 는 목록을 거르는 필터가 아니라 조회한 작업의 현재 상태에
+  대한 조건이며, 상태가 다르면 빈 결과가 아니라 **404** 가 나간다
+  (`replication-monitoring-get.service.ts` · `os-replication-monitoring-get.service.ts` 의 `calculateJobStatus`
+  대조 분기). recovery 모니터링의 "서버 기준 조회 전용" 개념은 여기 없다.
+
+### Changed — CLI 문서
+- `cli/docs/replication/monit.md` 의 사용 예시 `--status run` 을 `--status processing` 으로 교체했다.
+  `run` 은 유효값이 아니라 이제 파싱 단계에서 거부된다. 출력 블록 안의 `status : run` 은 응답 필드라 별건이며
+  손대지 않았다.
+- 같은 파일 `--status` 행의 `선택값` 을 `-` 에서 `{% include zdm/job-status.md %}` 로 채우고, 설명을
+  "상태 필터" 에서 "작업의 현재 상태 조건 (불일치 시 404)" 으로 바꿨다. 표 아래 안내에 단건 조회라는 점과
+  실제 404 문구(`No replication jobs found with status '...' (identifier: ...).`)를 덧붙였다.
+
+### Added — CLI 문서
+- `cli/docs/os-replication/monit.md` 에 `--status` 파라미터 행을 신설했다(string, Optional, 8개 선택값,
+  같은 404 설명). 사용 예시도 1줄 추가했다. 404 문구는 구현 그대로
+  `No os replication jobs found with status '...' (identifier: ...).` 다 — replication 쪽과 문구가 다르다.
+- 두 문서의 서술은 맞추되 마크업은 각 파일의 기존 관례(`Required*` / `<span class="required-note">`)를 유지했다.
+
+### Notes
+- `os-replication` 은 서비스가 `server` 를 실제로 걸러 404 를 내지만 **CLI 에 `--server` 옵션이 없다**.
+  `replication` 은 반대로 CLI 가 `server` 를 전송하는데 **서비스가 읽지 않는다** — 그래서
+  `cli/docs/replication/monit.md` 의 `--server` 행과 "서버 필터 추가" 예시 주석은 실제로 필터가 걸리는 것처럼
+  읽힌다. 이번 범위 밖이라 두 파일 모두 손대지 않고 기록만 남긴다.
+- 출력 예시는 새로 만들지 않았다(렌더러 정렬 재현이 필요한 변경이 없음). `os-replication/monit.md` 의 기존
+  JSON 블록은 파싱 검증했다. 버전 스냅샷과 `_site/` 는 변경하지 않았다.
+
+---
+
+## [Documentation] - 2026-09-03 (replication · os-replication 이력 단건 조회의 center · 필터 적용 반영)
+
+### Context
+- `GET /replications/histories/{identifier}` · `GET /os-replications/histories/{identifier}` 가 `center` 와
+  행 필터(`jobId` · `jobName` · `server` · `result`)를 **단건 조회에서도 실제로 적용**하기 시작했다.
+  종전에는 숫자(ID) 분기와 작업 이름 분기 **양쪽 모두** 무시돼, 다른 센터의 히스토리도 200 으로 나갔다.
+- 페이지네이션은 이 엔드포인트에 붙지 않는다 — 작업 이름 조회도 pagination 없이 호출되므로
+  `page` · `limit` 은 값 검증만 되고 결과에 영향을 주지 않는다. `sort` 는 작업 이름 조회(목록 응답)에만 적용된다.
+
+### Changed — API 문서
+- `api/docs/replication/history-get.md` 의 `center` 행 캐비앗 **"요청 검증에만 사용되며 단건 조회 결과를
+  센터로 좁히지는 않습니다"** 가 거짓이 되어 교체했다. 이제 "조회 대상을 해당 center 로 좁힙니다" 이고,
+  다른 center 의 행이면 200 이 아니라 404 라는 점을 표 아래 안내에 명시했다.
+- 같은 파일의 `page` · `limit` 기본값을 `1` · `20` 에서 `-` 로 바꾸고 "이 엔드포인트에서는 적용되지 않습니다" 로 정정,
+  이를 전제하던 `?result=success&page=1&limit=5` 예시도 `?result=success` 로 줄였다. `sort` 는 적용 범위를
+  "작업 이름 조회의 목록 응답" 으로 좁혔다.
+- 404 예시의 코드·문구를 구현 기준으로 정정했다 — `JOB-ERROR-01` / `Replication history not found for ID '999'` 는
+  실제로 나오지 않는 조합이다. 실제는 `NOT_FOUND` + `Replication history not found (ID: 999)` 이며,
+  center 불일치 전용 문구(`... does not belong to Center '...'`)와 작업 이름 분기 문구(`(JobName: ...)`) 예시를 추가했다.
+- 작업 이름 조회 응답 예시의 `message` 를 `Replication history list` 에서 실제 값인
+  `Replication history retrieved` 로 정정했다 (두 분기가 같은 문구를 쓴다).
+
+### Added — API 문서
+- `api/docs/os-replication/history-get.md` 에 **쿼리 파라미터 표를 신설**했다. 종전에는 `Authorization` · `identifier`
+  두 행뿐이었다. `jobId` · `jobName` · `server` · `result` · `page` · `limit` · `center` · `sort` 를 추가했고,
+  구성은 replication 쪽 표(기본값 열 포함)를 따랐다. 두 엔드포인트의 쿼리 계약은 동일하다.
+- 같은 파일에 **에러 응답 절을 신설**했다 — 404 세 가지(없는 ID / 다른 center 의 ID / 작업 이름 무결과).
+- 작업 이름으로 조회했을 때의 목록 응답 예시를 추가했다. `sort` 가 이 분기에만 영향을 주기 때문이다.
+  `pagination` 키가 실리지 않는다는 점도 함께 적었다.
+- 두 문서 모두 표 아래 안내를 맞췄다: center 는 ID·이름 양쪽 분기에 적용된다, 존재하지 않는 center 는
+  조회 없이 404 다(목록 조회가 빈 배열 200 인 것과 다르다), `center` · 필터를 지정하지 않은 요청은 종전과 동일하다.
+
+### Notes
+- center 불일치 전용 404 문구는 **숫자 identifier 조회에서만** 나온다. 작업 이름 분기는 사유와 무관하게
+  `(JobName: ...)` 한 문구다. 또 center 는 맞는데 `result` 등 다른 필터에서 걸러진 경우도 center 탓으로
+  표기되지 않고 `(ID: ...)` 문구가 나간다 — 두 사실을 문서에 그대로 적었다.
+- os-replication 응답 예시의 `message` 를 `OS Replication history retrieved` 에서 실제 값
+  `Os Replication history retrieved` 로 맞췄다.
+- 두 파일의 JSON 블록 10개를 전수 파싱 검증했고, `<details>` / `<summary>` 개폐 균형도 확인했다.
+  버전 스냅샷(`zdm/ko/api/**`)과 `_site/` 는 변경하지 않았다.
+
+---
+
+## [Documentation] - 2026-09-03 (이력 단건 조회 숫자 identifier 의미 · 페이지네이션 반영)
+
+### Context
+- `api/docs/backup/history-get.md` · `recovery/history-get.md` 두 문서의 숫자 identifier 서술이 서로 다른 이유로 사실과 달랐다.
+  - **backup 은 동작이 바뀌었다(breaking).** 단건 조회 키가 `nJobID` → `nID` 로 이동했다
+    (`backup-history.repository.ts` 의 `findById` 가 `nID` 를 조건으로 건다). 그 결과 응답의 `id` 가
+    **질의한 값과 일치**한다 — 종전 backup 은 작업 ID 로 찾고 이력 행 ID 를 돌려주어 둘이 달랐다.
+  - **recovery 는 원래부터 `nID`** 였고 문서 문장만 틀려 있었다. 동작 변화는 없다.
+  - 두 문서 모두 첫 줄은 이미 "히스토리 ID 또는 작업 이름" 이라 같은 문서 안에서 자기모순이었다.
+- 이름 identifier 에 `page`·`limit` 이 붙으면 서비스가 `PaginationUtils.createPaginatedResult` 를 태우고
+  컨트롤러가 목록 조회와 같은 봉투로 내보낸다. 문서는 "적용되지 않습니다" 라고 적혀 있었다.
+
+### Fixed — API 문서
+- 숫자 identifier 를 **히스토리 ID(이력 행 ID)** 로 정정했다(설명 줄 · 요청 예시 주석 · 파라미터 표의
+  `identifier` 행 · 응답 예시 summary · center 404 절 문구). 두 문서를 같은 서술로 맞췄다.
+- 응답의 `id` 가 요청한 값과 일치하고 `job.id` 는 별개의 작업 ID 라는 점을 참고에 명시했다.
+  예시도 이에 맞춰 `GET .../histories/1024` → `"id": 1024`, `"job": { "id": 10 }` 으로 바꿨다.
+  종전 예시는 `/10` 요청에 `"id": 1` 이라 요청 값과 응답 `id` 의 일치를 보여주지 못했고,
+  backup 에서는 옛 `nJobID` 조회를 전제한 값이기도 했다.
+- **"숫자로 조회하면 center 를 제외한 나머지 필터가 무시된다"** 는 서술을 제거했다. 현재 구현은
+  `pickRowFilters` 로 `jobId`·`jobName`·`server`(recovery 는 `serverType` 포함)·`partition`·`result` 를
+  이름 분기와 **같게** 적용한다. 대신 `sort`·`page`·`limit` 만 이름 분기 전용임을 남겼다 —
+  숫자는 이력 행 PK 조회라 정렬·절단할 결과 집합이 없다.
+- 이름 분기 목록 예시의 `message` 가 목록 엔드포인트 값(`... history list`)으로 적혀 있던 것을
+  컨트롤러 실제 값인 `... history retrieved` 로 정정했다.
+
+### Changed — API 문서
+- `page`·`limit` 서술을 교체했다: **이름 분기에서는 적용**되며 둘 중 하나라도 오면 목록 조회와 **같은
+  페이지네이션 봉투**(`pagination` 메타)로 응답하고, 둘 다 없으면 응답 형태는 종전 그대로다.
+  **숫자 분기는 미적용**(최대 1행)이다.
+- 404 조건을 좁혀 적었다 — 이름에 걸리는 이력이 **0건일 때만** 404이고, `?page=99` 같은 범위 밖 페이지는
+  **200 + `data: []` + 봉투**다. 서비스가 `countAll` 로 먼저 세고 0건일 때만 404 를 던진다.
+- 요청 예시에서 빠져 있던 `page`·`limit` 을 **이름 분기 예시로** 복원했다(숫자 분기에 붙이면 위 서술과 모순된다).
+- 응답 예시에 "페이지네이션 적용" · "범위를 벗어난 페이지" 두 절을 신설하고, 응답 필드 표에 `pagination.*` 6행을 추가했다.
+  봉투 형태·필드 설명은 목록 조회 문서(`backup/history-list.md` · `recovery/history-list.md`)의 것과 맞췄다 —
+  구현이 같은 `createPaginationMeta` 를 쓴다.
+
+### Notes
+- 두 문서의 JSON 블록 14개를 전수 파싱 검증했다. 필드명은 `backup-history-get-response.dto.ts` ·
+  `recovery-history-get-response.dto.ts` 에서 확인했다(`id` = `nID`, `job.id` = `nJobID`).
+- CLI 는 영향이 없다 — `zdm-cli-v2` 에 단건 이력 엔드포인트가 없어 CLI 문서는 손대지 않았다.
+- 버전 스냅샷(`history-get/1.x` · `2.0.2.md` 등)과 `_site/` 는 변경하지 않았다.
+
+---
+
+## [Documentation] - 2026-09-03 (CLI `recovery monit` 서버 기준 조회 옵션 3건 반영)
+
+### Added — CLI 문서
+- `cli/docs/recovery/monit.md` 파라미터 표에 `--job-name-filter`(`-jnf`) · `--page` · `--limit` 3행 추가.
+  설명은 기존 `--status` 행과 같은 "(서버 기준 조회 전용)" 표기를 따르고, 기본값은 `- (전체 목록)` 으로 뒀다.
+- `--job-name-filter` 행을 `--job-name` 바로 아래 두고, 표 아래 안내에 두 옵션의 차이를 한 줄로 명시했다 —
+  `--job-name` 은 모니터링할 작업을 지목하는 값, `--job-name-filter` 는 서버 기준 조회 결과의 job 목록에서
+  이름이 정확히 일치하는 작업만 남기는 필터.
+- 사용 예시 2줄 추가(`--job-name-filter` · `--page`/`--limit`).
+- 출력 예시에 `### 페이지 지정 출력 - 서버 기준` · `### 범위를 넘긴 페이지 출력 - 서버 기준` 두 절 신설.
+  text 는 `[Jobs Page]` 키-값 블록(`currentPage` · `totalPages` · `totalItems` · `itemsPerPage`),
+  JSON 은 `data.pagination`(`hasNextPage` · `hasPreviousPage` 포함) 형태다.
+
+### Changed — CLI 문서
+- 기존 "`--status` · `--server-type` 은 작업 기준 조회에서는 무시됩니다" 안내를 신규 3개 옵션까지 포함하도록 확장하고,
+  표현을 "전송되지 않습니다" 로 정정했다 — 작업 기준 조회에서는 해당 query 자체가 만들어지지 않는다.
+- "서버에 걸린 복구 작업을 **모두** 출력합니다" 문장에 `--page` · `--limit` 미지정 조건을 붙였다 —
+  페이지네이션이 생기면서 무조건 참이 아니게 된 문장이다.
+
+### Notes
+- `summary` 는 필터를 통과한 전체를, `job` 은 그중 한 페이지를 담는다. 범위를 넘긴 페이지는 200 에
+  `job: []` + `summary.total > 0` 이 정상이며 버그가 아니라는 점을 명시했다. `[Jobs Page]` 가 빈 목록 안내보다
+  먼저 렌더된다는 점도 함께 적었다 — 결과가 비어도 페이지 번호를 확인할 수 있어야 하기 때문이다.
+- `[Jobs Page]` 의 키·패딩은 렌더러 구현에서 확인했다. 키-값 출력은 `padEnd(최장 키 길이)` 이므로 폭은
+  `itemsPerPage` 기준 12 이고, 불리언 두 필드는 문자열·숫자만 받는 시그니처 때문에 text 출력에서 빠진다.
+- 예시 JSON 블록은 전부 파싱 검증했다. 버전 스냅샷(`zdm/ko/cli/**`)과 `_site/` 는 변경하지 않았다.
+
+---
+
+## [Documentation] - 2026-09-03 (DTO 검증 실패 400/422 응답 예시 형식 정정)
+
+### Context
+- DTO 검증 실패의 실제 응답은 `error.message` 가 코드별 정형 문구(`Request body validation failed.` ·
+  `URL parameter validation failed.` · `Query parameter validation failed.`)이고, **사유는 `error.details.<필드>[]`** 에 담긴다
+  (`zod-validation.middleware.ts` 의 `formatZodErrors` + `error-handler.ts`). 일부 기존 예시가 zod 원문 사유를
+  `message` 에 직접 넣어 두어, 클라이언트가 `message` 를 파싱하도록 유도하고 있었다.
+- `details` 는 `DTO-VALIDATION-*` 에만 실린다. 도메인 에러(`JOB-ERROR-*` 등)에는 이 키가 없다.
+
+### Fixed — API 문서
+- `api/docs/backup/history-list.md` · `recovery/history-list.md` · `replication/history-list.md` 의 400 예시:
+  `"Invalid enum value. Expected 'success' | 'failed', ..."` 를 `message` 에서 빼고
+  `details: { "result": ["result must be one of: success, failed"] }` 로 옮겼다. 문구는 스키마의 `message` 옵션 그대로다.
+- `api/docs/replication/list.md` 의 400 예시: 같은 형태로 `details: { "status": [...] }` 로 교체.
+  값 목록은 `VALID_JOB_STATUS_VALUES` 를 따른다.
+- `api/docs/auth/issue.md` 의 422 예시: 중괄호가 어긋나 **파싱되지 않던 JSON** 을 바로잡았다
+  (`details.email` 내용 자체는 스키마와 일치해 그대로 뒀다).
+- `api/docs/error-codes.md` 응답 형식 예시에서 `JOB-ERROR-13` 에 붙어 있던 빈 `details` 를 제거했다 —
+  도메인 에러에는 실리지 않는 키다. 필드 표의 설명도 "요청 검증 실패 등에서만" 에서
+  `DTO-VALIDATION-01/-02/-03` 에만 포함된다고 좁혔다.
+
+### Notes
+- 현행 문서 78개(`api/docs/**`, 버전 스냅샷 제외)의 JSON 블록 500개를 전수 파싱 검증했다. 남은 미파싱 블록은
+  조각 예시(`"schedule": { ... }`)·주석 포함 예시(`// 요청`)·인용문 내부 예시로, 의도된 문서 표기다.
+- 이미 `details` 형식으로 작성돼 있던 나머지 400/422 예시는 손대지 않았다. `BAD_REQUEST` 등 서비스 계층이
+  던지는 400 예시도 `details` 가 없는 것이 정상이라 그대로 뒀다(메시지 출처를 서버 코드에서 확인).
+- 버전 스냅샷(`zdm/ko/api/1.x` · `2.x`)과 `_site/` 는 변경하지 않았다.
+
+---
+
+## [Documentation] - 2026-09-03 (저장소 스캔 커버리지 `scan` 신설 반영)
+
+### Context
+- `zdm-api-v2` 가 이미지 조회 응답에 `scan`(커버리지 + 저장소별 실패)을 싣기 시작했다.
+  종전에는 실패 저장소가 **서버 로그에만** 남아 받는 쪽이 목록의 불완전함을 알 수 없었다.
+
+### Changed — API 문서
+- `api/docs/backup/images.md` · `images-list.md` 의 **"실패한 저장소는 서버 로그에만 기록됩니다 /
+  응답만 보고는 어느 저장소가 빠졌는지 알 수 없습니다"** 문장이 **거짓이 되어 교체**했다.
+  `scan` 형식·필드 표·예시로 대체하고, `repositoryId` 로 재호출해 원인을 찾으라는 우회 안내는 제거했다.
+- **`scan` 은 실패가 없어도 항상 포함**된다는 점을 두 문서 모두에 명시했다 — `failed: 0` 이 완전함의 신호이고,
+  실패 시에만 실으면 이 필드를 모르는 클라이언트가 부분 결과를 전체로 오인한다.
+- `api/changelog/3.0.0.md` 에 `신규 — 저장소 스캔 커버리지 scan` 추가, 요약 줄에도 반영.
+
+---
+
+## [Documentation] - 2026-09-03 (조회 파라미터 검증 강화 반영 — 미선언 파라미터 거절 · 열거형 대소문자)
+
+### Context
+- `zdm-api-v2` 2026-09-02 변경 2건이 문서에 반영돼 있지 않았다. 둘 다 **전 조회 엔드포인트에 걸치는** 계약 변경이라
+  개별 문서가 아니라 공통 안내 자리에 둔다.
+- **미선언 query 파라미터 거절** — query 스키마 31개에 `.strict()` 적용. 종전에는 모르는 키가 조용히 strip 되어
+  **필터가 빠진 더 넓은 결과가 200 으로** 나갔다. 받는 쪽은 요청이 어긋난 사실조차 알 수 없었다.
+  breaking 이므로 버전 changelog 요약 줄에도 올렸다.
+- **열거형 query 값의 대소문자 무시** — 응답은 `Processing`, 요청 어휘는 `processing` 이라
+  **API 가 만든 값을 API 가 400 으로 거절**하던 것을 해소. 대상은 조회·모니터링의
+  `status` / `mode` / `platform` / `repositoryType` / `serverType`.
+
+### Added — API 문서
+- `api/index.md` 참고사항에 두 항목 추가. 버전 가드(`include.version >= "3.0.0"`)를 걸어 하위 버전 문서에는 노출되지 않게 했다.
+- `api/docs/error-codes.md` 의 `DTO-VALIDATION-03` 아래에 안내 블록과 응답 예시를 넣었다 —
+  **`details` 의 key 가 문제 파라미터 이름**이라는 점이 핵심이라 예시로 보여준다.
+- `api/changelog/3.0.0.md` 에 `BREAKING — 조회 파라미터 검증 강화` 와 `동작 변경 — 조회 열거형 값의 대소문자` 신설.
+  전자는 v2.0.2 대비 표로 차이를 명시했다.
+
+### Notes
+- CLI 문서는 손대지 않았다. CLI 자체가 바뀐 것이 아니고, API 가 `.strict()` 를 켜지 않은 4개 스키마가
+  정확히 CLI 가 `center` 를 보내는 monit 경로들이라 지금은 CLI 동작에 영향이 없다.
+- `backup image` 목록의 저장소 부분 실패는 **이미 문서화돼 있어** 손대지 않았다
+  (`api/docs/backup/images.md` · `images-list.md`). 실패 저장소가 서버 로그에만 남는다는 한계까지 적혀 있다.
+
+---
+
+## [Documentation] - 2026-09-03 (복구 "대상 서버 사용 중" 정책 변경 반영 — 등록 허용 / 실행만 거부)
+
+### Context
+- `zdm-api-v2` 의 복구 동시성 정책이 바뀌었다. **진행 중인 복구가 있어도 등록은 언제나 허용되고, 막히는 것은 실행뿐이다.**
+  사전 등록은 정상 사용례이고, 같은 대상 디스크에 복구가 둘 붙어 서로의 결과를 덮어쓰는 것은 실행 시점의 문제이기 때문이다.
+- 계약의 정본은 구현(`recovery-target-activity-guard.service.ts` · `recovery-regist.service.ts` · `recovery-update.service.ts`)으로 두고,
+  `notices` 문구와 409 메시지는 코드의 문자열을 그대로 옮겨 적었다.
+- 경로별 결론: 등록(`autoStart` 없음) → 성공 + `notices` / 등록(`autoStart=use`) → 성공, 자동 시작만 생략 + `notices`,
+  응답 `common.autoStart` 는 `not use` / `PUT` `status=start` → `JOB-ERROR-64`(409) / `status=stop` → 영향 없음.
+  가드 조회 자체가 실패하면 등록도 실행도 막지 않는다(fail-open).
+
+### Fixed — API 문서 (`api/docs/recovery/regist.md`)
+- **주요 에러 코드 표의 `JOB-ERROR-64` 행이 "대상 서버에 진행 중인 복구 작업이 있음 (`autoStart` 요청 시)" 로
+  등록 거부를 설명하고 있어 행을 삭제**했다. 409 를 던지는 `assertTargetAvailableForStart` 의 호출자는
+  `recovery-update.service.ts` 하나뿐이라 `POST /recoveries` 는 이 코드를 반환할 수 없다 —
+  발생 조건 문구만 고치면 "이 엔드포인트의 주요 에러 코드" 표에 반환되지 않는 코드가 남는다.
+  표 아래에 "이 엔드포인트에서는 발생하지 않으며 `PUT ... status=start` 에서만 반환된다" 는 안내를 대신 두었다.
+
+### Changed — API 문서 (`api/docs/recovery/regist.md` · `image-regist.md`)
+- 요청 본문 `autoStart` 행에 "대상 서버가 사용 중이면 등록은 되고 자동 시작만 생략" 을 붙이고,
+  **"대상 서버가 사용 중일 때"** 안내 블록(경로별 결과 표 + 실행 방법 + fail-open)을 신설했다.
+- **응답 `common.autoStart` 가 요청값의 반향이 아니라 실제로 적용된 값**임을 응답 필드 표에 못 박았다.
+  `autoStart: "use"` 로 요청해도 `"not use"` 가 나올 수 있다 — 요청값과 응답값이 같다고 가정한 화면은
+  "시작됨" 으로 잘못 표시된다. 협력사 연동에서 가장 걸리기 쉬운 지점이라 changelog 에도 별도 문단으로 실었다.
+- `image-regist.md` 의 응답 필드 표에는 **`common.autoStart` 행 자체가 없어 신설**했다. 이번 변경의 핵심 값이다.
+- `notices` 설명이 양쪽 모두 "자동 skip 되었을 때만" 이라 사실과 달라졌다 — 대상 서버 사용 중 안내도 담기므로
+  사유 두 가지로 넓히고, 두 사유가 겹칠 때 **대상 서버 안내가 배열 앞**에 온다는 순서(구현상 `exclusionReasons` 앞에 push)도 적었다.
+- `notices` 실제 문구 두 개(자동 시작 생략 / `autoStart` 없이 등록)를 구현 문자열 그대로 인용했다.
+- `regist.md` 의 schedule 안내 블록이 "`autoStart=use` 와 함께 사용하면 즉시 1회 실행됩니다" 를 **무조건**으로 서술하고 있어
+  두 문장에 단서를 달았다. 새 안내 블록 바로 아래에서 정반대를 말하는 문장이 남아 있으면 독자는 가까운 쪽을 믿는다.
+
+### Added — API 문서 (`api/docs/recovery/update.md`)
+- **`status: "start"` 의 409 케이스를 에러 응답 블록에 신설**했다. 메시지는 구현의 `[Recovery start] - ...` 문구 그대로다.
+- 요청 본문 `status` 행과 **"실행 요청과 대상 서버 점유"** 안내 블록 신설 — `stop` 은 영향 없음, `status` 없는 설정 수정은 검사 대상 아님,
+  **자기 자신의 진행 이력은 차단 근거가 아님**(구현이 `excludeJobId` 로 자기 행을 제외하므로 재시작이 자기 자신 때문에 막히지 않음), fail-open.
+
+### Changed — API 문서 (`api/docs/error-codes.md`)
+- `JOB-ERROR-64` 설명을 실행 맥락으로 조정했다 — 한 문장 양식은 유지한 채 "실행 요청에서만 발생하며 등록은 이 사유로 거부되지 않는다" 를 덧붙였다.
+
+### Changed — 변경 안내 (`api/changelog/3.0.0.md`)
+- **동작 변경 — 대상 서버가 사용 중일 때 (등록은 허용, 실행만 거부)** 절을 신설하고 `<summary>` 의 절 목록에도 추가했다
+  (추가하지 않으면 접힌 상태에서 새 절이 보이지 않는다).
+- v2.0.2 대비 표는 이전 열을 **"검사 없음"** 으로 적었다. 이 가드는 v3.0.0 개발 중(2026-08-25)에 처음 들어왔으므로
+  "v2.0.2 에서는 409 로 등록이 거부됐다" 고 쓰면 사실이 아니다 — 협력사가 겪은 적 없는 동작을 이력으로 남기지 않았다.
+
+### Changed — CLI 문서 (`cli/docs/recovery/regist.md` · `image-regist.md` · `update.md`)
+- `--start` 설명, `[Notices]` 출력 조건, `--status` 설명을 새 정책에 맞게 고쳤다.
+- `image-regist.md` 의 `autoStart : -` 주석에 **"요청값이 아니라 서버가 실제로 적용한 값"** 을 덧붙였다.
+  CLI 는 `data.common.autoStart || "-"` 를 찍으므로 `-` 는 값이 비었다는 뜻이고, 대상이 사용 중이면 이 줄이 `not use` 로 나온다.
+- CLI 는 코드 변경이 없다 — `RegistCommand.ts`·`ImageRegistCommand.ts` 가 이미 `notices` 를 렌더링하고
+  `UpdateCommand.ts` 는 `--status` 를 그대로 전달한다. 문서 서술만 고쳤고 새 파일은 만들지 않았다.
+
+### Not touched
+- 버전 스냅샷(`zdm/ko/api/1.x` · `2.x`)과 `3.0.0` 래퍼 — 래퍼가 현행 `_includes` 를 include 하므로 자동 반영된다.
+- `zdm-api-v2` · `zdm-cli-v2` 소스 (읽기 전용으로만 참조), `_site/` 빌드 산출물.
+- `cli/docs/recovery/regist.md` 의 전량 skip 에러 코드 표기(`JOB-ERROR-01`)가 API 문서(`JOB-ERROR-14`)와 어긋나 있으나
+  이번 변경과 무관한 기존 불일치라 건드리지 않았다.
+
+---
+
+## [Documentation] - 2026-09-03 (복구 모니터링 문서에 파티션별 진행률 반영 + CLI monit 출력 예시 현행화)
+
+### Context
+- `zdm-api-v2` 의 복구 모니터링 `details[]` 각 행이 **그 파티션의 실제 진행 정보**(`status` · `percent` · `message` · `timeInfo`)를 싣도록 바뀌었다.
+  종전에는 작업 단위 값을 행마다 복사해 파티션 3개가 전부 같은 상태·같은 진행률로 보였다.
+- 작업 단위 `percent` 와 `summary.overallProgress` 의 **출처도 바뀌었다** — 데몬이 세어 둔 복구 완료 개수 기반이며,
+  이전의 "진행 행 평균" 이 아니다. 소비자가 `details[]` 로 재계산하지 않도록 문서에 못 박았다.
+- 계약의 정본은 구현(`recovery-monitoring-get.type.ts` · `dto/response/monitoring/`)으로 두고, 예시 값·표기 규칙을 전부 코드에서 확인해 적었다.
+
+### Changed — API 문서 (`api/docs/recovery/monitoring-job.md` · `monitoring-system.md`)
+- **예시 JSON 의 `details[]` 행을 서로 다른 값으로 재작성**했다. Linux 예시는 `/` 완료(`Complete` · `100%`),
+  `/home`(daily 이미지) 복구 중(`Processing` · `62%`), `/home`(weekly 이미지) **미시작**(`Registered` · `"-"`) 세 가지가 한 응답에 공존한다.
+  Windows 예시도 `C:` 완료 / `D:` 진행 중으로 갈랐다. 전부 같은 값으로 두면 종전의 잘못된 동작을 문서가 다시 광고하는 셈이라 피했다.
+- 응답 필드 표에 `details[].status` · `percent` · `message` · `timeInfo.{start,elapsed,end}` 6줄을 추가했다.
+- **표기 규칙 표를 작업 단위와 파티션 단위로 분리**했다. 작업 단위 `percent` 는 데몬이 센 개수 → 진행 정보 → `Complete` 순의 폴백,
+  파티션 단위는 **그 파티션의** 진행 정보로 판단한다.
+- **`details[].status` 판정 규칙 표(3분기)를 신설**했다 — ① 그 파티션의 진행 정보로 계산 ② 진행 정보 없고 다른 파티션엔 있음 → `Registered`(미시작)
+  ③ 작업 전체에 진행 정보가 없음 → 작업 상태 그대로. ③ 때문에 완료 작업의 행이 `Complete` · `100%` 인데 `message` · `timeInfo` 는 `"-"` 로 나오는
+  겉보기 모순이 생겨, 그것도 함께 적었다.
+- **미시작 파티션은 `0%` 가 아니라 `"-"`** 임을 별도로 못 박았다 — 시작하지 않은 것과 시작해서 0% 인 것은 다르다.
+- 예시 옆에 "3행 중 1행 완료(33%)인데 작업 진행률은 `45%`" 를 두고, 이것이 오류가 아니라 **출처가 다른 값**임을 설명했다.
+  표만으로는 독자가 계산해 보고 문서 버그로 읽는다.
+- 서버 기준 문서의 `summary.overallProgress` 설명에 출처와 분모(진행률을 구할 수 없는 작업도 제외)를 보강했다.
+
+### Changed — CLI 문서 (`cli/docs/recovery/monit.md`)
+- **출력 예시 전체가 재설계 이전 형상**(`system.source`/`target`, 중첩 `progressInfo`, 없는 필드들)이라 4개 시나리오를 전부 다시 만들었다.
+  실제 렌더러(`MonitCommand.ts`)를 따라 `[Server Information]` · `[Jobs Summary]`(7행, `canceled` 포함) ·
+  `[Job N]`(id/name/source/target/role/status/percent/message/start/elapsed/end) · `  [Detail N]` 블록과
+  **키 패딩 폭까지** 블록별로 맞춰 적었다.
+- `[Job Logs]` 항목 형식을 실제 값(`[시각]메시지`)으로 고쳤고, 헤더 `timestamp` 도 ISO 8601 로 바꿨다.
+- `[Detail N]` 블록에 **파티션별 진행 4필드**(`status` · `percent` · `message` · `timeInfo`)를 반영했다. text 렌더러는
+  `timeInfo` 를 `start` · `elapsed` · `end` 로 평탄화해 찍으므로 예시도 그 모양이다. 키가 늘었지만 가장 긴 키가
+  여전히 `targetDisk`/`backupFile`/`diskNumber`(10자)라 **패딩 폭은 10 그대로**다.
+- text 예시는 한 작업 안에서 **완료 / 복구 중 / 미시작**이 한 화면에 갈리도록 구성했다 — JSON 예시와 같은 시나리오다.
+- 파라미터 표에 `--status` · `--server-type` 의 서버 기준 전용 여부, `--partition`/`--drive` 상호 배타를 보강했다.
+
+### Changed — 변경 안내 (`api/changelog/3.0.0.md`)
+- 기존 "복구 모니터링의 `detail` 과 필터" BREAKING 절에 파티션별 진행률을 반영했다. 종전 문장이
+  "작업 단위 값을 파티션 행마다 복사하던 `progressInfo` 는 제거되고" 에서 멈춰 있어, **각 행이 자기 진행을 싣는다**는 사실과
+  미시작 파티션 표기, 진행률 출처 변경을 추가했다. 세 행이 어떻게 달라지는지 표로 함께 보였다.
+
+### Not touched
+- 버전 스냅샷(`zdm/ko/api/1.x` · `2.x`)과 `3.0.0` 래퍼 — 래퍼가 현행 `_includes` 를 include 하므로 자동 반영된다.
+- `zdm-api-v2` · `zdm-cli-v2` 소스 (읽기 전용으로만 참조), `_site/` 빌드 산출물.
+
+---
+
+## [Documentation] - 2026-09-02 (recovery 모니터링 문서 2건 전면 재작성 — 조회 계약 breaking 변경 반영)
+
+### Context
+- `zdm-api-v2` 의 recovery 모니터링 두 경로(`/recoveries/monitoring/system/:identifier` ·
+  `/recoveries/monitoring/job/:identifier`)가 **breaking 하게 재설계**되어, 응답 봉투·파라미터·에러 조건이 함께 바뀌었다.
+- 파라미터 표 몇 줄을 고치는 수준으로는 맞출 수 없어 **두 문서를 전면 재작성**했다
+  (`monitoring-system.md` 352 → 571줄, `monitoring-job.md` 254 → 418줄).
+- 반영 대상은 공용 include 2개뿐이다. 다른 페이지·navigation·versions 는 손대지 않았다.
+
+### Changed — 서버 기준 조회 (`api/docs/recovery/monitoring-system.md`)
+
+**응답 봉투가 바뀌었다** — `{ server, summary, job[] }` 이고 **`job` 이 배열**이다. 이전에는 작업 하나로 접혔다.
+
+- 최상위 `system.source` / `system.target` **제거**. 한 서버가 여러 복구에 걸리면 응답당 1쌍이 성립하지 않으므로
+  작업마다 `info.source` / `info.target` 으로 내려갔고, 조회 기준 서버가 그 작업에서 맡은 쪽은 `info.role`(`source`/`target`)로 표시된다.
+  `role` 은 **이 경로에만** 있다.
+- `info.id` 신설 — 상세 조회로 이어갈 때 쓰는 값이다. `status` · `percent` · `message` 는 파티션 행이 아니라 **작업 단위**로 올라왔다.
+- `summary` 정의를 배열 기준으로 다시 적었다. `total` 은 **작업 수**(이전에는 파티션 행 수), 버킷은
+  `completed` / `inProgress` / `failed` / `canceled` / `pending` 이고 **`canceled` 는 신설**이다
+  (`Canceling` · `Canceled` 가 어느 버킷에도 안 들어가던 것이 해소). 8개 상태 → 5개 버킷 대응표를 넣고
+  **버킷 합 == `total`** 이 페이지네이션과 무관하게 성립함을 명시했다.
+  `overallProgress` 의 분모는 진행 정보를 가진 작업이라 `inProgress` 와 일치하지 않는다는 주의도 함께 적었다.
+- **적용 순서를 명시** — `조회 → 파티션/드라이브/mode 필터 → status 필터 → 정렬 → summary 집계 → 페이지 잘라내기`.
+  따라서 `summary` 는 필터 적용 후 전체, `job` 은 그 중 한 페이지다.
+- **제거된 파라미터**: `server`, `sort`. 대상 서버는 경로가 정하고 정렬은 규칙으로 고정됐다.
+  실어 보내도 무시될 뿐 에러는 아니라는 점까지 적었다(이전 문서는 두 값을 동작하는 것처럼 서술했다).
+
+### Changed — 작업 기준 조회 (`api/docs/recovery/monitoring-job.md`)
+
+**작업 객체 구조가 서버 기준 조회의 `job[]` 원소와 같아졌다.** 문서도 "차이는 원소가 하나인 것, `log` 가 있는 것,
+`info.role` 이 없는 것뿐" 이라고 명시해 두 페이지를 대조해 읽을 수 있게 했다.
+
+- 봉투는 `{ job }` 단수. 최상위 `system` 은 여기서도 제거되고 `info.source` / `info.target` 으로 통일됐다.
+- **제거된 파라미터**: `server`, `serverType`, `jobName`, `status`, `sort`. 경로가 이미 작업 하나를 지목하므로
+  작업을 다시 고르는 필터가 성립하지 않는다. 나눌 대상이 없어 `page` · `limit` 도 받지 않는다.
+- **500 에러 블록 신설** — `JOB-ERROR-16`. 작업은 있는데 짝이 되는 작업 정보 행이 없는 경우로,
+  필터 불일치가 아니라 데이터 결손이라 재시도로 해소되지 않는다는 점을 적었다.
+
+### Changed — 두 문서 공통
+
+- **`detail` 파라미터의 의미가 확정됐다.** 이전에는 값을 받기만 하고 응답이 달라지지 않았다.
+  이제 기본 `false` = 경량(상태·진행률·시각), `true` = 파티션/드라이브별 `details[]`(+ 작업 기준 조회에서는 `log`).
+  `detail=false` 면 해당 키가 **아예 없다**(빈 배열이 아니다). `?detail` 처럼 값 없이 보내면 `true` 다 —
+  다른 파라미터의 "빈 값 400" 과 어긋나는 예외라 따로 짚었다.
+- **`percent` 표기 규칙을 표로 고정**했다(두 경로 공용). 진행 정보 없음 + `Complete` 는 `"100%"`,
+  진행 정보가 있어도 값이 비면 `"-"`, 그 외 미완료는 `"-"`.
+- **필터 결과 0건은 200 이고 404 가 아니다.** 다만 0건의 모양이 경로마다 다르다 —
+  서버 기준은 `job: []`, 작업 기준은 `details: []`(경로가 지목한 작업 자체는 감춰지지 않는다).
+- **404 조건을 각 경로에서 하나로 좁혔다** — 서버 기준은 서버 미존재(`SERVER-ERROR-01`),
+  작업 기준은 작업 미존재(`JOB-ERROR-01`). `center` 를 지정했고 그 범위 밖이면 같은 404 다.
+- **`page` 범위 초과 시 `job: []` + `summary.total > 0` 은 정상**임을 별도로 못 박았다.
+  "작업 없음" 으로 오독하기 쉬운 자리라, 작업 유무는 `summary.total` 로 판단하라고 적었다.
+- **`partition` / `drive` / `mode` 가 두 경로에서 다르게 작동하는 비대칭**을 양쪽 참고 항목에 적었다.
+  서버 기준에서는 일치 행이 없는 작업이 `job` 배열에서 **제외**되고, 작업 기준에서는 `details[]` 행만 좁혀진다.
+  의도된 차이임을 명시했다.
+- `details[]` 의 한 행은 (파티션, 백업 작업, 백업 이미지) 조합이라 같은 파티션이 여러 번 실릴 수 있고
+  **`backupFile` 이 그 행들을 구분하는 값**이라는 주의를 넣었다. 파티션 이름만으로 행을 식별하지 않도록.
+
+### Added — 「대시보드 연동 가이드」 신설 (두 문서)
+
+폴링 소비자를 대상으로 한 절을 양쪽 문서 끝에 새로 만들었다. 문서가 필드 사전에 그치던 것을 호출 패턴까지 안내한다.
+
+- **2단 조회 패턴** — 목록·상태 타일은 서버 기준 경량 조회로 반복, 상세 클릭 시 `info.id` 를 작업 기준 조회에 넘겨
+  `detail=true` 로 1회. 두 문서에 같은 표를 두어 어느 쪽에서 읽어도 상대 경로를 찾을 수 있게 했다.
+- **폴링 주기** — 5초 미만 비권장, `detail=true` 는 폴링용이 아님, 전체 목록 조회(`GET /recoveries`)를 폴링에 쓰지 말 것.
+- **토큰 만료 처리** — 유효 기간 1시간·refresh 토큰 없음을 전제로 `401 → 재발급 → 같은 요청 1회 재시도 → 그래도 401 이면 중단`.
+  매 요청 재발급은 `429` 로 이어진다는 경고를 함께 적었다.
+- **로그는 작업 기준 조회에서만 나온다** — 서버 기준은 `detail=true` 라도 `log` 를 반환하지 않는다.
+  폴링 경로에 작업마다의 로그 전 이력 조회를 지우지 않기 위한 설계라는 이유까지 적었다.
+- **빈 응답의 해석**(서버 기준) — `job: []` + `total > 0`(페이지 범위 밖) / `job: []` + `total == 0`(조건 불일치) / `404`(서버 없음) 3분기.
+- **다중 center** — 작업 이름은 center 사이에서 유일하지 않다. 이름으로 조회하면 `center` 로 범위를 지정할 것.
+
+### 손대지 않은 것 (판정 근거)
+
+- **버전 스냅샷 무변경** — 3.0.0 wrapper 는 공용 include 를 그대로 `include` 하는 껍데기라 위 재작성이 자동 반영된다.
+  1.x·2.x wrapper 7종은 전부 보존본(`monitoring-system/1.3.1.md` · `2.0.2.md`, `monitoring-job/1.3.1.md` · `2.0.2.md`)을
+  가리키고 있어(전수 확인) **당시 계약 그대로** 남는다. 공용 include 를 직접 include 하는 것은 3.0.0 wrapper 뿐이다.
+- **recovery 도메인의 다른 페이지** — 이번 변경은 모니터링 두 경로에 한정된다.
+  참고로 `GET /recoveries/monitoring/images` 는 이 저장소에 페이지가 없다(이번 범위 밖, 미조치).
+- `navigation.yml` · `versions.yml` — 신규/삭제 페이지가 없어 변경 없음.
+- CLI 문서 — 이번 계약 변경이 CLI 옵션 표기에 미치는 영향은 **별도 확인 대상**이다. 이번 범위에서 손대지 않았다.
+
+### 남은 작업 — 사용자 몫
+- `./run.sh --build` 로 Jekyll 빌드 검증 (이번 작업에서는 실행하지 않았다).
+
+---
+
 ## [Documentation] - 2026-09-01 (CLI backup image list 신설 · 출력 스트림 분리 안내 보강)
 
 ### Context

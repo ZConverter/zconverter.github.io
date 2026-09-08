@@ -7,7 +7,7 @@
 
 > * 시스템에 등록된 모든 ZDM(센터) 정보를 조회합니다.
 > * 필터 옵션을 통해 특정 조건의 ZDM만 조회할 수 있습니다.
-> * 추가 정보(network, disk, partition, repository)를 선택적으로 포함할 수 있습니다.
+> * 추가 정보(network, disk, partition, repository, zosRepository)와 상세 정보(detail)를 선택적으로 포함할 수 있습니다.
 > * 여기의 `partition` 은 "파티션 정보를 응답에 포함할지" 를 묻는 **포함 플래그(`true`/`false`)** 입니다. 파티션 하나를 지목해 거르는 값 필터가 아닙니다 - 그 용도는 `GET /servers/partitions` · `GET /servers/:identifier/partitions` 의 `partition` 이며, 같은 이름이지만 의미가 다릅니다.
 > * 필터에 맞는 ZDM이 없으면 **200과 빈 배열**을 반환합니다 (404가 아님).
 
@@ -51,7 +51,7 @@ curl -X GET "https://api.example.com/api/zdms?detail=true&repository=true" \
 | `partition` | Query | boolean | Optional | `false` | 파티션 정보 **포함 여부** (파티션을 지목하는 값 필터가 아님) | `true`, `false` |
 | `repository` | Query | boolean | Optional | `false` | 레포지토리 정보 포함 여부 | `true`, `false` |
 | `zosRepository` | Query | boolean | Optional | `false` | ZOS 레포지토리 정보 포함 여부 | `true`, `false` |
-| `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 (현재 버전 미동작) | `true`, `false` |
+| `detail` | Query | boolean | Optional | `false` | 상세 정보(`resources`) 포함 여부 | `true`, `false` |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
@@ -101,6 +101,63 @@ curl -X GET "https://api.example.com/api/zdms?detail=true&repository=true" \
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
+
+</details>
+
+<details markdown="1" open>
+<summary>상세 응답 (200 OK) - <code>detail=true</code></summary>
+
+기본 응답에 `resources` 블록이 추가됩니다. 위치는 `path` 다음, 부가 정보 배열 앞입니다.
+
+```json
+{
+  "success": true,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "data": [
+    {
+      "name": {
+        "center": "Main-Center",
+        "host": "zdm-host-01"
+      },
+      "id": {
+        "center": "1",
+        "install": "INST-001",
+        "machine": "550e8400-e29b-41d4-a716-446655440000"
+      },
+      "os": {
+        "version": "Ubuntu 22.04 LTS"
+      },
+      "ip": {
+        "public": "192.168.1.100",
+        "private": ["10.0.0.1", "10.0.0.2"]
+      },
+      "status": {
+        "connect": "connect",
+        "activate": "ok"
+      },
+      "path": {
+        "logFile": "/var/log/zdm",
+        "install": "/opt/zdm"
+      },
+      "resources": {
+        "model": "PowerEdge R740",
+        "cpu": "Intel(R) Xeon(R) Gold 6248",
+        "cpuCount": "2",
+        "memory": "34359738368 (32.00 GB)",
+        "kernel": "5.15.0-91-generic",
+        "systemType": "x86_64",
+        "organization": "ZConverter"
+      },
+      "lastUpdated": "2025-01-15 10:30:00"
+    }
+  ],
+  "message": "ZDM information list",
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+`memory` 는 `원값 (읽기 쉬운 값)` 형식입니다. 원값이 바이트 숫자가 아닌 경우에는 그 값을 그대로 냅니다.
+값이 없는 항목은 `"-"` 입니다.
 
 </details>
 
@@ -399,7 +456,7 @@ curl -X GET "https://api.example.com/api/zdms?detail=true&repository=true" \
 <details markdown="1">
 <summary>ZOS 레포지토리 정보 포함 응답 (zosRepository=true)</summary>
 
-> 주의: 현재 버전에서 `zosRepository` 옵션은 query에서 받아들이지만 응답 데이터는 채워지지 않습니다(빈 배열 반환). 추후 버전에서 활성화될 예정입니다.
+> v3.0.0 부터 실제 값이 채워집니다. **v2.0.2 까지는 이 옵션이 query 로 받아들여지기만 하고 항상 빈 배열을 반환**했습니다 — ZOS 저장소가 실재해도 "없음" 으로 보였습니다.
 
 ```json
 {

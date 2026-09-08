@@ -95,7 +95,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (0: 무제한) | - |
 | `excludePartition` | string | Optional | 제외할 파티션 목록 (콤마 구분, 예: `"h,d"` 또는 `"/boot,/home"`) | - |
 | `mailEvent` | string | Optional | 이벤트 알림 이메일 | - |
-| `autoStart` | string | Optional | 자동 시작 여부 | {% include zdm/use-options.md %} |
+| `autoStart` | string | Optional | 등록 직후 자동 시작 여부. 대상 서버가 사용 중이면 등록은 되고 자동 시작만 생략됩니다 — 아래 "대상 서버가 사용 중일 때" 참고 | {% include zdm/use-options.md %} |
 | `scriptPath` | string | Optional | 실행할 스크립트 경로 | - |
 | `scriptRun` | string | Optional | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 | `cloudAuth` | string | Optional | 클라우드 인증 정보 ID/Name | - |
@@ -139,6 +139,20 @@ curl -X POST "https://api.example.com/api/recoveries" \
 > **Windows 파티션 정규화 (since 2026-05-15)**
 >
 > Windows 서버 대상으로 등록 시 `sourcePartition` / `targetPartition` 입력값은 비교 단계에서 자동으로 대문자 변환 및 `:` 보정이 적용됩니다. 입력 `c`, `C`, `c:`, `C:` 모두 동일하게 `C:`로 취급되어 서버 파티션 정보와 매칭됩니다. (Linux는 정규화 없음 — 원본 그대로 비교)
+
+> **대상 서버가 사용 중일 때 (since 3.0.0)**
+>
+> 대상 서버에 다른 복구 작업이 진행 중이어도 **등록은 언제나 성공합니다.** 막히는 것은 등록이 아니라 실행입니다.
+>
+> | 요청 | 동작 |
+> |------|------|
+> | `autoStart` 미지정 | 등록 성공. `notices` 에 진행 중인 작업 안내가 담깁니다 |
+> | `autoStart: "use"` | 등록 성공. **자동 시작만 생략**되고 사유가 `notices` 에 담깁니다. 이때 응답의 `common.autoStart` 는 요청한 `"use"` 가 아니라 **`"not use"`** 입니다 |
+> | `PUT /recoveries/:identifier` 의 `status: "start"` | `JOB-ERROR-64` (409 Conflict) 로 **거부**됩니다 |
+>
+> 자동 시작이 생략된 작업은 진행 중인 복구가 끝난 뒤 `PUT /recoveries/:identifier` 에 `status: "start"` 를 보내 실행하세요.
+>
+> 진행 중 복구를 확인하는 조회 자체가 실패하면 등록도 자동 시작도 막지 않습니다 — 확인이 되지 않는다는 이유로 정상 요청을 거부하지 않습니다.
 
 </details>
 
@@ -246,7 +260,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 |------|------|------|
 | `common.state` | string | 등록 결과 (`success` / `fail`) |
 | `common.jobName` | string | 등록된 작업 이름 |
-| `common.autoStart` | string | 자동 시작 여부 |
+| `common.autoStart` | string | 자동 시작 여부 — **요청값의 반향이 아니라 실제로 적용된 값**입니다. `autoStart: "use"` 로 요청해도 대상 서버가 사용 중이면 자동 시작이 생략되고 이 필드는 `"not use"` 로 반환됩니다. 요청값과 응답값이 항상 같다고 가정하지 마세요 |
 | `common.platform` | string | 타겟 플랫폼 |
 | `common.bootMode` | string | 작업 후 부팅 모드 (`reboot` / `shutdown` / `maintain`) |
 | `common.schedule.basic` | object | 기본 스케줄 정보 (설정시에만 포함) — `{ id, type, description }` 객체 |
@@ -270,7 +284,18 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `summary.total` | number | 총 파티션 수 |
 | `summary.successful` | number | 성공한 파티션 수 |
 | `summary.failed` | number | 실패한 파티션 수 |
-| `notices` | string[] (optional) | 사용자 안내 메시지 배열 (v2.0.2 신규). backup 작업·이미지가 없는 partition 이 자동 skip 되었을 때만 응답에 포함. 예: `"Partition/drive 'D:' was skipped — no backup available: Backup job not found for partition 'D:' on server 'src-win01'"` |
+| `notices` | string[] (optional) | 사용자 안내 메시지 배열 (v2.0.2 신규). 안내할 내용이 있을 때만 응답에 포함되며, 사유는 두 가지입니다. ① 대상 서버가 사용 중 (since 3.0.0) — 아래 "대상 서버 사용 중 안내 문구" 참고. ② backup 작업·이미지가 없는 partition 자동 skip — 예: `"Partition/drive 'D:' was skipped — no backup available: Backup job not found for partition 'D:' on server 'src-win01'"`. 두 사유가 함께 발생하면 **대상 서버 안내가 배열의 앞**에 옵니다 |
+
+> **대상 서버 사용 중 안내 문구 (since 3.0.0)**
+>
+> 대상 서버에 진행 중인 복구가 있으면 아래 문구가 `notices` 에 담깁니다. `<jobName>` 은 진행 중인 복구 작업 이름, `<targetServer>` 는 대상 서버 이름입니다.
+>
+> - `autoStart: "use"` 로 요청해 자동 시작이 생략된 경우
+>   `Recovery job '<jobName>' is currently in progress on target server '<targetServer>' — this job was registered but autoStart was skipped. Start it with a status update once the running job completes.`
+> - `autoStart` 없이 등록한 경우
+>   `Recovery job '<jobName>' is currently in progress on target server '<targetServer>' — this job was registered but not started.`
+>
+> 두 경우 모두 **등록은 거부되지 않습니다** — 대상 서버가 사용 중이라는 이유로 실패하지 않습니다.
 
 </details>
 
@@ -333,8 +358,9 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `JOB-ERROR-14` | 400 | 등록 대상 partition 이 0건 — 전체 skip 또는 `excludePartition` 으로 전부 제외 |
 | `JOB-ERROR-67` | 400 | 지정한 `backupJob` 이 사용 불가 상태이거나, 사용 불가 작업의 **최신** 이미지를 `backupFile` 로 지정 |
 | `JOB-ERROR-63` | 400 | `listOnly: true` 인데 `jobList` 가 비었거나 없음 |
-| `JOB-ERROR-64` | 409 | 대상 서버에 진행 중인 복구 작업이 있음 (`autoStart` 요청 시) |
 | `BAD_REQUEST` | 400 | `backupFile` 의 파티션이 `sourcePartition` 과 불일치, 또는 이미지의 소속 작업명이 `backupJob` 과 불일치 |
+
+> **`JOB-ERROR-64` (409) 는 이 엔드포인트에서 발생하지 않습니다 (since 3.0.0).** 대상 서버에 진행 중인 복구가 있어도 등록은 거부되지 않습니다 — `autoStart` 를 요청했다면 자동 시작만 생략되고 사유가 `notices` 로 안내됩니다. 이 에러는 등록된 작업을 실제로 시작할 때, 즉 `PUT /recoveries/:identifier` 의 `status: "start"` 에서만 반환됩니다.
 
 </details>
 
@@ -345,9 +371,9 @@ curl -X POST "https://api.example.com/api/recoveries" \
 >
 > * Recovery 작업은 **`basic` 스케줄만** 지원합니다. (`mode`는 `full` / `increment`만 허용 — `smart` 모드 없음)
 > * 스케줄 `type`은 **0 ~ 6** 만 허용됩니다. (Smart 타입 7~11 불가 — 아래 거부 케이스 참조)
-> * `schedule` 필드를 생략하면 별도 예약 없이 등록되며, `autoStart=use` 와 함께 사용하면 즉시 1회 실행됩니다.
+> * `schedule` 필드를 생략하면 별도 예약 없이 등록되며, `autoStart=use` 와 함께 사용하면 즉시 1회 실행됩니다. 다만 대상 서버에 진행 중인 복구가 있으면 등록만 되고 **자동 시작은 생략**됩니다 (위 "대상 서버가 사용 중일 때" 참고).
 > * 응답의 `common.schedule` 은 `schedule` 이 동봉되었을 때만 포함되며, `{ basic: { id, type, description } }` 형태로 직렬화됩니다 (v2.0.2 — `id` 신규). `type` 은 displayMappings PascalCase 영문(`"Once"`, `"Daily"`, `"Weekly"` 등), `description` 은 `processScheduleInfo` 영문 결과(`[Basic]` prefix 포함).
-> * `schedule` 동봉 여부와 `autoStart` 는 **독립적**입니다. `autoStart=use` 는 등록 직후 1회 즉시 실행을, `schedule` 은 이후 반복/예약 실행을 각각 제어합니다.
+> * `schedule` 동봉 여부와 `autoStart` 는 **독립적**입니다. `autoStart=use` 는 등록 직후 1회 즉시 실행을, `schedule` 은 이후 반복/예약 실행을 각각 제어합니다. 즉시 실행은 대상 서버가 비어 있을 때만 일어나며, 사용 중이면 생략되고 응답의 `common.autoStart` 가 `not use` 로 반환됩니다 (`schedule` 등록에는 영향이 없습니다).
 
 ---
 

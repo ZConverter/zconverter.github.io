@@ -83,7 +83,7 @@ zdm-cli recovery update --center 9 --id 123 --change-name "MyRecovery" --platfor
 | --network-limit | -nl | number | Optional | 0 | 작업 Network 제한 속도 (Mbps) | - |
 | --script-path | -sp | string | Optional | - | 작업 스크립트 경로 | - |
 | --script-run | -sr | string | Optional | - | 작업 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
-| --status | - | string | Optional | - | 작업 상태 | `start`, `stop` |
+| --status | - | string | Optional | - | 작업 상태. `start` 는 대상 서버가 사용 중이면 `JOB-ERROR-64` (409) 로 거부됩니다 (`stop` 은 영향 없음) | `start`, `stop` |
 | --backup-file | -bf | string | Optional | - | 수정할 항목을 지목할 backup image 파일 이름 | - |
 | --target-partition | -tp | string | Optional | - | 같은 이미지가 여러 파티션에 복구된 경우 그중 하나로 좁힘 (Linux `/data`, Windows `C:`) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |

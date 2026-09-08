@@ -7,6 +7,8 @@
 
 > * 시스템에 등록된 모든 백업 작업 정보를 조회합니다.
 > * 필터 옵션을 통해 특정 조건의 백업 작업만 조회할 수 있습니다.
+> * **center 가 다른 동명 작업도 각각 나옵니다.** 종전에는 목록을 작업 이름으로 묶어
+>   같은 이름의 작업 하나가 목록에서 빠지고, 남은 하나에 다른 작업의 상세 정보가 붙을 수 있었습니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -348,7 +350,7 @@ curl -X GET "https://api.example.com/api/backups?page=1&limit=10" \
 | `job.info.schedule` | object | - | 스케줄 정보 (스케줄 설정시에만 포함) |
 | `job.info.schedule.basic` | object/string | - | 기본 스케줄 정보 |
 | `job.info.schedule.advanced` | object/string | - | 고급 스케줄 정보 (Smart 스케줄만) |
-| `job.info.status.current` | string | - | 현재 작업 상태 (PascalCase: `Preparing`, `Processing`, `Complete`, `Scheduled`, `Registered`, `Canceling`, `Canceled`, `Error`) |
+| `job.info.status.current` | string | - | 현재 작업 상태 (PascalCase: `Preparing`, `Processing`, `Complete`, `Scheduled`, `Registered`, `Canceling`, `Canceled`, `Error`). 데몬이 작업 도중 중단돼 **진행 행이 남은 경우** 그 행을 없는 것으로 보고 작업 본체의 상태를 냅니다 — 종전에는 끝난 작업이 영구히 `Processing` 으로 보였습니다 |
 | `job.info.status.time.start` | string | - | 작업 시작 시간 |
 | `job.info.status.time.elapsed` | string | - | 경과 시간 |
 | `job.info.status.time.end` | string | - | 작업 종료 시간 |

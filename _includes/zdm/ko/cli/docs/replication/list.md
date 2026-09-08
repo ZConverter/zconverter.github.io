@@ -6,6 +6,7 @@ Replication 목록 및 정보를 조회하는 명령어입니다.
 ## `replication list` {#replication-list}
 
 > * Replication 작업의 목록 또는 특정 작업의 상세 정보를 조회합니다.
+> * **v3.0.0 (BREAKING)** — `--server` 옵션이 제거되었습니다. Replication 작업 정보에는 서버 컬럼이 없어 이 옵션은 실제로는 Center 이름으로 거르는 필터였으므로, ID·이름을 모두 받는 `--center` 로 대체하세요. CLI 는 알 수 없는 옵션을 허용하지 않으므로 `--server` 를 그대로 둔 스크립트는 조용히 무시되지 않고 파싱 단계에서 즉시 실패합니다 (도움말이 출력되고 종료 코드 1).
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -29,8 +30,8 @@ zdm-cli replication list --center 9
 # 여러 Center의 Replication 목록 조회 (콤마 구분)
 zdm-cli replication list --center 9,10
 
-# 특정 서버의 Replication 목록 조회
-zdm-cli replication list --server web01
+# Center 이름으로 조회
+zdm-cli replication list --center center01
 
 # 작업 이름으로 조회
 zdm-cli replication list --name repl01
@@ -59,7 +60,6 @@ zdm-cli replication list --asc --output json
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --center | - | string | Optional | - | Center ID 또는 이름 (콤마로 구분하여 복수 지정 가능) | - |
-| --server | - | string | Optional | - | 대상 서버 | - |
 | --name | - | string | Optional | - | 작업 이름 | - |
 | --id | - | number | Optional | - | 작업 ID | - |
 | --mode | - | string | Optional | - | Replication 모드 | `full`, `increment`, `sync` |

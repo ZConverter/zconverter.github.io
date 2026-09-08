@@ -459,7 +459,10 @@ curl -X GET "https://api.example.com/api/replications?page=1&limit=10" \
   "success": false,
   "error": {
     "code": "DTO-VALIDATION-03",
-    "message": "Invalid enum value. Expected 'preparing' | 'processing' | 'complete' | 'scheduled' | 'canceling' | 'canceled' | 'error' | 'registered', received 'unknown'"
+    "message": "Query parameter validation failed.",
+    "details": {
+      "status": ["status must be one of: preparing, processing, complete, scheduled, canceling, canceled, error, registered"]
+    }
   },
   "timestamp": "2026-03-20T10:30:00.000+09:00"
 }

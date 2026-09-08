@@ -64,14 +64,18 @@ zdm-cli backup monit --server-id 456 --output table
 | --server-id | -si | number | Optional<span class="required-note">*</span> | - | 작업 대상 Server ID | - |
 | --server-name | -sn | string | Optional<span class="required-note">*</span> | - | 작업 대상 Server Name | - |
 | --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
-| --status | - | string | Optional | - | 작업 상태 | {% include zdm/job-status.md %} |
+| --status | - | string | Optional | - | 작업 상태로 목록을 거름 (서버 기준 조회 전용) | {% include zdm/job-status.md %} |
 | --drive | - | string | Optional | - | 작업 대상 drive (Windows) | - |
 | --repository-path | -rp | string | Optional | - | Repository Path | - |
+| --log | -l | boolean | Optional | `false` | 작업 로그 전체를 출력 (미지정 시 `message` 의 최근 한 줄만 표시) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 > <span class="required-note">*</span> `job-id/job-name` 또는 `server-id/server-name` 중 하나는 필수로 입력해야 합니다.<br>
 > <span class="required-note">*</span> ID와 Name은 동시에 입력할 수 없습니다.<br>
-> <span class="required-note">*</span> job과 server 파라미터는 동시에 사용할 수 없습니다.
+> <span class="required-note">*</span> job과 server 파라미터는 동시에 사용할 수 없습니다.<br>
+> <span class="required-note">*</span> `--status` 는 서버 기준 조회 전용이며 작업 기준 조회에서는 전송되지 않습니다.<br>
+> <span class="required-note">*</span> `--log` 는 **서버에서 로그를 받아올지**까지 결정합니다. 지정하지 않으면 API 가 로그를 싣지 않으므로(`detail` 미전송) 로그 구간이 비어 있습니다 — 표시만 감추는 것이 아닙니다.<br>
+> <span class="required-note">*</span> 작업 기준 조회에 `--status` 를 지정하면 오류 없이 **조용히 무시됩니다.** 종전에는 작업 기준 조회에서도 동작해 지정한 상태와 어긋나면 404 였으므로 실제로 잃는 동작입니다 — 조회한 작업의 상태는 결과의 `status`(`--output json` 에서는 `job.progressInfo.status`)를 읽으세요.
 
 </details>
 
@@ -179,6 +183,7 @@ completed       : 1
 inProgress      : 1
 failed          : 0
 pending         : 1
+canceled        : 0
 overallProgress : 45%
 
 [Job 1]
@@ -234,6 +239,7 @@ end       : -
       "inProgress": 1,
       "failed": 0,
       "pending": 1,
+      "canceled": 0,
       "overallProgress": "45%"
     },
     "job": [

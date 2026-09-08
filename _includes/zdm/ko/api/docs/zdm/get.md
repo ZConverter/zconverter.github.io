@@ -50,7 +50,7 @@ curl -X GET "https://api.example.com/api/zdms/1?detail=true&repository=true" \
 | `partition` | Query | boolean | Optional | `false` | 파티션 정보 **포함 여부** (파티션을 지목하는 값 필터가 아님) | `true`, `false` |
 | `repository` | Query | boolean | Optional | `false` | 레포지토리 정보 포함 여부 | `true`, `false` |
 | `zosRepository` | Query | boolean | Optional | `false` | ZOS 레포지토리 정보 포함 여부 | `true`, `false` |
-| `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 (현재 버전 미동작) | `true`, `false` |
+| `detail` | Query | boolean | Optional | `false` | 상세 정보(`resources`) 포함 여부 | `true`, `false` |
 
 </details>
 
@@ -339,7 +339,7 @@ curl -X GET "https://api.example.com/api/zdms/1?detail=true&repository=true" \
 <details markdown="1">
 <summary>ZOS 레포지토리 정보 포함 응답 (zosRepository=true)</summary>
 
-> 주의: 현재 버전에서 `zosRepository` 옵션은 query에서 받아들이지만 응답 데이터는 채워지지 않습니다(빈 배열 반환). 추후 버전에서 활성화될 예정입니다.
+> v3.0.0 부터 실제 값이 채워집니다. **v2.0.2 까지는 이 옵션이 query 로 받아들여지기만 하고 항상 빈 배열을 반환**했습니다 — ZOS 저장소가 실재해도 "없음" 으로 보였습니다.
 
 ```json
 {

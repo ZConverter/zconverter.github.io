@@ -30,10 +30,6 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/1" \
 # 작업 이름으로 모니터링 조회
 curl -X GET "https://api.example.com/api/replications/monitoring/job/backup-replication-01" \
   -H "Authorization: Bearer <token>"
-
-# 상태 필터 적용
-curl -X GET "https://api.example.com/api/replications/monitoring/job/1?status=running" \
-  -H "Authorization: Bearer <token>"
 ```
 
 </details>
@@ -45,12 +41,13 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/1?status=ru
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 복제 작업 ID (숫자) 또는 작업 이름 | - |
 | `server` | Query | string | Optional | - | 서버 이름. 요청 검증만 수행하며 조회 결과에는 영향이 없습니다 | - |
-| `status` | Query | string | Optional | - | 작업 상태. 요청 검증만 수행하며 조회 결과에는 영향이 없습니다 | {% include zdm/replication-job-status.md %} |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (단건 조회이므로 결과에 영향 없음) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 (단건 조회이므로 결과에 영향 없음) | - |
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 (단건 조회이므로 결과에 영향 없음) | `asc`, `desc` |
 
-> * `server` · `status` 는 **키를 보냈는데 값이 비어 있으면**(`?server=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 동작 변화가 없습니다.
+> * `status` 는 **제거되었습니다.** 보내면 400 (`DTO-VALIDATION-03`) 입니다 — 종전에는 지정한 값과 다르면 404 였습니다. 경로 `identifier` 로 이미 작업 하나를 지목한 단건 조회이므로, 상태는 응답의 `job.progress.status` 를 읽으면 됩니다. 상태로 거르는 조회가 필요하면 목록 조회(`GET /replications?status=`)를 사용합니다.
+> * 종전 `status` 에 `scheduled` · `registered` 를 주면 **항상 404** 였습니다. 이 경로의 상태는 실행 중인 활성 작업에서 계산하므로 그 두 값은 나올 수 없었습니다. 파라미터가 사라지면서 이 함정도 없어졌습니다.
+> * `server` 는 **키를 보냈는데 값이 비어 있으면**(`?server=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 동작 변화가 없습니다.
 
 </details>
 
@@ -176,6 +173,25 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/1?status=ru
   "error": {
     "code": "NOT_FOUND",
     "message": "Active replication not found (identifier: backup-replication-01)"
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
+}
+```
+
+**지원하지 않는 query 파라미터 (400 Bad Request)**
+
+제거된 `status` 처럼 스키마에 선언되지 않은 query 파라미터를 보낸 경우 반환됩니다. `details` 의 key 가 문제 파라미터 이름입니다.
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": false,
+  "error": {
+    "code": "DTO-VALIDATION-03",
+    "message": "Query parameter validation failed.",
+    "details": {
+      "status": ["status is not a supported parameter. Check for a typo or a parameter that has been removed."]
+    }
   },
   "timestamp": "2026-03-20T10:30:00.000+09:00"
 }

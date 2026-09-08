@@ -247,7 +247,10 @@ curl -X GET "https://api.example.com/api/backups/histories?page=1&limit=10" \
   "success": false,
   "error": {
     "code": "DTO-VALIDATION-03",
-    "message": "Invalid enum value. Expected 'success' | 'failed', received 'unknown'"
+    "message": "Query parameter validation failed.",
+    "details": {
+      "result": ["result must be one of: success, failed"]
+    }
   },
   "timestamp": "2026-03-03T10:30:00.000+09:00"
 }

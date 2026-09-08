@@ -34,10 +34,11 @@ curl -X GET "https://api.example.com/api/os-replications/monitoring/job/1" \
 |---------|------|------|------|------|--------|
 | `Authorization` | Header | string | Required | Bearer 토큰 | |
 | `identifier` | Path | string | Required | 작업 ID(숫자) 또는 작업 이름 | |
-| `status` | Query | string | Optional | 작업 상태 필터. 활성 작업의 계산된 status와 불일치 시 404 | (job status enum) |
 | `server` | Query | string | Optional | 작업 대상 서버 이름 필터. 불일치 시 404 | |
 
-> `status` · `server` 는 **키를 보냈는데 값이 비어 있으면**(`?server=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 "필터 없음" 이므로 동작 변화가 없습니다.
+> * `status` 는 **제거되었습니다.** 보내면 400 (`DTO-VALIDATION-03`) 입니다 — 종전에는 활성 작업의 계산된 status 와 불일치 시 404 였습니다. 경로 `identifier` 로 이미 작업 하나를 지목한 단건 조회이므로, 상태는 응답의 `job.progress.status` 를 읽으면 됩니다.
+> * 종전 `status` 에 `scheduled` · `registered` 를 주면 **항상 404** 였습니다. 이 경로의 상태는 실행 중인 활성 작업에서 계산하므로 그 두 값은 나올 수 없었습니다. 파라미터가 사라지면서 이 함정도 없어졌습니다.
+> * `server` 는 **키를 보냈는데 값이 비어 있으면**(`?server=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 "필터 없음" 이므로 동작 변화가 없습니다.
 
 </details>
 
@@ -96,7 +97,8 @@ curl -X GET "https://api.example.com/api/os-replications/monitoring/job/1" \
 
 | 코드 | HTTP | 설명 |
 |------|------|------|
-| `NOT_FOUND` | 404 | 작업 미존재 또는 `status`/`server` 필터와 불일치 |
+| `NOT_FOUND` | 404 | 작업 미존재 또는 `server` 필터와 불일치 |
+| `DTO-VALIDATION-03` | 400 | 지원하지 않는 query 파라미터 (제거된 `status` 포함) 또는 값이 빈 `server` |
 | `INTERNAL_SERVER_ERROR` | 500 | 내부 오류 |
 
 </details>

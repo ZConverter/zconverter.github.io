@@ -6,6 +6,7 @@
 ## `GET /files/list` {#get-files-list}
 
 > * ZDM에 업로드된 파일 목록을 조회합니다.
+> * **업로더와 무관하게 저장소의 전체 파일이 반환됩니다.** 파일은 사용자별로 분리되지 않고 하나의 공용 저장소에 보관됩니다.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -39,7 +40,7 @@ curl -X GET "https://api.example.com/api/files/list?page=1&limit=10" \
 | `Authorization` | Header | string | Required | - | Bearer 토큰 | - |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
-| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
+| `sort` | Query | string | Optional | `desc` | 정렬 순서 — **업로드 시각 기준**(`desc` = 최신순). 시각이 같으면 파일명으로 정렬합니다 | `asc`, `desc` |
 
 > `page` 와 `limit` 모두 미지정 시 페이지네이션 없이 전체 목록을 반환합니다. 하나라도 지정되면 다른 값은 기본값(`page=1`, `limit=20`)으로 적용됩니다.
 

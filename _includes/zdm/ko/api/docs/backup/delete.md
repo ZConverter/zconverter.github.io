@@ -98,7 +98,7 @@ curl -X DELETE "https://api.example.com/api/backups/daily-backup" \
 | `jobInfo[].deletedComponents.historyData` | boolean | 히스토리 데이터 삭제 여부 |
 | `jobInfo[].deletedComponents.logData` | boolean | 로그 데이터 삭제 여부 |
 | `jobInfo[].errorMessage` | string | 실패 시 오류 메시지 |
-| `summary.state` | string | 삭제 결과 (`success` / `fail`) |
+| `summary.state` | string | 삭제 결과 (`success` / `fail` / `not_found`). **`not_found`** 는 대상 행이 이미 없어 삭제된 행이 0건인 경우로, 실패와 구분됩니다 — 예전부터 이 값이 나가고 있었고 문서에만 빠져 있었습니다 |
 | `summary.affectedComponents.basicInfoDeleted` | number | 삭제된 기본 정보 수 |
 | `summary.affectedComponents.detailInfoDeleted` | number | 삭제된 상세 정보 수 |
 | `summary.affectedComponents.historyDataDeleted` | number | 삭제된 히스토리 데이터 수 |
@@ -108,6 +108,24 @@ curl -X DELETE "https://api.example.com/api/backups/daily-backup" \
 
 <details markdown="1">
 <summary><strong>에러 응답</strong></summary>
+
+**같은 이름의 작업이 여러 개 (409 Conflict)**
+
+작업 **이름**으로 삭제할 때, 지정한 center 안에 같은 이름의 작업이 2개 이상이면 반환됩니다.
+어느 것을 지울지 알 수 없으므로 **아무것도 삭제하지 않고** 거부합니다.
+메시지에 걸린 작업 ID 목록이 실리므로 **ID 로 다시 요청**하면 됩니다.
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": false,
+  "error": {
+    "code": "CONFLICT",
+    "message": "Multiple backup jobs named 'daily-backup' exist (ids: 10, 11). Delete by job id instead."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
 
 **백업 작업을 찾을 수 없음 (404 Not Found)**
 

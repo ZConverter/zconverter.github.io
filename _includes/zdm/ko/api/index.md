@@ -59,3 +59,11 @@ ZDM-API는 백업, 복구, 시스템 관리를 위한 **API 서버**입니다.
 
 - 모든 API 호출에는 {% if include.version >= "2.0.0" %}`POST /token/issue`{% else %}`POST /auth/issue`{% endif %}로 발급받은 인증 토큰이 필요합니다
 - 요청 헤더에 `Authorization: Bearer <token>` 형식으로 토큰을 포함해야 합니다
+{% if include.version >= "3.0.0" %}
+- **조회(query) 파라미터는 선언된 이름만 허용됩니다 (3.0.0 변경).** 오타이거나 제거된 파라미터를 보내면
+  조용히 무시되지 않고 `DTO-VALIDATION-03` (400) 으로 거절되며, `details` 에 문제 파라미터 이름이 담깁니다.
+  종전에는 미지의 키가 버려져 **필터가 빠진 더 넓은 결과가 200 으로** 나갔습니다
+- **열거형 query 값은 대소문자를 구분하지 않습니다 (3.0.0 변경).** 조회·모니터링의 `status` / `mode` /
+  `platform` / `repositoryType` / `serverType` 이 해당합니다. 응답에 실린 `Processing` 을 그대로 필터로
+  되돌려 보내도 통과합니다 — 종전에는 응답값을 그대로 쓰면 400 이었습니다
+{% endif %}

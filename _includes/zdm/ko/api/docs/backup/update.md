@@ -233,6 +233,10 @@ curl -X PUT "https://api.example.com/api/backups/1" \
 
 **백업 작업을 찾을 수 없음 (404 Not Found)**
 
+> **`center` 가 그 작업의 실제 center 와 다르면 여기에 해당합니다.**
+> 작업 **ID** 로 수정할 때도 `center` 를 대조합니다 — 종전에는 ID 경로에서 `center` 를 받기만 하고
+> 조회에 쓰지 않아 **다른 center 의 작업이 그대로 수정**됐습니다. 올바른 `center` 를 보내는 요청은 영향이 없습니다.
+
 ```json
 {
   "success": false,

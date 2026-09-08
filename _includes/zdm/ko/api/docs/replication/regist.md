@@ -302,6 +302,24 @@ curl -X POST "https://api.example.com/api/replications" \
 }
 ```
 
+**동시 등록 경합 (409 Conflict)**
+
+같은 center 에 같은 `jobName` 을 **동시에** 등록하려는 요청이 겹칠 때, 뒤의 요청이 이름 락을 기다리다 한도(10초)를 넘기면 반환됩니다. 요청 자체는 정상이므로 잠시 후 재시도하면 됩니다 — 앞 요청이 이미 등록을 마친 뒤라면 그때는 위의 400 이 돌아옵니다.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "CONFLICT",
+    "message": "Concurrent operation in progress (lock 'zdm:replname:1:c456c543f11b56b9f4a4ee85', waited 10s). Retry shortly."
+  },
+  "timestamp": "2026-04-17T10:30:00.000+09:00"
+}
+```
+
+> 이름 중복 검사는 두 번 수행됩니다 — 요청 검증 시점에 한 번(빠른 실패), 이름 확정과 INSERT 를 함께 처리하는 임계 구역 안에서 한 번 더. 그 사이에 같은 이름이 들어올 수 있기 때문입니다.
+
 </details>
 
 ---

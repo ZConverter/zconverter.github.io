@@ -87,7 +87,7 @@ zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky8
 | --exclude-partition | -exp | string | Optional | - | 작업 제외 partition | - |
 | --mail-event | -me | string | Optional | - | 작업 이벤트 수신 메일 | - |
 | --network-limit | -nl | number | Optional | 0 | 작업 Network 제한 속도 (Mbps) | - |
-| --start | - | boolean | Optional | - | 작업 자동시작 여부 | - |
+| --start | - | boolean | Optional | - | 작업 자동시작 여부. 대상 서버가 사용 중이면 등록은 되고 자동 시작만 생략됩니다 | - |
 | --script-path | -sp | string | Optional | - | 실행할 스크립트 파일 경로 (사전에 ZDM에 업로드 필요) | - |
 | --script-run | -sr | string | Optional | - | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 | --overwrite | - | boolean | Optional | false | 파티션 오버라이트 허용 여부 (Linux 전용) | - |
@@ -149,6 +149,16 @@ zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky8
 > 파티션별로 쓸 수 있는 백업이 없으면 그 파티션은 자동 제외되고 사유가 `notices` 로 안내됩니다
 > (백업 작업 없음 / 마지막 실행 실패 / 진행 중 / 실행 이력 없음 / 이미지 조회 실패 / repository 불일치).
 > 전체 파티션이 제외되면 `JOB-ERROR-14` (400) 으로 실패합니다.
+
+> **대상 서버가 사용 중일 때 (since 3.0.0)**
+>
+> 대상 서버에 다른 복구가 진행 중이어도 **등록은 언제나 성공합니다.** 막히는 것은 등록이 아니라 실행입니다.
+>
+> - `--start` 없이 등록: 등록 성공. 진행 중인 작업 안내가 `[Notices]` 로 출력됩니다.
+> - `--start` 로 등록: 등록 성공, **자동 시작만 생략**됩니다. 사유가 `[Notices]` 로 출력되고,
+>   `[Common Information]` 의 `autoStart` 는 요청한 `use` 가 아니라 **`not use`** 로 표시됩니다.
+> - 진행 중인 복구가 끝난 뒤 `zdm-cli recovery update --id <ID> --status start` 로 실행하세요.
+>   그때도 대상이 사용 중이면 `JOB-ERROR-64` (409) 로 거부됩니다.
 
 **사용 예시:**
 
@@ -255,7 +265,7 @@ repository.type   : nfs
 ```
 
 > `[Schedule - Basic]` 블록은 응답에 `schedule.basic` 이 포함될 때만 출력됩니다 (요청에 `--schedule` / `--schedule-id` / `--schedule-file` 동봉 시).
-> `[Notices]` 섹션은 응답에 `notices` 가 포함될 때만 출력됩니다 (자동 partition skip 발생 시).
+> `[Notices]` 섹션은 응답에 `notices` 가 포함될 때만 출력됩니다 (자동 partition skip, 또는 대상 서버가 사용 중일 때).
 
 **Table 형식 (--output table):**
 

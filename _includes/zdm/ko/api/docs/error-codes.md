@@ -7,6 +7,7 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 > * **`error.code` 는 안정 식별자입니다.** 클라이언트는 `error.message` 문자열이 아니라 이 값으로 분기하세요. 메시지 문구는 예고 없이 바뀔 수 있습니다.
 > * 데이터베이스 내부 오류는 스키마 정보 노출을 막기 위해 `INTERNAL_SERVER_ERROR` 로 치환되어 전달됩니다. 상세 원인은 서버 로그에만 기록됩니다.
 > * 이 표는 서버 코드에서 생성한 파생본입니다. 표와 실제 응답이 다르면 **서버 동작이 정본**입니다.
+> * **`(현재 발생하지 않음 — 정의만 존재)`** 로 표시된 코드는 서버에 정의돼 있으나 **어떤 경로에서도 반환되지 않습니다.** 클라이언트가 분기를 만들 필요가 없습니다(2026-09-07 확인).
 > * **`error.message` 는 영문으로 반환됩니다.** 아래 표의 설명은 한국어 안내이며 실제 응답 문구와 다릅니다.
 
 <details markdown="1" open>
@@ -18,8 +19,7 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "JOB-ERROR-13",
-    "message": "Specified drive/partition does not exist on the server.",
-    "details": { }
+    "message": "Specified drive/partition does not exist on the server."
   },
   "timestamp": "2026-08-28T10:30:00.000+09:00"
 }
@@ -29,7 +29,7 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 |------|------|------|
 | `error.code` | string | 분기용 안정 식별자 |
 | `error.message` | string | 사람이 읽는 설명 (영문) |
-| `error.details` | object | 필드별 상세 (요청 검증 실패 등에서만 포함) |
+| `error.details` | object | 필드별 상세 (`DTO-VALIDATION-01` · `-02` · `-03` 요청 검증 실패에만 포함. 그 외 에러에는 이 키가 없습니다) |
 | `traceId` | string | 서버 로그와 대조할 추적 ID. 문의 시 함께 전달하세요 |
 
 </details>
@@ -176,15 +176,15 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 </details>
 
 <details markdown="1">
-<summary><strong>User</strong> (5건)</summary>
+<summary><strong>User</strong> (5건 정의 · <strong>실제 발생 3건</strong>)</summary>
 
 | 코드 | HTTP | 설명 |
 |------|------|------|
 | `USER-ERROR-01` | 404 | 사용자를 찾을 수 없습니다. |
 | `USER-ERROR-02` | 404 | 지정한 이메일의 사용자를 찾을 수 없습니다. |
 | `USER-ERROR-03` | 404 | 지정한 ID 의 사용자를 찾을 수 없습니다. |
-| `USER-ERROR-04` | 409 | 이미 존재하는 사용자입니다. |
-| `USER-ERROR-05` | 401 | 인증 정보가 올바르지 않습니다. |
+| `USER-ERROR-04` | 409 | 이미 존재하는 사용자입니다. **(현재 발생하지 않음 — 정의만 존재)** |
+| `USER-ERROR-05` | 401 | 인증 정보가 올바르지 않습니다. **(현재 발생하지 않음 — 정의만 존재)** |
 
 </details>
 
@@ -209,6 +209,27 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 | `DTO-VALIDATION-03` | 400 | 쿼리 파라미터 검증에 실패했습니다. |
 | `DTO-VALIDATION-04` | 500 | 데이터 변환 중 오류가 발생했습니다. |
 | `DTO-CREATION-01` | 500 | 응답 데이터 생성 중 오류가 발생했습니다. |
+
+> **선언되지 않은 query 파라미터 (since 3.0.0)**
+>
+> 조회 엔드포인트는 스키마에 선언된 파라미터만 받습니다. 오타이거나 제거된 이름을 보내면
+> `DTO-VALIDATION-03` (400) 으로 거절되고, `details` 의 **key 가 문제 파라미터 이름**입니다.
+> 종전에는 미지의 키가 조용히 버려져 필터가 빠진 더 넓은 결과가 200 으로 나갔습니다.
+>
+> ```json
+> {
+>   "success": false,
+>   "error": {
+>     "code": "DTO-VALIDATION-03",
+>     "message": "Query parameter validation failed.",
+>     "details": {
+>       "sort": ["sort is not a supported parameter. Check for a typo or a parameter that has been removed."]
+>     }
+>   }
+> }
+> ```
+>
+> 같은 응답에 필수 누락과 미지의 키가 함께 있으면 각자 제 메시지를 유지합니다.
 
 </details>
 
@@ -276,7 +297,7 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 | `JOB-ERROR-61` | 500 | PDD 경로 생성에 실패했습니다. pdd 파일을 확인하세요. |
 | `JOB-ERROR-62` | 404 | 서버의 파티션 정보를 찾을 수 없습니다. |
 | `JOB-ERROR-63` | 400 | listOnly 가 true 이면 jobList 가 필수입니다. |
-| `JOB-ERROR-64` | 409 | 대상 서버에서 이미 복구 작업이 진행 중입니다. |
+| `JOB-ERROR-64` | 409 | 대상 서버에서 이미 복구 작업이 진행 중입니다. 복구 **실행** 요청(`PUT /recoveries/:identifier` 의 `status: "start"`)에서만 발생하며, 복구 등록은 이 사유로 거부되지 않습니다. |
 | `JOB-ERROR-65` | 400 | 복구를 지원하지 않는 서버 OS 입니다. |
 | `JOB-ERROR-66` | 400 | 저장소 경로 형식이 올바르지 않습니다. |
 | `JOB-ERROR-67` | 400 | 지정한 백업 작업은 복구에 사용할 수 없습니다. |
@@ -285,30 +306,30 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 </details>
 
 <details markdown="1">
-<summary><strong>License</strong> (10건)</summary>
+<summary><strong>License</strong> (10건 정의 · <strong>실제 발생 2건</strong>)</summary>
 
 | 코드 | HTTP | 설명 |
 |------|------|------|
-| `LICENSE-ERROR-01` | 404 | 라이선스를 찾을 수 없습니다. |
+| `LICENSE-ERROR-01` | 404 | 라이선스를 찾을 수 없습니다. 단건 조회(`GET /licenses/:identifier` · `GET /licenses/key/:key`)와 라이선스 할당에서 발생합니다. `GET /licenses/:identifier` 는 라이선스가 있어도 조회 조건(`category` · `exp` · `created`)과 맞지 않으면 이 코드입니다. |
 | `LICENSE-ERROR-02` | 409 | 이미 할당된 라이선스입니다. |
-| `LICENSE-ERROR-03` | 400 | 만료된 라이선스입니다. |
-| `LICENSE-ERROR-04` | 400 | 라이선스 사용 한도를 초과했습니다. |
-| `LICENSE-ERROR-05` | 400 | 라이선스 카테고리가 유효하지 않습니다. |
-| `LICENSE-ERROR-06` | 500 | 라이선스 할당에 실패했습니다. |
-| `LICENSE-ERROR-07` | 500 | 라이선스 이력 생성에 실패했습니다. |
-| `LICENSE-ERROR-08` | 500 | 라이선스 처리 결과를 해석하지 못했습니다. |
-| `LICENSE-ERROR-09` | 400 | 라이선스 키 형식이 올바르지 않습니다. |
-| `LICENSE-ERROR-10` | 500 | 라이선스 삭제에 실패했습니다. |
+| `LICENSE-ERROR-03` | 400 | 만료된 라이선스입니다. **(현재 발생하지 않음 — 정의만 존재)** |
+| `LICENSE-ERROR-04` | 400 | 라이선스 사용 한도를 초과했습니다. **(현재 발생하지 않음 — 정의만 존재)** |
+| `LICENSE-ERROR-05` | 400 | 라이선스 카테고리가 유효하지 않습니다. **(현재 발생하지 않음 — 정의만 존재)** |
+| `LICENSE-ERROR-06` | 500 | 라이선스 할당에 실패했습니다. **(현재 발생하지 않음 — 정의만 존재)** |
+| `LICENSE-ERROR-07` | 500 | 라이선스 이력 생성에 실패했습니다. **(현재 발생하지 않음 — 정의만 존재)** |
+| `LICENSE-ERROR-08` | 500 | 라이선스 처리 결과를 해석하지 못했습니다. **(현재 발생하지 않음 — 정의만 존재)** |
+| `LICENSE-ERROR-09` | 400 | 라이선스 키 형식이 올바르지 않습니다. **(현재 발생하지 않음 — 정의만 존재)** |
+| `LICENSE-ERROR-10` | 500 | 라이선스 삭제에 실패했습니다. **(현재 발생하지 않음 — 정의만 존재)** |
 
 </details>
 
 <details markdown="1">
-<summary><strong>Cloud Auth</strong> (2건)</summary>
+<summary><strong>Cloud Auth</strong> (2건 정의 · <strong>실제 발생 0건</strong>)</summary>
 
 | 코드 | HTTP | 설명 |
 |------|------|------|
-| `CLOUD-AUTH-ERROR-01` | 400 | 파일 크기가 제한을 초과했습니다. (최대 10MB) |
-| `CLOUD-AUTH-ERROR-02` | 400 | 파일 업로드 중 오류가 발생했습니다. |
+| `CLOUD-AUTH-ERROR-01` | 400 | 파일 크기가 제한을 초과했습니다. (최대 10MB) **(현재 발생하지 않음 — 정의만 존재)** |
+| `CLOUD-AUTH-ERROR-02` | 400 | 파일 업로드 중 오류가 발생했습니다. **(현재 발생하지 않음 — 정의만 존재)** |
 
 </details>
 

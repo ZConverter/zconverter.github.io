@@ -60,7 +60,7 @@ zdm-cli recovery image-regist --backup-file "server01_ROOT_0262.ZIA" --target "t
 | `--overwrite` | — | boolean | Optional | 덮어쓰기 허용 |
 | `--exclude-partition` | `-exp` | string | Optional | 제외할 파티션 |
 | `--after-reboot` | `-ar` | string | Optional | 작업 후 부팅 방식 |
-| `--start` | — | boolean | Optional | 등록 후 즉시 시작 |
+| `--start` | — | boolean | Optional | 등록 후 즉시 시작. 대상 서버가 사용 중이면 등록은 되고 자동 시작만 생략됩니다 |
 | `--network-limit` | `-nl` | number | Optional | 네트워크 제한 속도 |
 | `--schedule` / `--schedule-id` | `-sc` / `-sc-id` | string | Optional | 스케줄 지정 |
 | `--schedule-file` | `-sc-f` | string | Optional | 스케줄 정의 파일 |
@@ -159,6 +159,11 @@ repository.type   : NFS
 > `[Registration Summary]` 의 `total` 은 **등록된 작업 수**이지 파티션 수가 아닙니다. 위 예시는 파티션 3개를 한 작업으로 등록한 결과입니다.
 >
 > `autoStart` 가 `-` 인 것은 `--start` 를 주지 않아 서버가 기본값을 적용했다는 뜻입니다.
+>
+> **`autoStart` 는 요청값의 반향이 아니라 서버가 실제로 적용한 값입니다 (since 3.0.0).** `--start` 를 주었더라도
+> 대상 서버에 다른 복구가 진행 중이면 등록은 성공하되 자동 시작만 생략되고, 이 줄은 `not use` 로 표시됩니다.
+> 사유는 `[Notices]` 로 함께 출력됩니다. 진행 중인 복구가 끝난 뒤
+> `zdm-cli recovery update --id <ID> --status start` 로 실행하세요.
 
 **JSON 형식 (`--output json`)**
 

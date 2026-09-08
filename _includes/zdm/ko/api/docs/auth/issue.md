@@ -124,8 +124,7 @@ curl -X POST "https://api.example.com/api/token/issue" \
     "code": "DTO-VALIDATION-01",
     "message": "Request body validation failed.",
     "details": {
-    "email": ["invalid email format"]
-    }
+      "email": ["invalid email format"]
     }
   },
   "timestamp": "2026-01-17T15:14:09.000+09:00"

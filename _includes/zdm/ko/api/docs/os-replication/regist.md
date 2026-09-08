@@ -155,7 +155,25 @@ curl -X POST "https://api.example.com/api/os-replications" \
 | 코드 | HTTP | 설명 |
 |------|------|------|
 | `NOT_FOUND` | 404 | center / cloudKey / zosRepository / repository 미존재 |
-| `BAD_REQUEST` | 400 | cloudKey / zosRepository / repository 의 center 소속 불일치 |
+| `BAD_REQUEST` | 400 | cloudKey / zosRepository / repository 의 center 소속 불일치, 또는 등록 center 안에 같은 `jobName` 의 작업이 이미 존재 |
+| `CONFLICT` | 409 | 같은 center · 같은 `jobName` 에 대한 동시 등록 경합 — 이름 락 대기 한도(10초) 초과 |
 | `INTERNAL_SERVER_ERROR` | 500 | 트랜잭션 실패 등 내부 오류 |
+
+> **작업 이름 중복 (400)** — `jobName` 을 **명시적으로 지정한** 경우에만 해당합니다. 생략하면 자동생성 이름(`os_repl_<type>_<timestamp>`)이 쓰여 사실상 겹치지 않습니다.
+> 검사 범위는 **등록 center 안**입니다 — 다른 center 에 같은 이름이 있어도 등록됩니다.
+>
+> 중복 검사와 INSERT 는 이름 락 안에서 함께 수행됩니다. 같은 이름을 동시에 등록하려는 요청이 겹치면 뒤의 요청은 락을 얻은 뒤에 중복을 확인해 400 을 받고, 락 대기 한도를 넘긴 경우에는 409 를 받습니다. 409 는 재시도로 해소되는 성격입니다.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "BAD_REQUEST",
+    "message": "Os Replication jobName already exists in the center (jobName: os_repl_upload_01, centerID: 1)"
+  },
+  "timestamp": "2026-04-08T12:00:00.000+09:00"
+}
+```
 
 </details>

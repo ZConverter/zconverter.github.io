@@ -55,7 +55,7 @@ source 서버 없이 backup image 파일만으로 복구 작업을 등록합니�
 | `overwrite` | string | Optional | 공통 덮어쓰기 허용 여부 |
 | `excludePartition` | string | Optional | 작업에서 제외할 파티션 |
 | `afterReboot` | string | Optional | `reboot`(기본), `shutdown`, `maintain` |
-| `autoStart` | string | Optional | `use`, `not use`(기본) |
+| `autoStart` | string | Optional | `use`, `not use`(기본). 대상 서버가 사용 중이면 등록은 되고 자동 시작만 생략됩니다 — 아래 "대상 서버가 사용 중일 때" 참고 |
 | `networkLimit` | number | Optional | 네트워크 제한 속도. `0` 은 무제한 |
 | `schedule` | object \| number | Optional | 스케줄 객체 또는 기존 스케줄 ID |
 | `cloudAuth` | string \| number | Optional | 대상 플랫폼 인증정보 |
@@ -65,6 +65,25 @@ source 서버 없이 backup image 파일만으로 복구 작업을 등록합니�
 > **필수 식별자의 공백 값 (since 2026-09-01)**
 >
 > `center` / `target` 등 필수 식별자 필드는 **공백만 있거나 빈 문자열이면 거부**됩니다. 값은 앞뒤 공백을 제거한 뒤 사용됩니다. (예: `"center": " "` → 400, 메시지는 기존 `center is required`와 동일)
+
+> **대상 서버가 사용 중일 때 (since 3.0.0)**
+>
+> 대상 서버에 다른 복구 작업이 진행 중이어도 **등록은 언제나 성공합니다.** 막히는 것은 등록이 아니라 실행입니다.
+>
+> | 요청 | 동작 |
+> |------|------|
+> | `autoStart` 미지정 | 등록 성공. `notices` 에 진행 중인 작업 안내가 담깁니다 |
+> | `autoStart: "use"` | 등록 성공. **자동 시작만 생략**되고 사유가 `notices` 에 담깁니다. 이때 응답의 `common.autoStart` 는 요청한 `"use"` 가 아니라 **`"not use"`** 입니다 |
+> | `PUT /recoveries/:identifier` 의 `status: "start"` | `JOB-ERROR-64` (409 Conflict) 로 **거부**됩니다 |
+>
+> `notices` 에 담기는 문구는 아래와 같습니다. `<jobName>` 은 진행 중인 복구 작업 이름, `<targetServer>` 는 대상 서버 이름입니다.
+>
+> - 자동 시작이 생략된 경우
+>   `Recovery job '<jobName>' is currently in progress on target server '<targetServer>' — this job was registered but autoStart was skipped. Start it with a status update once the running job completes.`
+> - `autoStart` 없이 등록한 경우
+>   `Recovery job '<jobName>' is currently in progress on target server '<targetServer>' — this job was registered but not started.`
+>
+> 자동 시작이 생략된 작업은 진행 중인 복구가 끝난 뒤 `PUT /recoveries/:identifier` 에 `status: "start"` 를 보내 실행하세요. 진행 중 복구를 확인하는 조회 자체가 실패하면 등록도 자동 시작도 막지 않습니다.
 
 </details>
 
@@ -221,6 +240,7 @@ curl -X POST "https://api.example.com/api/recoveries/image" \
 |------|------|------|
 | `common.state` | string | 등록 결과 |
 | `common.jobName` | string | 최종 확정된 작업 이름 |
+| `common.autoStart` | string | 자동 시작 여부 — **요청값의 반향이 아니라 실제로 적용된 값**입니다. `autoStart: "use"` 로 요청해도 대상 서버가 사용 중이면 자동 시작이 생략되고 이 필드는 `"not use"` 로 반환됩니다. 요청에서 `autoStart` 를 생략하면 값이 비어 있을 수 있습니다 |
 | `common.platform` | string | 대상 플랫폼 |
 | `common.bootMode` | string | 작업 후 부팅 방식 |
 | `partitions[].sourcePartition` | string | 이미지에서 읽은 원본 파티션 |
@@ -230,7 +250,7 @@ curl -X POST "https://api.example.com/api/recoveries/image" \
 | `partitions[].backup.backupJob` | string | 이미지가 소속된 backup 작업 이름 |
 | `partitions[].repository` | object | 사용된 레포지토리 |
 | `summary` | object | 등록 성공·실패 집계 |
-| `notices` | string[] | 자동 skip 된 파티션 안내 (해당 시에만 포함) |
+| `notices` | string[] | 사용자 안내 메시지 (해당 시에만 포함). ① 대상 서버가 사용 중 (since 3.0.0) ② 자동 skip 된 파티션 안내. 두 사유가 함께 발생하면 **대상 서버 안내가 배열의 앞**에 옵니다 |
 
 </details>
 

@@ -104,7 +104,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (0 이상) | - |
 | `scriptPath` | string | Optional | 실행할 스크립트 경로 | - |
 | `scriptRun` | string | Optional | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
-| `status` | string | Optional | 작업 상태 변경 | {% include zdm/job-status-update.md %} |
+| `status` | string | Optional | 작업 상태 변경. `start` 는 대상 서버가 사용 중이면 거부됩니다 — 아래 "실행 요청과 대상 서버 점유" 참고 | {% include zdm/job-status-update.md %} |
 | `jobList` | array | Optional | 개별 작업 설정 배열 | - |
 
 **jobList 항목 구조:**
@@ -125,6 +125,18 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 > **필수 식별자의 공백 값 (since 2026-09-01)**
 >
 > `center`는 **공백만 있거나 빈 문자열이면 거부**됩니다. 값은 앞뒤 공백을 제거한 뒤 소속 검증에 사용됩니다. (예: `"center": " "` → 400, 메시지는 기존 `center is required`와 동일)
+
+> **실행 요청과 대상 서버 점유 (since 3.0.0)**
+>
+> 같은 대상 서버 디스크에 복구가 둘 붙으면 서로의 결과를 덮어쓰므로, **실행 요청은 대상 서버가 비어 있을 때만 받아들입니다.**
+>
+> - 대상 서버에 다른 복구가 진행 중인데 `status: "start"` 를 보내면 `JOB-ERROR-64` (409 Conflict) 로 거부됩니다. 진행 중인 작업이 끝난 뒤 다시 보내세요.
+> - `status: "stop"` 은 점유를 푸는 방향이라 **영향을 받지 않습니다.**
+> - `status` 를 보내지 않는 설정 수정은 검사 대상이 아닙니다.
+> - **자기 자신의 진행 이력은 차단 근거가 아닙니다.** 수정하려는 그 작업 자체의 진행 정보는 판정에서 제외되므로, 같은 작업을 다시 시작하는 요청은 자기 자신 때문에 막히지 않습니다.
+> - 진행 중 복구를 확인하는 조회 자체가 실패하면 실행을 막지 않습니다 — 확인이 되지 않는다는 이유로 정상 요청을 거부하지 않습니다.
+>
+> 등록(`POST /recoveries`, `POST /recoveries/image`)은 이 검사로 거부되지 않습니다. 대상 서버가 사용 중이면 등록은 그대로 성공하고 자동 시작만 생략됩니다.
 
 > **mode와 jobList 동시 사용 시 처리 순서:**
 > 1. `mode` 필드가 먼저 적용되어 **모든 파티션**의 모드가 변경됩니다.
@@ -425,6 +437,22 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
   "error": {
     "code": "JOB-ERROR-01",
     "message": "Recovery job with ID '999' not found"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+**대상 서버에 진행 중인 복구가 있음 (409 Conflict) — since 3.0.0**
+
+`status: "start"` 로 실행을 요청했으나 대상 서버에서 다른 복구 작업이 이미 진행 중인 경우입니다. `status: "stop"` 과 `status` 없는 설정 수정은 해당하지 않습니다.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-64",
+    "message": "[Recovery start] - Recovery job 'daily-recovery' is already in progress on target server 'target-server'. Wait for it to finish, then start this job again."
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
