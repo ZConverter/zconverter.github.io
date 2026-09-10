@@ -140,6 +140,14 @@ curl -X POST "https://api.example.com/api/recoveries" \
 >
 > Windows 서버 대상으로 등록 시 `sourcePartition` / `targetPartition` 입력값은 비교 단계에서 자동으로 대문자 변환 및 `:` 보정이 적용됩니다. 입력 `c`, `C`, `c:`, `C:` 모두 동일하게 `C:`로 취급되어 서버 파티션 정보와 매칭됩니다. (Linux는 정규화 없음 — 원본 그대로 비교)
 
+> **`overwrite` 는 Linux 전용입니다 (since 3.0.0)**
+>
+> `overwrite` 는 target 에 짝이 없는 데이터 파티션을 `/` 로 통합하는 Linux 규칙입니다. Windows 는 드라이브 단위라 통합할 상위 대상이 없어 이 옵션이 의미를 갖지 않습니다.
+>
+> Windows 대상 등록에 `overwrite: "allow"` (전역 또는 `jobList[].overwrite`) 를 보내면 **거부하지 않고 옵션을 무시**합니다 — 값은 `"not allow"` 로 처리되어 등록되고, 응답 `notices` 에 무시했다는 안내가 담깁니다. 응답의 `partitions[].overwrite` 는 **`"Not overwritten"`** 으로 나옵니다.
+>
+> **이전 동작과 다릅니다.** 3.0.0 이전에는 같은 요청이 `JOB-ERROR-56` (409 Conflict) 로 거부됐습니다. 이 에러에 의존하던 소비자는 영향을 받습니다.
+
 > **대상 서버가 사용 중일 때 (since 3.0.0)**
 >
 > 대상 서버에 다른 복구 작업이 진행 중이어도 **등록은 언제나 성공합니다.** 막히는 것은 등록이 아니라 실행입니다.
@@ -284,7 +292,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `summary.total` | number | 총 파티션 수 |
 | `summary.successful` | number | 성공한 파티션 수 |
 | `summary.failed` | number | 실패한 파티션 수 |
-| `notices` | string[] (optional) | 사용자 안내 메시지 배열 (v2.0.2 신규). 안내할 내용이 있을 때만 응답에 포함되며, 사유는 두 가지입니다. ① 대상 서버가 사용 중 (since 3.0.0) — 아래 "대상 서버 사용 중 안내 문구" 참고. ② backup 작업·이미지가 없는 partition 자동 skip — 예: `"Partition/drive 'D:' was skipped — no backup available: Backup job not found for partition 'D:' on server 'src-win01'"`. 두 사유가 함께 발생하면 **대상 서버 안내가 배열의 앞**에 옵니다 |
+| `notices` | string[] (optional) | 사용자 안내 메시지 배열 (v2.0.2 신규). 안내할 내용이 있을 때만 응답에 포함되며, 사유는 세 가지입니다. ① 대상 서버가 사용 중 (since 3.0.0) — 아래 "대상 서버 사용 중 안내 문구" 참고. ② backup 작업·이미지가 없는 partition 자동 skip — 예: `"Partition/drive 'D:' was skipped — no backup available: Backup job not found for partition 'D:' on server 'src-win01'"`. ③ Windows 대상에서 `overwrite` 무시 (since 3.0.0) — `"The overwrite option is Linux-only and was ignored for this Windows recovery job."`. 여러 사유가 함께 발생하면 **`overwrite` 무시 안내 → 대상 서버 안내 → partition skip 안내** 순으로 배열에 담깁니다 |
 
 > **대상 서버 사용 중 안내 문구 (since 3.0.0)**
 >

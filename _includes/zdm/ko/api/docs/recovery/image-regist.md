@@ -66,6 +66,12 @@ source 서버 없이 backup image 파일만으로 복구 작업을 등록합니�
 >
 > `center` / `target` 등 필수 식별자 필드는 **공백만 있거나 빈 문자열이면 거부**됩니다. 값은 앞뒤 공백을 제거한 뒤 사용됩니다. (예: `"center": " "` → 400, 메시지는 기존 `center is required`와 동일)
 
+> **`overwrite` 는 Linux 전용입니다 (since 3.0.0)**
+>
+> `overwrite` 는 target 에 짝이 없는 데이터 파티션을 `/` 로 통합하는 Linux 규칙이라 Windows 대상에서는 의미가 없습니다. Windows 대상 등록에 `overwrite: "allow"` (전역 또는 `jobList[].overwrite`) 를 보내면 **거부하지 않고 옵션을 무시**하고, 응답 `notices` 에 안내를 담습니다.
+>
+> **이전 동작과 다릅니다.** 3.0.0 이전에는 같은 요청이 `JOB-ERROR-56` (409 Conflict) 로 거부됐습니다.
+
 > **대상 서버가 사용 중일 때 (since 3.0.0)**
 >
 > 대상 서버에 다른 복구 작업이 진행 중이어도 **등록은 언제나 성공합니다.** 막히는 것은 등록이 아니라 실행입니다.
@@ -250,7 +256,7 @@ curl -X POST "https://api.example.com/api/recoveries/image" \
 | `partitions[].backup.backupJob` | string | 이미지가 소속된 backup 작업 이름 |
 | `partitions[].repository` | object | 사용된 레포지토리 |
 | `summary` | object | 등록 성공·실패 집계 |
-| `notices` | string[] | 사용자 안내 메시지 (해당 시에만 포함). ① 대상 서버가 사용 중 (since 3.0.0) ② 자동 skip 된 파티션 안내. 두 사유가 함께 발생하면 **대상 서버 안내가 배열의 앞**에 옵니다 |
+| `notices` | string[] | 사용자 안내 메시지 (해당 시에만 포함). ① 대상 서버가 사용 중 (since 3.0.0) ② 자동 skip 된 파티션 안내 ③ Windows 대상에서 `overwrite` 무시 (since 3.0.0) — `"The overwrite option is Linux-only and was ignored for this Windows recovery job."`. 여러 사유가 함께 발생하면 **`overwrite` 무시 안내 → 대상 서버 안내 → 파티션 skip 안내** 순입니다 |
 
 </details>
 

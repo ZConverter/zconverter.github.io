@@ -90,7 +90,7 @@ zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky8
 | --start | - | boolean | Optional | - | 작업 자동시작 여부. 대상 서버가 사용 중이면 등록은 되고 자동 시작만 생략됩니다 | - |
 | --script-path | -sp | string | Optional | - | 실행할 스크립트 파일 경로 (사전에 ZDM에 업로드 필요) | - |
 | --script-run | -sr | string | Optional | - | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
-| --overwrite | - | boolean | Optional | false | 파티션 오버라이트 허용 여부 (Linux 전용) | - |
+| --overwrite | - | boolean | Optional | false | 파티션 오버라이트 허용 여부 (Linux 전용 — Windows 대상에서는 무시되고 `[Notices]` 로 안내됩니다) | - |
 | --after-reboot | -ar | string | Optional | reboot | 복구 완료 후 동작 | `reboot`, `shutdown`, `none` |
 | --cloud-auth | -ca | string | Optional | - | 클라우드 인증정보 ID 또는 Name | - |
 | --list-only | -lo | boolean | Optional | - | jobList에 지정된 파티션만 작업 등록 | - |
@@ -390,6 +390,19 @@ table 출력은 partitions 를 행 단위 표로 표시하고, schedule 은 별�
 <summary><strong>오버라이트 옵션</strong></summary>
 
 {% include zdm/overwrite-options.md cli=true desc=true %}
+
+> **Linux 전용 옵션입니다 (since 3.0.0)**
+>
+> `--overwrite` 는 target 에 짝이 없는 데이터 파티션을 `/` 로 통합하는 Linux 규칙입니다. Windows 는 드라이브 단위라 통합할 상위 대상이 없어 의미가 없습니다.
+>
+> Windows 대상에 `--overwrite` 를 주면 등록은 그대로 진행되고 옵션만 무시되며, 결과의 `[Notices]` 에 아래 문구가 출력됩니다.
+>
+> ```
+> [Notices]
+>   - The overwrite option is Linux-only and was ignored for this Windows recovery job.
+> ```
+>
+> **이전 동작과 다릅니다.** 3.0.0 이전에는 같은 명령이 `JOB-ERROR-56` (409) 에러로 실패했습니다.
 
 </details>
 

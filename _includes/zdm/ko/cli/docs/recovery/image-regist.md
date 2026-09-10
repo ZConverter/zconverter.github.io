@@ -57,7 +57,7 @@ zdm-cli recovery image-regist --backup-file "server01_ROOT_0262.ZIA" --target "t
 | `--job-name` | `-jn` | string | Optional | 작업 이름. 미지정 시 자동 생성 |
 | `--job-list` | `-jl` | string | Optional | 파티션별 상세 지정 (JSON) |
 | `--list-only` | `-lo` | boolean | Optional | `--job-list` 에 지정한 항목만 등록 |
-| `--overwrite` | — | boolean | Optional | 덮어쓰기 허용 |
+| `--overwrite` | — | boolean | Optional | 덮어쓰기 허용 (Linux 전용 — Windows 대상에서는 무시되고 `[Notices]` 로 안내됩니다) |
 | `--exclude-partition` | `-exp` | string | Optional | 제외할 파티션 |
 | `--after-reboot` | `-ar` | string | Optional | 작업 후 부팅 방식 |
 | `--start` | — | boolean | Optional | 등록 후 즉시 시작. 대상 서버가 사용 중이면 등록은 되고 자동 시작만 생략됩니다 |
