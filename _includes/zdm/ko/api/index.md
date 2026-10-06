@@ -4,20 +4,13 @@
 
 ## {{ include.changelog_title }}
 
+<details class="changelog-block" markdown="1">
+<summary><strong>변경 내역 펼치기</strong></summary>
+
 {{ include.changelog }}
-{% endif %}
-
-<details markdown="1">
-<summary><strong>목차</strong></summary>
-
-- [ZDM API 소개](#zdm-api-소개)
-- [주요 기능](#주요-기능)
-- [Base URL](#base-url)
-- [참고사항](#참고사항)
 
 </details>
-
----
+{% endif %}
 
 ## ZDM API 소개
 

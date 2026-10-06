@@ -18,7 +18,7 @@
     </div>
   </header>
 
-  <main class="container">
+  <main class="container{% if page.layout == 'home' %} is-home{% endif %}">
     {{ content }}
   </main>
 

@@ -1,19 +1,6 @@
 
 CLI 설정 파일 및 설정 관리에 대한 개요입니다.
 
-<details markdown="1" open>
-<summary><strong>목차</strong></summary>
-
-- [설정 파일](#설정-파일)
-- [설정 항목](#설정-항목)
-- [설정 우선순위](#설정-우선순위)
-- [하위 커맨드](#하위-커맨드)
-- [참고사항](#참고사항)
-
-</details>
-
----
-
 ## 설정 파일
 
 <details markdown="1" open>

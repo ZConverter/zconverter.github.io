@@ -6,6 +6,49 @@
 
 ---
 
+## 2026년 10월
+
+<details>
+<summary><code>[10-06] [Changed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>변경 사항 페이지 분리 — ZDM 홈에서 changelog 독립</b></summary>
+
+- **Context**
+  - ZDM 홈 본문 80,360자 중 업데이트 목록이 79,981자(99.5%)였다. 소개·제품 카드는 396자. 홈이 사실상 changelog 페이지였다.
+- `zdm/ko/changelog.md` 신설 — 업데이트 목록을 통째로 옮겼다. 홈은 229KB → 15KB.
+- ZDM-API / ZDM-CLI 는 한 페이지에 유지한다. 11개 버전 중 8개가 양쪽 공통이고 같은 날 배포되며, CLI 변경의 상당수가 API 변경에 대응하는 내용이라 가로질러 보는 편이 맞다. 제품 트리(`/zdm/ko/{prod}/`) 아래에 두면 `path_parts[4]` 를 버전으로 쓰는 레이아웃 로직이 깨지는 문제도 있다.
+- 제품 제목을 `h3` → `h2` 로 올렸다. 새 페이지에서는 최상위 절이고, 우측 목차가 `ZDM-API` · `ZDM-CLI` 두 항목으로 잡힌다.
+- 홈에 `더 보기` 섹션 추가 — 다운로드 · 변경 사항 진입 카드.
+- `_data/navigation.yml` 의 `ko-zdm` 에 `변경 사항` 추가 (다운로드 다음).
+- 우측 목차 보조 수집에서 카드·밀집행 안의 `summary` 도 제외하도록 보강했다. 제외하지 않으면 changelog 페이지에서 버전 행 13개가 목차로 쏟아진다.
+
+</details>
+
+<details>
+<summary><code>[10-06] [Changed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>업데이트 목록 밀집 행 · BREAKING 건수 자동 집계</b></summary>
+
+- 버전별 접기 블록을 `버전 · 배포일 · 배지` 한 행으로 바꿨다. 변경 건수가 15건에서 1건까지 편중돼 있어, 내용량에 비례해 커지는 행 방식이 맞다.
+- changelog include 18개에서 바깥 `<details>` 래퍼를 걷어내고 첫 줄을 `#### v{version}` 으로 바꿨다. 버전 블록 안에 changelog 블록이 또 들어가던 2중 중첩이 사라지고, 600자를 넘던 한 줄 요약도 없앴다. 본문은 그대로다.
+- `_plugins/changelog_stats_generator.rb` 신설 — 본문의 `**BREAKING — …**` 소제목을 세어 `site.data.zdm.common.changelog_stats` 로 주입한다. 한 줄 요약의 `(BREAKING)` 태그(8건)가 아니라 본문 항목(13건)을 센다.
+- 섹션 최상단에 BREAKING 의 의미를 명시했다 — 이전 버전 기준으로 작성한 요청·스크립트가 수정 없이는 동작하지 않는다는 뜻.
+- 한 파일에 두 버전이 들어 있던 `api/changelog/1.3.0.md` · `cli/changelog/1.2.0.md` 를 분리했다. v1.3.1 항목은 기존 `api/changelog/1.3.1.md` 로 합치고, v1.2.1 은 `cli/changelog/1.2.1.md` 를 신설했다.
+- 우측 목차는 `h2`/`h3` 만 쓰고 중첩 `summary` 를 제외하도록 고쳤다. 허브 페이지 목차 항목이 35개에서 7개가 됐다.
+
+</details>
+
+<details>
+<summary><code>[10-06] [Added&nbsp;&nbsp;] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>서버리스 복구 자동화 가이드 (NCP)</b></summary>
+
+- 최상단 네비게이션에 `Guides` 항목 신설. `/guides/` 가이드 허브 + `/guides/ko/serverless-dr/ncp/` 가이드 랜딩 추가.
+- 단일 docx 변환 원본(inline base64 PNG 70개 포함)을 장·절 기준 15개 페이지로 분리. 본문 유실 없음.
+- 이미지 67개를 `assets/images/guides/serverless-dr-ncp/` 로 추출(중복 3건은 단일 파일 공유).
+- docx TOC 블록과 `zc_section` 앵커 25개 제거, 본문 교차참조 4곳을 `web-access` 페이지 URL로 재배선.
+- 1.2 시스템 요구사항의 pandoc HTML 표를 마크다운 파이프 표로 변환.
+- `_data/navigation.yml` 에 `ko-guides` · `ko-guide-serverless-dr-ncp` 사이드바 섹션 추가.
+- `_layouts/docs.html` breadcrumb 에 `guides` 분기 추가 — 버전 셀렉터는 `api`/`cli` 게이트로 그대로 비노출.
+
+</details>
+
+---
+
 ## 2026년 9월
 
 <details>

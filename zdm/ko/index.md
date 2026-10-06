@@ -6,38 +6,6 @@ navigation: ko-zdm
 lang: ko
 ---
 
-<style>
-.service-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin: 1.5rem 0;
-}
-@media (max-width: 780px) {
-  .service-grid {
-    grid-template-columns: 1fr;
-  }
-}
-.service-card {
-  border: 1px solid #e1e4e8;
-  border-radius: 8px;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-}
-.service-card.cli { border-top: 4px solid #2c3e50; }
-.service-card.api { border-top: 4px solid #3498db; }
-.service-card h3 { margin-top: 0; }
-.service-card table { margin-top: 1rem; }
-.service-card td, .service-card th { padding: 0.5rem 0.75rem; white-space: nowrap; }
-.service-card td:first-child { font-weight: bold; color: #2c3e50; }
-.service-card .sub-desc { color: #7f8c8d; font-size: 0.9rem; }
-.service-card .link-group a { margin-right: 0.5rem; }
-.badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600; vertical-align: middle; }
-.badge-latest { background: #dafbe1; color: #1a7f37; }
-.badge-patch { background: #ddf4ff; color: #0969da; }
-.update-date { color: #7f8c8d; font-size: 0.85rem; }
-</style>
-
 ## ZDM 소개
 
 ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
@@ -82,6 +50,7 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 
 <div class="service-card api">
 <h3>ZDM-API</h3>
+---
 <p>백업, 복구, 시스템 관리를 위한 <strong>API 서버</strong><br><span class="sub-desc">Linux 전용 · Ubuntu 22.04 이상 권장</span></p>
 <table>
 <tr><td>현재 버전</td><td><code>{{ api_latest.version }}</code></td></tr>
@@ -107,135 +76,18 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 
 ---
 
-## 업데이트 목록
+## 더 보기
 
-### ZDM-API <span class="badge badge-latest">latest v3.0.0</span> <span class="update-date">(2026-08-28)</span>
+<div class="service-grid">
 
-<details markdown="1">
-<summary><strong>v3.0.0</strong> <span class="update-date">(2026-08-28)</span></summary>
+<a class="feature-card" href="/zdm/ko/downloads">
+<h3>다운로드</h3>
+<p>버전별 바이너리와 배포일을 확인합니다.</p>
+</a>
 
-[v3.0.0 문서 바로가기](/zdm/ko/api/3.0.0/index)
+<a class="feature-card" href="/zdm/ko/changelog">
+<h3>변경 사항</h3>
+<p>ZDM-API · ZDM-CLI 의 버전별 변경 이력과 BREAKING 항목을 확인합니다.</p>
+</a>
 
-{% include zdm/ko/api/changelog/3.0.0.md %}
-
-</details>
-
-<details markdown="1">
-<summary><strong>v2.0.2</strong> <span class="update-date">(2026-06-01)</span></summary>
-
-[v2.0.2 문서 바로가기](/zdm/ko/api/2.0.2/index)
-
-{% include zdm/ko/api/changelog/2.0.2.md %}
-
-</details>
-
-<details markdown="1">
-<summary><strong>v2.0.0</strong> <span class="update-date">(2026-04-17)</span> · <span class="badge badge-patch">patch v2.0.1</span> <span class="update-date">(2026-05-18)</span></summary>
-
-[v2.0.0 문서 바로가기](/zdm/ko/api/2.0.0/index)
-
-{% include zdm/ko/api/changelog/2.0.0.md %}
-
-{% include zdm/ko/api/changelog/2.0.1.md %}
-
-</details>
-
-<details markdown="1">
-<summary><strong>v1.3.0</strong> <span class="update-date">(2026-04-08)</span> · <span class="badge badge-patch">patch v1.3.1</span> <span class="update-date">(2026-04-13)</span></summary>
-
-[v1.3.0 문서 바로가기](/zdm/ko/api/1.3.0/index)
-
-{% include zdm/ko/api/changelog/1.3.0.md %}
-
-{% include zdm/ko/api/changelog/1.3.1.md %}
-
-</details>
-
-<details markdown="1">
-<summary><strong>v1.2.0</strong> <span class="update-date">(2026-03-25)</span></summary>
-
-[v1.2.0 문서 바로가기](/zdm/ko/api/1.2.0/index)
-
-{% include zdm/ko/api/changelog/1.2.0.md %}
-
-</details>
-
-<details markdown="1">
-<summary><strong>v1.1.0</strong> <span class="update-date">(2026-03-04)</span></summary>
-
-[v1.1.0 문서 바로가기](/zdm/ko/api/1.1.0/index)
-
-{% include zdm/ko/api/changelog/1.1.0.md %}
-
-</details>
-
-<details markdown="1">
-<summary><strong>v1.0.3</strong></summary>
-
-[v1.0.3 문서 바로가기](/zdm/ko/api/1.0.3/index)
-
-{% include zdm/ko/api/changelog/1.0.3.md %}
-
-</details>
-
-### ZDM-CLI <span class="badge badge-latest">latest v3.0.0</span> <span class="update-date">(2026-08-28)</span>
-
-<details markdown="1">
-<summary><strong>v3.0.0</strong> <span class="update-date">(2026-08-28)</span></summary>
-
-[v3.0.0 문서 바로가기](/zdm/ko/cli/3.0.0/index)
-
-{% include zdm/ko/cli/changelog/3.0.0.md %}
-
-</details>
-
-<details markdown="1">
-<summary><strong>v2.0.0</strong> <span class="update-date">(2026-04-17)</span> · <span class="badge badge-patch">patch v2.0.1</span> <span class="update-date">(2026-05-21)</span> · <span class="badge badge-patch">patch v2.0.2</span> <span class="update-date">(2026-05-29)</span></summary>
-
-[v2.0.2 문서 바로가기](/zdm/ko/cli/2.0.2/index) · [v2.0.0 문서 바로가기](/zdm/ko/cli/2.0.0/index)
-
-{% include zdm/ko/cli/changelog/2.0.2.md %}
-
-{% include zdm/ko/cli/changelog/2.0.1.md %}
-
-{% include zdm/ko/cli/changelog/2.0.0.md %}
-
-</details>
-
-<details markdown="1">
-<summary><strong>v1.3.0</strong> <span class="update-date">(2026-04-10)</span> · <span class="badge badge-patch">patch v1.3.1</span> <span class="update-date">(2026-04-13)</span></summary>
-
-[v1.3.1 문서 바로가기](/zdm/ko/cli/1.3.1/index)
-
-{% include zdm/ko/cli/changelog/1.3.1.md %}
-
-{% include zdm/ko/cli/changelog/1.3.0.md %}
-
-</details>
-
-<details markdown="1">
-<summary><strong>v1.2.0</strong> <span class="update-date">(2026-04-09)</span> · <span class="badge badge-patch">patch v1.2.1</span> <span class="update-date">(2026-04-09)</span></summary>
-
-[v1.2.0 문서 바로가기](/zdm/ko/cli/1.2.0/index)
-
-{% include zdm/ko/cli/changelog/1.2.0.md %}
-
-</details>
-
-<details markdown="1">
-<summary><strong>v1.0.4</strong> <span class="update-date">(2026-03-04)</span></summary>
-
-[v1.0.4 문서 바로가기](/zdm/ko/cli/1.0.4/index)
-
-{% include zdm/ko/cli/changelog/1.0.4.md %}
-
-</details>
-
-<details markdown="1">
-<summary><strong>v1.0.3</strong></summary>
-
-[v1.0.3 문서 바로가기](/zdm/ko/cli/1.0.3/index)
-
-{% include zdm/ko/cli/changelog/1.0.3.md %}
-
-</details>
+</div>

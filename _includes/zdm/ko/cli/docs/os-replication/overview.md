@@ -1,18 +1,6 @@
 
 OS Replication 기능에 대한 개요입니다.
 
-<details markdown="1" open>
-<summary><strong>목차</strong></summary>
-
-- [OS Replication 타입](#os-replication-타입)
-- [모드](#모드)
-- [주요 구성 요소](#주요-구성-요소)
-- [서브커맨드](#서브커맨드)
-
-</details>
-
----
-
 ## OS Replication 타입
 
 <details markdown="1" open>

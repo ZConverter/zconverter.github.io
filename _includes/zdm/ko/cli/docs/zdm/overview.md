@@ -1,18 +1,6 @@
 
 ZDM Center 관리 기능에 대한 개요입니다.
 
-<details markdown="1" open>
-<summary><strong>목차</strong></summary>
-
-- [연결 상태](#연결-상태)
-- [활성화 상태](#활성화-상태)
-- [Repository 타입](#repository-타입)
-- [하위 커맨드](#하위-커맨드)
-
-</details>
-
----
-
 ## 연결 상태
 
 <details markdown="1" open>

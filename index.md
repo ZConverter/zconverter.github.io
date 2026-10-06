@@ -3,49 +3,65 @@ layout: home
 title: Home
 ---
 
-## ZConverter 공식 문서
+{% assign cli_latest = site.data.zdm.common.versions.cli | where: "status", "latest" | first %}
+{% assign api_latest = site.data.zdm.common.versions.api | where: "status", "latest" | first %}
+{% assign cli_docs_date = site.data.zdm.common.doc_mtimes.cli[cli_latest.version] | default: cli_latest.docs_updated %}
+{% assign api_docs_date = site.data.zdm.common.doc_mtimes.api[api_latest.version] | default: api_latest.docs_updated %}
 
-**ZConverter의 모든 서비스 문서를 한 곳에서 만나보세요.**
+<section class="home-section" markdown="1">
 
-이 페이지는 ZConverter에서 제공하는 다양한 솔루션의 공식 문서를 제공합니다.
+## 제품 문서
 
----
+<p class="section-sub">제품별 레퍼런스 — 커맨드와 엔드포인트 전체를 다룹니다.</p>
 
-## 제공 서비스
+<div class="feature-grid">
 
-### ZDM (ZConverter DR Manager)
+<a class="feature-card" href="/zdm/ko/cli/{{ cli_latest.version }}/index">
+<div class="feature-icon">&gt;_</div>
+<h3>ZDM-CLI <span class="badge badge-latest">latest</span></h3>
+<p>커맨드 라인에서 백업·복구 작업을 등록하고 모니터링합니다.</p>
+<div class="feature-foot"><span class="badge badge-patch">v{{ cli_latest.version }}</span> 문서 갱신 {{ cli_docs_date | default: "-" }}</div>
+</a>
 
-백업, 복구, 시스템 관리를 위한 통합 솔루션
+<a class="feature-card" href="/zdm/ko/api/{{ api_latest.version }}/index">
+<div class="feature-icon">{ }</div>
+<h3>ZDM-API <span class="badge badge-latest">latest</span></h3>
+<p>REST API 로 백업·복구·시스템 관리를 자동화합니다.</p>
+<div class="feature-foot"><span class="badge badge-patch">v{{ api_latest.version }}</span> 문서 갱신 {{ api_docs_date | default: "-" }}</div>
+</a>
 
-**서비스 개요**
+</div>
 
-ZDM은 데이터 보호와 시스템 관리를 위한 포괄적인 솔루션을 제공합니다:
+</section>
 
-- **ZDM-API**: 백업, 복구, 시스템 관리를 위한 API 서버
-- **ZDM-CLI**: 커맨드 라인 인터페이스 도구
+<section class="home-section home-band" markdown="1">
 
-**문서 링크**
+## 가이드
 
-| 문서 | 링크 |
-|------|------|
-| ZDM 홈 | [바로가기](/zdm/ko/) |
-| ZDM-API 문서 | [바로가기](/zdm/ko/api/1.0.3/index) |
-| ZDM-CLI 문서 | [바로가기](/zdm/ko/cli/1.0.3/index) |
+<p class="section-sub">시나리오별 구축·운영 절차를 처음부터 끝까지 안내합니다.</p>
 
----
+<div class="feature-grid">
 
-## 시작하기
+<a class="feature-card" href="/guides/ko/serverless-dr/ncp/index">
+<h3>서버리스 복구 자동화 <span class="badge badge-stable">NCP</span></h3>
+<p>Target ZDM 없이 백업 이미지로부터 복구를 자동화합니다.</p>
+<div class="feature-foot">Naver Cloud Platform · 6개 장</div>
+</a>
 
-**문서 사용 가이드**
+<a class="feature-card" href="/guides/">
+<h3>전체 가이드</h3>
+<p>클라우드·시나리오별 가이드 목록을 확인합니다.</p>
+<div class="feature-foot">가이드 홈</div>
+</a>
 
-1. **서비스 선택**: 위의 제공 서비스 섹션에서 필요한 서비스를 선택합니다
-2. **문서 탐색**: 각 서비스의 상세 문서를 확인합니다
-3. **API 시작**: API 문서의 Quick Start 가이드를 따라 시작합니다
+</div>
 
-각 서비스 항목에서 필요한 문서를 찾아보실 수 있습니다.
+</section>
 
----
+<section class="home-section" markdown="1">
 
 ## 지원
 
 문서 관련 문의사항이나 기술 지원이 필요하시면 [dev@zconverter.com](mailto:dev@zconverter.com)로 연락주세요.
+
+</section>

@@ -1,15 +1,6 @@
 
 CLI 설정 관리의 전체 워크플로우를 단계별로 설명합니다.
 
-<details markdown="1" open>
-<summary><strong>목차</strong></summary>
-
-- [초기 설정 절차](#초기-설정-절차)
-
-</details>
-
----
-
 ## 초기 설정 절차
 
 <details markdown="1" open>

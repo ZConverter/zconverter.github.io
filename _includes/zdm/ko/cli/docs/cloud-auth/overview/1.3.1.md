@@ -1,17 +1,6 @@
 
 Cloud Auth (클라우드 인증) 관리 기능에 대한 개요입니다.
 
-<details markdown="1" open>
-<summary><strong>목차</strong></summary>
-
-- [인증 타입](#인증-타입)
-- [지원 플랫폼](#지원-플랫폼)
-- [서브커맨드](#서브커맨드)
-
-</details>
-
----
-
 ## 인증 타입
 
 <details markdown="1" open>

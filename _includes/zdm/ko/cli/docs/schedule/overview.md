@@ -1,18 +1,6 @@
 
 스케줄 관리 기능에 대한 개요입니다. 작업(Job)에 연결할 스케줄을 생성, 검증, 등록, 조회, 삭제할 수 있습니다.
 
-<details markdown="1" open>
-<summary><strong>목차</strong></summary>
-
-- [하위 명령어](#하위-명령어)
-- [스케줄 타입](#스케줄-타입)
-- [스케줄 구조](#스케줄-구조)
-- [스케줄 JSON 예시](#스케줄-json-예시)
-
-</details>
-
----
-
 ## 하위 명령어
 
 <details markdown="1" open>

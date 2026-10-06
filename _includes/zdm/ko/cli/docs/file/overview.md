@@ -1,16 +1,6 @@
 
 ZDM 서버 파일 관리 기능에 대한 개요입니다. 서버에 파일을 업로드, 다운로드하고 목록을 조회할 수 있습니다.
 
-<details markdown="1" open>
-<summary><strong>목차</strong></summary>
-
-- [하위 명령어](#하위-명령어)
-- [파일 이름 형식](#파일-이름-형식)
-
-</details>
-
----
-
 ## 하위 명령어
 
 <details markdown="1" open>

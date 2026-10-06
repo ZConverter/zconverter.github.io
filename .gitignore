@@ -11,3 +11,8 @@ CLAUDE.md
 # dir
 image
 /docs
+# 가이드 원본 (대용량 inline base64 포함)
+ZConverter_*_단일파일.md
+
+# UI 시안 (임시)
+mockup/

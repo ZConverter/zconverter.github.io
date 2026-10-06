@@ -1,18 +1,6 @@
 
 스케줄 기능에 대한 개요입니다.
 
-<details markdown="1" open>
-<summary><strong>목차</strong></summary>
-
-- [스케줄 타입별 구조 및 설명](#스케줄-타입별-구조-및-설명)
-- [구조 필드 설명](#구조-필드-설명)
-- [Smart 스케줄 basic 필드 제한사항](#smart-스케줄-basic-필드-제한사항)
-- [타입별 상세 예시](#타입별-상세-예시)
-
-</details>
-
----
-
 ## 스케줄 타입별 구조 및 설명
 
 <details markdown="1" open>

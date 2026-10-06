@@ -20,6 +20,7 @@ permalink: pretty
 # Include all markdown files
 include:
   - "zdm/**/*.md"
+  - "guides/**/*.md"
   - "_layouts"
   - "_includes"
 
@@ -42,6 +43,8 @@ nav_links:
     url: /
   - title: ZDM
     url: /zdm/
+  - title: Guides
+    url: /guides/
 
 # Exclude from processing
 exclude:

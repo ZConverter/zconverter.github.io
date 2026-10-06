@@ -1,17 +1,6 @@
 
 Replication 기능에 대한 개요입니다.
 
-<details markdown="1" open>
-<summary><strong>목차</strong></summary>
-
-- [개요](#개요)
-- [하위 커맨드](#하위-커맨드)
-- [Replication Unit 타입](#replication-unit-타입)
-
-</details>
-
----
-
 ## 개요
 
 `replication` 커맨드 그룹은 Replication 작업의 등록, 조회, 수정, 삭제, 모니터링, 히스토리 조회 기능을 제공합니다.

@@ -1,18 +1,6 @@
 
 백업 기능에 대한 개요입니다.
 
-<details markdown="1" open>
-<summary><strong>목차</strong></summary>
-
-- [하위 명령어](#하위-명령어)
-- [백업 모드](#백업-모드)
-- [백업 상태](#백업-상태)
-- [Repository 타입](#repository-타입)
-
-</details>
-
----
-
 ## 하위 명령어
 
 <details markdown="1" open>

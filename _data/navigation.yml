@@ -9,6 +9,70 @@
 # 한국어 (Korean) Navigation
 # -------------------------------------------
 
+# -------------------------------------------
+# Guides (한국어)
+# -------------------------------------------
+
+# 가이드 허브 (한국어)
+ko-guides:
+  - title: "Guides"
+    links:
+      - title: "가이드 홈"
+        url: "/guides/ko/"
+      - title: "서버리스 복구 자동화 (NCP)"
+        url: "/guides/ko/serverless-dr/ncp/index"
+
+# 서버리스 복구 자동화 가이드 - NCP (한국어)
+ko-guide-serverless-dr-ncp:
+  - title: "가이드"
+    links:
+      - title: "가이드 홈"
+        url: "/guides/ko/"
+      - title: "서버리스 복구 자동화 (NCP)"
+        url: "/guides/ko/serverless-dr/ncp/index"
+  - title: "1 개요 및 준비"
+    links:
+      - title: "1 개요 및 준비"
+        url: "/guides/ko/serverless-dr/ncp/overview"
+  - title: "2 Source ZDM 설치와 설정"
+    links:
+      - title: "2.1 ZDM 설치"
+        url: "/guides/ko/serverless-dr/ncp/zdm-install"
+      - title: "2.2 ZDM 저장소 구성"
+        url: "/guides/ko/serverless-dr/ncp/zdm-repository"
+      - title: "2.3 Web Access"
+        url: "/guides/ko/serverless-dr/ncp/web-access"
+      - title: "2.4 라이선스 등록"
+        url: "/guides/ko/serverless-dr/ncp/license"
+  - title: "3 백업 구성"
+    links:
+      - title: "3.1 Agent 설치 (Source)"
+        url: "/guides/ko/serverless-dr/ncp/agent-install"
+      - title: "3.2 백업 작업 등록"
+        url: "/guides/ko/serverless-dr/ncp/backup-regist"
+      - title: "3.3 백업 작업 모니터링"
+        url: "/guides/ko/serverless-dr/ncp/backup-monitoring"
+  - title: "4 저장소 소산 복제 (Cloud Storage)"
+    links:
+      - title: "4.1 클라우드 인증 추가"
+        url: "/guides/ko/serverless-dr/ncp/cloud-credential"
+      - title: "4.2 NCP 인증정보 설정 파일 작성"
+        url: "/guides/ko/serverless-dr/ncp/ncp-credential-file"
+      - title: "4.3 클라우드 저장소 추가"
+        url: "/guides/ko/serverless-dr/ncp/cloud-storage"
+      - title: "4.4 저장소 소산 복제 등록"
+        url: "/guides/ko/serverless-dr/ncp/replication-regist"
+      - title: "4.5 저장소 소산 복제 모니터링"
+        url: "/guides/ko/serverless-dr/ncp/replication-monitoring"
+  - title: "5 복구 자동화 실행"
+    links:
+      - title: "5 복구 자동화 실행"
+        url: "/guides/ko/serverless-dr/ncp/recovery-automation"
+  - title: "6 부록"
+    links:
+      - title: "6.1 서버 접속 방법"
+        url: "/guides/ko/serverless-dr/ncp/appendix-server-access"
+
 # ZDM 메인 (한국어)
 ko-zdm:
   - title: "ZDM Services"
@@ -17,6 +81,8 @@ ko-zdm:
         url: "/zdm/ko/"
       - title: "다운로드"
         url: "/zdm/ko/downloads"
+      - title: "변경 사항"
+        url: "/zdm/ko/changelog"
       - title: "ZDM-CLI 문서"
         url: "/zdm/ko/cli/3.0.0/index"
       - title: "ZDM-API 문서"
@@ -2435,6 +2501,14 @@ ko-api-2.0.2:
 # -------------------------------------------
 
 # ZDM 메인 (레거시 - 리다이렉트용)
+
+guides:
+  - title: "Guides"
+    links:
+      - title: "가이드 홈"
+        url: "/guides/ko/"
+      - title: "서버리스 복구 자동화 (NCP)"
+        url: "/guides/ko/serverless-dr/ncp/index"
 
 zdm:
   - title: "ZDM Services"

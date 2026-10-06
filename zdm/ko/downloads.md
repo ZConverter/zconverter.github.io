@@ -6,42 +6,6 @@ navigation: ko-zdm
 lang: ko
 ---
 
-<style>
-.download-section {
-  margin: 1.5rem 0;
-}
-.download-section h3 {
-  border-bottom: 2px solid #e1e4e8;
-  padding-bottom: 0.5rem;
-}
-.download-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0;
-}
-.download-table th,
-.download-table td {
-  padding: 0.6rem 1rem;
-  border: 1px solid #e1e4e8;
-  text-align: left;
-}
-.download-table th {
-  background: #f6f8fa;
-}
-.badge {
-  display: inline-block;
-  padding: 0.15rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-left: 0.4rem;
-}
-.badge-latest { background: #dafbe1; color: #1a7f37; }
-.badge-stable { background: #ddf4ff; color: #0969da; }
-.no-download { color: #8b949e; font-style: italic; }
-.date-cell { color: #57606a; font-size: 0.9rem; white-space: nowrap; }
-</style>
-
 ## 다운로드
 
 버전별 다운로드 파일 목록입니다. 바이너리가 준비되지 않은 버전은 다운로드 링크가 표시되지 않습니다.

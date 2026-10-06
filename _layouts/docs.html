@@ -83,19 +83,77 @@
           <nav class="breadcrumb" aria-label="Breadcrumb">
             <ol>
               <li><a href="/">Home</a></li>
-              {% if path_parts[1] == 'zdm' %}
-                <li><a href="/zdm/{{ page.lang | default: 'ko' }}/">ZDM</a></li>
-                {% if path_parts[3] == 'api' %}
-                  <li><a href="/zdm/{{ page.lang | default: 'ko' }}/api/{{ path_parts[4] }}/index">API v{{ path_parts[4] }}</a></li>
-                  {% if path_parts[6] %}
-                    {% assign section_name = path_parts[6] | capitalize %}
-                    <li><span>{{ section_name }}</span></li>
+              {% if path_parts[1] == 'guides' %}
+                <li><a href="/guides/">Guides</a></li>
+                {% if path_parts[4] %}
+                  {%- capture guide_root -%}/guides/{{ path_parts[2] }}/{{ path_parts[3] }}/{{ path_parts[4] }}{%- endcapture -%}
+                  <li><a href="{{ guide_root }}/index">{{ page.section_title }}</a></li>
+                  {% if path_parts[5] and path_parts[5] != 'index' %}
+                    {%- capture cur_url -%}{{ guide_root }}/{{ path_parts[5] }}{%- endcapture -%}
+                    {%- assign chapter_title = nil -%}
+                    {%- for item in site.data.navigation[page.navigation] -%}
+                      {%- for link in item.links -%}
+                        {%- if link.url == cur_url -%}{%- assign chapter_title = item.title -%}{%- endif -%}
+                      {%- endfor -%}
+                    {%- endfor -%}
+                    {% if chapter_title and chapter_title != page.title %}
+                      <li><span>{{ chapter_title }}</span></li>
+                    {% endif %}
+                    <li><span>{{ page.title }}</span></li>
                   {% endif %}
-                {% elsif path_parts[3] == 'cli' %}
-                  <li><a href="/zdm/{{ page.lang | default: 'ko' }}/cli/{{ path_parts[4] }}/index">CLI v{{ path_parts[4] }}</a></li>
+                {% endif %}
+              {% elsif path_parts[1] == 'zdm' %}
+                <li><a href="/zdm/{{ page.lang | default: 'ko' }}/">ZDM</a></li>
+                {% if path_parts[3] == 'api' or path_parts[3] == 'cli' %}
+                  {%- assign prod = path_parts[3] -%}
+                  {%- assign prod_label = prod | upcase -%}
+                  <li><a href="/zdm/{{ page.lang | default: 'ko' }}/{{ prod }}/{{ path_parts[4] }}/index">{{ prod_label }} v{{ path_parts[4] }}</a></li>
+
+                  {%- comment -%}
+                    커맨드(= 사이드바 그룹) 크럼. 그룹 제목과 '개요' 링크는 navigation.yml 에서
+                    역조회한다 — 경로 슬러그를 capitalize 하면 os-replication → "Os-replication"
+                    이 되고, 개요 페이지 유무도 제품마다 다르기 때문(CLI 는 있고 API 는 없다).
+                  {%- endcomment -%}
                   {% if path_parts[6] %}
-                    {% assign section_name = path_parts[6] | capitalize %}
-                    <li><span>{{ section_name }}</span></li>
+                    {%- capture cur_doc -%}/zdm/{{ page.lang | default: 'ko' }}/{{ prod }}/{{ path_parts[4] }}/docs/{{ path_parts[6] }}{% if path_parts[7] %}/{{ path_parts[7] }}{% endif %}{%- endcapture -%}
+                    {%- assign grp_title = nil -%}
+                    {%- assign grp_overview = nil -%}
+                    {%- for item in site.data.navigation[page.navigation] -%}
+                      {%- assign hit = false -%}
+                      {%- for link in item.links -%}
+                        {%- if link.url == cur_doc -%}{%- assign hit = true -%}{%- endif -%}
+                      {%- endfor -%}
+                      {%- if hit -%}
+                        {%- assign grp_title = item.title -%}
+                        {%- for link in item.links -%}
+                          {%- if link.title == '개요' -%}{%- assign grp_overview = link.url -%}{%- endif -%}
+                        {%- endfor -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+
+                    {%- unless grp_title -%}{%- assign grp_title = path_parts[6] | capitalize -%}{%- endunless -%}
+
+                    {% if grp_overview %}
+                      <li><a href="{{ grp_overview }}">{{ grp_title }}</a></li>
+                    {% else %}
+                      <li><span>{{ grp_title }}</span></li>
+                    {% endif %}
+
+                    {%- comment -%}
+                      마지막 크럼에서 커맨드 접두는 뗀다 — 바로 앞 크럼이 이미 커맨드이므로
+                      "Token > token issue" 는 중복이다. "Token > Issue" 로 줄인다.
+                      API 처럼 제목이 커맨드로 시작하지 않으면(예: GET /backups/:identifier)
+                      제목을 그대로 쓴다.
+                    {%- endcomment -%}
+                    {% if path_parts[7] and grp_overview != cur_doc %}
+                      {%- assign leaf = page.title -%}
+                      {%- assign leaf_words = leaf | split: ' ' -%}
+                      {%- assign leaf_head = leaf_words[0] | downcase -%}
+                      {%- if leaf_words.size > 1 and leaf_head == path_parts[6] -%}
+                        {%- assign leaf = leaf | remove_first: leaf_words[0] | strip | capitalize -%}
+                      {%- endif -%}
+                      <li><span>{{ leaf }}</span></li>
+                    {% endif %}
                   {% endif %}
                 {% endif %}
               {% endif %}
@@ -127,8 +185,52 @@
         <div class="content">
           {{ content }}
         </div>
+
+        {%- comment -%} 가이드 페이지 이전/다음 네비게이션 (navigation.yml 순서 기반) {%- endcomment -%}
+        {% if path_parts[1] == 'guides' and path_parts[5] and path_parts[5] != 'index' %}
+          {%- assign flat = '' | split: '' -%}
+          {%- for item in site.data.navigation[page.navigation] -%}
+            {%- unless forloop.first -%}{%- assign flat = flat | concat: item.links -%}{%- endunless -%}
+          {%- endfor -%}
+          {%- capture cur_url -%}/guides/{{ path_parts[2] }}/{{ path_parts[3] }}/{{ path_parts[4] }}/{{ path_parts[5] }}{%- endcapture -%}
+          {%- assign idx = -1 -%}
+          {%- for l in flat -%}
+            {%- if l.url == cur_url -%}{%- assign idx = forloop.index0 -%}{%- endif -%}
+          {%- endfor -%}
+          {% if idx >= 0 %}
+            <nav class="page-nav" aria-label="페이지 이동">
+              {% if idx > 0 %}
+                {%- assign prev_i = idx | minus: 1 -%}
+                {%- assign prev = flat[prev_i] -%}
+                <a class="page-nav-prev" href="{{ prev.url }}">
+                  <span class="page-nav-label">이전</span>
+                  <span class="page-nav-title">{{ prev.title }}</span>
+                </a>
+              {% else %}
+                <a class="page-nav-prev" href="/guides/{{ path_parts[2] }}/{{ path_parts[3] }}/{{ path_parts[4] }}/index">
+                  <span class="page-nav-label">이전</span>
+                  <span class="page-nav-title">{{ page.section_title }}</span>
+                </a>
+              {% endif %}
+              {%- assign last_i = flat.size | minus: 1 -%}
+              {% if idx < last_i %}
+                {%- assign next_i = idx | plus: 1 -%}
+                {%- assign next = flat[next_i] -%}
+                <a class="page-nav-next" href="{{ next.url }}">
+                  <span class="page-nav-label">다음</span>
+                  <span class="page-nav-title">{{ next.title }}</span>
+                </a>
+              {% endif %}
+            </nav>
+          {% endif %}
+        {% endif %}
       </article>
     </main>
+
+    <aside class="docs-toc" id="docsToc" hidden>
+      <h4>이 페이지</h4>
+      <nav id="docsTocList"></nav>
+    </aside>
   </div>
 
   <footer>
@@ -246,6 +348,126 @@
     navDetails.forEach(function(d) {
       d.addEventListener('toggle', saveNavState);
     });
+
+    // ---------- 코드블록 복사 버튼 ----------
+    document.querySelectorAll('.docs-content .content pre').forEach(function(pre) {
+      if (pre.closest('.code-wrap')) return;
+      var host = pre.parentElement.classList.contains('highlight') ? pre.parentElement : pre;
+      var wrap = document.createElement('div');
+      wrap.className = 'code-wrap';
+      host.parentNode.insertBefore(wrap, host);
+      wrap.appendChild(host);
+
+      var btn = document.createElement('button');
+      btn.className = 'code-copy';
+      btn.type = 'button';
+      btn.textContent = '복사';
+      btn.setAttribute('aria-label', '코드 복사');
+      wrap.appendChild(btn);
+
+      btn.addEventListener('click', function() {
+        var text = pre.innerText.replace(/\n$/, '');
+        var done = function() {
+          btn.textContent = '복사됨';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.textContent = '복사';
+            btn.classList.remove('copied');
+          }, 1600);
+        };
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(done);
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); done(); } catch (e) {}
+          document.body.removeChild(ta);
+        }
+      });
+    });
+
+    // ---------- 우측 온페이지 목차 ----------
+    (function() {
+      var tocEl = document.getElementById('docsToc');
+      var listEl = document.getElementById('docsTocList');
+      if (!tocEl || !listEl) return;
+
+      // 제목(h2/h3)을 우선 쓰고, 제목이 부족한 문서에 한해 최상위 <details> 의
+      // summary 를 보조로 쓴다. 중첩 details(= changelog 등)는 절대 포함하지 않는다.
+      var root = document.querySelector('.docs-content .content');
+      if (!root) return;
+
+      // 카드·요약 블록 안의 제목은 '절'이 아니므로 목차에서 뺀다
+      var headings = Array.prototype.slice.call(root.querySelectorAll('h2, h3'))
+        .filter(function(h) {
+          return !h.closest('.service-card, .feature-card, .update-rows, summary, .breaking-note');
+        });
+      var nodes = headings;
+
+      if (headings.length < 3) {
+        var tops = Array.prototype.slice.call(root.querySelectorAll('details > summary'))
+          .filter(function(sm) {
+            // 다른 details 안에 들어 있는 summary, 그리고 카드·밀집행 안의 summary 는 제외
+            if (sm.closest('.service-card, .feature-card, .update-rows')) return false;
+            return !sm.parentElement.parentElement.closest('details');
+          });
+        nodes = headings.concat(tops).sort(function(a, b) {
+          var pos = a.compareDocumentPosition(b);
+          return (pos & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1;
+        });
+      }
+
+      var slug = 0;
+      var heads = nodes.map(function(n) {
+        var target = n.tagName === 'SUMMARY' ? n.parentElement : n;
+        if (!target.id) target.id = 'toc-' + (++slug);
+        return { el: target, label: n.textContent.trim(), depth: n.tagName === 'H3' ? 2 : 1 };
+      }).filter(function(h) { return h.label.length > 0; });
+
+      // 항목이 2개 미만이면 목차를 띄우지 않는다 (빈 여백 방지)
+      if (heads.length < 2) return;
+
+      heads.forEach(function(h) {
+        var a = document.createElement('a');
+        a.href = '#' + h.el.id;
+        a.textContent = h.label;
+        if (h.depth === 2) a.className = 'toc-h3';
+        listEl.appendChild(a);
+      });
+
+      tocEl.hidden = false;
+      docsLayout.classList.add('has-toc');
+
+      var links = Array.prototype.slice.call(listEl.querySelectorAll('a'));
+      function setActive(id) {
+        links.forEach(function(a) {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+
+      if ('IntersectionObserver' in window) {
+        var visible = new Set();
+        var obs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) visible.add(e.target.id);
+            else visible.delete(e.target.id);
+          });
+          for (var i = 0; i < heads.length; i++) {
+            if (visible.has(heads[i].el.id)) { setActive(heads[i].el.id); return; }
+          }
+        }, { rootMargin: '-60px 0px -70% 0px' });
+        heads.forEach(function(h) { obs.observe(h.el); });
+      }
+
+      listEl.addEventListener('click', function(e) {
+        var a = e.target.closest('a');
+        if (a) setActive(a.getAttribute('href').slice(1));
+      });
+    })();
 
     // 버전 셀렉터 토글
     var versionBtn = document.getElementById('versionSelectorBtn');
