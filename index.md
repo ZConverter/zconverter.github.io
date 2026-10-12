@@ -17,14 +17,12 @@ title: Home
 <div class="feature-grid">
 
 <a class="feature-card" href="/zdm/ko/cli/{{ cli_latest.version }}/index">
-<div class="feature-icon">&gt;_</div>
 <h3>ZDM-CLI <span class="badge badge-latest">latest</span></h3>
 <p>커맨드 라인에서 백업·복구 작업을 등록하고 모니터링합니다.</p>
 <div class="feature-foot"><span class="badge badge-patch">v{{ cli_latest.version }}</span> 문서 갱신 {{ cli_docs_date | default: "-" }}</div>
 </a>
 
 <a class="feature-card" href="/zdm/ko/api/{{ api_latest.version }}/index">
-<div class="feature-icon">{ }</div>
 <h3>ZDM-API <span class="badge badge-latest">latest</span></h3>
 <p>REST API 로 백업·복구·시스템 관리를 자동화합니다.</p>
 <div class="feature-foot"><span class="badge badge-patch">v{{ api_latest.version }}</span> 문서 갱신 {{ api_docs_date | default: "-" }}</div>

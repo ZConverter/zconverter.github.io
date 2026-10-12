@@ -35,6 +35,80 @@
 </details>
 
 <details>
+<summary><code>[10-06] [Removed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>본문 내 목차 섹션 35곳</b></summary>
+
+- 우측 온페이지 목차가 같은 내용을 더 정확히 보여주므로 페이지 안의 `목차` 접이식 블록을 걷어냈다. CLI 커맨드 개요·튜토리얼 문서와 API·CLI 소개 페이지가 대상이다.
+- 블록 본문이 `- [제목](#앵커)` 목록뿐인지 확인하고 지웠다. 형태가 다르면 건너뛰도록 했고, 건너뛴 파일은 없었다.
+- 가이드 랜딩(`/guides/ko/serverless-dr/ncp/`)의 `목차` 는 같은 페이지 앵커가 아니라 다른 15개 문서로 가는 링크 표라 유지한다.
+
+</details>
+
+<details>
+<summary><code>[10-06] [Changed] [API&nbsp;v3.0.0]</code> <b>에러 코드 총람의 미발생 코드 표기</b></summary>
+
+- `(현재 발생하지 않음 — 정의만 존재)` 표기를 범례 1줄과 표 안 12건에서 제거했다. 서버 내부 사정이라 외부 독자에게 노출할 정보가 아니다.
+- 에러 코드·HTTP 상태·설명은 그대로다. 표 171행 유지.
+
+</details>
+
+<details>
+<summary><code>[10-06] [Removed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>접이식 섹션·카드의 좌측 컬러 막대</b></summary>
+
+- `border-left: 4px solid` 로 강조하던 방식을 전체 1px 테두리로 바꿨다. 비활성 상태로 남아 있던 `.command-card` 블록도 지웠다.
+- 펼쳤을 때 헤더와 본문은 구분선으로 나눈다. 닫힘 상태에서 글자가 위로 치우치던 문제도 함께 고쳤다(컨테이너 패딩을 본문 쪽으로 옮김).
+- `CLAUDE.md` 코딩 컨벤션에 금지 규칙을 명시했다. 우측 목차의 현재 위치 표시와 경고 블록만 예외다.
+
+</details>
+
+<details>
+<summary><code>[10-06] [Changed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>사이드바 섹션 헤더 강조</b></summary>
+
+- 흐린 회색 uppercase 라 하위 링크와 위계가 없던 섹션 제목을 굵기 700 · 짙은 색으로 올리고, 현재 섹션은 연한 파란 배경으로 표시한다.
+- 섹션 안 링크는 세로선과 들여쓰기로 한 단계 내렸다.
+
+</details>
+
+<details>
+<summary><code>[10-06] [Changed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>breadcrumb — 가이드 장 · CLI 하위 커맨드</b></summary>
+
+- 가이드: `Home > Guides > 가이드명` 에서 멈추던 것을 `> 장 > 페이지` 까지 잇는다. 장 이름은 `_data/navigation.yml` 의 그룹 제목을 역조회해 쓴다.
+- CLI: `… > Config` 에서 `… > Config > Show` 로 하위 커맨드를 표시하고, 커맨드 크럼은 해당 커맨드 개요로 연결한다. 마지막 크럼에서 커맨드 접두는 뗀다(`Token > token issue` → `Token > Issue`).
+- 커맨드 개요가 없는 API 는 종전대로 텍스트로 둔다. 제목·개요 유무를 모두 navigation 데이터로 판별하므로 경로 슬러그를 가공하지 않는다(`os-replication` → `OS Replication`).
+- 고정 헤더에 제목이 가리던 문제를 `scroll-margin-top` 으로 보정했다. 목차뿐 아니라 본문 교차참조 링크에도 적용된다.
+
+</details>
+
+<details>
+<summary><code>[10-06] [Added&nbsp;&nbsp;] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>우측 온페이지 목차 · 코드블록 복사 버튼</b></summary>
+
+- 본문의 `h2`/`h3` 를 모아 우측에 고정 목차를 만들고 스크롤 위치를 추적한다. 제목이 3개 미만인 문서에서는 최상위 `details` 의 `summary` 를 보조로 쓴다 — ZDM 문서 상당수가 제목 대신 접이식 절로 구성돼 있다.
+- 중첩 `details`, 카드·밀집행 안의 `summary` 는 제외한다. 항목이 2개 미만이면 열 자체를 숨겨 빈 여백이 생기지 않게 했다.
+- 코드블록에 복사 버튼을 붙였다. `navigator.clipboard` 가 없는 환경에서는 대체 경로로 동작한다.
+
+</details>
+
+<details>
+<summary><code>[10-06] [Changed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>사이트 테마 — 제품 브랜드 색 적용 · 랜딩 페이지 개편</b></summary>
+
+- **Context**
+  - 기존 팔레트가 제품 콘솔과 무관한 Flat UI 계열(`#3498db`)이었고, CSS 803줄에 hex 가 하드코딩돼 있었다.
+- 제품 대시보드의 브랜드 값을 토큰으로 옮겼다(`--zc-blue: #3e6ae1` 외). hex 68곳을 변수로 치환한 단계에서 HTML 산출물 차이가 0 임을 확인한 뒤 시각 변경을 얹었다.
+- 헤더를 다크 바에서 화이트 고정 헤더로, 코드블록을 다크 테마로, 표를 uppercase 헤더 + hover 행으로 바꿨다. 본문 카드 그림자를 걷어내고 평면으로 정리했다.
+- 랜딩 페이지를 히어로 + 제품 카드 구성으로 개편했다. 버전·갱신일은 `versions.yml` 과 `doc_mtimes` 에서 읽는다.
+- 레이아웃 최대폭 1600 → 1840px, 좌우 여백 28 → 18px. 1680px 이상 화면에서 본문이 더 넓어지지 않던 상한을 풀었다.
+- 인라인 `<style>` 4곳(`zdm/ko/index.md` · `zdm/ko/downloads.md` · `language-selector.html` · `404.html`)을 전역 CSS 로 이관했다. 언어 선택기는 다크 헤더 전제의 `position: absolute` 였어서 플렉스 아이템으로 바꿨다.
+
+</details>
+
+<details>
+<summary><code>[10-06] [Changed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>본문 이미지 폭 제한</b></summary>
+
+- CSS 에 `img` 규칙이 하나도 없어 원본 픽셀 그대로 렌더됐다. 가이드 스크린샷 최대 3840px 가 레이아웃을 뚫고 나갔다.
+- `max-width: 100%` · `height: auto` 를 전역에 두고, 스크린샷은 블록 배치 + 테두리로 본문과 구분한다. 표지 로고는 별도 상한을 둔다.
+
+</details>
+
+<details>
 <summary><code>[10-06] [Added&nbsp;&nbsp;] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>서버리스 복구 자동화 가이드 (NCP)</b></summary>
 
 - 최상단 네비게이션에 `Guides` 항목 신설. `/guides/` 가이드 허브 + `/guides/ko/serverless-dr/ncp/` 가이드 랜딩 추가.

@@ -1199,20 +1199,6 @@ main.container img {
   text-decoration: none;
 }
 
-.feature-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: var(--zc-blue-soft);
-  color: var(--zc-blue-strong);
-  display: grid;
-  place-items: center;
-  font-size: 1rem;
-  font-weight: 800;
-  font-family: var(--zc-mono);
-  margin-bottom: 0.9rem;
-}
-
 .feature-card h3 {
   margin: 0 0 0.45rem;
   font-size: 1.1rem;
