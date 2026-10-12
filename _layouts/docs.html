@@ -23,6 +23,14 @@
   </header>
 
   <div class="docs-layout" id="docsLayout">
+    <script>
+      // 접힘 상태를 사이드바가 그려지기 전에 적용 — 하단 스크립트에서 적용하면 펼쳐진 채 그려졌다가 transition 으로 사라진다
+      try {
+        if (localStorage.getItem('zdm-sidebar-collapsed') === 'true') {
+          document.getElementById('docsLayout').classList.add('sidebar-collapsed');
+        }
+      } catch (e) {}
+    </script>
     <aside class="docs-sidebar" id="docsSidebar">
       <nav class="docs-nav">
         <h3>{{ page.section_title | default: "Documentation" }}</h3>

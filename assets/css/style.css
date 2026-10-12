@@ -696,7 +696,7 @@ tbody tr:hover td { background-color: var(--zc-bg-2); }
 }
 
 .sidebar-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--zc-bg-3);
 }
 
 /* Hamburger icon with CSS */
@@ -704,7 +704,7 @@ tbody tr:hover td { background-color: var(--zc-bg-2); }
   display: block;
   width: 20px;
   height: 2px;
-  background-color: white;
+  background-color: var(--zc-ink-2);
   position: relative;
   transition: background-color 0.3s;
 }
@@ -716,7 +716,7 @@ tbody tr:hover td { background-color: var(--zc-bg-2); }
   left: 0;
   width: 20px;
   height: 2px;
-  background-color: white;
+  background-color: var(--zc-ink-2);
   transition: transform 0.3s, top 0.3s;
 }
 
@@ -1038,7 +1038,7 @@ main.container img {
   box-shadow: 0 2px 14px rgba(62,106,225,0.08);
 }
 
-.service-card h3 { margin-top: 0; }
+.service-card h3 { margin-top: 0; padding-bottom: 0.6rem; border-bottom: 1px solid var(--zc-line); }
 .service-card table { margin-top: 0.9rem; font-size: 0.85rem; }
 .service-card td, .service-card th { padding: 0.4rem 0.6rem; white-space: nowrap; }
 .service-card td:first-child { font-weight: 600; color: var(--zc-ink-3); }

@@ -50,7 +50,6 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 
 <div class="service-card api">
 <h3>ZDM-API</h3>
----
 <p>백업, 복구, 시스템 관리를 위한 <strong>API 서버</strong><br><span class="sub-desc">Linux 전용 · Ubuntu 22.04 이상 권장</span></p>
 <table>
 <tr><td>현재 버전</td><td><code>{{ api_latest.version }}</code></td></tr>

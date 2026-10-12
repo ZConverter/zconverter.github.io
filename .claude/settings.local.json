@@ -48,5 +48,9 @@
     ],
     "deny": [],
     "ask": []
+  },
+  "enabledPlugins": {
+    "claude-mem@thedotmack": false,
+    "ponytail@ponytail": false
   }
 }
