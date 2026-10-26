@@ -22,8 +22,8 @@ module ZConverter
 
     PRODUCTS = %w[api cli].freeze
 
-    # 본문 소제목: `**BREAKING — …**` (줄 전체가 강조인 형태)
-    BREAKING_HEADING = /^\*\*BREAKING\b.*\*\*\s*$/i
+    # 본문 소제목: `**하위 호환 불가 — …**` (줄 전체가 강조인 형태). 옛 표기 `**BREAKING — …**` 도 계속 센다
+    BREAKING_HEADING = /^\*\*(?:BREAKING\b|하위 호환 불가).*\*\*\s*$/i
 
     def generate(site)
       stats = {}

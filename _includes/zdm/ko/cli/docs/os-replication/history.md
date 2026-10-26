@@ -6,7 +6,7 @@ OS Replication 실행 이력을 조회하는 명령어입니다.
 ## `os-replication history` {#os-replication-history}
 
 > * OS Replication 작업의 실행 이력을 조회합니다.
-> * **v3.0.0 (BREAKING)** — `--server` 옵션이 제거되었습니다. OS Replication 작업 정보에는 서버 컬럼이 없어 이 옵션은 실제로는 Center 이름으로 거르는 필터였으므로, ID·이름을 모두 받는 `--center` 로 대체하세요. CLI 는 알 수 없는 옵션을 허용하지 않으므로 `--server` 를 그대로 둔 스크립트는 조용히 무시되지 않고 파싱 단계에서 즉시 실패합니다 (도움말이 출력되고 종료 코드 1).
+> * **v3.0.0 (하위 호환 불가)** — `--server` 옵션이 제거되었습니다. OS Replication 작업 정보에는 서버 컬럼이 없어 이 옵션은 실제로는 Center 이름으로 거르는 필터였으므로, ID·이름을 모두 받는 `--center` 로 대체하세요. CLI 는 알 수 없는 옵션을 허용하지 않으므로 `--server` 를 그대로 둔 스크립트는 조용히 무시되지 않고 파싱 단계에서 즉시 실패합니다 (도움말이 출력되고 종료 코드 1).
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>

@@ -86,7 +86,7 @@ ZDM은 백업, 복구, 시스템 관리를 위한 통합 솔루션입니다.
 
 <a class="feature-card" href="/zdm/ko/changelog">
 <h3>변경 사항</h3>
-<p>ZDM-API · ZDM-CLI 의 버전별 변경 이력과 BREAKING 항목을 확인합니다.</p>
+<p>ZDM-API · ZDM-CLI 의 버전별 변경 이력과 하위 호환 불가 항목을 확인합니다.</p>
 </a>
 
 </div>

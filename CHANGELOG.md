@@ -9,6 +9,17 @@
 ## 2026년 10월
 
 <details>
+<summary><code>[10-26] [Changed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>화면의 "BREAKING" 표기를 "하위 호환 불가" 로 · 배지의 개수 숫자 제거</b></summary>
+
+- 비개발자도 읽을 수 있게 웹에 보이는 표기를 통일. 저장소 `CHANGELOG.md` · `versions.yml` 주석 · 플러그인 주석 같은 내부 표기는 그대로.
+- `zdm/ko/changelog.md` — 버전 행 배지 15곳을 `하위 호환 불가`(숫자 없음)로. 해당 항목이 있을 때만 보이는 조건은 유지. 상단 안내 상자 문구를 바꾸고 "배지의 숫자는 … 개수" 문장 삭제.
+- 릴리스 노트 소제목 `**BREAKING — …**` → `**하위 호환 불가 — …**` — API 3.0.0(13) · 2.0.2(1) · CLI 3.0.0(4). 본문 속 언급(API 2.0.2 요약 1 · CLI 3.0.0 참조 1)과 API 2.0.0 의 `Breaking Change(s)` 표기 5곳도 같이.
+- CLI 문서 5개(`replication/history` · `list` · `monit` · `os-replication/history` · `list`)의 `v3.0.0 (BREAKING)` → `v3.0.0 (하위 호환 불가)`. 메인 랜딩 `zdm/ko/index.md` 카드 문구도.
+- `_plugins/changelog_stats_generator.rb` — 새 소제목도 세도록 정규식 확장(옛 `**BREAKING …**` 도 계속 인식). 숫자는 화면에 쓰지 않지만 배지 표시 여부 판단에 쓰므로 집계 유지 — 버전별 집계값은 변경 전과 동일(API 3.0.0 13 · 2.0.2 1 · 2.0.0 1, CLI 3.0.0 4).
+
+</details>
+
+<details>
 <summary><code>[10-26] [Added&nbsp;&nbsp;] [API&nbsp;v3.0.1]</code> <b>API v3.0.1 릴리스 — 라이선스 검증 버그 수정 · 토큰 발급 한도 · Node.js 24.22.1 · 라이브러리 보안 업데이트</b></summary>
 
 - 부분 갱신 릴리스. `versions.yml` 에 v3.0.1 을 latest 로 등록(v3.0.0 → stable), `ko-api-3.0.1` 사이드바 · `zdm/ko/api/3.0.1/` wrapper · 릴리스 노트(`changelog/3.0.1.md`) · 변경 사항 페이지 행 추가. `ko-zdm` 의 ZDM-API 문서 링크를 v3.0.1 로.
