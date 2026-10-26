@@ -281,6 +281,22 @@ curl -X POST "https://api.example.com/api/backups" \
 }
 ```
 
+**라이선스가 할당되지 않은 서버 (400 Bad Request)**
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "LICENSE-ERROR-13",
+    "message": "No license is assigned to the server: web-01"
+  },
+  "timestamp": "2026-10-12T10:30:00.000+09:00"
+}
+```
+
+> `server` 와 `individual[].server` 로 지정한 서버를 모두 검사하며, 라이선스가 없는 서버 이름을 메시지에 나열합니다. 라이선스를 먼저 할당(`PUT /licenses/assign`)한 뒤 등록하세요.
+
 **작업 이름 중복 (409 Conflict)**
 
 ```json

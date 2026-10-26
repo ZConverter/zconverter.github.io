@@ -305,7 +305,7 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 </details>
 
 <details markdown="1">
-<summary><strong>License</strong> (10건 정의 · <strong>실제 발생 2건</strong>)</summary>
+<summary><strong>License</strong> (13건 정의 · <strong>실제 발생 6건</strong>)</summary>
 
 | 코드 | HTTP | 설명 |
 |------|------|------|
@@ -317,8 +317,11 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 | `LICENSE-ERROR-06` | 500 | 라이선스 할당에 실패했습니다. |
 | `LICENSE-ERROR-07` | 500 | 라이선스 이력 생성에 실패했습니다. |
 | `LICENSE-ERROR-08` | 500 | 라이선스 처리 결과를 해석하지 못했습니다. |
-| `LICENSE-ERROR-09` | 400 | 라이선스 키 형식이 올바르지 않습니다. |
+| `LICENSE-ERROR-09` | 400 | 라이선스 키 형식이 올바르지 않습니다. 라이선스 등록(`POST /licenses`)에서 유효하지 않은 키를 보내면 발생합니다. |
 | `LICENSE-ERROR-10` | 500 | 라이선스 삭제에 실패했습니다. |
+| `LICENSE-ERROR-11` | 409 | 이미 등록된 라이선스입니다. 같은 키를 다시 등록(`POST /licenses`)하면 발생합니다. |
+| `LICENSE-ERROR-12` | 400 | 등록 대상 ZDM 용으로 발급된 라이선스가 아닙니다. 키 발급에 쓴 UUID 와 `center` 의 UUID(`id.machine`)가 다르면 발생합니다. |
+| `LICENSE-ERROR-13` | 400 | 라이선스가 할당되지 않은 서버입니다. backup 등록(`POST /backups`)의 대상 서버(`individual[].server` 포함) 중 하나라도 라이선스가 없으면 발생합니다. |
 
 </details>
 

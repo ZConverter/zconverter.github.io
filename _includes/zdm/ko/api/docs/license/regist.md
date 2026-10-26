@@ -166,6 +166,54 @@ curl -X POST "https://api.example.com/api/licenses" \
 }
 ```
 
+**이미 등록된 라이선스 (409 Conflict)**
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "LICENSE-ERROR-11",
+    "message": "License is already registered (ID: 3)."
+  },
+  "timestamp": "2026-10-12T10:30:00.000+09:00"
+}
+```
+
+> 같은 키가 이미 등록돼 있으면 발생합니다.
+
+**다른 ZDM 용으로 발급된 라이선스 (400 Bad Request)**
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "LICENSE-ERROR-12",
+    "message": "License was not issued for this ZDM (UUID: {dca42442-7fa9-689b-8304-412cb7d103c3})."
+  },
+  "timestamp": "2026-10-12T10:30:00.000+09:00"
+}
+```
+
+> 키는 발급 시 지정한 ZDM UUID 에서만 등록할 수 있습니다. UUID 는 대소문자·중괄호까지 일치해야 합니다.
+
+**유효하지 않은 라이선스 키 (400 Bad Request)**
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "LICENSE-ERROR-09",
+    "message": "Invalid license key."
+  },
+  "timestamp": "2026-10-12T10:30:00.000+09:00"
+}
+```
+
+> 형식(영숫자)은 맞지만 라이선스 키로 해석되지 않으면 발생합니다.
+
 </details>
 
 ---

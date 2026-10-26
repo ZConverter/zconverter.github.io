@@ -9,6 +9,32 @@
 ## 2026년 10월
 
 <details>
+<summary><code>[10-26] [Added&nbsp;&nbsp;] [API&nbsp;v3.0.1]</code> <b>API v3.0.1 릴리스 — 라이선스 검증 버그 수정 · 토큰 발급 한도 · Node.js 24.22.1 · 라이브러리 보안 업데이트</b></summary>
+
+- 부분 갱신 릴리스. `versions.yml` 에 v3.0.1 을 latest 로 등록(v3.0.0 → stable), `ko-api-3.0.1` 사이드바 · `zdm/ko/api/3.0.1/` wrapper · 릴리스 노트(`changelog/3.0.1.md`) · 변경 사항 페이지 행 추가. `ko-zdm` 의 ZDM-API 문서 링크를 v3.0.1 로.
+- 바뀐 문서는 넷 — `error-codes` · `license/regist` · `backup/regist` · `auth/issue`. 공용 파일을 v3.0.1 내용으로 두고 v3.0.0 내용은 `{page}/3.0.0.md` 보존본으로 분리, v3.0.0 wrapper 4개를 보존본으로 연결.
+  - `error-codes` — License 절에 `LICENSE-ERROR-11`(이미 등록된 라이선스, 409) · `-12`(다른 ZDM 용 라이선스, 400) · `-13`(라이선스 미할당 서버, 400) 추가. `-09` 가 등록에서 실제로 발생하게 돼 설명 보강, 집계를 13건 정의 · 실제 발생 6건으로 정정.
+  - `license/regist` — 에러 응답에 `-11` · `-12` · `-09` 예시.
+  - `backup/regist` — 에러 응답에 `-13` 예시.
+  - `auth/issue` — `RATE-LIMIT-01` 의 기본 한도를 15분당 20회 → 100회로 정정 (API 2026-09-22 변경분이 v3.0.0 바이너리 이후라 v3.0.1 에 처음 실림).
+- 릴리스 노트에 내장 Node.js v22.21.1 → v24.22.1(2026-10-21 보안 릴리스 반영)과 실행 파일 포함 라이브러리 보안 패치(jsonwebtoken · mysql2 · express · express-openapi-validator · zod · express-rate-limit) 추가. 해당 변경은 문서 본문에 영향 없음.
+- 처음 v3.0.2 로 따로 준비했으나 v3.0.1 · v3.0.2 모두 배포 전이라 v3.0.1 하나로 병합(2026-10-26).
+- 바이너리 `downloads/zdm-api/3.0.1/zdm-api-linux.tar.gz` 는 API 저장소 배포 스크립트로 빌드 · 배치.
+
+</details>
+
+<details>
+<summary><code>[10-26] [Added&nbsp;&nbsp;] [CLI&nbsp;v3.0.1]</code> <b>CLI v3.0.1 릴리스 — Node.js 24.22.1 이관 · 라이브러리 보안 업데이트</b></summary>
+
+- 부분 갱신 릴리스. `versions.yml` 에 v3.0.1 을 latest 로 등록(v3.0.0 → stable), `ko-cli-3.0.1` 사이드바 · `zdm/ko/cli/3.0.1/` wrapper 66개 + intro · 릴리스 노트(`changelog/3.0.1.md`) · 변경 사항 페이지 행 추가. `ko-zdm` 의 ZDM-CLI 문서 링크를 v3.0.1 로.
+- CLI 커맨드 · 옵션 · 출력 · 종료 코드 변경이 없어 **문서 본문은 그대로** — 보존본 분리 없음. v3.0.1 wrapper 는 v3.0.0 과 같은 include 를 가리킴.
+- 릴리스 노트: 내장 Node.js v22.21.1 → v24.22.1(2026-10-21 보안 릴리스 반영 — 서버 응답의 Brotli 해제 경로), 실행 파일 포함 라이브러리 보안 패치(form-data · moment).
+- 바이너리 `downloads/zdm-cli/3.0.1/` 의 Linux · Windows 아카이브 2개를 참조 (사용자 배치).
+
+</details>
+
+
+<details>
 <summary><code>[10-06] [Changed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>변경 사항 페이지 분리 — ZDM 홈에서 changelog 독립</b></summary>
 
 - **Context**

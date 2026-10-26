@@ -22,8 +22,14 @@
 #     `site.data.zdm.common.doc_mtimes[prod][version]`에 주입.
 
 api:
-  - version: "3.0.0"
+  - version: "3.0.1"
     status: latest
+    docs: "3.0.1"           # 부분 갱신: error-codes · license regist · backup regist · auth issue 변경 (라이선스 검증 버그 수정 · 토큰 발급 한도) + 런타임 Node 24.22.1 이관 · 라이브러리 보안 업데이트
+    downloads:
+      - os: "Linux"
+        file: "/downloads/zdm-api/3.0.1/zdm-api-linux.tar.gz"
+  - version: "3.0.0"
+    status: stable
     docs: "3.0.0"           # 자체 docs (응답 봉투 BREAKING: error 객체화 · requestID→traceId · timestamp ISO 8601 + Image Recovery 신설)
     downloads:
       - os: "Linux"
@@ -80,8 +86,16 @@ api:
         file: "/downloads/zdm-api/1.0.3/zdm-api-linux.tar.gz"
 
 cli:
-  - version: "3.0.0"
+  - version: "3.0.1"
     status: latest
+    docs: "3.0.1"           # 부분 갱신: 런타임 Node 24.22.1 이관 + 실행 파일 라이브러리 보안 업데이트. 문서 본문 변경 없음
+    downloads:
+      - os: "Windows"
+        file: "/downloads/zdm-cli/3.0.1/zdm-cli-windows.zip"
+      - os: "Linux"
+        file: "/downloads/zdm-cli/3.0.1/zdm-cli-linux.tar.gz"
+  - version: "3.0.0"
+    status: stable
     docs: "3.0.0"           # 자체 docs (API 3.0.0 응답 봉투 대응 — 출력 헤더 traceId + recovery image-regist/backup image list 신설 + 출력 스트림 분리)
     downloads:
       - os: "Windows"

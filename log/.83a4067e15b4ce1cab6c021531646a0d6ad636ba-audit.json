@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "/project/gitpage/zconverter.github.io/log/.83a4067e15b4ce1cab6c021531646a0d6ad636ba-audit.json",
+    "files": [
+        {
+            "date": 1792994234881,
+            "name": "/project/gitpage/zconverter.github.io/log/error-2026-10-26.log",
+            "hash": "8f5d6423b1caddff5c9e17db65ad52a42e903220d9582cdd32d9686bce0d7d72"
+        }
+    ],
+    "hashType": "sha256"
+}
