@@ -102,9 +102,9 @@ source 서버 없이 backup image 파일만으로 복구 작업을 등록합니�
 
 | 배치 | 허용 |
 |------|------|
-| target `/` ← 이미지 A, B (둘 다 source `/` 의 이미지) | ✗ |
-| target `/` ← A, target `/data` ← B (둘 다 source `/` 의 이미지) | ✓ |
-| target `/` ← A(source `/`), C(source `/data`) | ✓ |
+| target `/` ← 이미지 A, B (둘 다 source `/` 의 이미지) | 불가 |
+| target `/` ← A, target `/data` ← B (둘 다 source `/` 의 이미지) | 가능 |
+| target `/` ← A(source `/`), C(source `/data`) | 가능 |
 
 출신 파티션이 다르면 서로 다른 데이터이므로 한 target 에 함께 복구할 수 있습니다.
 

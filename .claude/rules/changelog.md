@@ -36,7 +36,7 @@ paths:
 | 분류 | `Added` · `Changed` · `Fixed` · `Removed` | **7 로 패딩** |
 | 제품 | `API v3.0.0` · `CLI v3.0.0` · `Site` | **10 으로 패딩** |
 
-### ★ 정렬은 `<code>` + `&nbsp;` 로만 된다
+### 정렬은 `<code>` + `&nbsp;` 로만 된다
 
 **공백으로 맞추려 하지 말 것.** 이 파일은 GitHub 저장소 화면에서만 읽히는데(Jekyll 이 렌더하지 않음),
 

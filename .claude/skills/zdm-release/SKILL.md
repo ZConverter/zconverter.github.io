@@ -224,8 +224,8 @@ EOF
 | 케이스 | (D) intro 신규 | (D-2) 사이드바·wrapper 분리 |
 |---|:---:|:---:|
 | 표준 메이저/마이너 (docs 본문 신규) | — (3단계 (A)(B)(C) 그대로) | — |
-| 재사용 패치 + `status: stable` | ✓ | — (base 사이드바 공유) |
-| **재사용 패치 + `status: latest`** | ✓ | **✓** |
+| 재사용 패치 + `status: stable` | 예 | — (base 사이드바 공유) |
+| **재사용 패치 + `status: latest`** | 예 | **예** |
 
 **자동화 명령** — `cli` v2.0.0 → v2.0.2 (latest 패치) 예시. 다른 product/버전은 경로의 `cli`·버전 숫자만 치환:
 
@@ -502,7 +502,7 @@ ruby -ryaml -e '
 - `_data/zdm/common/enums.yml` 수정 또는
 - `_data/zdm/cli/v1_3_0/enums.yml` 생성 (디렉토리명에 점 대신 언더스코어 사용)
 
-#### (B) 공통 데이터 변경 시 문서 갱신일 반영 규칙 ★
+#### (B) 공통 데이터 변경 시 문서 갱신일 반영 규칙
 
 `_data/zdm/common/enums.yml`이나 `_includes/zdm/*.md` 같은 **cli/api 디렉토리 밖**의 공통 자료를 변경하면 출력값은 모든 버전에 즉시 반영되지만, `_plugins/doc_mtime_generator.rb`의 추적 대상 밖이라 **`docs_updated`가 자동 갱신되지 않습니다.** 변경 사실을 다운로드/랜딩 페이지의 "문서 갱신일"에 노출하려면 아래 둘 중 하나를 반드시 수행하세요.
 

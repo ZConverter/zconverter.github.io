@@ -9,6 +9,16 @@
 ## 2026년 10월
 
 <details>
+<summary><code>[10-26] [Changed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>문서의 이모지·장식 기호 제거 · 금지 규칙 보강</b></summary>
+
+- 사용자 문서 — `recovery/image-regist` 배치 표의 판정 `✓`/`✗` → `가능`/`불가`, API · CLI 3.0.0 릴리스 노트 강조 문단의 `⚠️` 제거(굵은 글씨는 유지).
+- 내부 문서 — `.claude/skills/zdm-release` 표의 `✓` → `예`, 소제목의 `★` 제거(`zdm-release` · `.claude/rules/changelog.md` · `CLAUDE.md`).
+- `CLAUDE.md` 의 "이모지 사용 금지" 를 대상(그림 이모지와 판정·강조 기호)·대체 표기·예외(코드블록 안 실물 출력)까지 적은 규칙으로 보강. `.claude/` 문서에도 적용.
+- 빌드 결과 화면에 보이는 이모지 0건.
+
+</details>
+
+<details>
 <summary><code>[10-26] [Changed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>화면의 "BREAKING" 표기를 "하위 호환 불가" 로 · 배지의 개수 숫자 제거</b></summary>
 
 - 비개발자도 읽을 수 있게 웹에 보이는 표기를 통일. 저장소 `CHANGELOG.md` · `versions.yml` 주석 · 플러그인 주석 같은 내부 표기는 그대로.
