@@ -5,9 +5,10 @@
 
 ## `backup image list` {#backup-image-list}
 
-> * 저장소에 남아 있는 backup image **파일명**을 찾는 것이 목적입니다 — 찾은 파일명은 [`recovery image-regist`](/zdm/ko/cli/3.0.0/docs/recovery/image-regist) 의 `--backup-file` 값으로 그대로 사용합니다.
+> * 저장소에 남아 있는 backup image **파일명**을 찾는 것이 목적입니다 — 찾은 파일명은 [`recovery image-regist`](/zdm/ko/cli/4.0.0/docs/recovery/image-regist) 의 `--backup-file` 값으로 그대로 사용합니다.
 > * 조회 범위는 네 가지입니다 — 모든 center 의 모든 저장소, 여러 center, 특정 center(기본값은 config 의 `zdm.id`), 특정 center 의 특정 저장소.
 > * **저장소마다 데몬이 직접 스캔**하므로 시간이 걸립니다. `--repository-id` 로 저장소 하나로 좁히면 왕복이 1회로 줄어 빨라집니다.
+> * 일부 저장소를 스캔하지 못하면 결과는 그대로 나오고 **표준에러에 스캔하지 못한 저장소와 사유**가 나옵니다. 불완전한 목록을 실패로 처리하려면 `--strict` 를 씁니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -40,6 +41,9 @@ zdm-cli backup image list --server web01
 # 파일명만 콤마로 이어 한 줄 출력 (recovery image-regist --backup-file 값으로 바로 사용)
 zdm-cli backup image list --server web01 --names-only
 
+# 스캔하지 못한 저장소가 있으면 결과 없이 실패로 종료 (스크립트용)
+zdm-cli backup image list --server web01 --names-only --strict
+
 # Table 형식으로 출력
 zdm-cli backup image list --output table
 
@@ -63,6 +67,7 @@ zdm-cli recovery image-regist --backup-file "$(zdm-cli backup image list --serve
 | --job-name | -jn | string | Optional | - | Backup 작업 이름 | - |
 | --partition | - | string | Optional | - | 대상 파티션 또는 드라이브 (예: `/data`, `C`, `C:`) | - |
 | --names-only | -no | boolean | Optional | false | 파일명만 콤마로 이어 한 줄 출력 (`recovery image-regist --backup-file` 값으로 바로 사용 가능) | - |
+| --strict | - | boolean | Optional | false | 스캔하지 못한 저장소가 하나라도 있으면 결과를 출력하지 않고 실패로 종료 (종료 코드 `1`, 오류 코드 `PARTIAL_SCAN`) | - |
 | --page | - | number | Optional | - (전체 목록) | 페이지 번호 | - |
 | --limit | - | number | Optional | - (전체 목록) | 페이지당 항목 수 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
@@ -146,21 +151,24 @@ timestamp : 2026-08-10 07:08:10
 
 ### `--names-only` 출력
 
+헤더 · `[request info]` · 구분선 없이 파일명 한 줄만 표준출력으로 나옵니다. 그대로 다른 명령의 인자로 넘길 수 있습니다.
+
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-* Backup Image List Result [traceId: a1b2c3d4e5f60718293a4b5c6d7e8f90] [output: text]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[request info]
-
-status    : success
-message   : Success
-timestamp : 2026-08-10 07:08:10
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[data]
 localhost.localdomain_192.168.2.170_ROOT.ZIA,localhost.localdomain_192.168.2.170_boot.ZIA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+### 일부 저장소를 스캔하지 못한 경우
+
+결과는 위 형식 그대로 나오고, **표준에러**에 아래 요약과 저장소별 사유가 붙습니다(text · table · `--names-only` 공통). 표준출력은 바뀌지 않으므로 파이프에 섞이지 않습니다.
+
+```
+[Scan] 4 of 6 repositories scanned (2 failed)
+  - center zdm-a, repository 11: not scanned, the server's scan time budget ran out (retryable)
+  - center zdm-a, repository 12: Image polling timed out (JOB-ERROR-68, retryable)
+```
+
+> `retryable` 이 붙은 저장소는 다시 조회하면 나올 수 있습니다 — `--repository-id` 로 그 저장소만 다시 조회하면 빠릅니다.<br>
+> `--strict` 를 주면 이 경우 결과를 출력하지 않고 `Incomplete scan: 4 of 6 repositories scanned (2 failed)` 오류와 함께 종료 코드 `1` 로 끝납니다. `--output json` 이면 표준에러의 실패 응답에 `error.code: "PARTIAL_SCAN"` 과 `error.details.scan` 이 실립니다.
 
 > `--names-only` 는 **text/table 형식에서만 적용됩니다.** `--output json` 에서는 무시되고 전체 JSON 이 그대로 나옵니다 — JSON 에서 파일명만 뽑고 싶다면 `jq` 로 추출하세요 (예: `zdm-cli backup image list -o json | jq -r '.data[].image.name'`).
 
@@ -231,11 +239,18 @@ localhost.localdomain_192.168.2.170_ROOT.ZIA,localhost.localdomain_192.168.2.170
       }
     }
   ],
+  "scan": {
+    "total": 1,
+    "succeeded": 1,
+    "failed": 0,
+    "failures": []
+  },
   "timestamp": "2026-08-10T07:08:10.000+09:00"
 }
 ```
 
-> `--page`/`--limit` 를 지정하면 `data` 가 배열이 아니라 `{ data: [...], pagination: {...} }` 봉투로 옵니다.
+> `--page`/`--limit` 를 지정하면 `data` 가 배열이 아니라 `{ data: [...], pagination: {...} }` 봉투로 옵니다.<br>
+> `scan` 은 실패가 없어도 항상 실립니다. 스캔하지 못한 저장소가 있으면 `failures[]` 에 `centerName` · `repositoryId` · `code`(있을 때) · `reason` · `retryable` 이 담깁니다. 전체 스캔 예산이 모자라 시작하지 않은 저장소는 `reason` 이 `"budget_exhausted"` 입니다.
 
 </details>
 

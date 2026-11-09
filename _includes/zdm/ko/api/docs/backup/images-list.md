@@ -44,8 +44,8 @@
 
 * 저장소 하나가 응답하지 않아도 **나머지 저장소의 이미지를 200으로 반환**합니다.
 * **어느 저장소가 왜 빠졌는지는 응답의 `scan` 필드에 담깁니다** — `total` / `succeeded` / `failed` 와
-  저장소별 `failures[]`(`centerName` · `repositoryId` · `code` · `reason` · `retryable`). 형식과 예시는
-  [GET /backups/images/server/:server](/zdm/ko/api/3.0.0/docs/backup/images#조회-결과가-비어-있는-경우) 참조.
+  저장소별 `failures[]`(`centerName` · `repositoryId` · `code` · `reason` · `retryable`). 저장소가 많아 스캔 예산이 모자라면 일부 저장소는 스캔하지 않고 `reason: "budget_exhausted"`, `retryable: true` (`code` 없음)로 기록됩니다. 형식과 예시는
+  [GET /backups/images/server/:server](/zdm/ko/api/4.0.0/docs/backup/images#조회-결과가-비어-있는-경우) 참조.
 * **`scan` 은 실패가 없어도 항상 포함됩니다.** `failed: 0` 이 곧 "목록이 완전하다" 는 신호입니다.
 * **모든 저장소가 실패하면 요청도 실패합니다** — 부분 성공이 하나도 없는 상태를 빈 목록으로 위장하지 않습니다. 이때는 첫 번째 실패 사유가 그대로 에러로 반환됩니다.
 * 이미지가 하나도 없는 **빈 저장소는 정상**이며, 그 저장소만 빈 기여로 처리됩니다. 저장소 한 곳이 비었다고 조회 전체가 404가 되지 않습니다.

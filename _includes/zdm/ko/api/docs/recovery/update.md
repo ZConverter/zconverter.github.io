@@ -94,10 +94,10 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 
 | 필드 | 타입 | 필수 | 설명 | 선택값 |
 |------|------|------|------|--------|
-| `center` | string \| number | Required | 작업이 속한 center ID 또는 Name (소속 검증용) | - |
-| `changeName` | string | Optional | 변경할 작업 이름 | - |
+| `center` | string \| number | Required | 작업이 속한 center ID 또는 Name (소속 검증용). 작업을 ID 로 지목해도 이 값과 작업의 center 를 대조하며, 다르면 404 `JOB-ERROR-01` 입니다 | - |
+| `changeName` | string | Optional | 변경할 작업 이름. 현재 이름과 같으면 변경 없이 200 입니다. 다른 작업이 쓰는 이름이면 409 `JOB-ERROR-07` | - |
 | `platform` | string | Optional | 플랫폼 | {% include zdm/platforms.md inline=true %} |
-| `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
+| `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID. 숫자 ID 는 기존 스케줄을 복제하지 않고 그대로 참조하며, 작업의 스케줄이 실제로 그 ID 로 바뀝니다 | - |
 | `mode` | string | Optional | 작업 모드 (전체 적용) | {% include zdm/job-modes.md %} |
 | `afterReboot` | string | Optional | 작업 후 부팅 방식 | {% include zdm/after-reboot.md %} |
 | `mailEvent` | string | Optional | 이벤트 알림 이메일 | - |
@@ -121,6 +121,8 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 > - `backupFile` + `targetPartition` → **그 항목 하나**에만 적용
 >
 > 지목한 이미지가 작업에 없으면 `JOB-ERROR-01`(404), 대상 서버에 없는 파티션을 지정하면 `JOB-ERROR-13`(404)로 실패합니다. 이전에는 매칭되지 않아도 조용히 무시돼 수정이 반영된 것처럼 보였습니다.
+
+> **enum 값의 대소문자 (v4.0.0)**: `platform`·`mode`·`afterReboot`·`scriptRun`·`status` 같은 enum 필드는 대소문자를 구분하지 않습니다. 예를 들어 `"START"` 도 허용됩니다. 허용 목록에 없는 값의 오류 응답은 그대로입니다.
 
 > **필수 식별자의 공백 값 (since 2026-09-01)**
 >
@@ -429,6 +431,8 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 <summary><strong>에러 응답</strong></summary>
 
 **복구 작업을 찾을 수 없음 (404 Not Found)**
+
+작업이 없거나, ID 로 지목한 작업이 요청 `center` 에 속하지 않을 때 반환됩니다 (v4.0.0 부터 후자도 404 입니다. 종전에는 다른 center 의 작업이 수정됐습니다). 이름으로 지목하면 메시지는 `Recovery job with Name '<이름>' not found.` 입니다.
 
 ```json
 {

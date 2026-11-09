@@ -77,14 +77,14 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 |------|------|------|------|--------|
 | `center` | string \| number | Required | 작업 소속 센터 ID 또는 이름 (소유 검증용) | - |
 | `changeName` | string | Optional | 변경할 작업 이름 | - |
-| `status` | string | Optional | 작업 상태 변경 | `start`, `stop` |
+| `status` | string | Optional | 작업 상태 변경. 대소문자를 구분하지 않습니다 | `start`, `stop` |
 | `replicationMode` | string | Optional | 복제 모드 | {% include zdm/replication-modes.md %} |
 | `transferType` | string | Optional | 전송 유형 | {% include zdm/transfer-types.md %} |
 | `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
 | `encryption` | string | Optional | 암호화 사용 여부 | {% include zdm/use-options.md %} |
 | `mailEvent` | string | Optional | 이벤트 알림 이메일 | - |
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (0 이상) | - |
-| `schedule` | object/number | Optional | 스케줄 객체 또는 기존 스케줄 ID | - |
+| `schedule` | object/number | Optional | 스케줄 객체 또는 기존 스케줄 ID. 숫자는 기존 스케줄을 참조하며 없는 ID 이면 오류입니다. 객체는 작업의 스케줄로 등록(upsert)됩니다 | - |
 | `targetRepository` | object | Optional | 타겟 레포지토리 정보 | - |
 | `exclude` | string | Optional | 제외 패턴 | - |
 | `multiString` | string | Optional | 추가 설정 문자열 | - |
@@ -100,6 +100,8 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 | `multiString` | 미지원 |
 
 > V1에서는 `changeName`, `status`, `compression`, `encryption`, `mailEvent`, `networkLimit`, `schedule`, `targetRepository` 필드만 사용 가능합니다.
+>
+> **V1 `schedule` 반영 (v4.0.0)**: 종전 V1 은 `schedule` 을 받고도 버렸습니다(200 이지만 저장되지 않음). 이제 V2 와 같이 반영됩니다. 숫자는 기존 스케줄 ID 를 참조하고(없으면 오류), 객체는 같은 트랜잭션 안에서 등록합니다. 스케줄이 실제로 바뀌면 `summary.updatedFields[]` 에 `schedule` 항목이 들어갑니다. `schedule` 을 함께 보내던 V1 호출은 그 값이 적용되는지 확인하세요.
 
 </details>
 
@@ -122,6 +124,8 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 <details markdown="1" open>
 <summary><strong>응답 예시</strong></summary>
 
+> **상태 변경 항목 (v4.0.0)**: `status` 를 보내면 `updatedFields[]` 에 `{ field: "status", previous, new }` 가 들어갑니다. `previous` 는 조회 응답의 `job.info.status.current` 와 같은 상태 값이고, `new` 는 요청 본문의 `status` 값 그대로(`start`/`stop`)입니다. V1·V2 모두 같습니다.
+>
 > **v2.0.2 신설**: schedule 변경 시 `updatedFields[]` 에 `{ field: "schedule", previous: <객체>, new: <객체> }` 형식으로 노출. 이전엔 service 가 schedule 입력을 무시했으나 본 버전부터 정상 처리.
 
 **성공 응답 (200 OK)**
@@ -151,6 +155,32 @@ curl -X PUT "https://api.example.com/api/replications/1" \
           "field": "compression",
           "previous": "not use",
           "new": "use"
+        }
+      ]
+    }
+  },
+  "message": "Replication job updated",
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
+}
+```
+
+**성공 응답 (200 OK) — 상태 변경**
+
+```json
+{
+  "success": true,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "data": {
+    "replicationInfo": {
+      "id": 1,
+      "name": "backup-replication-01"
+    },
+    "summary": {
+      "updatedFields": [
+        {
+          "field": "status",
+          "previous": "Registered",
+          "new": "start"
         }
       ]
     }
@@ -196,6 +226,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 | `replicationInfo.id` | number | 작업 ID |
 | `replicationInfo.name` | string | 작업 이름 |
 | `summary.updatedFields[].field` | string | 수정된 필드명 |
+| `summary.updatedFields[]` (`field: "status"`) | object | `previous` 는 조회 응답과 같은 상태 값(예: `Registered`), `new` 는 요청 값 그대로(`start`/`stop`) |
 | `summary.updatedFields[].previous` | string \| number \| ScheduleChangeValue | 수정 전 값. 일반 필드는 `string \| number`, **`schedule` 필드는 `{ id, type, description }` 객체** (v2.0.2 신설) |
 | `summary.updatedFields[].new` | string \| number \| ScheduleChangeValue | 수정 후 값. 일반 필드는 `string \| number`, **`schedule` 필드는 `{ id, type, description }` 객체** (v2.0.2 신설) |
 
@@ -205,7 +236,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 |------|------|------|
 | `id` | number | schedule ID |
 | `type` | string | schedule 타입 (displayMappings PascalCase 영문 — 예: `"Once"`, `"Every Minute"`, `"Hourly"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`, `"Smart Weekly (Specific Day of the Week)"`, 그 외 SMART_* 값들, 조회 실패 시 `"Unknown"`) |
-| `description` | string | schedule 영문 설명 (`processScheduleInfo` 결과 — 예: `"[Basic] Start working at 03:00 every day."`, `"[Basic] Start working at 03:00 Monday, Wednesday every week."`, `"[Basic] Start working at 03:00 on the 1, 15 of every month."`, `"[Basic] Start working at 00:00 every 2 Hour."`, 조회 실패 시 `"Schedule lookup failed"`) |
+| `description` | string | schedule 영문 설명 (예: `"[Basic] Start working at 03:00 every day."`, `"[Basic] Start working at 03:00 Monday, Wednesday every week."`, `"[Basic] Start working at 03:00 on the 1, 15 of every month."`, `"[Basic] Start working at 00:00 every 2 Hour."`, 조회 실패 시 `"Schedule lookup failed"`) |
 
 </details>
 
@@ -219,12 +250,14 @@ curl -X PUT "https://api.example.com/api/replications/1" \
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "JOB-ERROR-01",
+    "code": "NOT_FOUND",
     "message": "Replication not found (identifier: 999, center: 1)"
   },
   "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
+
+V1 의 메시지에는 `center` 가 붙지 않습니다(`Replication not found (identifier: 999)`).
 
 </details>
 

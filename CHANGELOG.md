@@ -6,6 +6,54 @@
 
 ---
 
+## 2026년 11월
+
+<details>
+<summary><code>[11-09] [Added&nbsp;&nbsp;] [API&nbsp;v4.0.0]</code> <b>API v4.0.0 릴리스 — replication 계열 상태 어휘 통일 · cloud-auth 자격증명 · 경로 필드 제거 · recovery 정정 — 하위 버전 호환 X</b></summary>
+
+- 부분 갱신 릴리스. `versions.yml` 에 v4.0.0 을 latest 로 등록(v3.0.1 → stable), `ko-api-4.0.0` 사이드바 · `zdm/ko/api/4.0.0/` wrapper + intro · 릴리스 노트(`changelog/4.0.0.md`, 아카이브 `RELEASE_NOTES.md` 의 원본) · 변경 사항 페이지 행 추가. `ko-zdm` 의 ZDM-API 문서 링크를 v4.0.0 으로.
+- 바뀐 문서 22개 — replication · os-replication 각 `get` · `list` · `monitoring-job` · `update`, recovery `update` · `list` · `get` · `delete`, cloud-auth `recovery-list` · `recovery-regist` · `zos-list` · `zos-regist` · `zos-delete`, `auth/issue` · `backup/images` · `backup/images-list` · `license/regist` · `error-codes`. 공용 파일을 4.0.0 내용으로 두고 이전 내용은 `{page}/3.0.1.md` 보존본으로 분리, v3.0.1 wrapper 22개와 공용 본문을 보던 v3.0.0 wrapper 19개를 보존본으로 연결.
+  - replication · os-replication — `status.current` 계산 상태 어휘, 단건 `status` 불일치 404 `NOT_FOUND`, 모니터링 `page` · `limit` · `sort` 와 `data.pagination`, 수정 응답 `updatedFields` 의 `status` 규칙, V1 `schedule` 반영. 404 예시를 실제 코드(`NOT_FOUND`)로, `center` 설명을 실제 동작(조회를 좁힘)으로 정정.
+  - recovery — 수정의 center 대조 404 · 현재 이름 `changeName` 200 · 숫자 schedule 반영, 목록 `sort`, `to` 의 `"Unknown"`, 삭제 `summary.state` 의 `fail` · `not_found` 의미.
+  - cloud-auth — 응답에서 `accessKey` · `secretKey` · `serviceAccount` · `serviceKeyFilePath` · `filePath` 제거, `cloudType` 필터 · 기본 정렬, 파일명 중복 삭제 409, `FILE-ERROR-11`.
+  - `auth/issue` 기본 한도 15분당 100 → 2700회, `backup/images` 의 `budget_exhausted`, `license/regist` 동시 등록 409, `error-codes` 의 `JOB-ERROR-08`(recovery 는 500).
+  - 공개 문서에 남아 있던 내부 이름 2곳(`os-replication/list`, `replication` · `os-replication/update`) 제거. 3.0.1 보존본에는 그대로.
+- 바이너리 `downloads/zdm-api/4.0.0/zdm-api-linux.tar.gz` 는 API 저장소 `npm run dg` 로 빌드 · 배치.
+
+</details>
+
+<details>
+<summary><code>[11-09] [Added&nbsp;&nbsp;] [CLI&nbsp;v4.0.0]</code> <b>CLI v4.0.0 릴리스 — backup image list 부분 스캔 표시 · --strict, cloud-auth 표시 정리</b></summary>
+
+- 표준 릴리스. `versions.yml` 에 v4.0.0 을 latest 로 등록(v3.0.1 → stable), `ko-cli-4.0.0` 사이드바 · `zdm/ko/cli/4.0.0/` wrapper 67개 + intro · 릴리스 노트(`changelog/4.0.0.md`, 아카이브 `RELEASE_NOTES.md` 의 원본) · 변경 사항 페이지 행 추가. `ko-zdm` 의 ZDM-CLI 문서 링크를 v4.0.0 으로.
+- 바뀐 문서는 넷 — `backup/image-list`(`--strict`, 부분 스캔 stderr 표시, json `scan`) · `cloud-auth/recovery-list`(자격증명 줄 제거, region · project 표시) · `zos-list`(`filePath` 제거, `createdDate`) · `zos-regist`(`filePath` 제거). 공용 파일을 4.0.0 내용으로 두고 이전 버전 wrapper(2.0.0 · 2.0.2 · 3.0.0 · 3.0.1)는 `<page>/3.0.1.md` 보존본을 보도록 돌림.
+- 릴리스 노트에 API 4.0.0 에 따른 표시 변화(replication 상태값 — 하위 호환 불가, recovery list 정렬, 단건 `--status` 불일치, 대상 파티션 `Unknown`)를 이행 안내와 함께 실음. 바이너리 `downloads/zdm-cli/4.0.0/` 은 `npm run dg` 로 배치.
+
+</details>
+
+<details>
+<summary><code>[11-06] [Changed] [API v3.0.1]</code> <b>recovery monitoring-job · monitoring-system</b></summary>
+
+- 응답 필드 `progress.partitions[].size` 설명에 "현재는 항상 `0`" 을 명시. 이 값을 기록하는 주체가 없어 실제로 늘 0 이 나감. API 동작 변화 없음.
+
+</details>
+
+<details>
+<summary><code>[11-04] [Removed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>내부 릴리스 절차 스킬 `zdm-release`</b></summary>
+
+- 릴리스 절차를 ZDM 작업 공간의 `release-version` 스킬 하나로 통합. 사이트 산출물 변화 없음.
+
+</details>
+
+<details>
+<summary><code>[11-04] [Fixed&nbsp;&nbsp;] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>CLI v2.0.2 다운로드 링크 — v2.0.0 아카이브를 가리키던 문제</b></summary>
+
+- 다운로드 페이지의 v2.0.2 행이 `downloads/zdm-cli/2.0.0/` 아카이브로 연결돼, v2.0.2 를 받아도 v2.0.0 이 설치됐음.
+- `versions.yml` 의 v2.0.2 `downloads` 2건을 이미 올라와 있던 `downloads/zdm-cli/2.0.2/` 로 변경. 아카이브 파일은 그대로.
+- 해당 행의 배포일이 2026-04-22 → 2026-06-01 로 바뀜. 문서 재사용(`docs: "2.0.0"`)은 그대로.
+
+</details>
+
 ## 2026년 10월
 
 <details>

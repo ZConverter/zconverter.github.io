@@ -362,7 +362,7 @@ curl -X GET "https://api.example.com/api/recoveries/1?detail=true" \
 | `job.info.afterReboot` | string | detail | 작업 후 부팅 모드 |
 | `job.info.notification.mail` | string | detail | 알림 이메일 |
 | `job.detail[].from` | string | - | 소스 파티션/드라이브 |
-| `job.detail[].to` | string | - | 타겟 파티션/드라이브 |
+| `job.detail[].to` | string | - | 타겟 파티션/드라이브. 타겟 파티션을 찾지 못하면 `"Unknown"` 입니다 (원본 드라이브는 `from` 으로 읽습니다) |
 | `job.detail[].targetDevice` | string | - | 타겟 디바이스 경로 |
 | `job.detail[].mode` | string | - | 작업 모드 |
 | `job.detail[].backup.jobName` | string | - | 백업 작업 이름 |

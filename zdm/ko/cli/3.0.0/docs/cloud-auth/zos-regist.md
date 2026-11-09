@@ -6,4 +6,4 @@ navigation: ko-cli-3.0.0
 lang: ko
 ---
 
-{% include zdm/ko/cli/docs/cloud-auth/zos-regist.md %}
+{% include zdm/ko/cli/docs/cloud-auth/zos-regist/3.0.1.md %}

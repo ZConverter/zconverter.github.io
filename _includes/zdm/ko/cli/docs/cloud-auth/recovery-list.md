@@ -56,19 +56,19 @@ zdm-cli cloud-auth recovery-list --ct gcp
 id            : 1
 displayName   : AWS Seoul
 cloudType     : aws
-accessKey     : AKIA****EXAMPLE
 region        : ap-northeast-2
 displayRegion : Asia Pacific (Seoul)
 
 [Recovery Auth 2]
-id              : 2
-displayName     : GCP Tokyo
-cloudType       : gcp
-serviceAccount  : sa@my-project.iam.gserviceaccount.com
-project         : my-project
-region          : asia-northeast1
-displayRegion   : Tokyo
+id            : 2
+displayName   : GCP Tokyo
+cloudType     : gcp
+project       : my-project
+region        : asia-northeast1
+displayRegion : Tokyo
 ```
+
+> 자격증명(AWS Access Key · Secret Key, GCP 서비스 계정)은 등록할 때만 보내고 조회 결과에는 나오지 않습니다.
 
 **JSON 형식**
 ```json
@@ -79,7 +79,6 @@ displayRegion   : Tokyo
       "id": 1,
       "displayName": "AWS Seoul",
       "cloudType": "aws",
-      "accessKey": "AKIA****EXAMPLE",
       "region": "ap-northeast-2",
       "displayRegion": "Asia Pacific (Seoul)"
     },
@@ -87,9 +86,10 @@ displayRegion   : Tokyo
       "id": 2,
       "displayName": "GCP Tokyo",
       "cloudType": "gcp",
-      "serviceAccount": "sa@my-project.iam.gserviceaccount.com",
       "project": "my-project",
+      "serviceKeyFile": "my-project-key.json",
       "region": "asia-northeast1",
+      "regionSub": "asia-northeast1-a",
       "displayRegion": "Tokyo"
     }
   ]

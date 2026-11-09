@@ -26,6 +26,17 @@ ZDM-API 와 ZDM-CLI 의 버전별 변경 이력입니다. 두 제품은 같은 �
 
 <div class="update-rows" markdown="1">
 
+{% assign b_4_0_0 = site.data.zdm.common.changelog_stats.api["4.0.0"].breaking | default: 0 %}
+{% assign brk_total = b_4_0_0 %}
+<details class="update-row" markdown="1">
+<summary><span class="ur-ver">v4.0.0</span><span class="ur-date">2026-11-09</span><span class="ur-badges">{% if brk_total > 0 %}<span class="badge badge-breaking">하위 호환 불가</span>{% endif %}</span></summary>
+
+[v4.0.0 문서 바로가기](/zdm/ko/api/4.0.0/index)
+
+{% include zdm/ko/api/changelog/4.0.0.md %}
+
+</details>
+
 {% assign b_3_0_1 = site.data.zdm.common.changelog_stats.api["3.0.1"].breaking | default: 0 %}
 {% assign brk_total = b_3_0_1 %}
 <details class="update-row" markdown="1">
@@ -127,6 +138,17 @@ ZDM-API 와 ZDM-CLI 의 버전별 변경 이력입니다. 두 제품은 같은 �
 <p class="product-meta"><span class="badge badge-latest">latest v{{ cli_latest.version }}</span> <span class="update-date">{{ cli_docs_date | default: "-" }}</span></p>
 
 <div class="update-rows" markdown="1">
+
+{% assign b_4_0_0 = site.data.zdm.common.changelog_stats.cli["4.0.0"].breaking | default: 0 %}
+{% assign brk_total = b_4_0_0 %}
+<details class="update-row" markdown="1">
+<summary><span class="ur-ver">v4.0.0</span><span class="ur-date">2026-11-09</span><span class="ur-badges">{% if brk_total > 0 %}<span class="badge badge-breaking">하위 호환 불가</span>{% endif %}</span></summary>
+
+[v4.0.0 문서 바로가기](/zdm/ko/cli/4.0.0/index)
+
+{% include zdm/ko/cli/changelog/4.0.0.md %}
+
+</details>
 
 {% assign b_3_0_1 = site.data.zdm.common.changelog_stats.cli["3.0.1"].breaking | default: 0 %}
 {% assign brk_total = b_3_0_1 %}

@@ -83,8 +83,7 @@ curl -X POST "https://api.example.com/api/cloud-auth/recovery" \
 | `gcpDisplayRegion` | Body | string | Optional | GCP 리전 표시 이름 (미입력 시 `Asia-Northeast3(Seoul)` 형식으로 자동 생성) |
 
 > **자동 생성 필드:**
-> - `serviceKeyFile` — 업로드된 파일의 원본 파일명
-> - `serviceKeyFilePath` — 파일 저장 경로 (`{CLOUD_AUTH_FILE_SAVE_PATH}/{userEmail}/GCP/{파일명}`)
+> - `serviceKeyFile` — 업로드된 파일의 원본 파일명 (서버 내 저장 경로는 응답에 포함되지 않습니다)
 > - `displayRegion` — `Asia-Northeast3(Seoul)` 형식으로 자동 생성
 > - `regionSub` 미입력 시 — 리전 데이터에서 해당 리전의 첫 번째 zone 자동 설정
 >
@@ -120,6 +119,7 @@ curl -X POST "https://api.example.com/api/cloud-auth/recovery" \
 | 코드 | HTTP | 의미 |
 |------|------|------|
 | `FILE-ERROR-01` | 404 | GCP 키 파일 미첨부 (`cloudType=gcp` 시 필수) |
+| `FILE-ERROR-11` | 400 | 업로드 파일명 또는 사용자 email 이 저장 디렉터리 밖을 가리킴 (v4.0.0). 파일 이동·등록 전에 거절됩니다 |
 | `CENTER-ERROR-01` | 403 | 지정한 `center`에 속하지 않음 (삭제 시) |
 | `CLOUD-AUTH-ERROR-01` | 400 | 업로드 파일 크기 초과(10MB) |
 | `CLOUD-AUTH-ERROR-02` | 400 | 파일 업로드 실패 |

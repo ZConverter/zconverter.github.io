@@ -8,6 +8,7 @@ Recovery 클라우드 인증 목록을 조회합니다.
 > * 등록된 Recovery 클라우드 인증 정보 목록을 조회합니다.
 > * cloudType별 필터링 및 페이지네이션을 지원합니다.
 > * `center` 는 ID 또는 이름을 콤마로 여러 개 지정할 수 있습니다. 파라미터를 **생략**하면 종전대로 center 필터 없이 조회하지만, `?center=` 처럼 **키만 보내고 값이 비면 400**입니다.
+> * 응답에는 자격증명(AWS Access Key·Secret Key, GCP 서비스 계정)과 서버 내 파일 저장 경로가 포함되지 않습니다 (v4.0.0 부터). GCP 키 파일은 파일명(`serviceKeyFile`)만 반환합니다.
 > * 필터에 맞는 항목이 없으면 **200과 빈 배열**을 반환합니다 (404가 아님).
 
 <details markdown="1" open>
@@ -41,11 +42,11 @@ curl -X GET "https://api.example.com/api/cloud-auth/recovery?cloudType=aws&page=
 |---------|------|------|------|------|--------|
 | `Authorization` | Header | string | Required | Bearer 토큰 | |
 | `displayName` | Query | string | Optional | 표시 이름 검색 (LIKE) | |
-| `cloudType` | Query | string | Optional | 클라우드 타입 필터 | `aws`, `gcp` |
+| `cloudType` | Query | string | Optional | 클라우드 타입 필터. 해당 타입으로 등록된 항목만 반환합니다 | `aws`, `gcp` |
 | `page` | Query | number | Optional | 페이지 번호 | |
 | `limit` | Query | number | Optional | 페이지당 개수 | |
 | `center` | Query | string | Optional | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`). 값이 빈 `?center=` 는 400 | - |
-| `sort` | Query | string | Optional | 정렬 방향 | `asc`, `desc` |
+| `sort` | Query | string | Optional | 정렬 방향. 생략하면 필터 유무와 관계없이 최신 등록순(`id` 내림차순)입니다 | `asc`, `desc` |
 
 </details>
 
@@ -61,8 +62,6 @@ curl -X GET "https://api.example.com/api/cloud-auth/recovery?cloudType=aws&page=
       "id": 1,
       "displayName": "AWS_RECOVERY",
       "cloudType": "AWS",
-      "accessKey": "AWS_ACC_KEY",
-      "secretKey": "AWS_SEC_KEY",
       "region": "ap-northeast-2",
       "displayRegion": "Asia Pacific (Seoul)"
     }
@@ -86,10 +85,8 @@ curl -X GET "https://api.example.com/api/cloud-auth/recovery?cloudType=aws&page=
       "id": 2,
       "displayName": "GCP_RECOVERY",
       "cloudType": "GCP",
-      "serviceAccount": "my-sa@project.iam.gserviceaccount.com",
       "project": "my-project",
       "serviceKeyFile": "service-key.json",
-      "serviceKeyFilePath": "/var/www/.../user@example.com/GCP/service-key.json",
       "region": "asia-northeast3",
       "regionSub": "asia-northeast3-a",
       "displayRegion": "Asia-Northeast3(Seoul)"
@@ -151,12 +148,8 @@ curl -X GET "https://api.example.com/api/cloud-auth/recovery?cloudType=aws&page=
 | `id` | number | 공통 | 인증 정보 ID |
 | `displayName` | string | 공통 | 표시 이름 |
 | `cloudType` | string | 공통 | `AWS` 또는 `GCP` |
-| `accessKey` | string | AWS | AWS Access Key |
-| `secretKey` | string | AWS | AWS Secret Key |
-| `serviceAccount` | string | GCP | GCP 서비스 계정 |
 | `project` | string | GCP | GCP 프로젝트 ID |
 | `serviceKeyFile` | string | GCP | 업로드된 키 파일명 |
-| `serviceKeyFilePath` | string | GCP | 키 파일 저장 경로 |
 | `region` | string | AWS/GCP | 리전 코드 |
 | `regionSub` | string | GCP | 존 코드 |
 | `displayRegion` | string | AWS/GCP | 리전 표시 이름 |

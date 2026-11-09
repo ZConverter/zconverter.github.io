@@ -6,4 +6,4 @@ navigation: ko-api-3.0.1
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/os-replication/update.md %}
+{% include zdm/ko/api/docs/os-replication/update/3.0.1.md %}

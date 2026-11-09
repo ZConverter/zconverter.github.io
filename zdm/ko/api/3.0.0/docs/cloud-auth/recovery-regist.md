@@ -6,4 +6,4 @@ navigation: ko-api-3.0.0
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/cloud-auth/recovery-regist.md %}
+{% include zdm/ko/api/docs/cloud-auth/recovery-regist/3.0.1.md %}

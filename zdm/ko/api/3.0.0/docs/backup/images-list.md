@@ -6,4 +6,4 @@ navigation: ko-api-3.0.0
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/backup/images-list.md %}
+{% include zdm/ko/api/docs/backup/images-list/3.0.1.md %}

@@ -6,4 +6,4 @@ navigation: ko-api-3.0.1
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/cloud-auth/zos-list.md %}
+{% include zdm/ko/api/docs/cloud-auth/zos-list/3.0.1.md %}

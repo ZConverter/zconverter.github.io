@@ -28,7 +28,7 @@ curl -X GET "https://api.example.com/api/replications" \
   -H "Authorization: Bearer <token>"
 
 # 필터 적용 조회
-curl -X GET "https://api.example.com/api/replications?mode=full&status=running" \
+curl -X GET "https://api.example.com/api/replications?mode=full&status=processing" \
   -H "Authorization: Bearer <token>"
 
 # 상세 정보 포함 조회
@@ -54,7 +54,7 @@ curl -X GET "https://api.example.com/api/replications?page=1&limit=10" \
 | `jobId` | Query | number | Optional | - | 작업 ID 필터 | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `server` | Query | string | Optional | - | 대상 서버 이름/ID 필터 | - |
-| `status` | Query | string | Optional | - | 작업 상태 필터 | {% include zdm/replication-job-status.md %} |
+| `status` | Query | string | Optional | - | 작업 상태 필터. 응답 `job.info.status.current` 와 같은 상태 값이며 대소문자를 구분하지 않습니다. `preparing`·`canceling` 도 조회됩니다 | {% include zdm/replication-job-status.md %} |
 | `mode` | Query | string | Optional | - | 복제 모드 필터 | {% include zdm/replication-modes.md %} |
 | `unit` | Query | string | Optional | - | 복제 단위 유형 필터 | {% include zdm/replication-unit-types.md %} |
 | `detail` | Query | boolean | Optional | `false` | 상세 정보 포함 여부 | `true`, `false` |
@@ -401,7 +401,7 @@ curl -X GET "https://api.example.com/api/replications?page=1&limit=10" \
 | `job.info.name` | string | 작업 이름 |
 | `job.info.unitType` | string | 복제 단위 유형 표시값 (`Backup Policy`/`Repository`/`Server`/`Unknown`) |
 | `job.info.replicationMode` | string | 복제 모드 표시값 (`Full`/`Incremental`/`Sync`/`Unknown`) |
-| `job.info.status.current` | string | 작업 상태 (PascalCase: `Preparing`, `Processing`, `Complete`, `Scheduled`, `Registered`, `Canceling`, `Canceled`, `Error`) |
+| `job.info.status.current` | string | 작업 상태. `?status=` 필터 값과 같은 어휘입니다 (PascalCase: `Preparing`, `Processing`, `Complete`, `Scheduled`, `Registered`, `Canceling`, `Canceled`, `Error`) |
 | `job.info.status.time.start` | string | 작업 시작 시간 (`YYYY-MM-DD HH:mm:ss` 또는 `-`) |
 | `job.info.status.time.elapsed` | string | 경과 시간 (`HH:MM:SS` 또는 `-`) |
 | `job.info.status.time.end` | string | 작업 종료 시간 (`YYYY-MM-DD HH:mm:ss` 또는 `-`) |

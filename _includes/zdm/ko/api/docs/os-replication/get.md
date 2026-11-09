@@ -33,9 +33,11 @@ curl -X GET "https://api.example.com/api/os-replications/1" \
 |---------|------|------|------|------|
 | `Authorization` | Header | string | Required | Bearer 토큰 |
 | `identifier` | Path | string | Required | 작업 ID(숫자) 또는 작업 이름 |
-| `center` | Query | string | Optional | center 식별자(ID/이름, 콤마 다중 지정 가능). 요청 검증에만 사용되며 단건 조회 결과를 센터로 좁히지는 않습니다 |
+| `status` | Query | string | Optional | 작업 상태 필터. 응답 `job.info.status.current` 와 같은 상태 값(`preparing`, `processing`, `complete`, `scheduled`, `registered`, `canceling`, `canceled`, `error`)이며 대소문자를 구분하지 않습니다. 작업은 있으나 상태가 다르면 404 입니다 |
+| `center` | Query | string | Optional | center 식별자(ID/이름, 콤마 다중 지정 가능). 지정한 center 에 속한 작업만 조회합니다. 존재하지 않는 center 이거나 그 center 에 작업이 없으면 404 입니다 |
 
-> `center` 는 **키를 보냈는데 값이 비어 있으면**(`?center=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 "필터 없음" 입니다.
+> * `center` 는 **키를 보냈는데 값이 비어 있으면**(`?center=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 "필터 없음" 입니다.
+> * `status` 를 보냈을 때 작업은 존재하지만 현재 상태가 다르면 404 `NOT_FOUND` 입니다. 메시지의 `exists, but` 로 작업 미존재와 구분할 수 있습니다.
 
 </details>
 
@@ -118,5 +120,40 @@ curl -X GET "https://api.example.com/api/os-replications/1" \
 ```
 
 > `replicationType` 이 `Upload` 이면 `uploadInfo`, `Download` 이면 `downloadInfo` 가 포함됩니다. `downloadInfo.type` 은 `Entire Bucket` 또는 `Specific Folder`. (필드 상세는 `GET /os-replications` 목록 조회 문서의 응답 필드 표 참고)
+
+</details>
+
+<details markdown="1">
+<summary><strong>에러 응답</strong></summary>
+
+**작업을 찾을 수 없음 (404 Not Found)**
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": false,
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Os Replication not found (identifier: 999)"
+  },
+  "timestamp": "2026-04-08T12:00:00.000+09:00"
+}
+```
+
+**작업은 있으나 `status` 가 맞지 않음 (404 Not Found)**
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": false,
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Os Replication job with ID '1' exists, but no results match the specified filter conditions."
+  },
+  "timestamp": "2026-04-08T12:00:00.000+09:00"
+}
+```
+
+작업 이름으로 조회하면 메시지는 `Os Replication job with Name '<이름>' exists, ...` 입니다.
 
 </details>

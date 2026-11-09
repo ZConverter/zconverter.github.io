@@ -103,12 +103,20 @@ curl -X DELETE "https://api.example.com/api/recoveries/daily-recovery?center=1" 
 | `jobInfo[].deletedComponents.historyData` | boolean | 히스토리 데이터 삭제 여부 |
 | `jobInfo[].deletedComponents.logData` | boolean | 로그 데이터 삭제 여부 |
 | `jobInfo[].errorMessage` | string | 실패 시 오류 메시지 |
-| `summary.state` | string | 삭제 결과 (`success` / `fail`) |
+| `summary.state` | string | 삭제 결과 (`success` / `fail` / `not_found`). 세 값 모두 HTTP 200 입니다. 아래 설명 참고 |
 | `summary.affectedComponents.basicInfoDeleted` | number | 삭제된 기본 정보 수 |
 | `summary.affectedComponents.additionalInfoDeleted` | number | 삭제된 추가 정보 수 |
 | `summary.affectedComponents.detailInfoDeleted` | number | 삭제된 상세 정보 수 |
 | `summary.affectedComponents.historyDataDeleted` | number | 삭제된 히스토리 데이터 수 |
 | `summary.affectedComponents.logDataDeleted` | number | 삭제된 로그 데이터 수 |
+
+> **`summary.state` 의 의미 (v4.0.0 에서 명확히 함)**
+>
+> - `success`: 기본·추가·상세 정보가 모두 삭제되었습니다.
+> - `fail`: 삭제 요청은 처리되어 작업은 지워졌지만, 지울 기본·추가·상세 정보 중 일부가 이미 없었던 경우입니다(`jobInfo[].deletedComponents` 로 확인). 삭제가 실제로 실패한 경우가 아닙니다. 진짜 삭제 실패는 이 응답이 아니라 500 `JOB-ERROR-05` 로 반환됩니다.
+> - `not_found`: 조회한 직후 다른 요청이 먼저 같은 작업을 지워 삭제 시점에는 지울 대상이 없었던 경우입니다.
+>
+> `fail`·`not_found` 도 200 으로 응답하므로, 삭제 성공 여부는 HTTP 상태와 500 에러 코드로 판단하고 `summary.state` 는 부가 정보로 읽습니다.
 
 </details>
 

@@ -45,7 +45,7 @@ curl -X GET "https://api.example.com/api/cloud-auth/zos?cloudPlatform=oci&page=1
 | `page` | Query | number | Optional | 페이지 번호 | |
 | `limit` | Query | number | Optional | 페이지당 개수 | |
 | `center` | Query | string | Optional | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`). 값이 빈 `?center=` 는 400 | - |
-| `sort` | Query | string | Optional | 정렬 방향 | `asc`, `desc` |
+| `sort` | Query | string | Optional | 정렬 방향. 생략하면 필터 유무와 관계없이 최신 등록순(`id` 내림차순)입니다 | `asc`, `desc` |
 
 </details>
 
@@ -62,7 +62,6 @@ curl -X GET "https://api.example.com/api/cloud-auth/zos?cloudPlatform=oci&page=1
       "displayName": "OCI_1712345678901",
       "cloudPlatform": "OCI",
       "fileName": "config.conf",
-      "filePath": "/var/www/.../config.conf",
       "createdDate": "2026-04-07 12:00:00"
     }
   ],
@@ -70,6 +69,21 @@ curl -X GET "https://api.example.com/api/cloud-auth/zos?cloudPlatform=oci&page=1
   "timestamp": "2026-04-07T12:00:00.000+09:00"
 }
 ```
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>응답 필드</strong></summary>
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `id` | number | 인증 정보 ID |
+| `displayName` | string | 표시 이름 |
+| `cloudPlatform` | string | 클라우드 플랫폼 |
+| `fileName` | string | 업로드된 인증 키 파일명 |
+| `createdDate` | string | 등록 일시 |
+
+> v4.0.0 부터 서버 내 저장 경로(`filePath`)는 응답에 포함되지 않습니다. 파일은 `fileName` 으로 `GET /cloud-auth/zos/download/:fileName` 에서 내려받습니다.
 
 </details>
 

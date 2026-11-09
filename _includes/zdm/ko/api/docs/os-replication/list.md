@@ -39,7 +39,7 @@ curl -X GET "https://api.example.com/api/os-replications?type=upload&mode=full&p
 | `server` | Query | string | Optional | 서버 이름 필터 | |
 | `type` | Query | string | Optional | 복제 방식 필터 | `upload`, `download` |
 | `mode` | Query | string | Optional | 복제 모드 필터 | `full`, `increment` |
-| `status` | Query | string | Optional | 작업 상태 필터 (`VALID_JOB_STATUS_VALUES`) | (job status enum) |
+| `status` | Query | string | Optional | 작업 상태 필터. 응답 `job.info.status.current` 와 같은 상태 값이며 대소문자를 구분하지 않습니다. `preparing`·`canceling` 도 조회됩니다 | {% include zdm/replication-job-status.md %} |
 | `detail` | Query | boolean | Optional | 상세 정보 포함 여부 | `true`, `false` |
 | `page` | Query | number | Optional | 페이지 번호 | |
 | `limit` | Query | number | Optional | 페이지당 개수 | |
@@ -48,6 +48,7 @@ curl -X GET "https://api.example.com/api/os-replications?type=upload&mode=full&p
 
 > * `center` 는 ID/이름을 콤마로 여러 개 지정할 수 있습니다 (예: `?center=1,zdm-b`). 조각 앞뒤 공백은 API 가 정규화합니다.
 > * `center` · `server` 는 **키를 보냈는데 값이 비어 있으면**(`?center=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 "필터 없음" 이므로 동작 변화가 없습니다.
+> * 응답의 `job.info.status.current` 는 `Preparing`·`Processing`·`Complete`·`Scheduled`·`Registered`·`Canceling`·`Canceled`·`Error` 중 하나이며 `status` 필터 값과 같은 어휘입니다. 진행 기록이 없는 취소 작업은 `Canceled`, 스케줄 대기 작업은 `Scheduled` 입니다.
 > * 일치하는 결과가 없거나 `center` 필터가 어떤 센터에도 매칭되지 않으면 빈 배열(`"data": []`)을 200 으로 반환합니다 (에러가 아님). 단건 조회의 404 는 종전대로이며, 지목한 리소스가 실제로 없다는 뜻이므로 의미가 다릅니다.
 
 </details>

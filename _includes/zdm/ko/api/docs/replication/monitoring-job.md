@@ -41,10 +41,11 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/backup-repl
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 복제 작업 ID (숫자) 또는 작업 이름 | - |
 | `server` | Query | string | Optional | - | 서버 이름. 요청 검증만 수행하며 조회 결과에는 영향이 없습니다 | - |
-| `page` | Query | number | Optional | 1 | 페이지 번호 (단건 조회이므로 결과에 영향 없음) | - |
-| `limit` | Query | number | Optional | 20 | 페이지당 항목 수 (단건 조회이므로 결과에 영향 없음) | - |
-| `sort` | Query | string | Optional | `desc` | 정렬 순서 (단건 조회이므로 결과에 영향 없음) | `asc`, `desc` |
+| `page` | Query | number | Optional | 1 | `job.log` 의 페이지 번호 (1부터 시작). `page`·`limit` 중 하나라도 주면 적용됩니다 | - |
+| `limit` | Query | number | Optional | 20 | `job.log` 의 페이지당 줄 수. `page`·`limit` 중 하나라도 주면 적용됩니다 | - |
+| `sort` | Query | string | Optional | `desc` | `job.log` 정렬 순서. 로그 번호 기준입니다 | `asc`, `desc` |
 
+> * `page` · `limit` · `sort` 는 `job.log` 에 적용됩니다. 셋 다 보내지 않으면 정렬된 로그의 앞 10줄(기본 `desc` 이므로 최근 10줄)만 반환하고 `data.pagination` 은 없습니다. `page` 또는 `limit` 중 하나라도 보내면 기본값(page 1, limit 20)으로 자르고 `data.pagination` 을 함께 반환합니다. 범위를 벗어난 `page` 는 빈 `log` 와 200 입니다. `sort` 만 보내면 10줄 제한은 그대로이고 정렬 방향만 바뀝니다.
 > * `status` 는 **제거되었습니다.** 보내면 400 (`DTO-VALIDATION-03`) 입니다 — 종전에는 지정한 값과 다르면 404 였습니다. 경로 `identifier` 로 이미 작업 하나를 지목한 단건 조회이므로, 상태는 응답의 `job.progress.status` 를 읽으면 됩니다. 상태로 거르는 조회가 필요하면 목록 조회(`GET /replications?status=`)를 사용합니다.
 > * 종전 `status` 에 `scheduled` · `registered` 를 주면 **항상 404** 였습니다. 이 경로의 상태는 실행 중인 활성 작업에서 계산하므로 그 두 값은 나올 수 없었습니다. 파라미터가 사라지면서 이 함정도 없어졌습니다.
 > * `server` 는 **키를 보냈는데 값이 비어 있으면**(`?server=`) 400 입니다. 파라미터를 **생략**하는 것은 종전대로 동작 변화가 없습니다.
@@ -148,7 +149,7 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/backup-repl
 | `system.name` | string | 센터 이름 |
 | `job.info.name` | string | 작업 이름 |
 | `job.info.id` | number | 작업 ID |
-| `job.log` | string[] | 작업 로그 목록 (최근 10건) |
+| `job.log` | string[] | 작업 로그 목록. `page`·`limit` 을 보내지 않으면 최근 10건, 보내면 요청한 페이지 |
 | `job.progress.status` | string | 현재 작업 상태 (PascalCase: `Preparing`/`Processing`/`Complete`/`Scheduled`/`Registered`/`Canceling`/`Canceled`/`Error`) |
 | `job.progress.step` | string | 현재 작업 단계 |
 | `job.progress.percent` | string | 진행률 |
@@ -156,6 +157,12 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/backup-repl
 | `job.time.start` | string | 작업 시작 시간 |
 | `job.time.end` | string | 작업 종료 시간 |
 | `job.time.elapsed` | string | 경과 시간 |
+| `pagination.currentPage` | number | 현재 페이지 번호 (`data` 안, `page`·`limit` 을 보낸 경우에만) |
+| `pagination.totalPages` | number | `job.log` 전체 페이지 수 |
+| `pagination.totalItems` | number | `job.log` 전체 줄 수 |
+| `pagination.itemsPerPage` | number | 페이지당 줄 수 |
+| `pagination.hasNextPage` | boolean | 다음 페이지 존재 여부 |
+| `pagination.hasPreviousPage` | boolean | 이전 페이지 존재 여부 |
 
 </details>
 

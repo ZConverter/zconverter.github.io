@@ -45,7 +45,7 @@ curl -X PUT "https://api.example.com/api/os-replications/1" \
 | `identifier` | Path | string | Required | 작업 ID 또는 이름 | |
 | `center` | Body | string \| number | Required | 센터 ID 또는 이름 (소속 검증용) | |
 | `changeName` | Body | string | Optional | 변경할 작업 이름 | |
-| `status` | Body | string | Optional | 작업 상태 | `start`, `stop` |
+| `status` | Body | string | Optional | 작업 상태. 대소문자를 구분하지 않습니다 | `start`, `stop` |
 | `uploadMode` | Body | string | Optional | 업로드 모드 | `full`, `increment` |
 | `uploadFolderName` | Body | string | Optional | 업로드 폴더 이름 | |
 | `uploadNewly` | Body | string | Optional | 업로드 신규 파일 옵션 | `disabled`, `newly_only` |
@@ -58,7 +58,7 @@ curl -X PUT "https://api.example.com/api/os-replications/1" \
 > **ScheduleChangeValue 구조** (`updatedFields[].previous` / `new` 값):
 > - `id` (number) — schedule ID
 > - `type` (string) — displayMappings PascalCase 영문 (`Once`, `Every Minute`, `Hourly`, `Daily`, `Weekly`, `Monthly (Specific Week and Day of the Week)`, `Monthly on Specific Date`, `Unknown`)
-> - `description` (string) — `processScheduleInfo` 영문 (예: `[Basic] Start working at 03:00 every day.`)
+> - `description` (string) — 영문 설명 (예: `[Basic] Start working at 03:00 every day.`)
 
 </details>
 
@@ -76,6 +76,7 @@ curl -X PUT "https://api.example.com/api/os-replications/1" \
     "summary": {
       "updatedFields": [
         { "field": "jobName", "previous": "old-name", "new": "new-job-name" },
+        { "field": "status", "previous": "Registered", "new": "start" },
         { "field": "uploadMode", "previous": "Full", "new": "Incremental" },
         { "field": "uploadNewly", "previous": "Disabled", "new": "Newly Created Files Only" },
         {
@@ -104,10 +105,12 @@ curl -X PUT "https://api.example.com/api/os-replications/1" \
 | `summary.updatedFields[].previous` | string \| object | 변경 전 값. `field` 가 `schedule` 인 경우 `{ id, type, description }` 객체 |
 | `summary.updatedFields[].new` | string \| object | 변경 후 값. `field` 가 `schedule` 인 경우 `{ id, type, description }` 객체 |
 
+> **`status` 항목** (v4.0.0): `previous` 는 조회 응답 `job.info.status.current` 와 같은 상태 값(`Preparing`·`Processing`·`Complete`·`Scheduled`·`Registered`·`Canceling`·`Canceled`·`Error`), `new` 는 요청 본문의 `status` 값 그대로(`start`/`stop`)입니다. 종전에는 두 값 모두 `Waiting`·`Start` 같은 별도 표기였습니다.
+
 > **schedule 값 형식** (`previous` / `new`):
 > - `id` (number) — schedule ID
 > - `type` (string) — displayMappings PascalCase 영문 (`Once`, `Every Minute`, `Hourly`, `Daily`, `Weekly`, `Monthly (Specific Week and Day of the Week)`, `Monthly on Specific Date`, `Unknown`)
-> - `description` (string) — `processScheduleInfo` 영문 (예: `[Basic] Start working at 03:00 every day.`)
+> - `description` (string) — 영문 설명 (예: `[Basic] Start working at 03:00 every day.`)
 
 </details>
 

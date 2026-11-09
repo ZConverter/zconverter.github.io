@@ -6,4 +6,4 @@ navigation: ko-cli-3.0.0
 lang: ko
 ---
 
-{% include zdm/ko/cli/docs/backup/image-list.md %}
+{% include zdm/ko/cli/docs/backup/image-list/3.0.1.md %}

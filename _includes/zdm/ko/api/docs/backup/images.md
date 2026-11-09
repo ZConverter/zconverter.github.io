@@ -481,8 +481,10 @@ curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bi
 > |---|---|
 > | `total` / `succeeded` / `failed` | 스캔 대상 저장소 수와 성공·실패 건수 |
 > | `failures[].code` | 분기용 안정 식별자. 사유가 분류되지 않은 경우 생략됩니다 |
-> | `failures[].reason` | 사람이 읽는 실패 사유 |
-> | `failures[].retryable` | 다시 호출하면 풀릴 수 있는 실패인지. 타임아웃·락 경합은 `true`, 저장소 미존재 등은 `false` |
+> | `failures[].reason` | 사람이 읽는 실패 사유. 값 `budget_exhausted` 는 아래 설명 참고 |
+> | `failures[].retryable` | 다시 호출하면 풀릴 수 있는 실패인지. 타임아웃·락 경합·`budget_exhausted` 는 `true`, 저장소 미존재 등은 `false` |
+>
+> **`reason: "budget_exhausted"` (v4.0.0)** — 저장소가 많아 한 요청의 전체 스캔 시간 예산이 모자라면, 일부 저장소는 스캔을 시작하지 않고 `scan.failures[]` 에 `reason: "budget_exhausted"`, `retryable: true` 로 기록됩니다. 이 항목에는 `code` 가 없습니다. 해당 저장소의 이미지는 이 응답에 포함되지 않으므로, 다시 호출하면 채워질 수 있습니다. 기본 설정에서는 한 요청이 동시에 최대 4개 저장소를 스캔하고 전체 예산은 60초입니다(첫 번째 묶음은 항상 시작합니다). 서버 환경변수 `BACKUP_IMAGE_SCAN_CONCURRENCY`(기본 `4`)와 `BACKUP_IMAGE_SCAN_TOTAL_BUDGET_MS`(기본 `60000`)로 조정할 수 있습니다.
 >
 > **`scan` 은 실패가 없어도 항상 포함됩니다.** `failed: 0` 이 곧 "목록이 완전하다" 는 신호입니다 —
 > 실패했을 때만 실으면 이 필드를 모르는 클라이언트가 부분 결과를 전체로 오인합니다.

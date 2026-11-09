@@ -57,14 +57,15 @@ curl -X POST "https://api.example.com/api/cloud-auth/zos" \
       "id": 1,
       "displayName": "OCI_1712345678901",
       "cloudPlatform": "oci",
-      "fileName": "config.conf",
-      "filePath": "/var/www/.../user@example.com/ZOS/config.conf"
+      "fileName": "config.conf"
     }
   },
   "message": "Cloud Auth ZOS registered",
   "timestamp": "2026-04-07T12:00:00.000+09:00"
 }
 ```
+
+> 응답 `cloudInfo` 는 `id`, `displayName`, `cloudPlatform`, `fileName` 입니다. v4.0.0 부터 서버 내 저장 경로(`filePath`)는 응답에 포함되지 않습니다. 파일은 `GET /cloud-auth/zos/download/:fileName` 으로 내려받습니다.
 
 </details>
 
@@ -74,6 +75,7 @@ curl -X POST "https://api.example.com/api/cloud-auth/zos" \
 | 코드 | HTTP | 메시지 | 발생 상황 |
 |------|------|--------|-----------|
 | `DTO-VALIDATION-01` | 422 | Request body validation failed. | `center` 누락, `cloudPlatform` 미입력 또는 허용 enum(`oci`, `nhn`, `ncp`, `aws`, `azure`, `minio`) 외 값 |
+| `FILE-ERROR-11` | 400 | Invalid file path. | 사용자 email 에 경로 구분자가 있어 저장 디렉터리 밖을 가리킴. 파일 저장 전에 거절됩니다 |
 
 </details>
 

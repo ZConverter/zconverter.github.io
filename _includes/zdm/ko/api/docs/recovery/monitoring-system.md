@@ -604,7 +604,7 @@ job[]
 | `job[].progress.partitions[].timeInfo.elapsed` | string | 항상 | 그 파티션의 경과 시간. 값이 없으면 `"-"` |
 | `job[].progress.partitions[].timeInfo.end` | string | 항상 | 그 파티션의 종료 시각 (`YYYY-MM-DD HH:mm:ss`). 값이 없으면 `"-"` |
 | `job[].progress.partitions[].targetDisk` | string | `detail=true` | 복구 대상 디스크 경로 또는 ID |
-| `job[].progress.partitions[].size` | number | `detail=true` | 복구 대상 디스크 크기 (신규 디스크 생성 시 사용) |
+| `job[].progress.partitions[].size` | number | `detail=true` | 복구 대상 디스크 크기 (신규 디스크 생성 시 사용). **현재는 항상 `0`** — 이 값을 기록하는 주체가 없습니다 |
 | `job[].progress.partitions[].mode` | string | `detail=true` | 복구 방식 표시 문자열 — `Full Recovery`, `Incremental Recovery`, `Unknown` |
 | `job[].progress.partitions[].diskNumber` | number | `detail=true` · Windows | 복구 대상 디스크 번호. Linux 응답에는 이 키가 없습니다 |
 | `job[].progress.partitions[].overwrite` | string | `detail=true` · Linux | 파티션 덮어쓰기 상태 — `Overwritten`, `Not overwritten`. Windows 응답에는 이 키가 없습니다 |

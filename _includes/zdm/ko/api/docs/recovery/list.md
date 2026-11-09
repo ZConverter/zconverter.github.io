@@ -70,7 +70,7 @@ curl -X GET "https://api.example.com/api/recoveries?page=1&limit=10" \
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 | `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
-| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
+| `sort` | Query | string | Optional | `desc` | 작업 시작 시각 기준 정렬 순서. 페이징 전에 적용됩니다. 시작 전이라 시작 시각이 없는 작업은 `asc` 에서 맨 앞, `desc` 에서 맨 뒤입니다. 시작 시각이 같으면 작업 ID 를 같은 방향으로 비교합니다 | `asc`, `desc` |
 
 > **참고:**
 > - `partition`과 `drive`는 **같은 대상을 가리키는 하나의 필터**입니다. 두 파라미터를 함께 지정하면 400으로 거부됩니다.
@@ -482,7 +482,7 @@ curl -X GET "https://api.example.com/api/recoveries?page=1&limit=10" \
 | `job.info.afterReboot` | string | detail | 작업 후 부팅 모드 |
 | `job.info.notification.mail` | string | detail | 알림 이메일 |
 | `job.detail[].from` | string | - | 소스 파티션/드라이브 |
-| `job.detail[].to` | string | - | 타겟 파티션/드라이브 |
+| `job.detail[].to` | string | - | 타겟 파티션/드라이브. 타겟 파티션을 찾지 못하면 `"Unknown"` 입니다 (원본 드라이브는 `from` 으로 읽습니다) |
 | `job.detail[].targetDevice` | string | - | 타겟 디바이스 경로 |
 | `job.detail[].mode` | string | - | 작업 모드 |
 | `job.detail[].backup.jobName` | string | - | 백업 작업 이름 |

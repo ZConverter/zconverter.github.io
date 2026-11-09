@@ -39,7 +39,13 @@ curl -X DELETE "https://api.example.com/api/cloud-auth/zos/config.conf" \
 |---------|------|------|------|------|
 | `Authorization` | Header | string | Required | Bearer 토큰 |
 | `identifier` | Path | string | Required | ID(숫자) 또는 파일명 |
-| `center` | Query | string | Optional | 센터 ID 또는 이름 — **정확히 1개만** 허용(여러 개·빈 값은 400). 지정 시 대상 레코드가 해당 center 소속인지 검증(불일치 시 `CENTER-ERROR-01`/403) |
+| `center` | Query | string | Optional | 센터 ID 또는 이름 — **정확히 1개만** 허용(여러 개·빈 값은 400). 지정 시 대상 레코드가 해당 center 소속인지 검증(ID 로 지목했는데 불일치하면 `CENTER-ERROR-01`/403). **파일명으로 지목하면 해당 center 안에서만 찾습니다** — 다른 center 에만 있는 파일명이면 404 입니다 |
+
+> **파일명으로 삭제할 때 (v4.0.0)**
+>
+> * 같은 파일명이 2건 이상이면 아무것도 지우지 않고 409 `CONFLICT` 를 반환합니다. 메시지에 해당 항목의 id 가 나열되며, id 로 삭제하라는 안내가 붙습니다. 종전에는 동명 항목 중 임의의 1건이 삭제되었습니다.
+> * `center` 를 지정하면 그 center 안에서만 파일명을 찾습니다. 다른 center 에 같은 파일명이 있어도 지정한 center 안에서 1건이면 삭제되고, 2건 이상이면 409 입니다.
+> * 숫자 identifier 는 종전처럼 id 로 삭제합니다.
 
 </details>
 
@@ -79,6 +85,36 @@ curl -X DELETE "https://api.example.com/api/cloud-auth/zos/config.conf" \
     "details": {
       "center": ["exactly one center must be specified"]
     }
+  },
+  "timestamp": "2026-04-07T12:00:00.000+09:00"
+}
+```
+
+**동명 파일이 여러 건 (409 Conflict)**
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": false,
+  "error": {
+    "code": "CONFLICT",
+    "message": "Multiple cloud auth ZOS entries with file name 'config.conf' exist (ids: 1, 4). Delete by id instead."
+  },
+  "timestamp": "2026-04-07T12:00:00.000+09:00"
+}
+```
+
+**대상을 찾을 수 없음 (404 Not Found)**
+
+해당 ID·파일명이 없거나, `center` 를 지정한 파일명 삭제에서 그 center 안에 없는 경우입니다.
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": false,
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Cloud Auth ZOS not found (identifier: config.conf)"
   },
   "timestamp": "2026-04-07T12:00:00.000+09:00"
 }

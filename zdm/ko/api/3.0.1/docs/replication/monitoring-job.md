@@ -6,4 +6,4 @@ navigation: ko-api-3.0.1
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/replication/monitoring-job.md %}
+{% include zdm/ko/api/docs/replication/monitoring-job/3.0.1.md %}

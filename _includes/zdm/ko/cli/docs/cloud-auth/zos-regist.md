@@ -56,7 +56,6 @@ id            : 1
 displayName   : AWS Production Key
 cloudPlatform : aws
 fileName      : aws-key.json
-filePath      : /cloud-auth/zos/aws-key.json
 ```
 
 **JSON 형식**
@@ -69,8 +68,7 @@ filePath      : /cloud-auth/zos/aws-key.json
       "id": 1,
       "displayName": "AWS Production Key",
       "cloudPlatform": "aws",
-      "fileName": "aws-key.json",
-      "filePath": "/cloud-auth/zos/aws-key.json"
+      "fileName": "aws-key.json"
     }
   }
 }

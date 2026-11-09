@@ -6,4 +6,4 @@ navigation: ko-api-3.0.1
 lang: ko
 ---
 
-{% include zdm/ko/api/docs/error-codes.md %}
+{% include zdm/ko/api/docs/error-codes/3.0.1.md %}
