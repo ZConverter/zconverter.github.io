@@ -1,3 +1,5 @@
+> 현재 버전 추가 절차의 정본은 zdm 저장소 `.claude/skills/release-version/SKILL.md` 다. 이 문서는 이전 절차 기록이다.
+
 # ZDM 문서 버전 관리 가이드
 
 이 문서는 ZDM API 및 CLI 문서의 신규 버전 추가 절차를 설명합니다.

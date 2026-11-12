@@ -3332,13 +3332,6 @@ api-1.0.3:
       - title: "DELETE /zdms/repositories/:identifier"
         url: "/zdm/ko/api/1.0.3/docs/zdm/repository-delete"
 
-# API v1.0.4 (레거시, Beta)
-api-1.0.4:
-  - title: "API Documentation (Beta)"
-    links:
-      - title: "API 소개"
-        url: "/zdm/ko/api/1.0.4/index"
-
 # CLI v1.0.3 (레거시)
 cli-1.0.3:
   - title: "CLI Documentation"

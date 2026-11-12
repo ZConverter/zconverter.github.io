@@ -21,8 +21,6 @@ permalink: pretty
 include:
   - "zdm/**/*.md"
   - "guides/**/*.md"
-  - "_layouts"
-  - "_includes"
 
 # Collections
 collections:
@@ -51,3 +49,7 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - README.md
+  - CHANGELOG.md
+  - CONTRIBUTING.md
+  - run.sh
+  - log/

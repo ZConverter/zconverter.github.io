@@ -2,7 +2,7 @@
 layout: docs
 title: ZDM API Documentation
 section_title: ZDM API Documentation
-navigation: ko-api
+navigation: ko-zdm
 lang: ko
 ---
 {%- comment -%}

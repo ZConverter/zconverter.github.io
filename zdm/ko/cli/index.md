@@ -2,7 +2,7 @@
 layout: docs
 title: ZDM CLI Documentation
 section_title: ZDM CLI Documentation
-navigation: ko-cli
+navigation: ko-zdm
 lang: ko
 ---
 {%- comment -%}

@@ -24,6 +24,13 @@
 
 <script>
 function changeLanguage(lang) {
+  // 영문판이 생기면 이 분기를 지운다
+  if (lang === 'en') {
+    alert('영문 문서는 준비 중입니다. / English documentation is coming soon.');
+    document.getElementById('lang-select').value = 'ko';
+    return;
+  }
+
   var currentPath = window.location.pathname;
   var newPath;
 

@@ -6,8 +6,8 @@ ZDM Enum Include Template
 {% include zdm/enum.html name="job-modes" type="api" version="1.0.3" %}
 {% include zdm/enum.html name="job-modes" type="api" version="1.0.3" context="backup" %}
 {% include zdm/enum.html name="server-modes" format="inline" %}
-{% include zdm/enum.html name="schedule-types" show_number=true show_category=true %}
 {% include zdm/enum.html name="weekdays" show_number=true %}
+(schedule-types 는 이 템플릿이 아니라 zdm/schedule-types.md 가 같은 데이터로 그린다)
 
 파라미터:
 name : (필수) enum 이름 (예: job-modes, server-modes)
@@ -55,7 +55,6 @@ show_category : 카테고리 컬럼 표시 여부 (기본값: false)
 {%- else -%}
 {%- comment -%} 헤더 생성 {%- endcomment -%}
 | {% if show_number %}번호 | {% endif %}값 |{% if show_desc %} 설명 |{% endif %}{% if show_category %} 카테고리 |{% endif %}
-
 |{% if show_number %}------|{% endif %}------|{% if show_desc %}------|{% endif %}{% if show_category %}------|{% endif
 %}
 

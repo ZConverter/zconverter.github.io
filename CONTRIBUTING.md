@@ -25,7 +25,7 @@
 | `_includes/zdm/` | ZDM 문서용 include 템플릿 (enum, platforms 등) |
 | `_data/` | 중앙 집중식 데이터 파일 |
 | `assets/` | CSS, 이미지 등 정적 자산 |
-| `docs/` | 문서 템플릿 및 업데이트 가이드 |
+| `_dev/docs/` | 문서 템플릿 및 업데이트 가이드 (내부용, 사이트에 출력되지 않음) |
 | `downloads/` | 다운로드 파일 (zdm-api, zdm-cli) |
 | `zdm/` | ZDM 제품 문서 (API, CLI) |
 | `zdm/api/{version}/docs/` | ZDM API 문서 페이지들 (1.0.3, 1.0.4 등) |
