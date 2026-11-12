@@ -9,6 +9,145 @@
 ## 2026년 11월
 
 <details>
+<summary><code>[11-12] [Changed] [CLI&nbsp;v4.0.0]</code> <b>backup·recovery·replication·os-replication --schedule-id (smart 객체 형식 · center · type 조건)</b></summary>
+
+- `backup update --schedule-id '{"type":7,"basic":ID,"advanced":ID}'` 가 `--mode smart` 없이도 동작함을 backup update 문서에 반영. smart 작업에 숫자 하나를 주면 서버가 400 `JOB-ERROR-102` 로 거부함을 추가.
+- backup regist · update 문서에 객체 형식은 smart 전용이며 full · increment 에 주면 요청 전에 종료 코드 2 로 막힌다는 내용과 영문 메시지 원문을 추가. `type` 불일치(400 `JOB-ERROR-108`) · 다른 center 스케줄(403 `CENTER-ERROR-01`)도 추가.
+- recovery · replication · os-replication regist · update 와 recovery image-regist 의 `--schedule-id` 설명에 "작업과 같은 center, 기본 유형 type 0~6" 조건 추가.
+- 사이트의 v4.0.0 릴리스 노트(`changelog/4.0.0.md`)에 같은 내용의 항목 추가. 이미 배포한 아카이브의 `RELEASE_NOTES.md` 와는 다시 배포할 때 같아짐.
+- 계약 변화: `backup update --schedule-id` 가 `--mode` 없이 객체 형식을 받음. full · increment 에 객체 형식을 주면 메시지가 `schedule-id must be an integer` 에서 smart 전용 안내로 바뀜(종료 코드 2 는 같음).
+
+</details>
+
+<details>
+<summary><code>[11-12] [Changed] [CLI&nbsp;v4.0.0]</code> <b>recovery regist · image-regist 요청 대기 시간</b></summary>
+
+- recovery regist · image-regist 문서에 "요청 대기 시간" 블록 추가. 대기 시간(초) = `max(120, 30 × (C + L) + 100)` (C: 서로 다른 저장소 수, L: 백업 파일 수), `recovery update` 는 그대로.
+- 사이트의 v4.0.0 릴리스 노트에 같은 내용의 항목 추가.
+- 계약 변화: CLI 가 30초에 먼저 끊어 `request timed out after 30000ms`(종료 코드 4)로 끝나던 요청이, 서버의 응답(예: 500 `JOB-ERROR-68`)을 그대로 표시함.
+
+</details>
+
+<details>
+<summary><code>[11-12] [Changed] [API&nbsp;v4.0.0]</code> <b>v4.0.0 릴리스 노트의 배포 설정 값 문단</b></summary>
+
+- 사이트의 v4.0.0 릴리스 노트(`changelog/4.0.0.md`) "보안 — 배포 파일의 설정 값" 문단에서 이전 버전 배포 파일의 설정 내용을 설명하던 문장을 지우고, 새로 설치 · 업그레이드 안내와 `JWT_SECRET` 권장 사항만 남김.
+- 이미 배포한 v4.0.0 아카이브의 `RELEASE_NOTES.md` 는 바꾸지 않음(공개된 번호는 다시 배포하지 않음). 다음 릴리스부터 사이트 노트와 아카이브가 다시 같아짐.
+
+</details>
+
+<details>
+<summary><code>[11-12] [Changed] [API&nbsp;v4.0.0]</code> <b>공개 문서의 내부 구현 표기 (소스 경로 · 함수명 · DB 테이블 · 컬럼)</b></summary>
+
+- 소스 파일 경로 · `.ts` 파일명 · 함수명 · 줄 번호("코드 위치")와 DB 테이블 · 컬럼 이름을 공개 문서에서 삭제하고 사용자 용어로 교체.
+- 대상: 스케줄(regist · get · delete · overview), 에러 코드(SCHEDULE-ERROR-39~50 설명에서 내부 필드명 삭제), license assign, os-replication regist, recovery history-list · monitoring-system, replication delete, server delete, 변경 이력 2.0.2.
+- 보존된 이전 버전 문서(1.3.1 · 2.0.2 · 3.0.0 · 3.0.1)와 구버전 래퍼(1.1.0~1.3.1 recovery history-list)도 같은 표기 변경만 적용하고 사실 관계는 그대로 유지.
+- 실제 응답에 포함되는 오류 메시지 `... (nLicenseID: 5)` 는 그대로 유지.
+- 문서 표기만 바뀌고 API 동작 변화 없음. 계약 변화 없음.
+
+</details>
+
+<details>
+<summary><code>[11-12] [Changed] [CLI&nbsp;v4.0.0]</code> <b>license assign 문서의 내부 구현 표기</b></summary>
+
+- 현재 버전과 보존된 2.0.2 의 license assign 문서에서 내부 테이블·컬럼 표기를 사용자 용어로 교체.
+- 실제로 반환되는 오류 메시지 `... (nLicenseID: 5)` 는 그대로 유지.
+- 문서 표기만 바뀌고 CLI 동작 변화 없음.
+
+</details>
+
+<details>
+<summary><code>[11-12] [Fixed&nbsp;&nbsp;] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>enum 표가 머리 없는 표로 갈라지던 문제</b></summary>
+
+- `_includes/zdm/enum.html` 이 표 머리와 구분선 사이에 빈 줄을 넣어, 렌더 때 머리 줄과 본문이 서로 다른 표로 갈라졌음. 빈 줄을 없애 머리가 있는 하나의 표로 렌더. CLI 출력 형식 표 등 enum 표를 쓰는 여러 페이지에 해당.
+
+</details>
+
+<details>
+<summary><code>[11-12] [Changed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>스케줄 타입 데이터 통합 · 타입 표 설명 문구</b></summary>
+
+- 스케줄 타입 데이터를 `_data/zdm/common/enums.yml` 한 벌로 통합하고 `_data/zdm/api/v1_0_3/schedule-types.yml` 삭제.
+- 타입 1·2 설명을 "n분 간격"·"n시간 간격" 으로. 모든 버전의 스케줄 타입 표 문구가 바뀜.
+- CLI 스케줄 개요의 타입 표에 분류 열 추가.
+
+</details>
+
+<details>
+<summary><code>[11-12] [Fixed&nbsp;&nbsp;] [CLI&nbsp;v4.0.0]</code> <b>스케줄 문서의 에러 이름 · 예시 · 옵션 · 저장 경로</b></summary>
+
+- 에러 이름 `INVALID_SCHEDULE_JOB_MODE_FOR_BASIC` 을 실제 코드(103 · 101)로 정정.
+- `backup update` 의 smart 예시에 `--mode smart` 추가. basic 스케줄 자동 래핑이 backup · recovery · replication · os-replication 4개 도메인 공통임을 명시.
+- 스케줄 개요 JSON 예시의 값을 문자열로 정정(숫자로 넣으면 등록 실패).
+- 튜토리얼에서 잘못된 옵션 3곳 수정. 스케줄 파일 저장 경로를 `zdm-cli-data/schedule/` 로 정정.
+- 도메인 문서마다 반복되던 정책 문구를 한 줄과 스케줄 문서 링크로 축소.
+- 문서만 바뀌고 CLI 동작 변화 없음.
+
+</details>
+
+<details>
+<summary><code>[11-12] [Fixed&nbsp;&nbsp;] [API&nbsp;v4.0.0]</code> <b>스케줄 서술 정정 — 지원 타입 · 숫자 스케줄 ID 처리 · 없는 스케줄 ID 에러</b></summary>
+
+- replication · os-replication · recovery 는 smart 스케줄(타입 7~11)을 지원하지 않고 타입 0~6 만 허용하며, 거부 코드는 103 · 101 로 정정.
+- 숫자 스케줄 ID 는 backup 에서는 새 스케줄로 복사되고 나머지 도메인에서는 그대로 참조됨. backup 수정 문서의 "ID 보존" 서술 정정.
+- 없는 스케줄 ID 는 404 `SCHEDULE-ERROR-01` 로 정정하고 `JOB-ERROR-100` 서술 삭제.
+- 스케줄 값은 문자열임을 반영하고, 주간 예시의 `day` 값 정정. 소스 코드 경로와 내부 용어 삭제.
+- 4.0.0 동작에 맞춘 문서 정정이며 API 동작 변화 없음.
+
+</details>
+
+<details>
+<summary><code>[11-12] [Changed] [API&nbsp;v4.0.0]</code> <b>스케줄 문서 재구성 — 스케줄 개요(객체 레퍼런스) · 스케줄 등록 분리, 도메인 문서는 링크로 축소</b></summary>
+
+- 스케줄 정본을 `schedule/overview`(객체 레퍼런스)와 `schedule/regist`(`POST /schedules` 엔드포인트)로 나눔.
+- backup · recovery · replication · os-replication 의 등록·수정 문서에서 스케줄 객체 구조 표 · 타입 표 · 중복 예시를 덜어내고, 공통 설명과 정본 링크, 엔드포인트 고유 정책과 예시만 남김.
+- 공통 include `_includes/zdm/schedule-object.md` · `schedule-change-value.md` 신설.
+- 이전 버전 화면은 `<page>/3.0.1.md` 보존본으로 분리해 기존 내용 그대로 유지(본문 18개, wrapper 45개).
+
+</details>
+
+<details>
+<summary><code>[11-11] [Fixed&nbsp;&nbsp;] [API&nbsp;v4.0.0]</code> <b>문서 본문 상대 링크가 404 로 풀리던 문제 · 다른 버전·없는 앵커로 가던 링크</b></summary>
+
+- 공용 본문의 상대 링크(`../schedule/regist` 등)가 주소 끝에 `/` 가 붙은 페이지에서 한 단계 깊게 풀려 404 가 났음. 현재 페이지 주소에서 `/zdm/<언어>/<제품>/<버전>` 을 잘라 담는 `_includes/zdm/base-path.html` 을 신설하고, 같은 버전의 다른 페이지를 가리키는 링크를 `{{ base_path }}/docs/...` 로 통일.
+- 다른 버전을 일부러 가리키는 링크는 절대 경로로 유지.
+- 버전이 박혀 있어 다른 버전 페이지로 보내던 링크 수정(예: 4.0.0 본문에서 3.0.0 페이지로 연결). 존재하지 않는 앵커 2종(`backup/images-list` 의 빈 결과 앵커, `cloud-auth/recovery-regist` 의 리전 목록 앵커) 수정.
+- 대상은 backup · cloud-auth · replication · os-replication · schedule 의 API 문서 본문과 이전 버전 보존본(1.3.x ~ 3.0.1). 문서 내용은 그대로이고 링크 목적지만 바뀜.
+
+</details>
+
+<details>
+<summary><code>[11-11] [Fixed&nbsp;&nbsp;] [CLI&nbsp;v4.0.0]</code> <b>backup image-list · recovery image-regist 의 문서 간 링크</b></summary>
+
+- 두 문서가 서로를 가리키는 링크에 버전이 박혀 있어(4.0.0 본문이 3.0.0 페이지로, 3.0.1 보존본이 3.0.0 페이지로 연결) 보고 있는 버전과 다른 페이지로 이동했음. `{{ base_path }}` 기반으로 바꿔 보고 있는 버전의 페이지로 연결.
+- 상대 링크 404 의 원인과 해법은 API 항목과 같음.
+
+</details>
+
+<details>
+<summary><code>[11-11] [Fixed&nbsp;&nbsp;] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>언어 선택의 English 404 — 준비 중 안내로 대체</b></summary>
+
+- 언어 선택에서 English 를 고르면 없는 페이지로 이동해 404 가 났음. 이제 "영문 문서는 준비 중입니다" 안내를 띄우고 선택값을 한국어로 되돌림. 영문판이 생기면 해당 분기를 지움.
+
+</details>
+
+<details>
+<summary><code>[11-11] [Changed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>사이드바 키 정리 · 사용처 없는 nav 블록 삭제</b></summary>
+
+- `zdm/ko/api/index.md` · `zdm/ko/cli/index.md` · `zdm/ko/compatibility.md` 의 사이드바 키를 `ko-zdm` 으로 통일하고, 어디서도 쓰지 않는 `_data/navigation.yml` 의 nav 블록 삭제. 화면에 보이는 사이드바 구성 변화는 없음.
+
+</details>
+
+<details>
+<summary><code>[11-11] [Changed] [Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</code> <b>내부용 파일의 사이트 출력 제외 · `docs/` 를 `_dev/docs/` 로 이동</b></summary>
+
+- `CHANGELOG.md` · `CONTRIBUTING.md` · `run.sh` · `log/` 를 `_config.yml` 의 제외 목록에 추가해 사이트 출력에서 뺌.
+- `_config.yml` 의 `include:` 에 들어 있던 `_layouts` · `_includes` 를 뺌. 레이아웃 템플릿과 문서 본문 원본(483개)이 `/_layouts/` · `/_includes/` 경로로 그대로 공개되고 있었음. 두 디렉터리는 이 설정 없이도 빌드에 쓰임.
+- 저장소 내부 문서 `docs/` 를 `_dev/docs/` 로 옮겨 공개되지 않게 함. `.gitignore` 의 `/docs` 항목 정리.
+- 사용자 문서 내용 변화 없음.
+
+</details>
+
+<details>
 <summary><code>[11-09] [Added&nbsp;&nbsp;] [API&nbsp;v4.0.0]</code> <b>API v4.0.0 릴리스 — replication 계열 상태 어휘 통일 · cloud-auth 자격증명 · 경로 필드 제거 · recovery 정정 — 하위 버전 호환 X</b></summary>
 
 - 부분 갱신 릴리스. `versions.yml` 에 v4.0.0 을 latest 로 등록(v3.0.1 → stable), `ko-api-4.0.0` 사이드바 · `zdm/ko/api/4.0.0/` wrapper + intro · 릴리스 노트(`changelog/4.0.0.md`, 아카이브 `RELEASE_NOTES.md` 의 원본) · 변경 사항 페이지 행 추가. `ko-zdm` 의 ZDM-API 문서 링크를 v4.0.0 으로.

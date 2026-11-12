@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 새로운 OS 복제 작업을 등록합니다.
 
@@ -6,7 +7,7 @@
 ## `POST /os-replications` {#post-os-replications}
 
 > * 새로운 OS 복제 작업을 시스템에 등록합니다.
-> * 복제 방식(upload, download)에 따라 해당 타입 필드만 DB에 매핑됩니다.
+> * 복제 방식(upload, download)에 따라 해당 방식의 필드만 저장됩니다.
 > * `cloudKeyId`, `zosRepositoryId`, `repositoryId`는 필수이며, center 소속 검증이 수행됩니다.
 > * `repositoryPath` 미입력 시 `repositoryId`의 `remotePath` 값을 자동 사용합니다.
 
@@ -71,9 +72,9 @@ curl -X POST "https://api.example.com/api/os-replications" \
 | `Authorization` | Header | string | Required | | Bearer 토큰 | |
 | `center` | Body | string | Required | | 센터 ID 또는 이름 | |
 | `replicationType` | Body | string | Required | | 복제 방식 | `upload`, `download` |
-| `cloudKeyId` | Body | number | Required | | Cloud Key ID (`cloud_info_zos.nID`) | |
-| `zosRepositoryId` | Body | number | Required | | ZOS Repository ID (`center_zos_repository.nID`) | |
-| `repositoryId` | Body | number | Required | | Repository ID (`center_repository.nID`) | |
+| `cloudKeyId` | Body | number | Required | | Cloud Key ID | |
+| `zosRepositoryId` | Body | number | Required | | ZOS Repository ID | |
+| `repositoryId` | Body | number | Required | | Repository ID | |
 | `mode` | Body | string | Required | | 복제 모드 | `full`, `increment` |
 | `jobName` | Body | string | Optional | 자동생성 | 작업 이름 | |
 | `repositoryPath` | Body | string | Optional | Repository의 remotePath | 저장소 경로 | |
@@ -82,19 +83,61 @@ curl -X POST "https://api.example.com/api/os-replications" \
 | `fileFilter` | Body | string | Optional | | 파일 필터 | |
 | `uploadNewly` | Body | string | Optional | `disabled` | 업로드 신규 파일 옵션 (upload 전용) | `disabled`, `newly_only` |
 | `downloadType` | Body | string | Optional | `all` | 다운로드 타입 (download 전용) | `all`, `folder` |
-| `schedule` | Body | object/number | Optional | | 스케줄 객체 또는 schedule ID (basic only, smart 차단) | |
+| `schedule` | Body | object \| number | Optional | | 스케줄 객체 또는 schedule ID. type `0`~`6`(basic)만 지원합니다. 아래 "schedule 객체 구조" 참조 | |
 | `autoStart` | Body | string | Optional | `not use` | 자동 시작 | `use`, `not use` |
 
 > **검증 항목:**
-> - `center` — DB 존재 확인
-> - `cloudKeyId` — `cloud_info_zos` 존재 + center 소속 검증
-> - `zosRepositoryId` — `center_zos_repository` 존재 + center 소속 검증
-> - `repositoryId` — `center_repository` 존재 + center 소속 검증
-> - `schedule` — basic schedule 만 지원 (smart 차단). jobMode `full` / `increment` 모두 허용
+> - `center` — 존재 확인
+> - `cloudKeyId` — 존재 + center 소속 검증
+> - `zosRepositoryId` — 존재 + center 소속 검증
+> - `repositoryId` — 존재 + center 소속 검증
 >
-> **참고**: `autoStart`가 `use`이면 `nJobStatus=START`, `not use`이면 `nJobStatus=COMPLETE`로 저장됩니다.
+> **참고**: `autoStart` 가 `use` 이면 등록 직후 시작 상태로, `not use` 이면 시작하지 않은 상태로 저장됩니다.
 
-> **v2.0.2 신설**: 이전엔 schedule 처리가 미구현이었으나 본 버전부터 schedule 입력 시 처리 + 응답에 `schedule: { id, type, description }` 객체 노출. basic schedule 만 지원 (smart 차단). 모든 jobMode (full / increment) 에서 허용.
+> **v2.0.2 신설**: 이전엔 schedule 처리가 미구현이었으나 본 버전부터 schedule 입력 시 처리 + 응답에 `schedule: { id, type, description }` 객체 노출.
+
+</details>
+
+<details markdown="1">
+<summary><strong>schedule 객체 구조</strong></summary>
+
+{% include zdm/schedule-object.md smart=false %}
+
+- 숫자 ID 는 **복사 없이 그 스케줄을 참조**합니다. 작업의 스케줄 ID 가 입력한 ID 가 됩니다.
+- 객체 안 `basic` 자리의 숫자는 그 내용을 복사해 새 스케줄로 저장합니다.
+- 존재하지 않는 ID 는 404 `SCHEDULE-ERROR-01` 입니다.
+- 지정한 스케줄이 요청 `center` 의 것이 아니면 403 `CENTER-ERROR-01` 입니다(`Schedule ID '<id>' does not belong to center <center>`). `nCenterID = 0` 도 하나의 center 로 비교합니다. 객체 안 숫자 ID 는 행 type 이 요청 `type` 과 다르면 400 `JOB-ERROR-108` 이며, 검사 순서는 존재(404) → center(403) → type(400)입니다.
+- Smart 스케줄(type 7~11)은 400 `JOB-ERROR-103` 으로 거부됩니다.
+- `mode` 가 `full` / `increment` 모두에서 사용할 수 있습니다.
+
+**Smart 스케줄 거부 예시 (400 Bad Request)**
+
+```json
+{
+  "center": "center-01",
+  "replicationType": "upload",
+  "cloudKeyId": 1,
+  "zosRepositoryId": 2,
+  "repositoryId": 3,
+  "mode": "full",
+  "schedule": {
+    "type": 7,
+    "basic": { "day": "mon", "time": "10:00" }
+  }
+}
+```
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-103",
+    "message": "Replication jobs accept schedule type 0-6 only (received: 7)."
+  },
+  "timestamp": "2026-04-08T12:00:00.000+09:00"
+}
+```
 
 </details>
 
@@ -141,8 +184,8 @@ curl -X POST "https://api.example.com/api/os-replications" \
 | `results[].autoStart` | string | 자동 시작 여부 (`use` / `not use`) |
 | `results[].schedule` | object | (Optional) 등록된 스케줄 정보. 미지정 시 응답에 포함되지 않음 |
 | `results[].schedule.id` | number | 등록된 schedule ID |
-| `results[].schedule.type` | string | displayMappings PascalCase 영문 (`Once`, `Every Minute`, `Hourly`, `Daily`, `Weekly`, `Monthly (Specific Week and Day of the Week)`, `Monthly on Specific Date`, `Unknown`) |
-| `results[].schedule.description` | string | `processScheduleInfo` 영문 (예: `[Basic] Start working at 03:00 every day.`). 조회 실패 시 `Schedule lookup failed` |
+| `results[].schedule.type` | string | 스케줄 타입 이름 (예: `Daily`). 값 목록은 [스케줄 개요]({{ base_path }}/docs/schedule/overview#스케줄-타입별-구조-및-설명)의 타입 표이며, 조회 실패 시 `Unknown` |
+| `results[].schedule.description` | string | 스케줄 내용을 설명하는 영문 한 줄 (예: `[Basic] Start working at 03:00 every day.`). 조회 실패 시 `Schedule lookup failed` |
 | `summary.total` | number | 요청 건수 |
 | `summary.successful` | number | 성공 건수 |
 | `summary.failed` | number | 실패 건수 |

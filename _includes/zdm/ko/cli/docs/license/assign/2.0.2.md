@@ -110,7 +110,7 @@ API 검증으로 다음 케이스에서 할당이 거부되며 CLI는 에러 메
   - 메시지 예: `Server 'server-01' already has a license assigned (nLicenseID: 5)`
 - **해당 server가 과거 라이선스를 할당받은 이력이 있는 경우** (HTTP 409)
   - 메시지 예: `License (id 5) is already assigned to server 'server-01' in center 1`
-  - `license_history` 테이블에 `(sSystemName, nCenterID)` 매칭 row가 있으면 거부됨 — 한 번 할당된 server는 재할당 불가
+  - 같은 센터에서 해당 서버 이름으로 매칭되는 라이선스 할당 이력이 있으면 거부됨 — 한 번 할당된 server는 재할당 불가
 
 </details>
 

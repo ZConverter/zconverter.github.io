@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 OS Replication 작업 설정을 변경하는 명령어입니다.
 
@@ -8,7 +9,7 @@ OS Replication 작업 설정을 변경하는 명령어입니다.
 > * 기존 OS Replication 작업의 설정을 변경합니다.
 > * `--schedule`, `--schedule-id`, `--schedule-file` 중 하나로 스케줄을 변경할 수 있습니다.
 
-> **v2.0.2 신설**: schedule 변경 시 `updatedFields[]` 에 `{ field: "schedule", previous: <객체>, new: <객체> }` 형식으로 노출. 이전엔 service 가 schedule 입력을 무시했으나 본 버전부터 정상 처리. basic schedule 만 지원 (smart 차단). jobMode `full` / `increment` 모두 허용 (sync 미지원). CLI 는 `formatChangeValue` 로 `Daily ([Basic] Start working at ...)` 한 줄 변환 표시.
+> **v2.0.2 신설**: schedule 변경 시 `updatedFields[]` 에 `{ field: "schedule", previous: <객체>, new: <객체> }` 형식으로 노출. 이전엔 service 가 schedule 입력을 무시했으나 본 버전부터 정상 처리. basic schedule 만 지원합니다. jobMode `full` / `increment` 모두 허용합니다 (sync 미지원). CLI 는 `Daily ([Basic] Start working at ...)` 한 줄로 표시합니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -38,8 +39,8 @@ zdm-cli os-replication update -c center01 --id 1 --download-network-limit 500
 # 스케줄 변경 (기존 스케줄 ID 재사용)
 zdm-cli os-replication update -c center01 --id 1 --schedule-id 1234
 
-# 스케줄 객체로 변경 (Daily 03:00 — basic only, smart 미지원)
-zdm-cli os-replication update -c center01 --id 1 --schedule '{"type":3,"basic":{"time":"03:00"}}'
+# 스케줄 JSON 으로 변경 (Daily 03:00, basic 자동 래핑)
+zdm-cli os-replication update -c center01 --id 1 --schedule '{"type":3,"time":"03:00"}'
 
 # 작업 이름 변경
 zdm-cli os-replication update -c center01 --id 1 --cn new-job-name
@@ -90,15 +91,12 @@ zdm-cli os-replication update -c center01 --id 1 --cn new-job-name
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 (basic only) | - |
-| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID (basic only) | - |
-| --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 (basic only) | - |
+| --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 (`basic` 키 없으면 자동 래핑) | - |
+| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID (복사하지 않고 그대로 참조). 작업과 같은 center 의 스케줄이어야 하고 기본 유형(type 0~6)만 받습니다 | - |
+| --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 (`basic` 키 없으면 자동 래핑) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
-> **v2.0.2 스케줄 정책**
-> - basic schedule 만 지원 — smart 입력 시 `INVALID_SCHEDULE_JOB_MODE_FOR_BASIC` 응답
-> - jobMode `full` / `increment` 모두 허용 (**sync 미지원** — replication 과 차이)
-> - 변경 시 `updatedFields[]` 에 `{ field: "schedule", previous: <객체>, new: <객체> }` 형식으로 노출
+> 이 작업은 Basic 스케줄(type 0~6)만 받습니다. Smart(type 7~11)를 지정하면 `JOB-ERROR-101` 로 거부됩니다. jobMode `full` / `increment` 모두 허용합니다 (**sync 미지원** — replication 과 차이). 변경 시 `updatedFields[]` 에 `{ field: "schedule", previous: <객체>, new: <객체> }` 형식으로 노출됩니다. 자동 래핑과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
 
 </details>
 
@@ -159,12 +157,9 @@ name : upload-daily
 | `summary.updatedFields[].previous` | string \| number \| object | 변경 전 값. `field` 가 `schedule` 인 경우 `{ id, type, description }` 객체 |
 | `summary.updatedFields[].new` | string \| number \| object | 변경 후 값. `field` 가 `schedule` 인 경우 `{ id, type, description }` 객체 |
 
-> **ScheduleChangeValue 구조** (`previous` / `new` 값, `field === "schedule"` 일 때):
-> - `id` (number) — schedule ID
-> - `type` (string) — displayMappings PascalCase 영문 (`Once`, `Daily`, `Weekly`, `Monthly (Specific Week and Day of the Week)`, `Monthly on Specific Date`, `Unknown`)
-> - `description` (string) — `processScheduleInfo` 영문 (예: `[Basic] Start working at 03:00 every day.`)
->
-> CLI text 모드에서는 `formatChangeValue` 가 `Daily ([Basic] Start working at 03:00 every day.)` 한 줄로 변환합니다. table 모드는 `Daily (#5)` 형식으로 표시합니다.
+`field` 가 `schedule` 인 경우 `previous` / `new` 는 다음 구조입니다. CLI text 모드는 `Daily ([Basic] Start working at 03:00 every day.)` 한 줄로, table 모드는 `Daily (#5)` 형식으로 표시합니다.
+
+{% include zdm/schedule-change-value.md %}
 
 </details>
 

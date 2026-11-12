@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 스케줄 기능의 전체 워크플로우를 단계별로 설명합니다.
 
@@ -9,7 +10,7 @@
 ```bash
 # 1. 스케줄 타입 선택
 #    - Basic (0~6): 단일 주기 스케줄
-#    - Smart (7~11): Full + Increment 복합 스케줄
+#    - Smart (7~11): Full + Increment 복합 스케줄 (Backup 작업에서만 사용)
 
 # 2. 스케줄 생성 (예: 매일 12:00 실행)
 zdm-cli schedule create -t 3 --basic-time 12:00
@@ -17,10 +18,10 @@ zdm-cli schedule create -t 3 --basic-time 12:00
 # 3. 생성된 파일 경로 확인 (출력 예시)
 # [info]
 #
-# saved to  : /home/user/.zconverter/zdm-cli/schedule/Basic_schedule-20250106120000.json
+# saved to  : /home/user/.zconverter/zdm-cli-data/schedule/Basic_schedule-20250106120000.json
 
 # 4. 스케줄 검증
-zdm-cli schedule verify -p /home/user/.zconverter/zdm-cli/schedule/Basic_schedule-20250106120000.json
+zdm-cli schedule verify -p /home/user/.zconverter/zdm-cli-data/schedule/Basic_schedule-20250106120000.json
 ```
 
 </details>
@@ -58,6 +59,8 @@ zdm-cli schedule verify -p ./Basic_schedule-20250106120000.json
 
 ## 스케줄 등록 절차
 
+> `schedule create` 는 파일 저장과 함께 서버 등록까지 수행합니다. 아래 `schedule regist` 단계는 직접 작성했거나 다른 곳에서 가져온 JSON 파일을 등록할 때 사용합니다. `create` 로 만든 파일을 다시 `regist` 하면 같은 내용의 스케줄이 하나 더 등록됩니다.
+
 <details markdown="1" open>
 <summary><strong>스케줄 서버 등록</strong></summary>
 
@@ -68,13 +71,13 @@ zdm-cli schedule create -t 3 --basic-time 12:00
 # 2. 생성된 파일 경로 확인 (출력 예시)
 # [info]
 #
-# saved to  : /home/user/.zconverter/zdm-cli/schedule/Basic_schedule-20250106120000.json
+# saved to  : /home/user/.zconverter/zdm-cli-data/schedule/Basic_schedule-20250106120000.json
 
 # 3. 스케줄 검증
-zdm-cli schedule verify -p /home/user/.zconverter/zdm-cli/schedule/Basic_schedule-20250106120000.json
+zdm-cli schedule verify -p /home/user/.zconverter/zdm-cli-data/schedule/Basic_schedule-20250106120000.json
 
 # 4. 스케줄 서버 등록
-zdm-cli schedule regist -p /home/user/.zconverter/zdm-cli/schedule/Basic_schedule-20250106120000.json
+zdm-cli schedule regist -p /home/user/.zconverter/zdm-cli-data/schedule/Basic_schedule-20250106120000.json
 
 # 5. 등록된 스케줄 확인
 zdm-cli schedule list
@@ -92,17 +95,17 @@ zdm-cli schedule create -t 3 --basic-time 02:00
 # 2. 생성된 파일 경로 확인 (출력 예시)
 # [info]
 #
-# saved to  : /home/user/.zconverter/zdm-cli/schedule/Basic_schedule-20250106020000.json
+# saved to  : /home/user/.zconverter/zdm-cli-data/schedule/Basic_schedule-20250106020000.json
 
 # 3. 스케줄 검증
-zdm-cli schedule verify -p /home/user/.zconverter/zdm-cli/schedule/Basic_schedule-20250106020000.json
+zdm-cli schedule verify -p /home/user/.zconverter/zdm-cli-data/schedule/Basic_schedule-20250106020000.json
 
 # 4. 스케줄 등록 후 ID 확인
-zdm-cli schedule regist -p /home/user/.zconverter/zdm-cli/schedule/Basic_schedule-20250106020000.json
+zdm-cli schedule regist -p /home/user/.zconverter/zdm-cli-data/schedule/Basic_schedule-20250106020000.json
 zdm-cli schedule list
 
-# 5. 백업 작업 등록 시 스케줄 ID 지정
-zdm-cli backup regist --server "server-01" --mode full --repository-id 1 --schedule "schedule_id"
+# 5. 백업 작업 등록 시 스케줄 ID 지정 (입력한 ID 의 내용이 복사되어 새 스케줄로 연결됨)
+zdm-cli backup regist --server "server-01" --mode full --repository-id 1 --schedule-id <스케줄 ID>
 
 # 6. 등록 결과 확인
 zdm-cli backup list
@@ -125,8 +128,8 @@ zdm-cli schedule create -t 4 --basic-day sun --basic-time 03:00 -p /tmp/weekly-s
 # 3. 스케줄 검증
 zdm-cli schedule verify -p /tmp/weekly-schedule.json
 
-# 4. 복구 작업 등록 시 스케줄 파일 경로 지정
-zdm-cli recovery regist --source "source-server" --target "target-server" --platform "aws" --mode full --repository-id 1 --schedule "/tmp/weekly-schedule.json"
+# 4. 복구 작업 등록 시 스케줄 파일 경로 지정 (--schedule-file)
+zdm-cli recovery regist --source "source-server" --target "target-server" --platform "aws" --mode full --repository-id 1 --schedule-file "/tmp/weekly-schedule.json"
 
 # 5. 등록 결과 확인
 zdm-cli recovery list
@@ -151,10 +154,12 @@ zdm-cli schedule create -t 3 --basic-time 02:00 --center 9
 # 2. 등록된 스케줄 확인
 zdm-cli schedule list --center 9
 
-# 3. 백업 작업에 스케줄 연결
-zdm-cli backup regist --server "server-01" --mode full --repository-id 1 --schedule "schedule_id"
+# 3. 백업 작업에 스케줄 연결 (list 에서 확인한 ID 사용)
+zdm-cli backup regist --server "server-01" --mode full --repository-id 1 --schedule-id <스케줄 ID>
 ```
 
 </details>
 
 ---
+
+작업 종류별 스케줄 옵션과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.

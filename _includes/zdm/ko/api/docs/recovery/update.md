@@ -1,4 +1,4 @@
-
+{% include zdm/base-path.html %}
 특정 복구 작업의 설정을 수정합니다.
 
 ---
@@ -97,7 +97,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 | `center` | string \| number | Required | 작업이 속한 center ID 또는 Name (소속 검증용). 작업을 ID 로 지목해도 이 값과 작업의 center 를 대조하며, 다르면 404 `JOB-ERROR-01` 입니다 | - |
 | `changeName` | string | Optional | 변경할 작업 이름. 현재 이름과 같으면 변경 없이 200 입니다. 다른 작업이 쓰는 이름이면 409 `JOB-ERROR-07` | - |
 | `platform` | string | Optional | 플랫폼 | {% include zdm/platforms.md inline=true %} |
-| `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID. 숫자 ID 는 기존 스케줄을 복제하지 않고 그대로 참조하며, 작업의 스케줄이 실제로 그 ID 로 바뀝니다 | - |
+| `schedule` | object \| number | Optional | 스케줄 객체 또는 스케줄 ID. 복구는 type `0`~`6`(basic)만 지원합니다. 아래 "schedule 처리" 참조 | - |
 | `mode` | string | Optional | 작업 모드 (전체 적용) | {% include zdm/job-modes.md %} |
 | `afterReboot` | string | Optional | 작업 후 부팅 방식 | {% include zdm/after-reboot.md %} |
 | `mailEvent` | string | Optional | 이벤트 알림 이메일 | - |
@@ -145,6 +145,45 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 > 2. 이후 `jobList`가 적용되어 **지정된 파티션만** 개별적으로 재변경됩니다.
 >
 > 예: `mode: "increment"` + `jobList["/"].mode: "full"` → `/`는 `full`, 나머지는 `increment`
+>
+> **변경 내역의 `Recovery Mode`:** `commonUpdatedFields` · `eachUpdatedFields` 의 `Recovery Mode` 항목은 값이 실제로 바뀐 경우에만 나옵니다. 현재와 같은 mode 를 보내면 항목이 생기지 않습니다. 실제로 바꾼 경우 `previous` · `new` 는 표시 이름(`Full Recovery` · `Incremental Recovery`)이며, `previous` 에 실제 이전 mode 이름이 나옵니다(4.0.0 이전에는 `Unknown` 이 나갔고, 같은 mode 를 보내도 항목이 생겼습니다).
+
+</details>
+
+
+<details markdown="1">
+<summary><strong>schedule 처리</strong></summary>
+
+{% include zdm/schedule-object.md smart=false %}
+
+- 숫자 ID 는 **복사 없이 그 스케줄을 참조**하며, 작업의 스케줄이 실제로 그 ID 로 바뀝니다.
+- 존재하지 않는 ID 는 404 `SCHEDULE-ERROR-01` 입니다.
+- 지정한 스케줄이 작업이 속한 center 의 것이 아니면 403 `CENTER-ERROR-01` 입니다(`Schedule ID '<id>' does not belong to center <center>`). `nCenterID = 0` 도 하나의 center 로 비교합니다. 객체 안 숫자 ID 는 행 type 이 요청 `type` 과 다르면 400 `JOB-ERROR-108` 이며, 검사 순서는 존재(404) → center(403) → type(400)입니다.
+- Smart 스케줄(type 7~11)은 400 `JOB-ERROR-101` 로 거부됩니다.
+
+**Smart 스케줄 거부 예시 (400 Bad Request)**
+
+```json
+{
+  "center": "1",
+  "schedule": {
+    "type": 7,
+    "basic": { "day": "mon", "time": "10:00" }
+  }
+}
+```
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-101",
+    "message": "For full/increment job types, schedule must contain only basic."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
 
 </details>
 
@@ -284,8 +323,8 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
             "commonUpdatedFields": [
               {
                 "field": "Recovery Mode",
-                "previous": "full",
-                "new": "increment"
+                "previous": "Full Recovery",
+                "new": "Incremental Recovery"
               }
             ],
             "eachUpdatedFields": []
@@ -324,8 +363,8 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
             "commonUpdatedFields": [
               {
                 "field": "Recovery Mode",
-                "previous": "full",
-                "new": "increment"
+                "previous": "Full Recovery",
+                "new": "Incremental Recovery"
               }
             ],
             "eachUpdatedFields": []
@@ -363,8 +402,8 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
       "commonUpdatedFields": [
         {
           "field": "Recovery Mode",
-          "previous": "full",
-          "new": "increment"
+          "previous": "Full Recovery",
+          "new": "Incremental Recovery"
         },
         {
           "field": "After Reboot",
@@ -380,8 +419,8 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
             "commonUpdatedFields": [
               {
                 "field": "Recovery Mode",
-                "previous": "increment",
-                "new": "full"
+                "previous": "Incremental Recovery",
+                "new": "Full Recovery"
               }
             ],
             "eachUpdatedFields": []
@@ -404,7 +443,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 
 | 필드 | 타입 | 설명 |
 |------|------|------|
-| `jobInfo.id` | string | 작업 ID |
+| `jobInfo.id` | string | 작업 행 `nID`. 목록·조회의 작업 ID 와 같은 값입니다 |
 | `jobInfo.name` | string | 작업 이름 |
 | `jobInfo.errorMessage` | string | 실패 시 오류 메시지 |
 | `summary.state` | string | 수정 결과 (`success` / `fail`) |
@@ -417,11 +456,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 
 **ScheduleChangeValue 구조** (v2.0.2 신규):
 
-| 하위 필드 | 타입 | 설명 |
-|------|------|------|
-| `id` | number | schedule ID |
-| `type` | string | schedule 타입 — displayMappings PascalCase 영문 (예: `"Once"`, `"Every Minute"`, `"Hourly"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`, `"Smart Weekly (Specific Day of the Week)"`, `"Smart Monthly (Specific Week and Day of the Week)"`, `"Smart Monthly (Specific Date)"`, `"Smart Custom (Specific Month, Week and Day of the Week)"`, `"Smart Custom (Specific Month and Date)"`). 조회 실패 시 `"Unknown"` |
-| `description` | string | `processScheduleInfo` 영문 결과 (예: `"[Basic] Start working at 03:00 every day."`, `"[Basic] Start working at 03:00 Monday, Wednesday every week."`). 조회 실패 시 `"Schedule lookup failed"` |
+{% include zdm/schedule-change-value.md %}
 
 > **참고**: id ≤ 0 (이전 schedule 없음) 인 경우 해당 필드는 `null` 로 반환됩니다. Recovery 는 `basic` 스케줄만 지원하므로 `Schedule(Advanced)` 필드는 발생하지 않습니다 (응답 발생 위치는 `Schedule(Basic)` 한 곳).
 

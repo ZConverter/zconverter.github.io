@@ -152,7 +152,7 @@ curl -X GET "https://api.example.com/api/replications/monitoring/job/backup-repl
 | `job.log` | string[] | 작업 로그 목록. `page`·`limit` 을 보내지 않으면 최근 10건, 보내면 요청한 페이지 |
 | `job.progress.status` | string | 현재 작업 상태 (PascalCase: `Preparing`/`Processing`/`Complete`/`Scheduled`/`Registered`/`Canceling`/`Canceled`/`Error`) |
 | `job.progress.step` | string | 현재 작업 단계 |
-| `job.progress.percent` | string | 진행률 |
+| `job.progress.percent` | string | 진행률. 값이 비어 있으면 `"-"` 입니다(4.0.0 이전에는 `"null%"`) |
 | `job.progress.message` | string | 진행 상태 메시지 |
 | `job.time.start` | string | 작업 시작 시간 |
 | `job.time.end` | string | 작업 종료 시간 |

@@ -71,7 +71,7 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
 }
 ```
 
-**성공 응답 (200 OK) — `sJobName`이 비어 있어 `Schedule-<id>`로 대체된 경우 + Advanced 스케줄**
+**성공 응답 (200 OK) — 작업 이름이 비어 있어 `Schedule-<id>`로 대체된 경우 + Advanced 스케줄**
 
 ```json
 {
@@ -188,16 +188,16 @@ curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
 <details markdown="1" open>
 <summary><strong>참조 검증 동작</strong></summary>
 
-스케줄 삭제 전에 다음 4개 컬럼을 조회해 참조 카운트를 계산합니다. 어느 하나라도 카운트가 0보다 크면 `SCHEDULE_IN_USE` (409 Conflict) 로 차단됩니다.
+스케줄 삭제 전에 다음 4개 참조 항목을 조회해 참조 카운트를 계산합니다. 어느 하나라도 카운트가 0보다 크면 `SCHEDULE_IN_USE` (409 Conflict) 로 차단됩니다.
 
-| 도메인 | 테이블 | 컬럼 |
-|--------|--------|------|
-| Backup | `job_backup` | `nScheduleID` |
-| Backup (Advanced) | `job_backup` | `nScheduleID_advanced` |
-| Recovery | `job_recovery` | `nScheduleID` |
-| Replication | `job_replication` | `nScheduleID` |
+| 도메인 | 참조 항목 |
+|--------|----------|
+| Backup | 백업 작업의 스케줄 ID |
+| Backup (Advanced) | 백업 작업의 고급 스케줄 ID |
+| Recovery | 복구 작업의 스케줄 ID |
+| Replication | 복제 작업의 스케줄 ID |
 
-> * `job_backup.nScheduleID` 와 `job_backup.nScheduleID_advanced` 는 합산되어 `backup(N)` 으로 보고됩니다.
+> * 백업 작업의 스케줄 ID 와 고급 스케줄 ID 는 합산되어 `backup(N)` 으로 보고됩니다.
 > * 에러 메시지의 도메인 카운트는 0인 경우 생략됩니다 (예: replication 참조가 없으면 `backup(2), recovery(1)` 형태).
 
 </details>

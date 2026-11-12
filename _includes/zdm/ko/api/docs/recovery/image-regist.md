@@ -57,7 +57,7 @@ source 서버 없이 backup image 파일만으로 복구 작업을 등록합니�
 | `afterReboot` | string | Optional | `reboot`(기본), `shutdown`, `maintain` |
 | `autoStart` | string | Optional | `use`, `not use`(기본). 대상 서버가 사용 중이면 등록은 되고 자동 시작만 생략됩니다 — 아래 "대상 서버가 사용 중일 때" 참고 |
 | `networkLimit` | number | Optional | 네트워크 제한 속도. `0` 은 무제한 |
-| `schedule` | object \| number | Optional | 스케줄 객체 또는 기존 스케줄 ID |
+| `schedule` | object \| number | Optional | 스케줄 객체 또는 기존 스케줄 ID. 숫자 ID 는 요청 `center` 의 스케줄이어야 하며 아니면 403 `CENTER-ERROR-01` 입니다 |
 | `cloudAuth` | string \| number | Optional | 대상 플랫폼 인증정보 |
 | `scriptPath` / `scriptRun` | string | Optional | 작업 전후 실행할 스크립트 |
 | `mailEvent` | string | Optional | 작업 로그 수신 이메일 |
@@ -306,6 +306,14 @@ curl -X POST "https://api.example.com/api/recoveries/image" \
   "timestamp": "2026-08-28T10:30:00.000+09:00"
 }
 ```
+
+**이미지 조회 시간 초과 (500 Internal Server Error, since 4.0.0)**
+
+데몬이 이미지 목록을 시간 안에 채우지 못하면 `JOB-ERROR-68` 입니다. 종전에는 408 `TIMEOUT_ERROR` 였습니다. 메시지는 `Backup image lookup timed out …` 로 시작하고 center·repository·마지막 작업 상태가 담깁니다.
+
+- 이미지 조회 대기는 (center, repository) 조합마다 30초이고, 서버의 바깥 한도는 대기 합계 + 25초입니다. 조합이 1·2·3·4개이면 기본 폴링 간격(1초)에서 각각 55·85·115·145초입니다.
+- 클라이언트의 요청 timeout 은 서버 바깥 한도보다 길게 두세요(조합 1개 기준 55초 이상).
+- `JOB-ERROR-68` 은 재시도할 수 있는 이미지 조회 실패로 처리하세요. 408 로 시간 초과를 판정하던 코드는 이 코드도 함께 처리해야 합니다.
 
 **등록할 파티션이 하나도 남지 않음 (400 Bad Request)**
 

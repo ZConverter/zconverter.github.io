@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 특정 백업 작업의 모니터링 정보를 조회합니다.
 
@@ -54,9 +55,9 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
 > - `partition`과 `drive`는 같은 대상을 가리키는 **하나의 필터**입니다. 함께 지정하면 400을 반환하므로 **둘 중 하나만** 사용합니다.
 > - 값 형식은 API가 정규화하므로 `C`, `C:`, `/data`가 모두 허용됩니다. OS에 따라 파라미터를 구분해 고를 필요가 없습니다.
 > - `server`는 **키만 보내고 값이 비면**(`?server=`) 400입니다. 파라미터를 **생략**하는 것은 종전대로 "해당 필터 없음"이며 동작이 달라지지 않습니다.
-> - `status`는 **제거되었습니다.** 보내면 400(`DTO-VALIDATION-03`)입니다 — 종전에는 지정한 상태와 어긋나면 404였습니다. 이 경로는 경로 `identifier`로 작업 하나를 지목한 단건 조회이므로, 상태는 응답의 `job.progressInfo.status`를 읽으면 됩니다. 상태로 목록을 거르려면 [서버 기준 모니터링](/zdm/ko/api/3.0.0/docs/backup/monitoring-system)을 사용합니다.
+> - `status`는 **제거되었습니다.** 보내면 400(`DTO-VALIDATION-03`)입니다 — 종전에는 지정한 상태와 어긋나면 404였습니다. 이 경로는 경로 `identifier`로 작업 하나를 지목한 단건 조회이므로, 상태는 응답의 `job.progressInfo.status`를 읽으면 됩니다. 상태로 목록을 거르려면 [서버 기준 모니터링]({{ base_path }}/docs/backup/monitoring-system)을 사용합니다.
 > - `center`는 ID/이름을 콤마로 여러 개 지정할 수 있습니다. (예: `?center=1,zdm-b`) 키만 보내고 값이 비면(`?center=`) 400입니다.
-> - `page`와 `limit`은 스키마가 받기는 하지만 **이 경로에서는 결과에 영향을 주지 않습니다.** 경로 `identifier`로 작업 하나를 지목한 단건 조회라 자를 목록이 없기 때문이며, 페이지네이션은 [서버 기준 모니터링](/zdm/ko/api/3.0.0/docs/backup/monitoring-system)에서만 동작합니다. 표에서 행을 지우지 않은 것은 선언되지 않은 query 파라미터가 400이기 때문입니다.
+> - `page`와 `limit`은 스키마가 받기는 하지만 **이 경로에서는 결과에 영향을 주지 않습니다.** 경로 `identifier`로 작업 하나를 지목한 단건 조회라 자를 목록이 없기 때문이며, 페이지네이션은 [서버 기준 모니터링]({{ base_path }}/docs/backup/monitoring-system)에서만 동작합니다. 표에서 행을 지우지 않은 것은 선언되지 않은 query 파라미터가 400이기 때문입니다.
 > - `sort`는 이 경로의 스키마에 **없는 이름입니다.** 보내면 400(`DTO-VALIDATION-03`)이므로 요청에서 빼야 합니다.
 
 </details>
@@ -151,12 +152,12 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
 | `job.info.partition` | string | 대상 파티션 (Linux) |
 | `job.info.drive` | string | 대상 드라이브 (Windows) |
 | `job.progressInfo.status` | string | 현재 작업 상태 (PascalCase: `Preparing`, `Processing`, `Complete`, `Scheduled`, `Registered`, `Canceling`, `Canceled`, `Error`). **작업 본체가 정합니다** — 진행 정보가 종료 단계에 들어가도 본체가 아직 진행 중이라고 말하면 `Processing` 입니다 |
-| `job.progressInfo.percent` | string | 진행률. **`"100%"` 인데 `status` 가 `Processing` 인 것은 모순이 아닙니다** — 복사가 끝난 뒤에도 후속 단계가 남아 있으면 작업은 아직 진행 중입니다. 완료 판정은 `status` 로만 하세요 |
+| `job.progressInfo.percent` | string | 진행률. 값이 비어 있으면 `"-"` 입니다(4.0.0 이전에는 `"null%"`). **`"100%"` 인데 `status` 가 `Processing` 인 것은 모순이 아닙니다** — 복사가 끝난 뒤에도 후속 단계가 남아 있으면 작업은 아직 진행 중입니다. 완료 판정은 `status` 로만 하세요 |
 | `job.progressInfo.message` | string | 진행 상태 메시지 |
 | `job.progressInfo.start` | string | 시작 시간 |
 | `job.progressInfo.elapsed` | string | 경과 시간 |
 | `job.progressInfo.end` | string | 종료 시간 |
-| `job.log` | string[] | 작업 로그 목록. **`detail=true` 일 때만 채워집니다** — 기본 조회에서는 빈 배열입니다 (서버 기준 조회와 같은 규칙) |
+| `job.log` | string[] | 작업 로그 목록. **`detail=true` 일 때만 채워집니다** — 기본 조회에서는 빈 배열입니다 (서버 기준 조회와 같은 규칙). 가장 최근 실행분의 마지막 최대 500줄이며 오래된 것부터 나옵니다. 한 실행의 로그가 500줄을 넘으면 앞쪽(가장 오래된) 줄이 빠집니다(4.0.0). 로그 안 시각은 데몬이 남긴 원문 그대로입니다 |
 
 </details>
 

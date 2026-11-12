@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 기존 Recovery 작업 정보를 수정합니다.
 
@@ -45,9 +46,8 @@ zdm-cli recovery update --center 9 --id 123 --schedule-id 1234
 # 스케줄 변경 (JSON 파일 사용)
 zdm-cli recovery update --center 9 --id 123 --schedule-file "schedule.json"
 
-# 스케줄 변경 (JSON 문자열 사용) — type 은 정수 0 ~ 6 (Recovery 는 basic only)
-# 예: type 3 = Daily, type 4 = Weekly. 상세는 recovery regist 문서의 schedule 동봉 예시 참조
-zdm-cli recovery update --center 9 --id 123 --schedule '{"type":3,"basic":{"time":"03:00"}}'
+# 스케줄 변경 (JSON 문자열 사용, basic 자동 래핑) — type 은 정수 0 ~ 6
+zdm-cli recovery update --center 9 --id 123 --schedule '{"type":3,"time":"03:00"}'
 
 # 메일 알림 수신자 변경
 zdm-cli recovery update --center 9 --id 123 --mail-event "admin@example.com"
@@ -74,9 +74,9 @@ zdm-cli recovery update --center 9 --id 123 --change-name "MyRecovery" --platfor
 | --name | - | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
 | --change-name | -cn | string | Optional | - | 변경할 작업 이름 | - |
 | --platform | -pf | string | Optional | - | 변경할 플랫폼 | {% include zdm/platforms.md baremetal=true inline=true %} |
-| --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 | - |
-| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID | - |
-| --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 | - |
+| --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 (`basic` 키 없으면 자동 래핑) | - |
+| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID (복사하지 않고 그대로 참조). 작업과 같은 center 의 스케줄이어야 하고 기본 유형(type 0~6)만 받습니다 | - |
+| --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 (`basic` 키 없으면 자동 래핑) | - |
 | --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md recovery=true %} |
 | --after-reboot | -ar | string | Optional | - | 작업 완료 후 부팅 모드 | `reboot`, `shutdown`, `none` |
 | --mail-event | -me | string | Optional | - | 작업 이벤트 수신 메일 | - |
@@ -88,6 +88,8 @@ zdm-cli recovery update --center 9 --id 123 --change-name "MyRecovery" --platfor
 | --target-partition | -tp | string | Optional | - | 같은 이미지가 여러 파티션에 복구된 경우 그중 하나로 좁힘 (Linux `/data`, Windows `C:`) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
+> Recovery 는 Basic 스케줄(type 0~6)만 받습니다. Smart(type 7~11)를 지정하면 `JOB-ERROR-101` 로 거부됩니다. 자동 래핑과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
+
 > <span class="required-note">*</span> --id 또는 --name 중 하나는 필수로 입력해야 합니다.
 
 </details>
@@ -96,7 +98,7 @@ zdm-cli recovery update --center 9 --id 123 --change-name "MyRecovery" --platfor
 <summary><strong>출력 예시</strong></summary>
 
 > **v2.0.2 변경 사항**:
-> - Schedule(Basic) 변경 detail 의 `previous`/`new` 가 `{ id, type, description }` 객체로 확장. 이전 schedule 없음은 `null` 로 표시. CLI 는 `formatChangeValue` 로 한 줄 변환 (`- -> Daily ([Basic] Start working at 03:00 every day.)` 형식).
+> - Schedule(Basic) 변경 detail 의 `previous`/`new` 가 `{ id, type, description }` 객체로 확장. 이전 schedule 없음은 `null` 로 표시. CLI 는 한 줄로 표시합니다 (`- -> Daily ([Basic] Start working at 03:00 every day.)` 형식).
 > - Job Status 변경 detail 의 `previous` 가 DB raw enum 이 아닌 UI 와 동일한 calculated 결과 (`Registered` / `Processing` / `Scheduled` / `Complete` 등). `new` 는 요청 입력값 (`start` / `stop`) 그대로.
 
 **Text 형식 (--output text, 기본값):**
@@ -148,12 +150,12 @@ value : increment -> full
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-> `Schedule(Basic)` 변경 detail 은 `formatChangeValue` 가 객체를 한 줄로 변환합니다. `previous` 가 `null` 이면 `-`, 그렇지 않으면 `<type> (<description>)` 형식. (Recovery 는 `basic` 만 지원 — `Schedule(Advanced)` 필드는 발생하지 않음)
+> `Schedule(Basic)` 변경 detail 은 객체를 한 줄로 변환해 표시합니다. `previous` 가 `null` 이면 `-`, 그렇지 않으면 `<type> (<description>)` 형식. (Recovery 는 `basic` 만 지원 — `Schedule(Advanced)` 필드는 발생하지 않음)
 > `Job Status` 변경 detail 의 `previous` 는 UI 와 동일한 calculated 값 (`Registered` / `Processing` / `Scheduled` / `Complete` 등) 으로 표시됩니다.
 
 **Table 형식 (--output table):**
 
-table 출력은 commonUpdatedFields / eachUpdatedFields 를 각각 행 단위 표로 표시하며, `previous`/`new` 컬럼은 `formatChangeValue` 결과를 표시합니다. Schedule(Basic) / Job Status 도 동일하게 한 줄 변환되어 셀에 들어갑니다.
+table 출력은 commonUpdatedFields / eachUpdatedFields 를 각각 행 단위 표로 표시하며, `previous`/`new` 컬럼에는 한 줄 문자열이 들어갑니다. Schedule(Basic) / Job Status 도 같습니다.
 
 **JSON 형식 (--output json):**
 
@@ -217,9 +219,13 @@ table 출력은 commonUpdatedFields / eachUpdatedFields 를 각각 행 단위 �
 }
 ```
 
-> JSON 응답은 서버 응답을 그대로 직렬화합니다 (text/table 양식은 CLI 측에서 `formatChangeValue` 로 한 줄 변환).
+> JSON 응답은 서버 응답을 그대로 직렬화합니다 (text/table 양식은 CLI 가 한 줄로 변환해 표시합니다).
 > `Schedule(Basic)` 의 `previous`/`new` 가 `null` 인 경우는 이전 schedule 이 없었거나 (id ≤ 0) 모드 전환으로 schedule 이 reset 된 경우입니다.
 > `Job Status` 의 `previous` 는 UI 와 동일한 calculated 값 (`"Registered"` / `"Processing"` / `"Scheduled"` / `"Complete"` 등) 이고, `new` 는 요청 body 의 `status` 입력값 (`"start"` / `"stop"`) 그대로입니다.
+
+`Schedule(Basic)` 의 `previous` / `new` 객체 구조는 다음과 같습니다.
+
+{% include zdm/schedule-change-value.md %}
 
 </details>
 

@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 Schedule Data를 생성하여 JSON 파일로 저장하고 ZDM 서버에 자동으로 등록합니다.
 
@@ -6,7 +7,7 @@ Schedule Data를 생성하여 JSON 파일로 저장하고 ZDM 서버에 자동�
 ## `schedule create` {#schedule-create}
 
 > * Schedule 정보를 생성하고 JSON 파일로 저장한 후, ZDM 서버에 자동으로 등록하는 명령어입니다.
-> * Schedule Type에 따라 Basic Schedule 또는 Basic + Advanced Schedule을 생성합니다.
+> * Schedule Type에 따라 Basic Schedule 또는 Basic + Advanced Schedule을 생성합니다. 타입별 구조와 작업에 붙이는 방법은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
 > * 생성된 파일은 로컬에 저장되며, 서버 등록 결과(ID, 타입, 상태, 설명)가 함께 출력됩니다.
 
 <details markdown="1" open>
@@ -111,7 +112,7 @@ zdm-cli schedule create -t 3 --basic-time "02:00" --center 9
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [info]
 
-saved to  : /home/user/.zconverter/zdm-cli/schedule/Basic_schedule-20250106120000.json
+saved to  : /home/user/.zconverter/zdm-cli-data/schedule/Basic_schedule-20250106120000.json
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [data]
@@ -143,7 +144,7 @@ basic.description : [Basic] Start working at 12:00 every day.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [info]
 
-saved to  : /home/user/.zconverter/zdm-cli/schedule/Advanced_schedule-20250106120000.json
+saved to  : /home/user/.zconverter/zdm-cli-data/schedule/Advanced_schedule-20250106120000.json
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [data]

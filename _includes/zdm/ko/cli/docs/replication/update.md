@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 Replication 작업을 수정하는 명령어입니다.
 
@@ -9,7 +10,7 @@ Replication 작업을 수정하는 명령어입니다.
 > * 작업 ID 또는 이름으로 대상을 지정합니다.
 > * `--center` 파라미터는 지원하지 않습니다.
 
-> **v2.0.2 신설**: schedule 변경 시 `updatedFields[]` 에 `{ field: "schedule", previous: <객체>, new: <객체> }` 형식으로 노출. 이전엔 service 가 schedule 입력을 무시했으나 본 버전부터 정상 처리. CLI 는 `formatChangeValue` 로 `Daily ([Basic] Start working at ...) -> Weekly ([Basic] Start working at ...)` 한 줄로 변환 표시.
+> **v2.0.2 신설**: schedule 변경 시 `updatedFields[]` 에 `{ field: "schedule", previous: <객체>, new: <객체> }` 형식으로 노출. 이전엔 service 가 schedule 입력을 무시했으나 본 버전부터 정상 처리. CLI 는 `Daily ([Basic] Start working at ...) -> Weekly ([Basic] Start working at ...)` 한 줄로 표시합니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -45,8 +46,8 @@ zdm-cli replication update --id 123 --me admin@example.com
 # 스케줄 설정 (기존 스케줄 ID)
 zdm-cli replication update --id 123 --schedule-id 1234
 
-# 스케줄 JSON 직접 입력 (Daily 03:00 — basic only, smart 미지원)
-zdm-cli replication update --id 123 --schedule '{"type":3,"basic":{"time":"03:00"}}'
+# 스케줄 JSON 직접 입력 (Daily 03:00, basic 자동 래핑)
+zdm-cli replication update --id 123 --schedule '{"type":3,"time":"03:00"}'
 
 # JSON 형식으로 출력
 zdm-cli replication update --id 123 --mode full --output json
@@ -86,11 +87,11 @@ zdm-cli replication update --id 123 --mode full --output json
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --schedule | - | string | Optional | - | 스케줄 JSON 문자열 (basic only — smart 입력 시 `INVALID_SCHEDULE_JOB_MODE_FOR_BASIC` 응답) | - |
-| --schedule-id | - | number | Optional | - | 기존 스케줄 ID | - |
-| --schedule-file | - | string | Optional | - | 스케줄 JSON 파일 경로 (basic only) | - |
+| --schedule | - | string | Optional | - | 스케줄 JSON 문자열 (`basic` 키 없으면 자동 래핑) | - |
+| --schedule-id | - | number | Optional | - | 기존 스케줄 ID (복사하지 않고 그대로 참조). 작업과 같은 center 의 스케줄이어야 하고 기본 유형(type 0~6)만 받습니다 | - |
+| --schedule-file | - | string | Optional | - | 스케줄 JSON 파일 경로 (`basic` 키 없으면 자동 래핑) | - |
 
-> **v2.0.2 정책**: replication 의 schedule 은 basic schedule 만 허용 (smart 차단). jobMode `full` / `increment` / `sync` 모두 허용. 변경 시 응답 `updatedFields[]` 에 `{ field: "schedule", previous: { id, type, description }, new: { id, type, description } }` 객체로 노출됩니다.
+> 이 작업은 Basic 스케줄(type 0~6)만 받습니다. Smart(type 7~11)를 지정하면 `JOB-ERROR-101` 로 거부됩니다. jobMode `full` / `increment` / `sync` 모두 허용합니다. 변경 시 응답 `updatedFields[]` 에 `{ field: "schedule", previous: {...}, new: {...} }` 객체로 노출됩니다. 자동 래핑과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
 
 **출력**
 
@@ -133,7 +134,7 @@ value : Daily ([Basic] Start working at 03:00 every day.) -> Weekly ([Basic] Sta
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-> `schedule` 필드 변경은 `formatChangeValue` 로 `<type> (<description>) -> <type> (<description>)` 한 줄로 변환되어 출력됩니다 (v2.0.2 신설).
+> `schedule` 필드 변경은 `<type> (<description>) -> <type> (<description>)` 한 줄로 출력됩니다 (v2.0.2 신설).
 
 **Table 형식 (--output table)**
 
@@ -192,13 +193,9 @@ value : Daily ([Basic] Start working at 03:00 every day.) -> Weekly ([Basic] Sta
 | `summary.updatedFields[].previous` | string \| number \| ScheduleChangeValue | 수정 전 값. 일반 필드는 `string \| number`, `schedule` 필드는 `{ id, type, description }` 객체 (v2.0.2 신설) |
 | `summary.updatedFields[].new` | string \| number \| ScheduleChangeValue | 수정 후 값. 일반 필드는 `string \| number`, `schedule` 필드는 `{ id, type, description }` 객체 (v2.0.2 신설) |
 
-**ScheduleChangeValue 구조** (v2.0.2 신규 — `field === "schedule"` 인 경우):
+**ScheduleChangeValue 구조** (`field` 가 `schedule` 인 경우):
 
-| 필드 | 타입 | 설명 |
-|------|------|------|
-| `id` | number | schedule ID |
-| `type` | string | schedule 타입 (displayMappings PascalCase 영문 — 예: `"Once"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`, `"Smart Weekly (Specific Day of the Week)"`, 조회 실패 시 `"Unknown"`) |
-| `description` | string | schedule 영문 설명 (`processScheduleInfo` 결과 — 예: `"[Basic] Start working at 03:00 every day."`, `"[Basic] Start working at 03:00 Monday, Wednesday every week."`, 조회 실패 시 `"Schedule lookup failed"`) |
+{% include zdm/schedule-change-value.md %}
 
 </details>
 

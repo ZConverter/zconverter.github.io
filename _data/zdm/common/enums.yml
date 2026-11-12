@@ -197,47 +197,59 @@ schedule-types:
     value: "Once"
     description: "한 번 실행"
     category: "Basic"
+    basic: "{ year, month, day, time }"
   - number: 1
     value: "Every Minute"
-    description: "매분 실행"
+    description: "지정한 시간부터 n분 간격으로 실행"
     category: "Basic"
+    basic: "{ time, interval: { minute } }"
   - number: 2
     value: "Hourly"
-    description: "매시간 실행"
+    description: "지정한 시간부터 n시간 간격으로 실행"
     category: "Basic"
+    basic: "{ time, interval: { hour } }"
   - number: 3
     value: "Daily"
     description: "매일 실행"
     category: "Basic"
+    basic: "{ time }"
   - number: 4
     value: "Weekly"
     description: "매주 특정 요일 (요일 복수선택 가능)"
     category: "Basic"
+    basic: "{ day, time }"
   - number: 5
     value: "Monthly (Specific Week and Day of the Week)"
     description: "매월 특정 주/요일 (복수선택 가능)"
     category: "Basic"
+    basic: "{ week, day, time }"
   - number: 6
     value: "Monthly on Specific Date"
     description: "매월 특정 일 (날짜 복수선택 가능)"
     category: "Basic"
+    basic: "{ day, time }"
   - number: 7
     value: "Smart Weekly (Specific Day of the Week)"
     description: "매주 특정 요일 (basic: 단일 요일, advanced: 복수 요일)"
     category: "Smart"
+    basic: "{ day, time }"
   - number: 8
     value: "Smart Monthly (Specific Week and Day of the Week)"
     description: "매월 특정 주/요일 (basic: 단일 주/요일, advanced: 복수 주/요일)"
     category: "Smart"
+    basic: "{ week, day, time }"
   - number: 9
     value: "Smart Monthly (Specific Date)"
     description: "매월 특정 일 (basic: 단일 날짜, advanced: 복수 날짜)"
     category: "Smart"
+    basic: "{ day, time }"
   - number: 10
     value: "Smart Custom (Specific Month, Week and Day of the Week)"
     description: "매년 특정 월/주/요일 (basic: 단일 월/주/요일, advanced: 복수 월/주/요일)"
     category: "Smart"
+    basic: "{ month, week, day, time }"
   - number: 11
     value: "Smart Custom (Specific Month and Date)"
     description: "매년 특정 월/일 (basic: 단일 월/날짜, advanced: 복수 월/날짜)"
     category: "Smart"
+    basic: "{ month, day, time }"

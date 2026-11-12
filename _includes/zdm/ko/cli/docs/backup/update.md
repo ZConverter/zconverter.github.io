@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 Backup 작업 정보를 수정하는 명령어입니다.
 
@@ -6,7 +7,7 @@ Backup 작업 정보를 수정하는 명령어입니다.
 ## `backup update` {#backup-update}
 
 > * 기존 Backup 작업의 설정을 변경합니다. 작업 ID 또는 작업 이름으로 대상을 지정합니다.
-> * `--schedule` 또는 `--schedule-file` 사용 시 JSON에 `basic` 키가 없으면 `type`을 제외한 필드가 자동으로 `basic`으로 래핑됩니다.
+> * `--schedule` 또는 `--schedule-file` 의 JSON 에 `basic` 키가 없으면 자동으로 `basic` 으로 감쌉니다. 규칙과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -48,7 +49,7 @@ zdm-cli backup update --id 123 --schedule-file "/path/to/schedule.json"
 # 스케줄 변경 (JSON 문자열 직접 입력, basic 자동 래핑)
 zdm-cli backup update --id 123 --schedule '{"type":3,"time":"02:00"}'
 
-# smart 모드 스케줄 변경 (JSON 형식 schedule-id)
+# smart 작업의 스케줄 교체 (JSON 형식 schedule-id, --mode 는 생략 가능)
 zdm-cli backup update --id 123 --schedule-id '{"type":7,"basic":100,"advanced":200}'
 
 # 스크립트 설정 변경
@@ -83,7 +84,7 @@ zdm-cli backup update --id 123 --mode increment --output json
 | --repository-path | -rp | string | Optional | - | Repository Path | - |
 | --change-name | -cn | string | Optional | - | 변경할 작업 이름 | - |
 | --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 (`basic` 키 없으면 자동 래핑) | - |
-| --schedule-id | -sc-id | string | Optional | - | 기존 스케줄 ID (smart 모드: `'{"type":TYPE,"basic":ID,"advanced":ID}'`) | - |
+| --schedule-id | -sc-id | string | Optional | - | 기존 스케줄 ID. 입력한 ID 의 내용이 복사되어 새 스케줄로 연결됩니다. full / increment: 숫자 하나(`123`). smart: `'{"type":7,"basic":123,"advanced":456}'` (basic + advanced ID, `--mode smart` 는 생략 가능). `type` 은 참조하는 스케줄의 type 과 같아야 합니다. smart 작업에 숫자 하나를 주면 서버가 거부합니다 | - |
 | --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 (`basic` 키 없으면 자동 래핑) | - |
 | --rotation | -rot | number | Optional | - | 작업 반복횟수 | - |
 | --compression | -comp | string | Optional | - | 작업 압축 사용 여부 | `use`, `not use` |
@@ -99,16 +100,16 @@ zdm-cli backup update --id 123 --mode increment --output json
 </details>
 
 <details markdown="1" open>
-<summary><strong>스케줄 등록/수정 정책 (v2.0.0)</strong></summary>
+<summary><strong>스케줄 변경 정책</strong></summary>
 
-`--schedule`, `--schedule-id`, `--schedule-file` 옵션으로 스케줄을 변경할 때 아래 규칙에 따라 동작합니다.
+`--schedule`, `--schedule-id`, `--schedule-file` 으로 스케줄을 바꿀 때 기존 스케줄을 갱신할지 새로 등록할지는 작업의 현재 스케줄과 모드 전환 여부에 따라 정해집니다. 규칙은 [Backup 수정 API](/zdm/ko/api/4.0.0/docs/backup/update)와 같습니다. 숫자 ID 를 지정하면 그 스케줄이 복사되어 새 ID 로 연결되고, 응답의 `notices` 에 안내가 포함됩니다. 스케줄 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
 
-| 시나리오 | 동작 |
-|---------|------|
-| 기존 스케줄 없음 | 신규 스케줄 등록 |
-| 모드 동일(F/I→F/I, Smart→Smart) + 기존 스케줄 있음 | 기존 스케줄의 데이터만 입력값으로 갱신 (스케줄 ID 보존) |
-| 모드 전환(F/I↔Smart) | 신규 스케줄 등록 (기존 스케줄 참조 해제, advanced 자동 초기화) |
-| 입력이 스케줄 ID(숫자) + 기존 스케줄 있음 | 입력 ID의 스케줄 데이터를 기존 스케줄에 복사하여 갱신 (ID 보존) |
+**`--schedule-id` 객체 형식 (smart)**
+
+- `'{"type":7,"basic":ID,"advanced":ID}'` 형식은 `--mode` 없이도 받습니다. 작업의 현재 모드를 유지한 채 smart 작업의 스케줄만 교체합니다.
+- smart 작업에 숫자 하나를 주면 서버가 `400 JOB-ERROR-102` 로 거부합니다.
+- `--mode full` · `--mode increment` 에 이 형식을 주면 요청 전에 종료 코드 `2` 로 끝납니다: `schedule-id in '{"type":...,"basic":ID,"advanced":ID}' form is for smart mode only (use --mode smart, or a single ID for full mode)`
+- `type` 이 참조하는 스케줄의 type 과 다르면 서버가 `400 JOB-ERROR-108` 로 거부합니다. 다른 center 의 스케줄을 참조하면 `403 CENTER-ERROR-01` 입니다.
 
 </details>
 
@@ -116,7 +117,7 @@ zdm-cli backup update --id 123 --mode increment --output json
 <summary><strong>v2.0.2 변경 사항</strong></summary>
 
 > **v2.0.2 변경 사항**:
-> - Schedule 변경 detail 의 `previous`/`new` 가 `{ id, type, description }` 객체로 확장. CLI 는 `formatChangeValue` 로 `Daily ([Basic] Start working at ...)` 한 줄 변환 표시.
+> - Schedule 변경 detail 의 `previous`/`new` 가 `{ id, type, description }` 객체로 확장. CLI 는 `Daily ([Basic] Start working at ...)` 한 줄로 표시합니다.
 > - Job Status 변경 detail 의 `previous` 가 DB raw 가 아닌 UI 와 동일한 calculated 결과 (`Registered` / `Processing` / `Scheduled` / `Complete` 등).
 > - notices 신규 필드 — schedule 자동 복제 등 안내.
 
@@ -175,7 +176,7 @@ value : 0 -> 1000
 <details markdown="1" open>
 <summary><strong>출력 예시 (Table format)</strong></summary>
 
-`--output table` 사용 시 변경 필드는 표 형태로 표시되며, Schedule/Job Status 의 previous/new 컬럼은 `formatChangeValue` 결과로 출력됩니다.
+`--output table` 사용 시 변경 필드는 표 형태로 표시되며, Schedule/Job Status 의 previous/new 컬럼은 한 줄 문자열로 출력됩니다.
 
 ```
 ┌───┬────────────┬─────────────────────────────────────────────────────────────────────┬───────────────────────────────────────────────────────────────────────────────────┐
@@ -244,7 +245,9 @@ value : 0 -> 1000
 }
 ```
 
-> `Schedule` / `Schedule(Basic)` / `Schedule(Advanced)` 필드의 `previous` / `new` 는 v2.0.2 부터 `{ id, type, description }` 객체로 확장됩니다. CLI text/table 양식은 이를 `formatChangeValue` 로 `type (description)` 한 줄로 변환합니다. `notices` 는 schedule 자동 복제 등 부가 안내가 있을 때만 응답에 포함됩니다.
+`Schedule` / `Schedule(Basic)` / `Schedule(Advanced)` 필드의 `previous` / `new` 는 객체입니다. CLI text/table 양식은 이를 `type (description)` 한 줄로 표시합니다. `notices` 는 schedule 자동 복제 등 부가 안내가 있을 때만 응답에 포함됩니다.
+
+{% include zdm/schedule-change-value.md %}
 
 </details>
 

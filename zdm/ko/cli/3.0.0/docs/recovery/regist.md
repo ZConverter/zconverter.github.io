@@ -6,4 +6,4 @@ navigation: ko-cli-3.0.0
 lang: ko
 ---
 
-{% include zdm/ko/cli/docs/recovery/regist.md %}
+{% include zdm/ko/cli/docs/recovery/regist/3.0.1.md %}

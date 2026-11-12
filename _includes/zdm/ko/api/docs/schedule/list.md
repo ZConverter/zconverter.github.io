@@ -64,7 +64,7 @@ curl -X GET "https://api.example.com/api/schedules?id=15" \
 |----------|------|------|------|--------|------|--------|
 | `id` | Query | number | Optional | - | 스케줄 ID 필터 | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
-| `type` | Query | string | Optional | - | 스케줄 타입 필터 | [선택값 참조](#type-선택값) |
+| `type` | Query | string | Optional | - | 스케줄 타입 필터. 대소문자와 앞뒤 공백을 무시하며 12종 모두 필터됩니다(4.0.0 이전에는 대소문자를 구분했고 5~11 이름은 결과가 0건) | [선택값 참조](#type-선택값) |
 | `state` | Query | string | Optional | - | 활성화 상태 필터 | {% include zdm/schedule-state.md %} |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |

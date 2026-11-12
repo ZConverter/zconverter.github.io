@@ -258,17 +258,17 @@ curl -X GET "https://api.example.com/api/backups/monitoring/system/server-01?pag
 | `summary.failed` | number | 실패한 작업 수 |
 | `summary.pending` | number | 대기 중인 작업 수 |
 | `summary.canceled` | number | 취소된 작업 수 |
-| `summary.overallProgress` | string | 전체 진행률. **진행 중인 작업이 하나도 없으면 `"-"`** 입니다 — `"0%"` 는 "진행률을 0으로 측정했다" 로 읽혀 대기·완료 상태와 구분되지 않으므로 쓰지 않습니다 |
+| `summary.overallProgress` | string | 전체 진행률. **진행률 값이 있는 작업만으로 평균**을 냅니다(진행률이 비어 있는 작업은 개수에도 넣지 않습니다. 예: 40%·80%·빈 값이면 `"60%"`). **진행률 값이 있는 작업이 하나도 없으면 `"-"`** 입니다 — `"0%"` 는 "진행률을 0으로 측정했다" 로 읽혀 대기·완료 상태와 구분되지 않으므로 쓰지 않습니다 |
 | `job[].info.name` | string | 작업 이름 |
 | `job[].info.partition` | string | 대상 파티션 (Linux) |
 | `job[].info.drive` | string | 대상 드라이브 (Windows) |
 | `job[].progressInfo.status` | string | 현재 작업 상태 (PascalCase: `Preparing`, `Processing`, `Complete`, `Scheduled`, `Registered`, `Canceling`, `Canceled`, `Error`). **작업 본체가 정합니다** — 진행 정보가 종료 단계에 들어가도 본체가 아직 진행 중이라고 말하면 `Processing` 입니다. 반대로 데몬이 중단돼 **진행 행만 남은 경우**에는 그 행을 없는 것으로 보고 본체 상태를 냅니다(종전에는 영구히 `Processing`) |
-| `job[].progressInfo.percent` | string | 진행률. **`"100%"` 인데 `status` 가 `Processing` 인 것은 모순이 아닙니다** — 복사가 끝난 뒤에도 후속 단계가 남아 있으면 작업은 아직 진행 중입니다. 완료 판정은 `status` 로만 하세요 |
+| `job[].progressInfo.percent` | string | 진행률. 값이 비어 있으면 `"-"` 입니다(4.0.0 이전에는 `"null%"`). **`"100%"` 인데 `status` 가 `Processing` 인 것은 모순이 아닙니다** — 복사가 끝난 뒤에도 후속 단계가 남아 있으면 작업은 아직 진행 중입니다. 완료 판정은 `status` 로만 하세요 |
 | `job[].progressInfo.message` | string | 진행 상태 메시지 |
 | `job[].progressInfo.start` | string | 시작 시간 |
 | `job[].progressInfo.elapsed` | string | 경과 시간 |
 | `job[].progressInfo.end` | string | 종료 시간 |
-| `job[].log` | string[] | 작업 로그 목록. **`detail=true` 일 때만 채워집니다** — 기본 조회(폴링 용도)에서는 빈 배열입니다 |
+| `job[].log` | string[] | 작업 로그 목록. **`detail=true` 일 때만 채워집니다** — 기본 조회(폴링 용도)에서는 빈 배열입니다. 작업마다 가장 최근 실행분의 마지막 최대 500줄이며 오래된 것부터 나옵니다. 한 실행의 로그가 500줄을 넘으면 앞쪽(가장 오래된) 줄이 빠집니다(4.0.0). 로그 안 시각은 데몬이 남긴 원문 그대로입니다 |
 | `pagination.currentPage` | number | 현재 페이지 번호 (페이지네이션 적용 시) |
 | `pagination.totalPages` | number | 전체 페이지 수 (페이지네이션 적용 시) |
 | `pagination.totalItems` | number | 전체 항목 수 (페이지네이션 적용 시) |

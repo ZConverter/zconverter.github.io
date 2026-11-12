@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 특정 백업 작업의 설정을 수정합니다.
 
@@ -40,7 +41,7 @@ curl -X PUT "https://api.example.com/api/backups/daily-backup" \
     "schedule": {
       "type": 4,
       "basic": {
-        "day": "1",
+        "day": "mon",
         "time": "03:00"
       }
     }
@@ -80,7 +81,7 @@ curl -X PUT "https://api.example.com/api/backups/1" \
 | `excludeDir` | string | Optional | 제외 디렉토리 | - |
 | `mailEvent` | string | Optional | 이벤트 알림 이메일 | - |
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (0 이상) | - |
-| `schedule` | object/number | Optional | 스케줄 객체 또는 기존 스케줄 ID (스케줄 타입에 따라 작업 모드 자동 전환) | - |
+| `schedule` | object \| number | Optional | 스케줄 객체 또는 기존 스케줄 ID. 스케줄 타입에 따라 작업 모드가 자동 전환됩니다. [스케줄 개요]({{ base_path }}/docs/schedule/overview) 참조 | - |
 | `repository` | object | Optional | 레포지토리 정보 | - |
 | `repository.id` | number | Optional | 레포지토리 ID. 생략 시 기존 백업 작업의 레포지토리를 그대로 유지하고 `repository.path` 만 변경 | - |
 | `repository.type` | string | Optional | 레포지토리 타입 | {% include zdm/repository-types.md %} |
@@ -95,42 +96,32 @@ curl -X PUT "https://api.example.com/api/backups/1" \
 <details markdown="1">
 <summary><strong>schedule 객체 구조</strong></summary>
 
-> 기존 스케줄 ID(숫자)를 사용하거나, 새 스케줄 객체를 생성할 수 있습니다.
-> 스케줄 타입별 상세 구조는 [POST /schedules](../schedule/regist)를 참고하세요.
-
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|------|------|
-| `type` | number/string | Required | 스케줄 타입 (0~11 숫자 또는 타입명 문자열) |
-| `basic` | object/number | Required | 기본 스케줄 구조 또는 기존 스케줄 ID |
-| `advanced` | object/number | Optional | 고급 스케줄 구조 (Smart 스케줄 type 7~11) |
-
-**스케줄 타입별 basic/advanced 구조:**
-
-| Type | 이름 | 구조 |
-|------|------|------|
-| 0 | once | `{ year, month, day, time }` |
-| 1 | every minute | `{ time, interval: { minute } }` |
-| 2 | hourly | `{ time, interval: { hour } }` |
-| 3 | daily | `{ time }` |
-| 4 | weekly | `{ day, time }` |
-| 5 | monthly on specific week | `{ week, day, time }` |
-| 6 | monthly on specific day | `{ day, time }` |
-| 7~11 | smart schedules | basic + advanced 모두 필요 |
+{% include zdm/schedule-object.md %}
 
 **모드-스케줄 자동 전환:**
 
-- Full/Increment 작업에 Smart 스케줄(타입 7~11)을 등록하면, 작업 모드가 자동으로 Smart로 전환됩니다.
-- Smart 작업에 Full/Increment 스케줄(타입 0~6)을 등록하면, 작업 모드가 자동으로 Full로 전환되고 Advanced 스케줄이 초기화됩니다.
+- 아래 자동 전환은 **스케줄을 객체로 보낼 때만** 적용됩니다. 최상위 숫자 ID 는 자동 전환되지 않습니다(아래 참조).
+- Full/Increment 작업에 Smart 스케줄 객체(타입 7~11)를 등록하면, 작업 모드가 자동으로 Smart로 전환됩니다.
+- Smart 작업에 Full/Increment 스케줄 객체(타입 0~6)를 등록하면, 작업 모드가 자동으로 Full로 전환되고 Advanced 스케줄이 초기화됩니다.
 - `mode` 필드를 함께 지정하면 해당 값이 우선 적용됩니다.
+- Smart 작업(또는 `mode: "smart"`)에 최상위 숫자 ID 를 보내면 전환되지 않고 400 (`JOB-ERROR-102`)입니다. Smart 작업을 단일 basic 스케줄로 바꾸려면 숫자 ID 와 함께 `mode: "full"`(또는 `"increment"`)을 보내세요. 이때 Advanced 스케줄은 0 으로 초기화됩니다.
 
-**스케줄 등록/수정 정책 (v2.0.0):**
+**스케줄 등록/수정 정책:**
 
 | 시나리오 | 동작 |
 |---------|------|
 | 기존 스케줄 없음 | 신규 스케줄 등록 |
-| 모드 동일(F/I→F/I, Smart→Smart) + 기존 스케줄 있음 | 기존 스케줄의 데이터만 입력값으로 갱신 (스케줄 ID 보존) |
+| 모드 동일(F/I→F/I, Smart→Smart) + 기존 스케줄 있음 + 입력이 스케줄 객체 | 기존 스케줄의 데이터만 입력값으로 갱신 (스케줄 ID 보존) |
 | 모드 전환(F/I↔Smart) | 신규 스케줄 등록 (기존 스케줄 참조 해제, advanced 자동 초기화) |
-| 입력이 스케줄 ID(숫자) + 기존 스케줄 있음 | 입력 ID의 스케줄 데이터를 기존 스케줄에 복사하여 갱신 (ID 보존) |
+| 입력이 스케줄 ID(숫자) | 입력 ID 의 스케줄을 **복사해 새 스케줄로 등록**하고 작업에 연결 (새 ID 발급, 기존 스케줄 ID 는 유지되지 않음). 응답 `notices` 에 복사 안내가 포함됩니다 |
+
+- 숫자 ID 는 Full/Increment 용(basic) 스케줄만 최상위로 지정합니다. Smart 스케줄을 ID 로 지정하려면 `{ "type": 7, "basic": <ID>, "advanced": <ID> }` 형식을 사용합니다. 도메인별 처리는 [스케줄 개요]({{ base_path }}/docs/schedule/overview#숫자-id-로-지정할-때-도메인별-처리)를 참조하세요.
+- 존재하지 않는 ID 는 404 (`SCHEDULE-ERROR-01`)입니다.
+- 지정한 스케줄이 작업이 속한 center 의 것이 아니면 403 (`CENTER-ERROR-01`)입니다(`Schedule ID '<id>' does not belong to center <center>`). `nCenterID = 0` 도 하나의 center 로 비교합니다.
+- 판정 mode 는 요청 `mode`(없으면 기존 작업 mode)입니다. Smart mode 에 최상위 숫자 ID 를 보내면 400 (`JOB-ERROR-102`, `Smart job mode cannot use a single schedule ID. Use the object form { type, basic: <id>, advanced: <id> }.`)입니다.
+- Full/Increment mode 에 Smart 스케줄 행(타입 7~11)의 ID 를 보내면 400 (`JOB-ERROR-101`, `Schedule ID '<id>' is a smart schedule (type N). Full/increment job modes accept schedule type 0-6 only.`)입니다.
+- 객체의 `basic` / `advanced` 자리를 비우고 Smart 스케줄을 보내면 400 (`JOB-ERROR-102`, `Smart job mode requires both a basic and an advanced schedule.`)입니다. 종전에는 500 이었습니다.
+- 검사 순서는 존재(404) → center(403) → mode·type(400)입니다.
 
 </details>
 
@@ -139,7 +130,7 @@ curl -X PUT "https://api.example.com/api/backups/1" \
 
 **성공 응답 (200 OK)**
 
-> **v2.0.2 변경 사항**: `Schedule` / `Schedule(Basic)` / `Schedule(Advanced)` 필드의 `previous` / `new` 가 단순 ID(숫자) 가 아닌 `{ id, type, description }` 객체 구조로 확장되었습니다. 그 외 필드 (`jobName`, `mode`, `rotation` 등) 는 기존 그대로 단순 값. 이전 양식은 [v2.0.1](../../../2.0.0/docs/backup/update) 문서를 참고하세요.
+> **v2.0.2 변경 사항**: `Schedule` / `Schedule(Basic)` / `Schedule(Advanced)` 필드의 `previous` / `new` 가 단순 ID(숫자) 가 아닌 `{ id, type, description }` 객체 구조로 확장되었습니다. 그 외 필드 (`jobName`, `mode`, `rotation` 등) 는 기존 그대로 단순 값. 이전 양식은 [v2.0.1](/zdm/ko/api/2.0.0/docs/backup/update) 문서를 참고하세요.
 
 ```json
 {
@@ -218,11 +209,7 @@ curl -X PUT "https://api.example.com/api/backups/1" \
 
 **ScheduleChangeValue 구조** (v2.0.2 신규):
 
-| 하위 필드 | 타입 | 설명 |
-|------|------|------|
-| `id` | number | schedule ID |
-| `type` | string | schedule 타입 displayMappings PascalCase 영문 (예: `"Once"`, `"Every Minute"`, `"Hourly"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`, `"Smart Weekly (Specific Day of the Week)"`, `"Smart Monthly (Specific Week and Day of the Week)"`, `"Smart Monthly (Specific Date)"`, `"Smart Custom (Specific Month, Week and Day of the Week)"`, `"Smart Custom (Specific Month and Date)"`). 조회 실패 시 `"Unknown"` |
-| `description` | string | schedule 내용 영문 설명 — `processScheduleInfo` 결과 (예: `"[Basic] Start working at 03:00 every day."`, `"[Basic] Start working at 03:00 Monday, Wednesday every week."`, `"[Basic] Start working at 03:00 on the 1, 15 of every month."`, `"[Basic] Start working at 00:00 every 2 Hour."`, `"[Basic] Start working on 15/06/2026 03:00."`). 조회 실패 시 `"Schedule lookup failed"` |
+{% include zdm/schedule-change-value.md %}
 
 > **참고**: id ≤ 0 (이전 schedule 없음) 인 경우 해당 필드는 `null` 로 반환됩니다. schedule 자동 복제로 새 ID 가 발급된 경우 `notices` 에 안내 메시지 첨부.
 

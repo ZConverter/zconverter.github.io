@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 Backup 작업을 등록하는 명령어입니다.
 
@@ -7,7 +8,9 @@ Backup 작업을 등록하는 명령어입니다.
 
 > * 새로운 Backup 작업을 등록합니다. 서버의 전체 파티션 또는 특정 파티션에 대한 백업 작업을 설정할 수 있습니다.
 > * `--mode smart` 지정 시 schedule 옵션(`--schedule`, `--schedule-id`, `--schedule-file`) 중 하나가 반드시 필요합니다.
-> * `--schedule` 또는 `--schedule-file` 사용 시 JSON에 `basic` 키가 없으면 `type`을 제외한 필드가 자동으로 `basic`으로 래핑됩니다.
+> * `--schedule-id` 의 객체 형식(`'{"type":...,"basic":ID,"advanced":ID}'`)은 smart 전용입니다. `--mode full` 이나 `--mode increment` 에 주면 요청 전에 종료 코드 `2` 로 끝납니다: `schedule-id in '{"type":...,"basic":ID,"advanced":ID}' form is for smart mode only (use --mode smart, or a single ID for full mode)`
+> * `type` 이 참조하는 스케줄의 type 과 다르면 서버가 `400 JOB-ERROR-108`, 다른 center 의 스케줄이면 `403 CENTER-ERROR-01` 로 거부합니다.
+> * `--schedule` 또는 `--schedule-file` 의 JSON 에 `basic` 키가 없으면 자동으로 `basic` 으로 감쌉니다. 규칙과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -83,7 +86,7 @@ zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --individual 
 | --partition | - | string | Optional | 전체 파티션 | 작업 대상 파티션 (콤마로 구분) | - |
 | --job-name | -jn | string | Optional | - | 작업 이름 | - |
 | --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 (`basic` 키 없으면 자동 래핑) | - |
-| --schedule-id | -sc-id | string | Optional | - | 기존 스케줄 ID (smart 모드: `'{"type":TYPE,"basic":ID,"advanced":ID}'`) | - |
+| --schedule-id | -sc-id | string | Optional | - | 기존 스케줄 ID. 입력한 ID 의 내용이 복사되어 새 스케줄로 연결됩니다 (smart 모드: `--mode smart` 와 함께 `'{"type":TYPE,"basic":ID,"advanced":ID}'`. `type` 은 참조하는 스케줄의 type 과 같아야 함) | - |
 | --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 (`basic` 키 없으면 자동 래핑) | - |
 | --rotation | -rot | number | Optional | 1 | 작업 반복횟수 | - |
 | --compression | -comp | string | Optional | use | 작업 압축 사용 여부 | `use`, `not use` |
@@ -129,7 +132,7 @@ zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --individual 
 <details markdown="1" open>
 <summary><strong>v2.0.2 변경 사항</strong></summary>
 
-> **v2.0.2 변경 사항**: schedule 응답 객체에 `id` 필드 신규 추가 (text 양식 `id` 줄, table 양식 `Daily (#7)` 형식). type 은 displayMappings PascalCase 영문, description 은 `processScheduleInfo` 영문.
+> **v2.0.2 변경 사항**: schedule 응답 객체에 `id` 필드 신규 추가 (text 양식 `id` 줄, table 양식 `Daily (#7)` 형식). type 은 영문 타입 이름(PascalCase), description 은 영문 설명입니다.
 
 </details>
 

@@ -85,7 +85,7 @@ curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-ser
 > - `center`를 지정하면 **그 범위 밖의 서버는 존재하지 않는 것으로 취급**되어 404가 반환됩니다.
 > - **제거된 파라미터**: `server`, `sort`. 대상 서버는 경로 `identifier` 가 정하므로 `server` 는 의미가 없고, 정렬은 아래 규칙으로 고정되어 `sort` 가 없습니다. 이 값들은 **더 이상 받지 않습니다** — 요청에 실으면 `400` (`DTO-VALIDATION-03`) 이고, `error.details` 에 해당 파라미터 이름이 담깁니다. 이전 버전에서 이 값들이 검증만 되고 실제로는 반영되지 않던 동작을 정리한 것입니다.
 
-**정렬 순서** — 진행 정보를 가진 작업이 앞에 오고, 그 안에서는 최근 갱신순(`sLastUpdateTime` 내림차순, 동률이면 최근 등록순)입니다.
+**정렬 순서** — 진행 정보를 가진 작업이 앞에 오고, 그 안에서는 최근 갱신순(마지막 갱신 시각 내림차순, 동률이면 최근 등록순)입니다.
 
 </details>
 
@@ -585,7 +585,7 @@ job[]
 | `summary.pending` | number | 항상 | 대기 중인 작업 수 |
 | `summary.overallProgress` | string | 항상 | 진행 정보를 가진 작업들의 진행률 평균 (`"45%"`). 각 작업의 진행률은 `job[].progress.percent` 와 **같은 출처**(데몬이 센 복구 완료 개수)를 씁니다. 평균에 넣을 작업이 하나도 없으면 `"-"` |
 | `job` | array | 항상 | 작업 배열. 조건에 맞는 작업이 없으면 빈 배열 |
-| `job[].info.id` | number | 항상 | 복구 작업 ID. 상세 조회(`/monitoring/job/:id`)로 이어갈 때 사용합니다 |
+| `job[].info.id` | number | 항상 | 작업 행 `nID`. 목록·조회의 작업 ID 와 같은 값이며, 상세 조회(`/monitoring/job/:id`)로 이어갈 때 사용합니다 |
 | `job[].info.name` | string | 항상 | 복구 작업 이름 |
 | `job[].info.source` | string | 항상 | 복구 이미지를 제공한 원본 서버 이름 |
 | `job[].info.target` | string | 항상 | 복구가 이뤄지는 대상 서버 이름 |

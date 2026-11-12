@@ -6,4 +6,4 @@ navigation: ko-cli-2.0.0
 lang: ko
 ---
 
-{% include zdm/ko/cli/docs/os-replication/regist.md %}
+{% include zdm/ko/cli/docs/os-replication/regist/3.0.1.md %}

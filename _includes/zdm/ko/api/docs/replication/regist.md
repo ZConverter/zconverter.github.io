@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 새로운 복제 작업을 등록합니다.
 
@@ -90,7 +91,7 @@ curl -X POST "https://api.example.com/api/replications" \
 | `port` | number | Optional | 타겟 포트 | - |
 | `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (기본값: 0, 0=무제한) | - |
-| `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
+| `schedule` | object \| number | Optional | 스케줄 객체 또는 스케줄 ID. 복제는 type `0`~`6`(basic)만 지원합니다. 아래 "schedule 객체 구조" 참조 | - |
 | `autoStart` | string | Optional | 자동 시작 여부 (기본값: `not use`) | {% include zdm/use-options.md %} |
 | `targetRepository` | string | Required | 타겟 레포지토리 (단일 ID 또는 경로, 예: `"41"` / `"/replication/target"`) | - |
 | `sourceRepository` | string | Conditional | 소스 레포지토리 (unitType=repository 시 필수, comma-separated ID/경로 다중 가능, 예: `"39,40"`) | - |
@@ -168,14 +169,42 @@ curl -X POST "https://api.example.com/api/replications" \
 <details markdown="1">
 <summary><strong>schedule 객체 구조</strong></summary>
 
-> 기존 스케줄 ID(숫자)를 사용하거나, 새 스케줄 객체를 생성할 수 있습니다.
-> 스케줄 타입별 상세 구조는 [POST /schedules](../schedule/regist)를 참고하세요.
+{% include zdm/schedule-object.md smart=false %}
 
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|------|------|
-| `type` | number | Required | 스케줄 타입 (0~11) |
-| `basic` | object/number | Required | 기본 스케줄 구조 또는 기존 스케줄 ID |
-| `advanced` | object/number | Optional | 고급 스케줄 구조 (Smart 스케줄 type 7~11) |
+- 숫자 ID 는 **복사 없이 그 스케줄을 참조**합니다. 작업의 스케줄 ID 가 입력한 ID 가 됩니다.
+- 객체 안 `basic` 자리의 숫자는 그 내용을 복사해 새 스케줄로 저장합니다.
+- 존재하지 않는 ID 는 404 `SCHEDULE-ERROR-01` 입니다.
+- 지정한 스케줄이 요청 `center` 의 것이 아니면 403 `CENTER-ERROR-01` 입니다(`Schedule ID '<id>' does not belong to center <center>`). `nCenterID = 0` 도 하나의 center 로 비교합니다. 객체 안 숫자 ID 는 행 type 이 요청 `type` 과 다르면 400 `JOB-ERROR-108` 이며, 검사 순서는 존재(404) → center(403) → type(400)입니다.
+- Smart 스케줄(type 7~11)은 400 `JOB-ERROR-103` 으로 거부됩니다.
+- 모든 `replicationMode` (full / increment / sync)에서 사용할 수 있습니다.
+
+**Smart 스케줄 거부 예시 (400 Bad Request)**
+
+```json
+{
+  "sourceCenter": "1",
+  "targetCenter": "2",
+  "replicationUnitType": "server",
+  "sourceServer": "web-server-01",
+  "targetRepository": "/replication/server",
+  "schedule": {
+    "type": 7,
+    "basic": { "day": "mon", "time": "10:00" }
+  }
+}
+```
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-103",
+    "message": "Replication jobs accept schedule type 0-6 only (received: 7)."
+  },
+  "timestamp": "2026-04-17T10:30:00.000+09:00"
+}
+```
 
 </details>
 
@@ -260,8 +289,8 @@ curl -X POST "https://api.example.com/api/replications" \
 | `results[].autoStart` | string | 자동 시작 여부 |
 | `results[].schedule` | object | 스케줄 정보 (요청에 `schedule` 지정 시에만 포함, 미지정 시 응답에 미포함) — v2.0.2 신설 |
 | `results[].schedule.id` | number | 등록된 schedule ID |
-| `results[].schedule.type` | string | schedule 타입 (displayMappings PascalCase 영문 — 예: `"Once"`, `"Every Minute"`, `"Hourly"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`, `"Smart Weekly (Specific Day of the Week)"`, 그 외 SMART_* 값들, 조회 실패 시 `"Unknown"`) |
-| `results[].schedule.description` | string | schedule 영문 설명 (`processScheduleInfo` 결과 — 예: `"[Basic] Start working at 03:00 every day."`, `"[Basic] Start working at 03:00 Monday, Wednesday every week."`, `"[Basic] Start working at 03:00 on the 1, 15 of every month."`, `"[Basic] Start working at 00:00 every 2 Hour."`, 조회 실패 시 `"Schedule lookup failed"`) |
+| `results[].schedule.type` | string | 스케줄 타입 이름 (예: `"Daily"`). 값 목록은 [스케줄 개요]({{ base_path }}/docs/schedule/overview#스케줄-타입별-구조-및-설명)의 타입 표이며, 조회 실패 시 `"Unknown"` |
+| `results[].schedule.description` | string | 스케줄 내용을 설명하는 영문 한 줄 (예: `"[Basic] Start working at 03:00 every day."`, `"[Basic] Start working at 03:00 Monday, Wednesday every week."`, `"[Basic] Start working at 03:00 on the 1, 15 of every month."`, `"[Basic] Start working at 00:00 every 2 Hour."`, 조회 실패 시 `"Schedule lookup failed"`) |
 | `results[].errorMessage` | string | 실패 시 오류 메시지 |
 
 </details>

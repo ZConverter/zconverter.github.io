@@ -63,7 +63,7 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 
 | 코드 | HTTP | 설명 |
 |------|------|------|
-| `CENTER-ERROR-01` | 403 | 해당 데이터가 지정한 center 에 속하지 않습니다. |
+| `CENTER-ERROR-01` | 403 | 해당 데이터가 지정한 center 에 속하지 않습니다. 작업 등록·수정에서 숫자 ID 로 지정한 스케줄이 작업의 center 에 속하지 않을 때도 이 코드입니다(`Schedule ID '<id>' does not belong to center <center>`). |
 | `CENTER-ERROR-02` | 400 | center 를 정확히 하나만 지정해야 합니다. |
 
 </details>
@@ -158,18 +158,18 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 | `SCHEDULE-ERROR-36` | 422 | minute 값이 유효하지 않습니다. |
 | `SCHEDULE-ERROR-37` | 400 | hour 값이 누락됐습니다. |
 | `SCHEDULE-ERROR-38` | 422 | hour 값이 유효하지 않습니다. |
-| `SCHEDULE-ERROR-39` | 422 | ONCE 타입의 필수 필드가 누락됐습니다. (sYear, sMonth, sDay) |
-| `SCHEDULE-ERROR-40` | 422 | EVERY_MINUTE 타입의 필수 필드가 누락됐습니다. (nPeriodMinute) |
-| `SCHEDULE-ERROR-41` | 422 | HOURLY 타입의 필수 필드가 누락됐습니다. (nPeriodHour) |
+| `SCHEDULE-ERROR-39` | 422 | ONCE 타입의 필수 필드가 누락됐습니다. |
+| `SCHEDULE-ERROR-40` | 422 | EVERY_MINUTE 타입의 필수 필드가 누락됐습니다. |
+| `SCHEDULE-ERROR-41` | 422 | HOURLY 타입의 필수 필드가 누락됐습니다. |
 | `SCHEDULE-ERROR-42` | 422 | DAILY 타입에 불필요한 필드가 포함돼 있습니다. |
-| `SCHEDULE-ERROR-43` | 422 | WEEKLY 타입의 필수 필드가 누락됐습니다. (sDayweek) |
-| `SCHEDULE-ERROR-44` | 422 | MONTHLY_BY_WEEK 타입의 필수 필드가 누락됐습니다. (sDayweek, sWeek) |
-| `SCHEDULE-ERROR-45` | 422 | MONTHLY_BY_DAY 타입의 필수 필드가 누락됐습니다. (sDate) |
-| `SCHEDULE-ERROR-46` | 422 | SMART_WEEKLY 타입의 필수 필드가 누락됐습니다. (sDayweek) |
-| `SCHEDULE-ERROR-47` | 422 | SMART_MONTHLY_BY_WEEKDAY 타입의 필수 필드가 누락됐습니다. (sDayweek, sWeek) |
-| `SCHEDULE-ERROR-48` | 422 | SMART_MONTHLY_BY_DATE 타입의 필수 필드가 누락됐습니다. (sDate) |
-| `SCHEDULE-ERROR-49` | 422 | SMART_CUSTOM_MONTHLY_BY_WEEKDAY 타입의 필수 필드가 누락됐습니다. (sDayweek, sWeek, sMonths) |
-| `SCHEDULE-ERROR-50` | 422 | SMART_CUSTOM_MONTHLY_BY_DATE 타입의 필수 필드가 누락됐습니다. (sDate, sMonths) |
+| `SCHEDULE-ERROR-43` | 422 | WEEKLY 타입의 필수 필드가 누락됐습니다. |
+| `SCHEDULE-ERROR-44` | 422 | MONTHLY_BY_WEEK 타입의 필수 필드가 누락됐습니다. |
+| `SCHEDULE-ERROR-45` | 422 | MONTHLY_BY_DAY 타입의 필수 필드가 누락됐습니다. |
+| `SCHEDULE-ERROR-46` | 422 | SMART_WEEKLY 타입의 필수 필드가 누락됐습니다. |
+| `SCHEDULE-ERROR-47` | 422 | SMART_MONTHLY_BY_WEEKDAY 타입의 필수 필드가 누락됐습니다. |
+| `SCHEDULE-ERROR-48` | 422 | SMART_MONTHLY_BY_DATE 타입의 필수 필드가 누락됐습니다. |
+| `SCHEDULE-ERROR-49` | 422 | SMART_CUSTOM_MONTHLY_BY_WEEKDAY 타입의 필수 필드가 누락됐습니다. |
+| `SCHEDULE-ERROR-50` | 422 | SMART_CUSTOM_MONTHLY_BY_DATE 타입의 필수 필드가 누락됐습니다. |
 | `SCHEDULE-ERROR-51` | 409 | 사용 중인 스케줄이라 삭제할 수 없습니다. |
 
 </details>
@@ -268,14 +268,14 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 | 코드 | HTTP | 설명 |
 |------|------|------|
 | `JOB-ERROR-100` | 404 | 지정한 스케줄을 찾을 수 없습니다. |
-| `JOB-ERROR-101` | 400 | full/increment 작업은 스케줄에 basic 만 포함해야 합니다. |
-| `JOB-ERROR-102` | 400 | smart 작업은 스케줄에 basic 과 advanced 를 모두 포함해야 합니다. |
+| `JOB-ERROR-101` | 400 | full/increment 작업은 스케줄에 basic 만 포함해야 합니다. backup 에서 full/increment mode 에 Smart 스케줄 행(타입 7~11)의 숫자 ID 를 보낼 때도 이 코드입니다. recovery·replication·os-replication 수정에서 Smart 스케줄 ID 를 보낼 때도 같습니다. |
+| `JOB-ERROR-102` | 400 | smart 작업은 스케줄에 basic 과 advanced 를 모두 포함해야 합니다. backup 에서 smart mode 에 최상위 숫자 ID 를 보낼 때(`Smart job mode cannot use a single schedule ID. …`), 객체 형식 smart 스케줄에서 basic 또는 advanced 가 빠졌을 때(`Smart job mode requires both a basic and an advanced schedule.`)도 이 코드입니다. 후자는 종전에 500 이었습니다. |
 | `JOB-ERROR-103` | 400 | full/increment 작업의 스케줄 타입은 0 ~ 6 이어야 합니다. |
 | `JOB-ERROR-104` | 400 | smart 작업의 스케줄 타입은 7 ~ 11 이어야 합니다. |
 | `JOB-ERROR-105` | 400 | basic 과 advanced 의 스케줄 타입이 일치하지 않습니다. |
 | `JOB-ERROR-106` | 500 | 스케줄 수정에 실패했습니다. |
 | `JOB-ERROR-107` | 400 | Smart Backup 은 스케줄이 필수입니다. |
-| `JOB-ERROR-108` | 400 | 스케줄 모드가 일치하지 않습니다. (basic/advanced) |
+| `JOB-ERROR-108` | 400 | 스케줄 모드가 일치하지 않습니다. (basic/advanced) 객체 안 `basic` / `advanced` 자리의 숫자 ID 행 type 이 요청 `type` 과 다를 때도 이 코드입니다(`Schedule ID '<id>' is type <n>, but the request type is <m>.`). |
 
 </details>
 
@@ -300,7 +300,7 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 | `JOB-ERROR-65` | 400 | 복구를 지원하지 않는 서버 OS 입니다. |
 | `JOB-ERROR-66` | 400 | 저장소 경로 형식이 올바르지 않습니다. |
 | `JOB-ERROR-67` | 400 | 지정한 백업 작업은 복구에 사용할 수 없습니다. |
-| `JOB-ERROR-68` | 500 | 백업 이미지 조회에 실패했습니다. ZDBackup 데몬과 저장소 마운트 상태를 확인하세요. |
+| `JOB-ERROR-68` | 500 | 백업 이미지 조회에 실패했습니다. ZDBackup 데몬과 저장소 마운트 상태를 확인하세요. recovery 등록(`POST /recoveries`, `POST /recoveries/image`)에서 이미지 조회가 시간 안에 끝나지 않을 때도 이 코드입니다. 종전에는 408 `TIMEOUT_ERROR` 였습니다. |
 
 </details>
 

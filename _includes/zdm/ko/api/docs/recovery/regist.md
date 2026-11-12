@@ -1,4 +1,4 @@
-
+{% include zdm/base-path.html %}
 새로운 복구 작업을 등록합니다.
 
 ---
@@ -90,7 +90,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `jobName` | string | Optional | 작업 이름 | - |
 | `overwrite` | string | Optional | 덮어쓰기 허용 여부 | `allow`, `not allow` |
 | `user` | string | Optional | 사용자 ID (숫자) 또는 이메일 | - |
-| `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
+| `schedule` | object \| number | Optional | 스케줄 객체 또는 스케줄 ID. 복구는 type `0`~`6`(basic)만 지원합니다. [스케줄 개요]({{ base_path }}/docs/schedule/overview) 참조 | - |
 | `afterReboot` | string | Optional | 작업 후 부팅 방식 | {% include zdm/after-reboot.md %} |
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (0: 무제한) | - |
 | `excludePartition` | string | Optional | 제외할 파티션 목록 (콤마 구분, 예: `"h,d"` 또는 `"/boot,/home"`) | - |
@@ -170,7 +170,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 **성공 응답 (201 Created)**
 
 > **v2.0.2 변경 사항**:
-> - `schedule.basic` 객체에 `id` 필드 신규 추가 (type/description 은 기존 형식 그대로 — displayMappings PascalCase 영문 + `processScheduleInfo` 영문 결과)
+> - `schedule.basic` 객체에 `id` 필드 신규 추가 (type/description 은 기존 형식 그대로)
 > - 응답에 `notices?: string[]` 필드 신규 — backup 없는 partition 자동 skip 안내 (값이 있을 때만 포함)
 
 > **자동 partition skip 동작**: source 서버의 partition 중 복구에 쓸 수 있는 백업이 없는 partition 은 자동으로 jobList 에서 제외됩니다 (silent skip). skip 된 partition 은 `notices` 에 안내 메시지로 포함됩니다. 전체 partition 이 skip 되면 `JOB-ERROR-14` (400 Bad Request) 응답이 반환되며, 각 partition 이 왜 제외됐는지가 메시지에 함께 담깁니다. `excludePartition` 옵션을 명시하지 않아도 동일하게 동작합니다.
@@ -216,7 +216,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
       {
         "sourcePartition": "/",
         "targetPartition": "/dev/sda1",
-        "jobMode": "full",
+        "jobMode": "Full Recovery",
         "overwrite": "allow",
         "fileSystem": "ext4",
         "backup": {
@@ -233,7 +233,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
       {
         "sourcePartition": "/home",
         "targetPartition": "/dev/sdb1",
-        "jobMode": "increment",
+        "jobMode": "Incremental Recovery",
         "overwrite": "allow",
         "fileSystem": "ext4",
         "backup": {
@@ -273,14 +273,14 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `common.bootMode` | string | 작업 후 부팅 모드 (`reboot` / `shutdown` / `maintain`) |
 | `common.schedule.basic` | object | 기본 스케줄 정보 (설정시에만 포함) — `{ id, type, description }` 객체 |
 | `common.schedule.basic.id` | number | 스케줄 ID (v2.0.2 신규) |
-| `common.schedule.basic.type` | string | 스케줄 타입 — displayMappings PascalCase 영문 (예: `"Once"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`, `"Smart Weekly (Specific Day of the Week)"` 등). 조회 실패 시 `"Unknown"` |
-| `common.schedule.basic.description` | string | `processScheduleInfo` 영문 결과 (예: `"[Basic] Start working at 03:00 every day."`). 조회 실패 시 `"Schedule lookup failed"` |
+| `common.schedule.basic.type` | string | 스케줄 타입 이름 (예: `"Daily"`). 값 목록은 [스케줄 개요]({{ base_path }}/docs/schedule/overview#스케줄-타입별-구조-및-설명)의 타입 표이며, 조회 실패 시 `"Unknown"` |
+| `common.schedule.basic.description` | string | 스케줄 내용을 설명하는 영문 한 줄 (예: `"[Basic] Start working at 03:00 every day."`). 조회 실패 시 `"Schedule lookup failed"` |
 | `common.scriptPath` | string | 스크립트 경로 (설정시에만 포함) |
 | `common.scriptRunTiming` | string | 스크립트 실행 타이밍 (`before job` / `after job`, 설정시에만 포함) |
 | `common.errorMessage` | string | 실패 시 오류 메시지 |
 | `partitions[].sourcePartition` | string | 소스 파티션/드라이브 명 |
 | `partitions[].targetPartition` | string | 타겟 파티션/드라이브 명 |
-| `partitions[].jobMode` | string | 파티션별 작업 모드 |
+| `partitions[].jobMode` | string | 파티션별 작업 모드 (`Full Recovery` · `Incremental Recovery`) |
 | `partitions[].overwrite` | string | 덮어쓰기 상태 |
 | `partitions[].fileSystem` | string | 파일시스템 |
 | `partitions[].backup.useLatest` | string | 최신 백업 파일 사용 여부 |
@@ -366,26 +366,31 @@ curl -X POST "https://api.example.com/api/recoveries" \
 | `JOB-ERROR-14` | 400 | 등록 대상 partition 이 0건 — 전체 skip 또는 `excludePartition` 으로 전부 제외 |
 | `JOB-ERROR-67` | 400 | 지정한 `backupJob` 이 사용 불가 상태이거나, 사용 불가 작업의 **최신** 이미지를 `backupFile` 로 지정 |
 | `JOB-ERROR-63` | 400 | `listOnly: true` 인데 `jobList` 가 비었거나 없음 |
+| `JOB-ERROR-68` | 500 | 이미지 조회 시간 초과 — 데몬이 이미지 목록을 채우지 못함. 재시도할 수 있는 이미지 조회 실패입니다(종전 408 `TIMEOUT_ERROR`) |
 | `BAD_REQUEST` | 400 | `backupFile` 의 파티션이 `sourcePartition` 과 불일치, 또는 이미지의 소속 작업명이 `backupJob` 과 불일치 |
+
+> **이미지 조회 대기와 클라이언트 timeout (since 4.0.0).** 이미지 조회 대기는 (center, repository) 조합마다 30초이고, 서버의 바깥 한도는 대기 합계 + 25초입니다. 조합이 1·2·3·4개이면 기본 폴링 간격(1초)에서 각각 55·85·115·145초입니다. 클라이언트의 요청 timeout 은 이보다 길게 두세요. 시간이 초과되면 408 대신 500 `JOB-ERROR-68`(`Backup image lookup timed out …`, center·repository·마지막 작업 상태 포함)이 나가며, 이를 재시도할 수 있는 이미지 조회 실패로 처리하세요.
 
 > **`JOB-ERROR-64` (409) 는 이 엔드포인트에서 발생하지 않습니다 (since 3.0.0).** 대상 서버에 진행 중인 복구가 있어도 등록은 거부되지 않습니다 — `autoStart` 를 요청했다면 자동 시작만 생략되고 사유가 `notices` 로 안내됩니다. 이 에러는 등록된 작업을 실제로 시작할 때, 즉 `PUT /recoveries/:identifier` 의 `status: "start"` 에서만 반환됩니다.
 
 </details>
 
 <details markdown="1">
-<summary><strong>schedule 동봉 예시 — 정상 등록</strong></summary>
+<summary><strong>schedule 동봉 예시</strong></summary>
 
-> **Recovery 스케줄 정책**
->
-> * Recovery 작업은 **`basic` 스케줄만** 지원합니다. (`mode`는 `full` / `increment`만 허용 — `smart` 모드 없음)
-> * 스케줄 `type`은 **0 ~ 6** 만 허용됩니다. (Smart 타입 7~11 불가 — 아래 거부 케이스 참조)
-> * `schedule` 필드를 생략하면 별도 예약 없이 등록되며, `autoStart=use` 와 함께 사용하면 즉시 1회 실행됩니다. 다만 대상 서버에 진행 중인 복구가 있으면 등록만 되고 **자동 시작은 생략**됩니다 (위 "대상 서버가 사용 중일 때" 참고).
-> * 응답의 `common.schedule` 은 `schedule` 이 동봉되었을 때만 포함되며, `{ basic: { id, type, description } }` 형태로 직렬화됩니다 (v2.0.2 — `id` 신규). `type` 은 displayMappings PascalCase 영문(`"Once"`, `"Daily"`, `"Weekly"` 등), `description` 은 `processScheduleInfo` 영문 결과(`[Basic]` prefix 포함).
-> * `schedule` 동봉 여부와 `autoStart` 는 **독립적**입니다. `autoStart=use` 는 등록 직후 1회 즉시 실행을, `schedule` 은 이후 반복/예약 실행을 각각 제어합니다. 즉시 실행은 대상 서버가 비어 있을 때만 일어나며, 사용 중이면 생략되고 응답의 `common.autoStart` 가 `not use` 로 반환됩니다 (`schedule` 등록에는 영향이 없습니다).
+{% include zdm/schedule-object.md smart=false %}
+
+**복구 스케줄 정책**
+
+- 복구 작업은 `basic` 스케줄만 지원합니다. `mode` 는 `full` / `increment` 만 허용되며 `smart` 모드가 없습니다. Smart 스케줄(type 7~11)을 보내면 400 `JOB-ERROR-101` 로 거부됩니다. `advanced` 는 사용하지 않습니다.
+- `schedule` 을 생략하면 별도 예약 없이 등록되고, 응답에 `common.schedule` 이 포함되지 않습니다. `autoStart=use` 와 함께 쓰면 즉시 1회 실행됩니다. 다만 대상 서버에 진행 중인 복구가 있으면 등록만 되고 **자동 시작은 생략**됩니다 (위 "대상 서버가 사용 중일 때" 참고).
+- `schedule` 과 `autoStart` 는 독립적입니다. `autoStart=use` 는 등록 직후 1회 즉시 실행을, `schedule` 은 이후 반복/예약 실행을 제어합니다. 대상 서버가 사용 중이어서 자동 시작이 생략되어도 `schedule` 등록에는 영향이 없습니다.
+- 응답의 `common.schedule` 은 `schedule` 을 보냈을 때만 `{ basic: { id, type, description } }` 형태로 포함됩니다.
+- 숫자 ID 는 **복사 없이 그 스케줄을 참조**합니다. 작업의 스케줄 ID 가 입력한 ID 가 됩니다. 객체 안 `basic` 자리의 숫자는 그 내용을 복사해 새 스케줄로 저장하므로 응답의 ID 가 입력한 ID 와 다릅니다. 존재하지 않는 ID 는 404 `SCHEDULE-ERROR-01` 입니다. 지정한 스케줄이 요청 `center` 의 것이 아니면 403 `CENTER-ERROR-01`(`Schedule ID '<id>' does not belong to center <center>`)이며, `nCenterID = 0` 도 하나의 center 로 비교합니다. 객체 안 `basic` 자리의 숫자도 같은 center 검사를 받고, 행의 type 이 요청 `type` 과 다르면 400 `JOB-ERROR-108`(`Schedule ID '<id>' is type <n>, but the request type is <m>.`)입니다. 검사 순서는 존재(404) → center(403) → type(400)입니다.
 
 ---
 
-**1. schedule 미동봉 (즉시 1회 실행 또는 수동 시작)**
+**1. schedule type 3 (Daily)**
 
 요청 body:
 
@@ -399,180 +404,6 @@ curl -X POST "https://api.example.com/api/recoveries" \
     "id": 13
   },
   "mode": "full",
-  "jobName": "daily-recovery",
-  "autoStart": "use"
-}
-```
-
-성공 응답 (200 OK) — `common.schedule` 필드 자체가 응답에 포함되지 않음:
-
-```json
-{
-  "success": true,
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "data": {
-    "common": {
-      "state": "success",
-      "jobName": "daily-recovery",
-      "autoStart": "use",
-      "platform": "vmware",
-      "bootMode": "reboot"
-    },
-    "partitions": [ /* ... */ ],
-    "summary": { "total": 1, "successful": 1, "failed": 0 }
-  },
-  "message": "Recovery job registration completed",
-  "timestamp": "2025-01-15T10:30:00.000+09:00"
-}
-```
-
----
-
-**2. schedule type 0 (Once) — 일회성 예약 복구**
-
-요청 body:
-
-```json
-{
-  "center": "1",
-  "source": "source-server",
-  "target": "target-server",
-  "platform": "vmware",
-  "repository": {
-    "id": 13
-  },
-  "mode": "full",
-  "jobName": "once-recovery",
-  "schedule": {
-    "type": 0,
-    "basic": {
-      "year": "2026",
-      "month": "06",
-      "day": "01",
-      "time": "10:00"
-    }
-  }
-}
-```
-
-성공 응답 (200 OK) — `common.schedule.basic`:
-
-```json
-{
-  "common": {
-    "state": "success",
-    "jobName": "once-recovery",
-    "autoStart": "not use",
-    "platform": "vmware",
-    "bootMode": "reboot",
-    "schedule": {
-      "basic": {
-        "id": 5,
-        "type": "Once",
-        "description": "[Basic] Start working on 01/06/2026 10:00."
-      }
-    }
-  }
-}
-```
-
----
-
-**3. schedule type 1 (Every Minute)**
-
-요청 body:
-
-```json
-{
-  "center": "1",
-  "source": "source-server",
-  "target": "target-server",
-  "platform": "vmware",
-  "repository": {
-    "id": 13
-  },
-  "mode": "increment",
-  "schedule": {
-    "type": 1,
-    "basic": {
-      "time": "10:00",
-      "interval": {
-        "minute": "5"
-      }
-    }
-  }
-}
-```
-
-성공 응답 — `common.schedule.basic`:
-
-```json
-{
-  "basic": {
-    "id": 6,
-    "type": "Every Minute",
-    "description": "[Basic] Start working at 10:00 every 5 Minute."
-  }
-}
-```
-
----
-
-**4. schedule type 2 (Hourly)**
-
-요청 body:
-
-```json
-{
-  "center": "1",
-  "source": "source-server",
-  "target": "target-server",
-  "platform": "vmware",
-  "repository": {
-    "id": 13
-  },
-  "mode": "increment",
-  "schedule": {
-    "type": 2,
-    "basic": {
-      "time": "10:00",
-      "interval": {
-        "hour": "2"
-      }
-    }
-  }
-}
-```
-
-성공 응답 — `common.schedule.basic`:
-
-```json
-{
-  "basic": {
-    "id": 7,
-    "type": "Hourly",
-    "description": "[Basic] Start working at 10:00 every 2 Hour."
-  }
-}
-```
-
----
-
-**5. schedule type 3 (Daily) — 매일 동일 시간**
-
-요청 body:
-
-```json
-{
-  "center": "1",
-  "source": "source-server",
-  "target": "target-server",
-  "platform": "vmware",
-  "repository": {
-    "id": 13
-  },
-  "mode": "full",
-  "jobName": "daily-recovery",
   "schedule": {
     "type": 3,
     "basic": {
@@ -582,7 +413,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 }
 ```
 
-성공 응답 — `common.schedule.basic`:
+성공 응답 (200 OK) — `common.schedule.basic`:
 
 ```json
 {
@@ -594,102 +425,13 @@ curl -X POST "https://api.example.com/api/recoveries" \
 }
 ```
 
----
-
-**6. schedule type 4 (Weekly) — 특정 요일**
-
-요청 body — 요일은 `mon, tue, wed, thu, fri, sat, sun` 문자열의 콤마 구분 (basic 다중 선택 가능):
-
-```json
-{
-  "center": "1",
-  "source": "source-server",
-  "target": "target-server",
-  "platform": "vmware",
-  "repository": {
-    "id": 13
-  },
-  "mode": "full",
-  "schedule": {
-    "type": 4,
-    "basic": {
-      "day": "mon,wed,fri",
-      "time": "10:00"
-    }
-  }
-}
-```
-
-성공 응답 — `common.schedule.basic` (요일은 응답에서 풀네임으로 표기):
-
-```json
-{
-  "basic": {
-    "id": 9,
-    "type": "Weekly",
-    "description": "[Basic] Start working at 10:00 Monday, Wednesday, Friday every week."
-  }
-}
-```
+타입별 `basic` 구성(type 0~6)은 [스케줄 개요]({{ base_path }}/docs/schedule/overview#타입별-요청-예시-type-0--11)를 참조하세요.
 
 ---
 
-**7. schedule type 5 (Monthly — 특정 주차 + 요일)**
+**2. 스케줄 ID 지정 — 기존 스케줄을 참조**
 
-요청 body:
-
-```json
-{
-  "center": "1",
-  "source": "source-server",
-  "target": "target-server",
-  "platform": "vmware",
-  "repository": {
-    "id": 13
-  },
-  "mode": "full",
-  "schedule": {
-    "type": 5,
-    "basic": {
-      "week": "1,3",
-      "day": "mon",
-      "time": "10:00"
-    }
-  }
-}
-```
-
----
-
-**8. schedule type 6 (Monthly — 특정 날짜)**
-
-요청 body — `day` 는 `1 ~ 31` 숫자(콤마 구분으로 다중 허용):
-
-```json
-{
-  "center": "1",
-  "source": "source-server",
-  "target": "target-server",
-  "platform": "vmware",
-  "repository": {
-    "id": 13
-  },
-  "mode": "full",
-  "schedule": {
-    "type": 6,
-    "basic": {
-      "day": "1,15",
-      "time": "10:00"
-    }
-  }
-}
-```
-
----
-
-**9. schedule ID 참조 — 이미 등록된 스케줄 사용**
-
-요청 body — `schedule` 자리에 객체 대신 등록된 스케줄 ID(숫자)를 그대로 전달:
+요청 body — `schedule` 에 객체 대신 등록된 스케줄 ID 를 보냅니다:
 
 ```json
 {
@@ -705,70 +447,13 @@ curl -X POST "https://api.example.com/api/recoveries" \
 }
 ```
 
-> ID 참조 경로는 신규 스케줄을 생성하지 않고 해당 스케줄을 그대로 작업에 연결합니다. ID 가 존재하지 않으면 아래 거부 케이스 “4” 가 반환됩니다.
+신규 스케줄을 만들지 않고 ID `42` 의 스케줄을 작업에 연결합니다.
 
 ---
 
-**10. 부분 ID 참조 — `schedule.basic` 만 ID (`type` 필수 동봉)**
+**3. 거부 — Smart 스케줄 (type 7 ~ 11)**
 
-요청 body — `schedule.basic` 자리에 객체 대신 등록된 스케줄 ID(숫자)를 전달. `type` 은 그대로 함께 보냅니다(여기서는 Daily = `3` 예시. type 1 Every Minute 등 type 0~6 어디서나 동일하게 적용):
-
-```json
-{
-  "center": "1",
-  "source": "source-server",
-  "target": "target-server",
-  "platform": "vmware",
-  "repository": {
-    "id": 13
-  },
-  "mode": "full",
-  "schedule": {
-    "type": 3,
-    "basic": 15
-  }
-}
-```
-
-성공 응답 (200 OK) — 참조된 스케줄 ID(`15`)의 데이터를 그대로 읽어 **신규 schedule 레코드로 INSERT** 합니다. 응답 본문의 `common.schedule.basic` 형식은 일반 객체 입력 결과와 동일:
-
-```json
-{
-  "common": {
-    "state": "success",
-    "jobName": "daily-recovery",
-    "autoStart": "not use",
-    "platform": "vmware",
-    "bootMode": "reboot",
-    "schedule": {
-      "basic": {
-        "id": 16,
-        "type": "Daily",
-        "description": "[Basic] Start working at 10:00 every day."
-      }
-    }
-  }
-}
-```
-
-> **동작 안내 (부분 ID vs 전체 ID)**
-> - 부분 ID 동작도 전체 ID 와 동일하게 — 참조한 schedule 레코드의 데이터를 읽어 **새 schedule 레코드로 INSERT** 합니다. 즉, 작업에 연결되는 schedule ID 는 입력한 ID(`15`)와 다른 새 ID 입니다(전체 ID 경로 #9 만이 입력 ID 를 그대로 작업에 연결).
-> - `schedule.advanced` 는 사용하지 않음 — Recovery 는 smart 스케줄을 지원하지 않으므로 `advanced` 필드는 동봉하더라도 무시되며, type 7~11 동봉은 본 페이지 거부 케이스 “1” (`JOB-ERROR-101`) 로 차단됩니다.
-
-</details>
-
-<details markdown="1">
-<summary><strong>schedule 동봉 예시 — 거부 / 검증 실패</strong></summary>
-
-> 아래 케이스는 `schedule` 필드가 동봉되었을 때만 발생합니다. Recovery 도메인의 추가 검증 로직과 zod 본문 검증을 함께 다룹니다.
-
----
-
-**1. Smart schedule 거부 (type 7 ~ 11) — `JOB-ERROR-101` / 400 Bad Request**
-
-Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에도 Smart 스케줄(type 7 ~ 11)을 받아들이지 않습니다. type 7, 8, 9, 10, 11 모두 동일하게 거부됩니다.
-
-요청 body 예시 (type 7):
+복구는 `advanced` 동봉 여부와 무관하게 type 7~11 을 모두 거부합니다.
 
 ```json
 {
@@ -790,7 +475,7 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 }
 ```
 
-거부 응답 (400 Bad Request):
+응답 (400 Bad Request):
 
 ```json
 {
@@ -804,132 +489,9 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 }
 ```
 
-> 동일한 응답이 type 8, 9, 10, 11 모든 Smart 타입에 대해 반환됩니다. (Recovery 는 `advanced` 동봉 여부와 무관하게 type ≥ 7 자체를 거부)
-
 ---
 
-**2. `basic` 누락 — `DTO-VALIDATION-01` / 422 Unprocessable Entity**
-
-`schedule.basic` 은 모든 type 에서 필수입니다. 누락 시 zod 본문 검증 단계에서 거부됩니다.
-
-요청 body:
-
-```json
-{
-  "center": "1",
-  "source": "source-server",
-  "target": "target-server",
-  "platform": "vmware",
-  "repository": {
-    "id": 13
-  },
-  "mode": "full",
-  "schedule": {
-    "type": 3
-  }
-}
-```
-
-거부 응답 (422 Unprocessable Entity):
-
-```json
-{
-  "success": false,
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "error": {
-    "code": "DTO-VALIDATION-01",
-    "message": "Request body validation failed.",
-    "details": {
-      "schedule.basic": [
-        "basic/advanced must be a schedule object or an existing schedule ID (number)"
-      ]
-    }
-  },
-  "timestamp": "2025-01-15T10:30:00.000+09:00"
-}
-```
-
----
-
-**3. type별 basic 필수 필드 누락 — `DTO-VALIDATION-01` / 422 Unprocessable Entity**
-
-예시: type 3 (Daily) 에 `time` 미입력:
-
-```json
-{
-  "schedule": {
-    "type": 3,
-    "basic": {}
-  }
-}
-```
-
-거부 응답:
-
-```json
-{
-  "success": false,
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "error": {
-    "code": "DTO-VALIDATION-01",
-    "message": "Request body validation failed.",
-    "details": {
-      "schedule.basic": [
-        "basic schedule validation failed (type: 3): time: time is required"
-      ]
-    }
-  },
-  "timestamp": "2025-01-15T10:30:00.000+09:00"
-}
-```
-
-> 동일 패턴: type 0 → `year/month/day/time`, type 1 → `time, interval.minute`, type 2 → `time, interval.hour`, type 4 → `day, time`, type 5 → `week, day, time`, type 6 → `day, time` 필수.
-
----
-
-**4. 잘못된 type 범위 — `DTO-VALIDATION-01` / 422 Unprocessable Entity**
-
-`type` 은 정수 0 ~ 11 만 허용. 12 이상이거나 음수인 경우:
-
-요청 body:
-
-```json
-{
-  "schedule": {
-    "type": 12,
-    "basic": {
-      "time": "10:00"
-    }
-  }
-}
-```
-
-거부 응답:
-
-```json
-{
-  "success": false,
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "error": {
-    "code": "DTO-VALIDATION-01",
-    "message": "Request body validation failed.",
-    "details": {
-      "schedule.type": [
-        "invalid schedule type (must be 0 ~ 11)"
-      ]
-    }
-  },
-  "timestamp": "2025-01-15T10:30:00.000+09:00"
-}
-```
-
-> Recovery 도메인은 추가로 type ≥ 7 인 경우 `JOB-ERROR-101` (400) 으로 거부합니다 (위 케이스 1). zod 단계에서 12 이상이거나 음수인 경우 먼저 422 로 차단됩니다.
-
----
-
-**5. 존재하지 않는 schedule ID 참조 — `JOB-ERROR-100` / 404 Not Found**
-
-요청 body:
+**4. 거부 — 존재하지 않는 스케줄 ID (`SCHEDULE-ERROR-01` / 404 Not Found)**
 
 ```json
 {
@@ -945,83 +507,7 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
 }
 ```
 
-거부 응답 (404 Not Found):
-
-```json
-{
-  "success": false,
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "error": {
-    "code": "JOB-ERROR-100",
-    "message": "Schedule ID '99999' not found"
-  },
-  "timestamp": "2025-01-15T10:30:00.000+09:00"
-}
-```
-
----
-
-**6. Center NOT_FOUND — `ZDM-ERROR-01` / 404 Not Found**
-
-요청 body 의 `center` 가 존재하지 않는 ID/Name 인 경우 (스케줄 검증 이전 단계에서 차단):
-
-```json
-{
-  "center": "999",
-  "source": "source-server",
-  "target": "target-server",
-  "platform": "vmware",
-  "repository": {
-    "id": 13
-  },
-  "mode": "full",
-  "schedule": {
-    "type": 3,
-    "basic": {
-      "time": "10:00"
-    }
-  }
-}
-```
-
-거부 응답:
-
-```json
-{
-  "success": false,
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "error": {
-    "code": "ZDM-ERROR-01",
-    "message": "Zdm with ID '999' not found"
-  },
-  "timestamp": "2025-01-15T10:30:00.000+09:00"
-}
-```
-
----
-
-**7. 부분 ID 미존재 — `schedule.basic` 으로 전달된 ID 가 존재하지 않음 — `SCHEDULE-ERROR-01` / 404 Not Found**
-
-요청 body:
-
-```json
-{
-  "center": "1",
-  "source": "source-server",
-  "target": "target-server",
-  "platform": "vmware",
-  "repository": {
-    "id": 13
-  },
-  "mode": "full",
-  "schedule": {
-    "type": 3,
-    "basic": 999
-  }
-}
-```
-
-거부 응답 (404 Not Found):
+응답 (404 Not Found):
 
 ```json
 {
@@ -1029,32 +515,31 @@ Recovery 는 `mode` 가 `full` / `increment` 만 허용되며, 어떤 경우에�
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "SCHEDULE-ERROR-01",
-    "message": "Schedule ID '999' not found."
+    "message": "Schedule ID '99999' not found"
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }
 ```
 
-> 부분 ID 경로(`schedule.basic` = number)와 전체 ID 경로(`schedule` = number)는 코드 상 다른 함수에서 not-found 를 발생시키므로 **에러 코드가 다릅니다**:
-> - 전체 ID(케이스 5): `JOB-ERROR-100` / `"Schedule ID '99999' not found"`
-> - 부분 ID(본 케이스): `SCHEDULE-ERROR-01` / `"Schedule ID '999' not found."` (문장 끝 마침표는 의도된 차이로 오타가 아닙니다)
->
-> 둘 다 HTTP 404 입니다.
+숫자를 `basic` 자리에 넣은 경우(`{ "type": 3, "basic": 999 }`)도 같은 코드이며 메시지 끝에 마침표가 붙습니다(`Schedule ID '999' not found.`).
 
 ---
 
-**참고: schedule 동봉 시 주요 에러 코드**
+**schedule 동봉 시 주요 에러 코드**
 
 | code | HTTP | 발생 조건 |
 |------|------|-----------|
 | `DTO-VALIDATION-01` | 422 | `schedule.type` 범위 위반, `schedule.basic` 누락, type별 필수 필드 누락 |
-| `JOB-ERROR-100` | 404 | `schedule` (전체) 자리에 전달한 ID 가 존재하지 않음 |
-| `JOB-ERROR-101` | 400 | Recovery 에 Smart 스케줄(type 7 ~ 11) 동봉됨 |
-| `SCHEDULE-ERROR-01` | 404 | `schedule.basic` 으로 전달한 ID 가 존재하지 않음 (부분 ID 참조 경로) |
+| `JOB-ERROR-101` | 400 | 복구에 Smart 스케줄(type 7 ~ 11) 동봉됨 |
+| `JOB-ERROR-108` | 400 | 객체 안 `basic` 자리의 숫자 ID 행 type 이 요청 `type` 과 다름 |
+| `SCHEDULE-ERROR-01` | 404 | 전달한 스케줄 ID 가 존재하지 않음 |
+| `CENTER-ERROR-01` | 403 | 전달한 스케줄 ID 가 요청 `center` 의 스케줄이 아님 |
 | `SCHEDULE-ERROR-16` | 400 | `time` 형식 오류 (`HH:mm` 아님) |
 | `SCHEDULE-ERROR-19` | 400 | type 6 의 `day` 가 `1 ~ 31` 범위 밖 |
 | `SCHEDULE-ERROR-22` | 422 | type 4/5 의 `day` 값이 `mon ~ sun` 외 |
 | `ZDM-ERROR-01` | 404 | `center` 미존재 |
+
+요청 형식 오류와 스케줄 값 오류의 요청·응답 예시는 [스케줄 개요]({{ base_path }}/docs/schedule/overview#검증-실패-응답-예시)를 참조하세요.
 
 </details>
 

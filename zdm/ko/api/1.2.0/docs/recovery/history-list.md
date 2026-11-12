@@ -67,8 +67,8 @@ curl -X GET "https://api.example.com/api/recoveries/histories?page=1&limit=10" \
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 > **참고:**
-> - `serverType`이 `target`(기본값)이면 `server`는 복구 대상 서버(`sRecoverySystemName`)를, `source`이면 소스 서버(`sSystemName`)를 기준으로 필터링합니다.
-> - `partition` 파라미터는 콤마 구분된 `sRecoverDrive` 필드에서 개별 항목을 정확히 매칭합니다.
+> - `serverType`이 `target`(기본값)이면 `server`는 복구 대상 서버 이름을, `source`이면 소스 서버 이름을 기준으로 필터링합니다.
+> - `partition` 파라미터는 콤마 구분된 복구 드라이브(파티션) 값에서 개별 항목을 정확히 매칭합니다.
 > - `partition` + `server` 사용 시, 해당 서버가 Windows이면 `:` 누락 시 자동으로 추가됩니다. (예: `C` → `C:`)
 
 </details>

@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 새로운 백업 작업을 등록합니다.
 
@@ -79,7 +80,7 @@ curl -X POST "https://api.example.com/api/backups" \
 | `repository.path` | string | Optional | 레포지토리 경로 | - |
 | `jobName` | string | Optional | 작업 이름 | - |
 | `user` | string \| number | Optional | 사용자 ID (숫자) 또는 이메일 | - |
-| `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
+| `schedule` | object \| number | Optional | 스케줄 객체 또는 스케줄 ID. `smart` 모드는 필수입니다. [스케줄 개요]({{ base_path }}/docs/schedule/overview) 참조 | - |
 | `rotation` | number | Optional | 작업 반복 횟수 (1~30, 기본값 `1`) | - |
 | `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
 | `encryption` | string | Optional | 암호화 사용 여부 | {% include zdm/use-options.md %} |
@@ -107,7 +108,7 @@ curl -X POST "https://api.example.com/api/backups" \
 | `type` | string | Optional | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
 | `repository` | object | Optional | 레포지토리 정보 | - |
 | `jobName` | string | Optional | 작업 이름. 명시적으로 지정 시 파티션 suffix 없이 그대로 사용. 미지정 시 자동 생성 | - |
-| `schedule` | object/number | Optional | 스케줄 객체 또는 스케줄 ID | - |
+| `schedule` | object \| number | Optional | 스케줄 객체 또는 스케줄 ID. `smart` 모드는 필수입니다. [스케줄 개요]({{ base_path }}/docs/schedule/overview) 참조 | - |
 | `rotation` | number | Optional | 작업 반복 횟수 (1~30) | - |
 | `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
 | `encryption` | string | Optional | 암호화 사용 여부 | {% include zdm/use-options.md %} |
@@ -154,27 +155,11 @@ curl -X POST "https://api.example.com/api/backups" \
 <details markdown="1">
 <summary><strong>schedule 객체 구조</strong></summary>
 
-> 기존 스케줄 ID(숫자)를 사용하거나, 새 스케줄 객체를 생성할 수 있습니다.
-> 스케줄 타입별 상세 구조는 [POST /schedules](../schedule/regist)를 참고하세요.
+{% include zdm/schedule-object.md %}
 
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|------|------|
-| `type` | number | Required | 스케줄 타입 (0~11) |
-| `basic` | object/number | Required | 기본 스케줄 구조 또는 기존 스케줄 ID |
-| `advanced` | object/number | Optional | 고급 스케줄 구조 (Smart 스케줄 type 7~11) |
-
-**스케줄 타입별 basic/advanced 구조:**
-
-| Type | 이름 | 구조 |
-|------|------|------|
-| 0 | once | `{ year, month, day, time }` |
-| 1 | every minute | `{ time, interval: { minute } }` |
-| 2 | hourly | `{ time, interval: { hour } }` |
-| 3 | daily | `{ time }` |
-| 4 | weekly | `{ day, time }` |
-| 5 | monthly on specific week | `{ week, day, time }` |
-| 6 | monthly on specific day | `{ day, time }` |
-| 7~11 | smart schedules | basic + advanced 모두 필요 |
+- Smart 모드(`type: "smart"`)는 `schedule` 이 필수이고 `schedule.type` 은 `7`~`11` 이어야 합니다.
+- 숫자 ID 를 넣으면 그 스케줄을 **복사**해 새 스케줄로 연결합니다. 최상위 숫자 하나는 Full·Increment 작업(basic)용이며, Smart 스케줄은 `{ "type": 7, "basic": <ID>, "advanced": <ID> }` 형식으로 지정합니다. 도메인별 처리는 [숫자 ID 로 지정할 때 도메인별 처리]({{ base_path }}/docs/schedule/overview#숫자-id-로-지정할-때-도메인별-처리)를 참조하세요.
+- `schedule` 을 생략하면 응답에 `schedule` 필드가 포함되지 않습니다.
 
 </details>
 
@@ -317,65 +302,28 @@ curl -X POST "https://api.example.com/api/backups" \
 > 들어올 수 있어, 이름 확정과 INSERT 를 하나의 임계 구역에서 처리합니다.
 > 같은 이름을 **동시에** 등록하려는 요청이 겹치면 뒤의 요청이 이 오류를 받습니다 — 재시도하면 됩니다.
 
-</details>
-
-<details markdown="1">
-<summary><strong>schedule 동봉 등록 예시 (Type별 정상 케이스)</strong></summary>
-
-> 본 블록의 응답 예시는 실제 코드 기준입니다. 성공 응답은 HTTP **200 OK**이며, `jobMode` 문자열은 `Full Backup` / `Increment Backup` / `Smart Backup` 중 하나로 직렬화됩니다.
-> 본 블록의 모든 예시는 `partition: ["/"]` 단일 파티션 가정 (전체 응답 구조는 위의 응답 예시 블록 참고).
-
-#### 1. schedule 없음 — 즉시 1회 실행 (`autoStart: "use"`)
+**센터를 찾을 수 없음 (404 Not Found)**
 
 ```json
 {
-  "center": "1",
-  "server": "server-01",
-  "type": "full",
-  "partition": ["/"],
-  "repository": { "id": 5 },
-  "autoStart": "use"
-}
-```
-
-```bash
-curl -X POST "https://api.example.com/api/backups" \
-  -H "Authorization: Bearer <token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "center": "1",
-    "server": "server-01",
-    "type": "full",
-    "partition": ["/"],
-    "repository": { "id": 5 },
-    "autoStart": "use"
-  }'
-```
-
-**응답 (200 OK)** — schedule 필드 자체가 응답에서 누락됩니다.
-
-```json
-{
+  "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "message": "Backup job registration completed",
-  "success": true,
-  "data": {
-    "summary": { "total": 1, "successful": 1, "failed": 0 },
-    "results": [
-      {
-        "state": "success",
-        "jobName": "server-01_ROOT_Backup_1",
-        "partition": "/",
-        "jobMode": "Full Backup",
-        "autoStart": "use"
-      }
-    ]
+  "error": {
+    "code": "JOB-ERROR-03",
+    "message": "Center '999' not found."
   },
   "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
-#### 2. basic — Daily (`type: 3`)
+</details>
+
+<details markdown="1">
+<summary><strong>schedule 동봉 등록 예시</strong></summary>
+
+> 성공 응답은 HTTP **200 OK** 입니다. 모든 예시는 `partition: ["/"]` 단일 파티션이며, 전체 응답 구조는 위의 응답 예시를 참조하세요. 타입별 `basic`/`advanced` 구성은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참조하세요.
+
+#### 1. basic — Daily (`type: 3`)
 
 ```json
 {
@@ -391,119 +339,19 @@ curl -X POST "https://api.example.com/api/backups" \
 }
 ```
 
-**응답 (200 OK)**
-
-```json
-{
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "message": "Backup job registration completed",
-  "success": true,
-  "data": {
-    "summary": { "total": 1, "successful": 1, "failed": 0 },
-    "results": [
-      {
-        "state": "success",
-        "jobName": "server-01_ROOT_Backup_1",
-        "partition": "/",
-        "jobMode": "Full Backup",
-        "autoStart": "not use",
-        "schedule": {
-          "basic": {
-            "id": 10,
-            "type": "Daily",
-            "description": "[Basic] Start working at 02:00 every day."
-          }
-        }
-      }
-    ]
-  },
-  "timestamp": "2026-05-19T10:30:00.000+09:00"
-}
-```
-
-#### 3. basic — Weekly (`type: 4`) — `increment` 모드
-
-```json
-{
-  "center": "1",
-  "server": "server-01",
-  "type": "increment",
-  "partition": ["/"],
-  "repository": { "id": 5 },
-  "schedule": {
-    "type": 4,
-    "basic": {
-      "day": "mon,wed,fri",
-      "time": "01:30"
-    }
-  }
-}
-```
-
-**응답 (200 OK)**
-
-```json
-{
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "message": "Backup job registration completed",
-  "success": true,
-  "data": {
-    "summary": { "total": 1, "successful": 1, "failed": 0 },
-    "results": [
-      {
-        "state": "success",
-        "jobName": "server-01_ROOT_Backup_1",
-        "partition": "/",
-        "jobMode": "Increment Backup",
-        "autoStart": "not use",
-        "schedule": {
-          "basic": {
-            "id": 11,
-            "type": "Weekly",
-            "description": "[Basic] Start working at 01:30 Monday, Wednesday, Friday every week."
-          }
-        }
-      }
-    ]
-  },
-  "timestamp": "2026-05-19T10:30:00.000+09:00"
-}
-```
-
-> 요청은 짧은 요일 표기(`mon,wed,fri`)를 사용하지만 응답 description은 풀네임(`Monday, Wednesday, Friday`)으로 변환됩니다.
-
-#### 4. basic — Monthly on Specific Date (`type: 6`)
-
-```json
-{
-  "center": "1",
-  "server": "server-01",
-  "type": "full",
-  "partition": ["/"],
-  "repository": { "id": 5 },
-  "schedule": {
-    "type": 6,
-    "basic": {
-      "day": "1,15",
-      "time": "12:00"
-    }
-  }
-}
-```
-
-**응답 schedule 부분**
+응답 `schedule` 부분:
 
 ```json
 "schedule": {
   "basic": {
-    "id": 12,
-    "type": "Monthly on Specific Date",
-    "description": "[Basic] Start working at 12:00 1, 15 every month."
+    "id": 10,
+    "type": "Daily",
+    "description": "[Basic] Start working at 02:00 every day."
   }
 }
 ```
 
-#### 5. Smart Weekly (`type: 7`) — `smart` 모드 + basic/advanced 동봉
+#### 2. Smart Weekly (`type: 7`) — `smart` 모드 + basic/advanced
 
 ```json
 {
@@ -526,9 +374,9 @@ curl -X POST "https://api.example.com/api/backups" \
 }
 ```
 
-> Smart 모드는 `schedule` 필드 자체가 필수입니다. `basic.day`는 **단일 요일만 허용**되며 `advanced.day`는 다중 요일 허용.
+`basic.day` 는 단일 요일만 허용하고 `advanced.day` 는 복수 요일을 허용합니다.
 
-**응답 schedule 부분**
+응답 `schedule` 부분:
 
 ```json
 "schedule": {
@@ -545,51 +393,7 @@ curl -X POST "https://api.example.com/api/backups" \
 }
 ```
 
-#### 6. Smart Custom — Specific Month and Date (`type: 11`)
-
-```json
-{
-  "center": "1",
-  "server": "server-01",
-  "type": "smart",
-  "partition": ["/"],
-  "repository": { "id": 5 },
-  "schedule": {
-    "type": 11,
-    "basic": {
-      "month": "3",
-      "day": "1",
-      "time": "03:00"
-    },
-    "advanced": {
-      "month": "6,9,12",
-      "day": "15,30",
-      "time": "04:00"
-    }
-  }
-}
-```
-
-> Smart Custom 11 타입은 가장 복잡한 형태입니다. `basic`은 `month`/`day` 모두 **단일 값**, `advanced`는 다중 값 가능. 월·일 조합(예: 2월 30일 같은 비현실적 일자)에 대한 별도 검증 로직은 없으며 각 값은 1~12 / 1~31 범위면 모두 허용됩니다.
-
-**응답 schedule 부분** — basic은 count==1 분기, advanced는 count>1 분기로 description이 다릅니다.
-
-```json
-"schedule": {
-  "basic": {
-    "id": 15,
-    "type": "Smart Custom (Specific Month and Date)",
-    "description": "[Basic] Start working on March 1 at 03:00"
-  },
-  "advanced": {
-    "id": 16,
-    "type": "Smart Custom (Specific Month and Date)",
-    "description": "[Advanced] Start working at 04:00 on the 15, 30 of June, September, December"
-  }
-}
-```
-
-#### 7. schedule ID 참조 (number)
+#### 3. 스케줄 ID 지정 (number)
 
 ```json
 {
@@ -602,9 +406,7 @@ curl -X POST "https://api.example.com/api/backups" \
 }
 ```
 
-> ID 참조 경로는 해당 ID의 기존 스케줄 데이터를 **읽어와 새 schedule 레코드로 INSERT**합니다. 즉, 응답에 노출되는 schedule은 입력 ID와 다른 새로운 ID를 가지며, `advanced` 필드는 채워지지 않습니다 (basic만 복사).
-
-**응답 schedule 부분**
+ID `42` 의 스케줄을 복사해 새 스케줄로 저장하므로 응답의 ID 는 입력한 ID 와 다릅니다. `advanced` 는 채워지지 않습니다.
 
 ```json
 "schedule": {
@@ -616,57 +418,7 @@ curl -X POST "https://api.example.com/api/backups" \
 }
 ```
 
-#### 8. 부분 ID 참조 — basic만 ID (`type: 1` Once)
-
-inline 객체의 `basic` 또는 `advanced` 자리에 number를 넣으면 해당 ID의 schedule 레코드를 읽어 **새 schedule 레코드로 INSERT**합니다 (전체 ID 참조와 동일한 새 INSERT 동작).
-
-```json
-{
-  "center": "1",
-  "server": "server-01",
-  "type": "full",
-  "partition": ["/"],
-  "repository": { "id": 5 },
-  "schedule": {
-    "type": 1,
-    "basic": 15
-  }
-}
-```
-
-**응답 (200 OK)**
-
-```json
-{
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "message": "Backup job registration completed",
-  "success": true,
-  "data": {
-    "summary": { "total": 1, "successful": 1, "failed": 0 },
-    "results": [
-      {
-        "state": "success",
-        "jobName": "server-01_ROOT_Backup_1",
-        "partition": "/",
-        "jobMode": "Full Backup",
-        "autoStart": "not use",
-        "schedule": {
-          "basic": {
-            "id": 18,
-            "type": "Once",
-            "description": "[Basic] Start working on 2026-06-01 at 02:00"
-          }
-        }
-      }
-    ]
-  },
-  "timestamp": "2026-05-19T10:30:00.000+09:00"
-}
-```
-
-#### 9. 부분 ID 참조 — smart에서 basic/advanced 모두 ID (`type: 7` Smart Weekly)
-
-`smart` 모드에서도 `basic`과 `advanced` 양쪽에 각각 다른 schedule ID를 지정할 수 있습니다. 단, 참조되는 schedule 레코드는 ID 15가 단일 선택 패턴(basic 용), ID 16이 다중 선택 패턴(advanced 용)이어야 합니다 (자세한 제약은 동작 안내 참고).
+#### 4. Smart 스케줄을 ID 로 지정 (`type: 7`, `basic` 과 `advanced` 모두 ID)
 
 ```json
 {
@@ -683,7 +435,7 @@ inline 객체의 `basic` 또는 `advanced` 자리에 number를 넣으면 해당 
 }
 ```
 
-**응답 schedule 부분**
+ID `15` 는 단일 선택 스케줄(basic 용), ID `16` 은 복수 선택 스케줄(advanced 용)이어야 합니다. `basic` 과 `advanced` 중 한쪽만 ID 로 지정하고 다른 쪽은 객체로 보내는 조합도 가능합니다.
 
 ```json
 "schedule": {
@@ -700,53 +452,14 @@ inline 객체의 `basic` 또는 `advanced` 자리에 number를 넣으면 해당 
 }
 ```
 
-#### 10. 부분 ID 참조 — smart에서 basic은 inline 객체 + advanced만 ID (`type: 7`)
-
-inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 쓸 수 있습니다.
-
-```json
-{
-  "center": "1",
-  "server": "server-01",
-  "type": "smart",
-  "partition": ["/"],
-  "repository": { "id": 5 },
-  "schedule": {
-    "type": 7,
-    "basic": {
-      "day": "mon",
-      "time": "02:00"
-    },
-    "advanced": 16
-  }
-}
-```
-
-**응답 schedule 부분**
-
-```json
-"schedule": {
-  "basic": {
-    "id": 21,
-    "type": "Smart Weekly (Specific Day of the Week)",
-    "description": "[Basic] Start working every Monday at 02:00"
-  },
-  "advanced": {
-    "id": 22,
-    "type": "Smart Weekly (Specific Day of the Week)",
-    "description": "[Advanced] Start working every Tuesday, Wednesday, Thursday, Friday at 12:00"
-  }
-}
-```
-
 </details>
 
 <details markdown="1">
 <summary><strong>schedule 동봉 검증 실패 예시</strong></summary>
 
-> 모든 예시는 실제 코드의 errorCode/HTTP/메시지에 정합합니다. `error.message` 는 모두 영문이며, customMessage 가 지정되지 않은 경로는 errorCode 의 default message 가 그대로 노출됩니다.
+> 요청 형식 오류(`DTO-VALIDATION-01`)와 스케줄 값 오류(`SCHEDULE-ERROR-*`)는 [스케줄 개요]({{ base_path }}/docs/schedule/overview#검증-실패-응답-예시)를 참조하세요. 아래는 백업 등록에서만 발생하는 오류입니다. HTTP 상태는 5번만 404 이고 나머지는 400 입니다. `error.message` 는 영문입니다.
 
-#### 1. smart 모드인데 `schedule` 누락 (400 / `JOB-ERROR-107`)
+#### 1. smart 모드인데 `schedule` 누락 (`JOB-ERROR-107`)
 
 요청:
 
@@ -774,9 +487,9 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 }
 ```
 
-#### 2. smart 모드 + scheduleType < 7 (400 / `JOB-ERROR-102`)
+#### 2. smart 모드에 일반 스케줄(type 0~6) 동봉 (`JOB-ERROR-102`)
 
-요청 — smart 모드에 일반 Daily(type 3) 스케줄을 동봉:
+요청:
 
 ```json
 {
@@ -792,7 +505,7 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 }
 ```
 
-응답 — `resolveForRegist`의 mode-type 매칭 검증에서 default message 노출:
+응답:
 
 ```json
 {
@@ -806,39 +519,9 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 }
 ```
 
-#### 3. smart 모드 + scheduleType ≥ 7 + `advanced` 누락 (400 / `JOB-ERROR-102`)
+`advanced` 가 없는 Smart 스케줄(type 7~11)도 같은 코드 `JOB-ERROR-102` 로 거부됩니다. 이 경우 메시지는 `Smart job mode requires both a basic and an advanced schedule.` 입니다.
 
-요청:
-
-```json
-{
-  "center": "1",
-  "server": "server-01",
-  "type": "smart",
-  "partition": ["/"],
-  "repository": { "id": 5 },
-  "schedule": {
-    "type": 7,
-    "basic": { "day": "mon", "time": "10:00" }
-  }
-}
-```
-
-응답 — `validateJobScheduleCompatibility`의 ProcessedSmart 가드에서 customMessage 노출:
-
-```json
-{
-  "success": false,
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "error": {
-    "code": "JOB-ERROR-102",
-    "message": "Smart job mode requires both a basic and an advanced schedule."
-  },
-  "timestamp": "2026-05-19T10:30:00.000+09:00"
-}
-```
-
-#### 4. full/increment 모드인데 Smart type(7~11) 스케줄 동봉 (400 / `JOB-ERROR-101`)
+#### 3. full/increment 모드에 Smart 스케줄(type 7~11) 동봉 (`JOB-ERROR-101`)
 
 요청:
 
@@ -856,7 +539,7 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 }
 ```
 
-응답 — `resolveForRegist`의 backupMode-scheduleType 매칭 검증:
+응답:
 
 ```json
 {
@@ -870,42 +553,7 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
 }
 ```
 
-#### 5. schedule.type 범위 위반 (422 / `DTO-VALIDATION-01`)
-
-요청:
-
-```json
-{
-  "center": "1",
-  "server": "server-01",
-  "type": "full",
-  "partition": ["/"],
-  "repository": { "id": 5 },
-  "schedule": {
-    "type": 100,
-    "basic": { "time": "02:00" }
-  }
-}
-```
-
-응답:
-
-```json
-{
-  "success": false,
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "error": {
-    "code": "DTO-VALIDATION-01",
-    "message": "Request body validation failed.",
-    "details": {
-      "schedule.type": ["invalid schedule type (must be 0 ~ 11)"]
-    }
-  },
-  "timestamp": "2026-05-19T10:30:00.000+09:00"
-}
-```
-
-#### 6. type 7 + `basic.time` 누락 (422 / `DTO-VALIDATION-01`)
+#### 4. Smart 스케줄 ID 를 맞지 않는 자리에 지정 (`JOB-ERROR-108`)
 
 요청:
 
@@ -918,30 +566,29 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
   "repository": { "id": 5 },
   "schedule": {
     "type": 7,
-    "basic": { "day": "mon" },
-    "advanced": { "day": "tue,wed", "time": "12:00" }
+    "basic": 16,
+    "advanced": 16
   }
 }
 ```
 
-응답 — superRefine이 type별 schema로 재검증한 결과를 합쳐 단일 issue로 출력:
+응답:
 
 ```json
 {
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "DTO-VALIDATION-01",
-    "message": "Request body validation failed.",
-    "details": {
-      "schedule.basic": ["basic schedule validation failed (type: 7): time: time is required"]
-    }
+    "code": "JOB-ERROR-108",
+    "message": "Schedule ID '16' cannot be used as basic schedule. This schedule is for advanced use."
   },
   "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
 
-#### 7. schedule ID 참조인데 해당 ID 미존재 (404 / `JOB-ERROR-100`)
+복수 선택 스케줄(ID `16`)은 `advanced` 자리에만 쓸 수 있고, 단일 선택 스케줄은 `basic` 자리에만 쓸 수 있습니다.
+
+#### 5. 존재하지 않는 스케줄 ID (404, `SCHEDULE-ERROR-01`)
 
 요청:
 
@@ -963,75 +610,14 @@ inline 객체와 ID 참조는 `basic`/`advanced` 각각 독립적으로 섞어 �
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "JOB-ERROR-100",
-    "message": "Schedule ID '999' not found"
-  },
-  "timestamp": "2026-05-19T10:30:00.000+09:00"
-}
-```
-
-#### 8. Center NOT_FOUND (404 / `JOB-ERROR-03`)
-
-요청:
-
-```json
-{
-  "center": "999",
-  "server": "server-01",
-  "type": "full",
-  "partition": ["/"],
-  "repository": { "id": 5 }
-}
-```
-
-응답 — backup 도메인의 `getCenterInfo` 경로 (schedule 도메인의 `ZDM-ERROR-01`과 다른 코드):
-
-```json
-{
-  "success": false,
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "error": {
-    "code": "JOB-ERROR-03",
-    "message": "Center '999' not found."
-  },
-  "timestamp": "2026-05-19T10:30:00.000+09:00"
-}
-```
-
-#### 9. 부분 ID 참조인데 해당 ID 미존재 (404 / `SCHEDULE-ERROR-01`)
-
-inline 객체의 `basic` 또는 `advanced`에 number를 넣었으나 해당 ID의 schedule 레코드가 없을 때 발생. **errorCode 자체는 전체 ID 미존재(#7, `JOB-ERROR-100`)와 다른 `SCHEDULE-ERROR-01`** (부분 ID 경로의 NOT_FOUND가 schedule 도메인 NOT_FOUND로 throw되기 때문). HTTP 상태와 메시지 골격은 동일.
-
-요청:
-
-```json
-{
-  "center": "1",
-  "server": "server-01",
-  "type": "smart",
-  "partition": ["/"],
-  "repository": { "id": 5 },
-  "schedule": {
-    "type": 7,
-    "basic": { "day": "mon", "time": "10:00" },
-    "advanced": 999
-  }
-}
-```
-
-응답:
-
-```json
-{
-  "success": false,
-  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
-  "error": {
     "code": "SCHEDULE-ERROR-01",
     "message": "Schedule ID '999' not found."
   },
   "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
 ```
+
+`schedule` 자리의 숫자와 `basic`/`advanced` 자리의 숫자 모두 같은 코드로 응답합니다.
 
 </details>
 
@@ -1040,41 +626,38 @@ inline 객체의 `basic` 또는 `advanced`에 number를 넣었으나 해당 ID�
 
 #### 1. smart 모드의 schedule 필수 정책
 
-- `type: "smart"` 등록 요청은 `schedule` 필드가 **항상 필수**입니다. 누락 시 즉시 400 (`JOB-ERROR-107`) 반환.
-- smart 모드의 `schedule.type`은 반드시 7~11 범위 (Smart Weekly ~ Smart Custom).
-- smart 모드의 `schedule`은 **basic + advanced 모두 필수**.
+- `type: "smart"` 등록 요청은 `schedule` 이 항상 필수입니다. 누락 시 400 (`JOB-ERROR-107`).
+- `schedule.type` 은 `7`~`11`, `basic` 과 `advanced` 모두 필요합니다.
+- Smart 스케줄을 ID 로 지정하려면 객체 형식 `{ "type": 7, "basic": <ID>, "advanced": <ID> }` 을 사용합니다.
 
-#### 2. mode ↔ schedule type 정합성 (regist에는 자동 전환이 없음)
+#### 2. 작업 모드와 스케줄 type 의 정합
 
-regist 단계에서는 mode와 schedule type이 정합하지 않으면 즉시 400을 반환합니다. **mode-schedule 교차 변경 자동 전환은 update 전용**으로, regist에서는 동작하지 않습니다.
+등록 요청에서는 작업 모드와 스케줄 type 이 맞지 않으면 400 으로 거부합니다. 모드에 맞춰 자동으로 바꾸는 동작은 [수정 API]({{ base_path }}/docs/backup/update)에만 있습니다.
 
-| 요청 mode | 허용 schedule type | 위반 시 errorCode |
-|----------|------------------|------------------|
-| `full` / `increment` | 0 ~ 6 | `JOB-ERROR-101` (HTTP 400) |
-| `smart` | 7 ~ 11 | `JOB-ERROR-102` (HTTP 400) |
-| `smart` (advanced 누락) | — | `JOB-ERROR-102` (HTTP 400) |
-| `smart` (schedule 자체 누락) | — | `JOB-ERROR-107` (HTTP 400) |
+| 요청 모드 | 허용 schedule type | 위반 시 |
+|----------|------------------|---------|
+| `full` / `increment` | 0 ~ 6 | `JOB-ERROR-101` (400) |
+| `smart` | 7 ~ 11 | `JOB-ERROR-102` (400) |
+| `smart` (basic 또는 advanced 누락) | - | `JOB-ERROR-102` (400, 종전 500) |
+| `smart` + 최상위 숫자 ID | - | `JOB-ERROR-102` (400) |
+| `smart` (schedule 자체 누락) | - | `JOB-ERROR-107` (400) |
 
-#### 3. inline schedule 객체 vs schedule ID(number) 우선순위
+#### 3. 스케줄 객체와 스케줄 ID
 
-- 두 형식은 같은 `schedule` 필드 위에 **union**으로 정의되어 있어 상호 배타입니다. 형태(object 또는 number)에 따라 zod가 자동으로 한쪽을 선택합니다.
-- **schedule ID(number) 경로의 특수 동작**: 참조된 schedule 레코드의 데이터를 읽어 **새 schedule 레코드로 INSERT**합니다. 즉, 응답에 노출되는 schedule은 입력 ID와 다른 새 ID를 가지며 `advanced`는 항상 빈 상태입니다. 기존 schedule을 그대로 재사용하는 동작이 아닙니다.
-- **부분 ID 참조도 동일하게 새 INSERT 동작**: inline 객체 내부의 `basic` 또는 `advanced` 자리에 number를 넣어도, 참조된 schedule 레코드의 데이터를 읽어 **새 schedule 레코드로 INSERT**합니다. 응답에 노출되는 schedule ID는 입력 ID와 다른 새 ID입니다.
-- **부분 ID + inline 객체 혼합 허용**: `basic`만 ID + `advanced` 객체, `basic` 객체 + `advanced`만 ID, 양쪽 모두 ID — 세 조합 모두 동작합니다. (예시: 정상 케이스 #8 / #9 / #10)
-- **부분 ID 미존재 시**: HTTP 404로 응답하되 errorCode는 `SCHEDULE-ERROR-01` (전체 ID 미존재의 `JOB-ERROR-100`과 코드 자체는 다름 — 검증 실패 #9 참고). HTTP 상태와 메시지 골격(`Schedule ID '...' not found.`)은 동일.
-- **smart 타입 부분 ID의 모드 일치 제약**: smart 타입(7~11) schedule을 부분 ID로 참조할 경우, 참조되는 schedule 레코드의 저장 패턴(`day`/`week`/`month`/`date`의 비트 개수)에 따라 사용 자리가 결정됩니다. **단일 선택(count==1) 패턴은 `basic` 자리에만**, **다중 선택(count>1) 패턴은 `advanced` 자리에만** 사용 가능합니다. 위반 시 400 (`JOB-ERROR-108`).
+- `schedule` 에는 객체 또는 숫자 중 하나를 보냅니다.
+- 숫자 ID 는 그 스케줄의 내용을 **복사해 새 스케줄로 저장**합니다. 응답의 스케줄 ID 는 입력한 ID 와 다르며 `advanced` 는 비어 있습니다. 기존 스케줄을 그대로 재사용하지 않습니다.
+- 객체 안의 `basic`·`advanced` 자리에 숫자를 넣어도 같은 방식으로 복사합니다. 한쪽만 ID 로, 다른 쪽은 객체로 보내는 조합도 가능합니다.
+- Smart 스케줄을 부분 ID 로 지정할 때는 참조하는 스케줄의 저장 패턴이 자리와 맞아야 합니다. 단일 선택 스케줄은 `basic` 에만, 복수 선택 스케줄은 `advanced` 에만 쓸 수 있고 어긋나면 400 (`JOB-ERROR-108`)입니다.
+- 존재하지 않는 ID 는 404 (`SCHEDULE-ERROR-01`)입니다.
+- 최상위 숫자 ID 는 **full/increment 전용**입니다. `mode` 가 `smart` 인데 숫자 ID 를 보내면 400 (`JOB-ERROR-102`, `Smart job mode cannot use a single schedule ID. Use the object form { type, basic: <id>, advanced: <id> }.`)입니다. Smart 는 객체 형식 `{ "type": 7, "basic": <ID>, "advanced": <ID> }` 으로 지정하세요.
+- full/increment 에 Smart 스케줄 행(타입 7~11)의 ID 를 보내면 400 (`JOB-ERROR-101`, `Schedule ID '<id>' is a smart schedule (type N). Full/increment job modes accept schedule type 0-6 only.`)입니다.
+- 지정한 스케줄이 요청 `center` 의 것이 아니면 403 (`CENTER-ERROR-01`, `Schedule ID '<id>' does not belong to center <center>`)입니다. `nCenterID = 0` 도 하나의 center 로 비교합니다.
+- 객체 안 `basic`·`advanced` 자리의 숫자 ID 는 행의 type 이 요청 `type` 과 같아야 하며 어긋나면 400 (`JOB-ERROR-108`, `Schedule ID '<id>' is type <n>, but the request type is <m>.`), 다른 center 의 행이면 403 (`CENTER-ERROR-01`)입니다.
+- 검사 순서는 존재(404) → center(403) → mode·type(400)입니다.
 
-#### 4. 요일/주차 입력 형식 ↔ 응답 description 형식
+#### 4. 입력 규칙
 
-- 요청 입력: 짧은 표기(`mon`, `tue`, `wed`, …) 또는 콤마로 묶은 다중 표기(`"mon,wed,fri"`).
-- 응답 `description`: 풀네임(`Monday`, `Wednesday`, …)으로 변환되어 출력.
-- 자세한 변환 규칙: [요일 입력 ↔ DB 저장 형식 (binary) 변환](../schedule/overview#요일-입력--db-저장-형식-binary-변환).
-
-#### 5. Smart 스케줄 basic 필드 단일값 제약
-
-Smart 타입(7~11)의 `basic`에서는 `day`/`week`/`month`가 모두 **단일 값만 허용**됩니다. 복수 값이 필요하면 `advanced` 쪽에 명시하세요.
-
-자세한 규칙: [Smart 스케줄 basic 필드 제한사항](../schedule/overview#smart-스케줄-basic-필드-제한사항).
+요일·날짜 표기와 Smart `basic` 의 단일값 제한은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참조하세요.
 
 </details>
 

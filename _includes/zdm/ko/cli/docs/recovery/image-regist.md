@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 Backup image 파일만으로 Recovery 작업을 등록합니다.
 
@@ -8,7 +9,7 @@ Backup image 파일만으로 Recovery 작업을 등록합니다.
 > * Source 서버를 지정하지 않고 **backup image 파일명만으로** 복구 작업을 등록합니다.
 > * Source 서버가 ZDM 에서 삭제된 뒤에도 이미지가 저장소에 남아 있으면 복구할 수 있습니다.
 > * 각 이미지의 원본 파티션과 소속 백업 작업은 저장소의 이미지 정보에서 자동으로 읽습니다.
-> * `--backup-file` 에 넣을 파일명을 모른다면 [`backup image list`](/zdm/ko/cli/3.0.0/docs/backup/image-list) 로 먼저 조회하세요 (`--names-only` 로 조회하면 그대로 붙여넣을 수 있는 형식으로 나옵니다).
+> * `--backup-file` 에 넣을 파일명을 모른다면 [`backup image list`]({{ base_path }}/docs/backup/image-list) 로 먼저 조회하세요 (`--names-only` 로 조회하면 그대로 붙여넣을 수 있는 형식으로 나옵니다).
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -62,12 +63,28 @@ zdm-cli recovery image-regist --backup-file "server01_ROOT_0262.ZIA" --target "t
 | `--after-reboot` | `-ar` | string | Optional | 작업 후 부팅 방식 |
 | `--start` | — | boolean | Optional | 등록 후 즉시 시작. 대상 서버가 사용 중이면 등록은 되고 자동 시작만 생략됩니다 |
 | `--network-limit` | `-nl` | number | Optional | 네트워크 제한 속도 |
-| `--schedule` / `--schedule-id` | `-sc` / `-sc-id` | string | Optional | 스케줄 지정 |
+| `--schedule` | `-sc` | string | Optional | 스케줄 JSON 문자열 |
+| `--schedule-id` | `-sc-id` | number | Optional | 기존 스케줄 ID. 작업과 같은 center 의 스케줄이어야 하고 기본 유형(type 0~6)만 받습니다 |
 | `--schedule-file` | `-sc-f` | string | Optional | 스케줄 정의 파일 |
 | `--script-path` / `--script-run` | `-sp` / `-sr` | string | Optional | 작업 전후 스크립트 |
 | `--cloud-auth` | `-ca` | string | Optional | 플랫폼 인증정보 |
 | `--mail-event` | `-me` | string | Optional | 작업 로그 수신 이메일 |
 | `--user` | — | string | Optional | 작업 등록 사용자 |
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>요청 대기 시간</strong></summary>
+
+서버가 저장소의 이미지를 확인하는 동안 기다리도록, 요청 대기 시간은 이미지 수와 저장소 수에 따라 늘어납니다. 서버가 끝나기 전에 CLI 가 먼저 끊어 `request timed out after 30000ms`(종료 코드 `4`)가 나오던 문제를 막기 위한 것입니다. 이제 서버의 응답(예: `500 JOB-ERROR-68`)이 그대로 표시됩니다.
+
+```
+대기 시간(초) = max(120, 30 × (C + L) + 100)
+```
+
+- `C`: 저장소 수(최소 1). `--repository-id` 의 저장소 하나가 기본이고, `--job-list` 항목이 저장소를 따로 지정하면 서로 다른 저장소를 모두 센다.
+- `L`: `--backup-file` 의 이미지 수. 문자열 안의 이미지 이름은 `,` 또는 `|` 로 나뉜다.
+- 예: 이미지 3장, 저장소 1개이면 `max(120, 30 × 4 + 100)` = 220초.
 
 </details>
 

@@ -6,4 +6,4 @@ navigation: ko-cli-3.0.1
 lang: ko
 ---
 
-{% include zdm/ko/cli/docs/replication/update.md %}
+{% include zdm/ko/cli/docs/replication/update/3.0.1.md %}

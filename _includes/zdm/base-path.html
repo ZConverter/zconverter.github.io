@@ -1,0 +1,6 @@
+{%- comment -%}
+  현재 페이지 URL 에서 /zdm/<lang>/<prod>/<ver> 를 잘라 base_path 에 담는다. 출력 없음.
+  같은 제품·같은 버전의 다른 페이지 링크는 base_path 뒤에 /docs/<domain>/<page> 를 붙여 쓴다.
+{%- endcomment -%}
+{%- assign url_parts = page.url | split: '/' -%}
+{%- assign base_path = '/' | append: url_parts[1] | append: '/' | append: url_parts[2] | append: '/' | append: url_parts[3] | append: '/' | append: url_parts[4] -%}

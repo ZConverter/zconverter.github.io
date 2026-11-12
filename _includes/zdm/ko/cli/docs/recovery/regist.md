@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 새로운 Recovery 작업을 등록합니다.
 
@@ -81,9 +82,9 @@ zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky8
 | --repository-type | -rt | string | Optional | - | 작업시 사용할 Repository 타입 | - |
 | --job-name | -jn | string | Optional | - | 작업 이름 | - |
 | --user | -u | string | Optional | config 설정값 | 사용자 ID 또는 메일 | - |
-| --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 | - |
-| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID | - |
-| --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 | - |
+| --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 (`basic` 키 없으면 자동 래핑) | - |
+| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID (복사하지 않고 그대로 참조). 작업과 같은 center 의 스케줄이어야 하고 기본 유형(type 0~6)만 받습니다 | - |
+| --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 (`basic` 키 없으면 자동 래핑) | - |
 | --exclude-partition | -exp | string | Optional | - | 작업 제외 partition | - |
 | --mail-event | -me | string | Optional | - | 작업 이벤트 수신 메일 | - |
 | --network-limit | -nl | number | Optional | 0 | 작업 Network 제한 속도 (Mbps) | - |
@@ -96,6 +97,23 @@ zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky8
 | --list-only | -lo | boolean | Optional | - | jobList에 지정된 파티션만 작업 등록 | - |
 | --job-list | -jl | string | Optional | - | 사용자 커스텀 작업 등록 (JSON 문자열 형태) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
+
+> Recovery 는 Basic 스케줄(type 0~6)만 받습니다. Smart(type 7~11)를 지정하면 `JOB-ERROR-101` 로 거부됩니다. 자동 래핑과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>요청 대기 시간</strong></summary>
+
+서버가 저장소의 이미지를 확인하는 동안 기다리도록, 요청 대기 시간은 백업 파일 수와 저장소 수에 따라 늘어납니다. 서버가 끝나기 전에 CLI 가 먼저 끊어 `request timed out after 30000ms`(종료 코드 `4`)가 나오던 문제를 막기 위한 것입니다. 이제 서버의 응답(예: `500 JOB-ERROR-68`)이 그대로 표시됩니다.
+
+```
+대기 시간(초) = max(120, 30 × (C + L) + 100)
+```
+
+- `C`: `--job-list` 항목들이 쓰는 서로 다른 저장소 수(항목에 저장소가 없으면 최상위 저장소). 최소 1.
+- `L`: `--job-list` 항목별 `max(1, backupFile 수)` 의 합. `--job-list` 가 없으면 0. 문자열 안의 이미지 이름은 `,` 또는 `|` 로 나뉜다.
+- 예: 저장소 1개, `backupFile` 이 2개인 항목 하나이면 `max(120, 30 × 3 + 100)` = 190초.
 
 </details>
 
@@ -190,7 +208,7 @@ zdm-cli recovery regist --source "ca-rocky810_172.25.0.48" --target "t-ys-rocky8
 <summary><strong>출력 예시</strong></summary>
 
 > **v2.0.2 변경 사항**:
-> - `schedule.basic` 객체에 `id` 필드 신규 추가 (type/description 은 기존 형식 그대로 — displayMappings PascalCase 영문 + `processScheduleInfo` 영문 결과)
+> - `schedule.basic` 객체에 `id` 필드 신규 추가 (type/description 은 기존 형식 그대로 — 영문 타입 이름과 영문 설명)
 > - 응답에 `notices?: string[]` 신규 필드 — backup 없는 partition 자동 skip 안내 (값이 있을 때만 포함). text 양식은 `[Notices]` 섹션으로, table 양식은 별도 단일 `message` 컬럼 테이블로 표시됨
 
 > **자동 partition skip (v2.0.2)**: source 서버의 partition 중 backup 작업·이미지가 없는 partition 은 자동으로 jobList 에서 제외됩니다 (silent skip). skip 된 partition 은 `notices` 에 안내 메시지로 포함됩니다. 전체 partition 이 skip 되면 `JOB-ERROR-01` (NOT_FOUND) 응답이 반환됩니다. `excludePartition` 옵션을 명시하지 않아도 동일하게 동작합니다.
@@ -363,8 +381,8 @@ table 출력은 partitions 를 행 단위 표로 표시하고, schedule 은 별�
 ```
 
 > `data.notices` 는 자동 skip 된 partition 이 있을 때만 응답에 포함됩니다. 모든 partition 이 정상이면 필드 자체가 응답에 포함되지 않습니다.
-> `common.schedule.basic.type` 값은 displayMappings PascalCase 영문 — `"Once"`, `"Every Minute"`, `"Hourly"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`. 조회 실패 시 `"Unknown"`.
-> `common.schedule.basic.description` 값은 `processScheduleInfo` 영문 결과 — 예: `"[Basic] Start working at 03:00 every day."` (Daily), `"[Basic] Start working at 03:00 Monday, Wednesday every week."` (Weekly), `"[Basic] Start working at 00:00 every 2 Hour."` (Hourly), `"[Basic] Start working on 15/06/2026 03:00."` (Once). 조회 실패 시 `"Schedule lookup failed"`.
+> `common.schedule.basic.type` 값은 영문 타입 이름(PascalCase) — `"Once"`, `"Every Minute"`, `"Hourly"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`. 조회 실패 시 `"Unknown"`.
+> `common.schedule.basic.description` 값은 영문 설명 — 예: `"[Basic] Start working at 03:00 every day."` (Daily), `"[Basic] Start working at 03:00 Monday, Wednesday every week."` (Weekly), `"[Basic] Start working at 00:00 every 2 Hour."` (Hourly), `"[Basic] Start working on 15/06/2026 03:00."` (Once). 조회 실패 시 `"Schedule lookup failed"`.
 
 </details>
 

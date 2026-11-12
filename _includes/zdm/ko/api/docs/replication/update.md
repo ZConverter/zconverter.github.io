@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 특정 복제 작업의 설정을 수정합니다.
 
@@ -52,7 +53,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
     "schedule": {
       "type": 4,
       "basic": {
-        "day": "1",
+        "day": "mon",
         "time": "03:00"
       }
     }
@@ -84,7 +85,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 | `encryption` | string | Optional | 암호화 사용 여부 | {% include zdm/use-options.md %} |
 | `mailEvent` | string | Optional | 이벤트 알림 이메일 | - |
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (0 이상) | - |
-| `schedule` | object/number | Optional | 스케줄 객체 또는 기존 스케줄 ID. 숫자는 기존 스케줄을 참조하며 없는 ID 이면 오류입니다. 객체는 작업의 스케줄로 등록(upsert)됩니다 | - |
+| `schedule` | object \| number | Optional | 스케줄 객체 또는 기존 스케줄 ID. 복제는 type `0`~`6`(basic)만 지원합니다. 아래 "schedule 객체 구조" 참조 | - |
 | `targetRepository` | object | Optional | 타겟 레포지토리 정보 | - |
 | `exclude` | string | Optional | 제외 패턴 | - |
 | `multiString` | string | Optional | 추가 설정 문자열 | - |
@@ -110,14 +111,36 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 <details markdown="1">
 <summary><strong>schedule 객체 구조</strong></summary>
 
-> 기존 스케줄 ID(숫자)를 사용하거나, 새 스케줄 객체를 생성할 수 있습니다.
-> 스케줄 타입별 상세 구조는 [POST /schedules](../schedule/regist)를 참고하세요.
+{% include zdm/schedule-object.md smart=false %}
 
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|------|------|
-| `type` | number | Required | 스케줄 타입 (0~11) |
-| `basic` | object/number | Required | 기본 스케줄 구조 또는 기존 스케줄 ID |
-| `advanced` | object/number | Optional | 고급 스케줄 구조 (Smart 스케줄 type 7~11) |
+- 숫자 ID 는 **복사 없이 그 스케줄을 참조**하며, 작업의 스케줄이 실제로 그 ID 로 바뀝니다. 객체는 작업의 스케줄로 등록(upsert)됩니다.
+- 존재하지 않는 ID 는 404 `SCHEDULE-ERROR-01` 입니다.
+- 지정한 스케줄이 작업이 속한 center 의 것이 아니면 403 `CENTER-ERROR-01` 입니다(`Schedule ID '<id>' does not belong to center <center>`). `nCenterID = 0` 도 하나의 center 로 비교합니다. 객체 안 숫자 ID 는 행 type 이 요청 `type` 과 다르면 400 `JOB-ERROR-108` 이며, 검사 순서는 존재(404) → center(403) → type(400)입니다.
+- Smart 스케줄(type 7~11)은 400 `JOB-ERROR-101` 로 거부됩니다.
+
+**Smart 스케줄 거부 예시 (400 Bad Request)**
+
+```json
+{
+  "center": "1",
+  "schedule": {
+    "type": 7,
+    "basic": { "day": "mon", "time": "10:00" }
+  }
+}
+```
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "JOB-ERROR-101",
+    "message": "For full/increment job types, schedule must contain only basic."
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
+}
+```
 
 </details>
 
@@ -232,11 +255,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 
 **ScheduleChangeValue 구조** (v2.0.2 신규 — `field === "schedule"` 인 경우):
 
-| 필드 | 타입 | 설명 |
-|------|------|------|
-| `id` | number | schedule ID |
-| `type` | string | schedule 타입 (displayMappings PascalCase 영문 — 예: `"Once"`, `"Every Minute"`, `"Hourly"`, `"Daily"`, `"Weekly"`, `"Monthly (Specific Week and Day of the Week)"`, `"Monthly on Specific Date"`, `"Smart Weekly (Specific Day of the Week)"`, 그 외 SMART_* 값들, 조회 실패 시 `"Unknown"`) |
-| `description` | string | schedule 영문 설명 (예: `"[Basic] Start working at 03:00 every day."`, `"[Basic] Start working at 03:00 Monday, Wednesday every week."`, `"[Basic] Start working at 03:00 on the 1, 15 of every month."`, `"[Basic] Start working at 00:00 every 2 Hour."`, 조회 실패 시 `"Schedule lookup failed"`) |
+{% include zdm/schedule-change-value.md %}
 
 </details>
 

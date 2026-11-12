@@ -65,8 +65,8 @@ curl -X GET "https://api.example.com/api/recoveries/histories?page=1&limit=10" \
 | `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
 
 > **참고:**
-> - `serverType`이 `target`(기본값)이면 `server`는 복구 대상 서버(`sRecoverySystemName`)를, `source`이면 소스 서버(`sSystemName`)를 기준으로 필터링합니다.
-> - `partition` 파라미터는 콤마 구분된 `sRecoverDrive` 필드에서 개별 항목을 정확히 매칭합니다.
+> - `serverType`이 `target`(기본값)이면 `server`는 복구 대상 서버 이름을, `source`이면 소스 서버 이름을 기준으로 필터링합니다.
+> - `partition` 파라미터는 콤마 구분된 복구 드라이브(파티션) 값에서 개별 항목을 정확히 매칭합니다.
 > - `partition` 값 형식은 API가 정규화하므로 `C`, `C:`, `/data`를 모두 그대로 쓸 수 있습니다. **OS에 따라 골라 쓸 필요 없이 하나만 사용**하면 됩니다. (예: `C` → `C:`)
 > - `?center=`, `?server=`, `?partition=`처럼 **키만 보내고 값이 비어 있으면 400**입니다. 파라미터를 아예 **생략**하는 것(필터 없음)과는 다릅니다.
 > - `center`는 ID와 이름을 콤마로 섞어 여러 개 지정할 수 있습니다 (예: `?center=1,zdm-b`).

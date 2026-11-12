@@ -1,3 +1,4 @@
+{% include zdm/base-path.html %}
 
 OS Replication 작업을 등록하는 명령어입니다.
 
@@ -9,7 +10,7 @@ OS Replication 작업을 등록하는 명령어입니다.
 > * Cloud Auth Key, ZOS Repository, Repository가 사전에 등록되어 있어야 합니다.
 > * `--schedule`, `--schedule-id`, `--schedule-file` 중 하나로 스케줄을 설정할 수 있습니다.
 
-> **v2.0.2 신설**: 이전엔 os-replication 의 schedule 처리가 미구현이었으나 본 버전부터 schedule 입력 시 처리 + 응답에 `schedule: { id, type, description }` 객체 노출. basic schedule 만 지원 (smart 차단). jobMode `full` / `increment` 모두 허용 (sync 미지원).
+> **v2.0.2 신설**: 이전엔 os-replication 의 schedule 처리가 미구현이었으나 본 버전부터 schedule 입력 시 처리 + 응답에 `schedule: { id, type, description }` 객체 노출. basic schedule 만 지원합니다. jobMode `full` / `increment` 모두 허용합니다 (sync 미지원).
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -36,8 +37,8 @@ zdm-cli os-replication regist --rt upload --ck 1 --zri 1 --ri 1 --mode full --fn
 # 스케줄 설정과 함께 등록 (기존 스케줄 ID 재사용)
 zdm-cli os-replication regist --rt upload --ck 1 --zri 1 --ri 1 --mode full --schedule-id 1234
 
-# 스케줄 객체로 신규 등록 (Daily 02:00 — basic only, smart 미지원)
-zdm-cli os-replication regist --rt upload --ck 1 --zri 1 --ri 1 --mode full --schedule '{"type":3,"basic":{"time":"02:00"}}'
+# 스케줄 JSON 으로 신규 등록 (Daily 02:00, basic 자동 래핑)
+zdm-cli os-replication regist --rt upload --ck 1 --zri 1 --ri 1 --mode full --schedule '{"type":3,"time":"02:00"}'
 
 # 신규 파일만 업로드 설정
 zdm-cli os-replication regist --rt upload --ck 1 --zri 1 --ri 1 --mode full --upload-newly newly_only
@@ -76,14 +77,11 @@ zdm-cli os-replication regist --rt upload --ck 1 --zri 1 --ri 1 --mode full --up
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 (basic only) | - |
-| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID (basic only) | - |
-| --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 (basic only) | - |
+| --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 (`basic` 키 없으면 자동 래핑) | - |
+| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID (복사하지 않고 그대로 참조). 작업과 같은 center 의 스케줄이어야 하고 기본 유형(type 0~6)만 받습니다 | - |
+| --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 (`basic` 키 없으면 자동 래핑) | - |
 
-> **v2.0.2 스케줄 정책**
-> - basic schedule 만 지원 — smart 입력 시 `INVALID_SCHEDULE_JOB_MODE_FOR_BASIC` 응답
-> - jobMode `full` / `increment` 모두 허용 (**sync 미지원** — replication 과 차이)
-> - 응답에는 `schedule: { id, type, description }` 객체 형식으로 노출
+> 이 작업은 Basic 스케줄(type 0~6)만 받습니다. Smart(type 7~11)를 지정하면 `JOB-ERROR-103` 로 거부됩니다. jobMode `full` / `increment` 모두 허용합니다 (**sync 미지원** — replication 과 차이). 응답에는 `schedule: { id, type, description }` 객체가 포함됩니다. 자동 래핑과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
 
 **업로드/다운로드 옵션**
 
@@ -164,8 +162,8 @@ description : [Basic] Start working at 03:00 every day.
 | `results[].autoStart` | string | 자동 시작 여부 (`use` / `not use`) |
 | `results[].schedule` | object | (Optional) 등록된 스케줄 정보. 미지정 시 응답에 포함되지 않음 |
 | `results[].schedule.id` | number | 등록된 schedule ID |
-| `results[].schedule.type` | string | displayMappings PascalCase 영문 (`Once`, `Daily`, `Weekly`, `Monthly (Specific Week and Day of the Week)`, `Monthly on Specific Date`, `Unknown`) |
-| `results[].schedule.description` | string | `processScheduleInfo` 영문 (예: `[Basic] Start working at 03:00 every day.`). 조회 실패 시 `Schedule lookup failed` |
+| `results[].schedule.type` | string | 영문 타입 이름 (예: `Once`, `Daily`, `Weekly`. 전체 이름은 [스케줄 개요]({{ base_path }}/docs/schedule/overview) 참고). 조회 실패 시 `Unknown` |
+| `results[].schedule.description` | string | 영문 설명 (예: `[Basic] Start working at 03:00 every day.`). 조회 실패 시 `Schedule lookup failed` |
 | `summary.total` | number | 요청 건수 |
 | `summary.successful` | number | 성공 건수 |
 | `summary.failed` | number | 실패 건수 |
