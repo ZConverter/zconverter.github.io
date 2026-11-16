@@ -41,7 +41,7 @@ zdm-cli token i -p mypassword
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `--user-mail` | `-mail` | string | Optional | 설정 파일의 기본값 | 포털 로그인 ID (이메일) | - |
+| `--user-mail` | `-mail` | string | Optional | 설정 파일의 기본값 | 포털 로그인 ID (이메일). 직접 지정한 값은 요청 전에 형식을 검사하며, 잘못되면 `Invalid email format: <값>` 과 종료 코드 `2` 로 끝남 | - |
 | `--user-pwd` | `-p` | string | Required | - | 포털 로그인 비밀번호 | - |
 | `--output` | `-o` | string | Optional | `text` | 출력 형식 | {% include zdm/output-formats.md %} |
 
@@ -83,6 +83,16 @@ expiresAt : 2026-04-17 11:30:00
   "timestamp": "2026-04-17T10:30:00.000+09:00",
   "userMail": "admin@example.com"
 }
+```
+
+> 출력의 `tokenUrl:` 줄은 더 이상 표준 출력에 나오지 않으므로 `-o json` 출력을 그대로 JSON 으로 파싱할 수 있습니다.
+
+**토큰 저장 실패 시:**
+
+발급은 성공했지만 설정 파일에 저장하지 못하면 원인을 담은 경고가 표준에러에 출력됩니다. 종료 코드는 `0` 이고 토큰은 결과에 출력되므로, 경고의 안내대로 `zdm-cli-config.json` 에 직접 등록하거나 `config set --token` 으로 저장합니다.
+
+```
+token save failed: <오류 메시지> (manual registration required in zdm-cli-config.json)
 ```
 
 </details>

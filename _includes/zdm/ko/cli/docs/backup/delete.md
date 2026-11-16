@@ -45,7 +45,7 @@ zdm-cli backup delete --name "OldBackup" --output table
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --center | -c | string | Optional | config 설정값 | 작업 대상 Center | - |
-| --name | - | string | Optional<span class="required-note">*</span> | - | 작업 이름 | - |
+| --name | - | string | Optional<span class="required-note">*</span> | - | 작업 이름. (숫자로만 된 이름은 작업 ID 로 해석되므로 이런 작업은 `--id` 를 사용하세요) | - |
 | --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
@@ -92,6 +92,8 @@ logData deleted    : Yes
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+> 작업별로 삭제 중 오류가 있었으면 해당 작업 항목 끝에 `errorMessage : <오류 메시지>` 줄이 추가됩니다. 일부 구성 요소만 삭제된 경우 `No` 와 함께 이유를 확인할 수 있습니다. 오류가 없는 작업에는 이 줄이 나오지 않습니다.
 
 </details>
 

@@ -219,6 +219,8 @@ curl -X POST "https://api.example.com/api/schedules" \
 }
 ```
 
+type 1 · 2 의 간격(`basic.interval.minute` · `basic.interval.hour`)이 1 ~ 2147483647 의 정수가 아니면 422 `SCHEDULE-ERROR-36`(minute) · `SCHEDULE-ERROR-38`(hour) 입니다(v4.0.0). 59분 · 23시간을 넘는 값은 그대로 분 · 시간 단위로 실행합니다(예: 90 = 90분마다). 작업 등록 · 수정의 inline `schedule` 도 같습니다.
+
 그 밖의 검증 오류(`SCHEDULE-ERROR-16` 시간 형식, `SCHEDULE-ERROR-19` 날짜 범위, `SCHEDULE-ERROR-22` 요일 형식, `SCHEDULE-ERROR-23`·`27`·`31` Smart basic 복수 선택, `SCHEDULE-ERROR-30` 월 범위 등)의 요청·응답 예시는 [스케줄 개요]({{ base_path }}/docs/schedule/overview#검증-실패-응답-예시)를 참조하세요.
 
 </details>

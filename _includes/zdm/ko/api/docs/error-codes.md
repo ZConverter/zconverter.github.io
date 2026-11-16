@@ -155,9 +155,9 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 | `SCHEDULE-ERROR-33` | 422 | year 값이 유효하지 않습니다. |
 | `SCHEDULE-ERROR-34` | 400 | year 는 0000 ~ 9999 사이여야 합니다. |
 | `SCHEDULE-ERROR-35` | 400 | minute 값이 누락됐습니다. |
-| `SCHEDULE-ERROR-36` | 422 | minute 값이 유효하지 않습니다. |
+| `SCHEDULE-ERROR-36` | 422 | minute 값이 유효하지 않습니다. type 1 의 간격은 1 이상 2147483647 이하의 정수여야 합니다(`minute must be an integer between 1 and 2147483647.`). `0` 과 범위를 넘는 값도 이 코드입니다. |
 | `SCHEDULE-ERROR-37` | 400 | hour 값이 누락됐습니다. |
-| `SCHEDULE-ERROR-38` | 422 | hour 값이 유효하지 않습니다. |
+| `SCHEDULE-ERROR-38` | 422 | hour 값이 유효하지 않습니다. type 2 의 간격은 1 이상 2147483647 이하의 정수여야 합니다(`hour must be an integer between 1 and 2147483647.`). `0` 과 범위를 넘는 값도 이 코드입니다. |
 | `SCHEDULE-ERROR-39` | 422 | ONCE 타입의 필수 필드가 누락됐습니다. |
 | `SCHEDULE-ERROR-40` | 422 | EVERY_MINUTE 타입의 필수 필드가 누락됐습니다. |
 | `SCHEDULE-ERROR-41` | 422 | HOURLY 타입의 필수 필드가 누락됐습니다. |
@@ -327,12 +327,13 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 </details>
 
 <details markdown="1">
-<summary><strong>Cloud Auth</strong> (2건 정의 · <strong>실제 발생 0건</strong>)</summary>
+<summary><strong>Cloud Auth</strong> (3건 정의 · <strong>실제 발생 1건</strong>)</summary>
 
 | 코드 | HTTP | 설명 |
 |------|------|------|
 | `CLOUD-AUTH-ERROR-01` | 400 | 파일 크기가 제한을 초과했습니다. (최대 10MB) |
 | `CLOUD-AUTH-ERROR-02` | 400 | 파일 업로드 중 오류가 발생했습니다. |
+| `CLOUD-AUTH-ERROR-03` | 409 | 같은 이름의 키 파일이 이미 있습니다(v4.0.0). 같은 사용자가 같은 이름의 파일을 올리는 ZOS 등록(`POST /cloud-auth/zos`)과 GCP Recovery 등록(`POST /cloud-auth/recovery`)에서 발생합니다. 메시지는 `A key file named '<fileName>' already exists.` 입니다. |
 
 </details>
 

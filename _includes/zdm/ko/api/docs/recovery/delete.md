@@ -38,7 +38,7 @@ curl -X DELETE "https://api.example.com/api/recoveries/daily-recovery?center=1" 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 복구 ID (숫자) 또는 복구 이름 | - |
-| `center` | Query | string | Conditional | - | 삭제 대상 center 식별자 (ID 또는 이름). **정확히 1개만** 지정할 수 있습니다. 복구 ID로 삭제할 때는 선택, 복구 이름으로 삭제할 때는 필수입니다 | - |
+| `center` | Query | string | Conditional | - | 삭제 대상 center 식별자 (ID 또는 이름). **정확히 1개만** 지정할 수 있습니다. 복구 ID로 삭제할 때는 선택, 복구 이름으로 삭제할 때는 필수입니다. 복구 ID와 함께 지정하면 작업이 그 center 에 속해야 합니다 | - |
 
 > **참고:**
 > - `center`는 삭제 대상이 모호해지지 않도록 **정확히 1개**만 허용합니다. `?center=1,zdm-b`처럼 여러 개를 지정하면 400으로 거부됩니다.
@@ -46,6 +46,7 @@ curl -X DELETE "https://api.example.com/api/recoveries/daily-recovery?center=1" 
 > - `?center=`처럼 **키만 보내고 값이 비어 있으면 400**입니다. 파라미터를 아예 **생략**하는 것과는 다릅니다.
 > - `center`의 **개수·빈 값** 검증은 요청 스키마 단계에서 수행되므로, 응답은 요청 검증 에러 형식으로 반환됩니다.
 > - 복구 **이름**으로 삭제하면서 `center`를 생략하면 `CENTER-ERROR-02`(400)로 거부됩니다. 다중 center 환경에서 다른 center의 동명 작업이 삭제되는 것을 막기 위함입니다.
+> - 복구 **ID**로 삭제하면서 지정한 `center`와 작업이 속한 center 가 다르면 **404 `JOB-ERROR-01`** 입니다(v4.0.0). 종전에는 200 으로 응답하며 작업을 지웠습니다. `center` 를 생략하면 작업의 center 와 대조하지 않고 ID 로 지웁니다.
 
 </details>
 
@@ -124,6 +125,8 @@ curl -X DELETE "https://api.example.com/api/recoveries/daily-recovery?center=1" 
 <summary><strong>에러 응답</strong></summary>
 
 **복구 작업을 찾을 수 없음 (404 Not Found)**
+
+작업이 없을 때와, ID 로 삭제하면서 지정한 `center` 가 작업의 center 와 다를 때 반환됩니다. 후자의 메시지는 `Recovery job with ID '<id>' not found` 입니다.
 
 ```json
 {

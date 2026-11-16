@@ -51,7 +51,7 @@ zdm-cli config set --zdm-repo-path "\\\\192.168.2.108\\ZConverter"
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `--user-mail` | `-mail` | string | Optional | - | 포털 로그인 ID (유효한 이메일 형식 필요) | - |
-| `--token` | - | string | Optional | - | API Server 인증 토큰 | - |
+| `--token` | - | string | Optional | - | API Server 인증 토큰. 설정 파일에는 입력한 값이 그대로 저장되며, 변경 결과 출력(text · json)에는 앞 6자와 `...` 만 표시됩니다 | - |
 | `--zdm-repo-id` | `-zri` | number | Optional | - | 기본으로 사용할 ZDM Repository ID (숫자만 입력 가능) | - |
 | `--zdm-repo-path` | `-zrp` | string | Optional | - | 기본으로 사용할 ZDM Repository 경로 | - |
 | `--auto` | - | boolean | Optional | - | `--zdm-repo-id`와 함께 사용 시 API에서 repository path 자동 조회 | - |
@@ -84,6 +84,10 @@ value : 192.168.1.1 -> 121.189.21.220
 [Change 2]
 field : zdm-id
 value : 1 -> 9
+
+[Change 3]
+field : token
+value : eyJhbG... -> eyJzdW...
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -121,6 +125,11 @@ state : no_change
       "field": "zdm-id",
       "previous": 1,
       "new": 9
+    },
+    {
+      "field": "token",
+      "previous": "eyJhbG...",
+      "new": "eyJzdW..."
     }
   ]
 }

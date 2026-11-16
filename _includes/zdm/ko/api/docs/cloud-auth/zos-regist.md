@@ -65,6 +65,8 @@ curl -X POST "https://api.example.com/api/cloud-auth/zos" \
 }
 ```
 
+> 같은 사용자가 같은 이름의 키 파일을 다시 올리면 409 `CLOUD-AUTH-ERROR-03` 입니다(v4.0.0). 종전에는 이전 파일을 덮어써서, 그 파일을 쓰던 앞선 등록이 새 키를 쓰게 됐습니다. 이름을 바꿔 올리세요. 등록을 삭제해도 키 파일은 지워지지 않으므로, 같은 이름을 다시 쓰려면 파일을 정리해야 합니다. 본문 검증이나 등록에 실패한 업로드 파일은 서버가 지웁니다.
+>
 > 응답 `cloudInfo` 는 `id`, `displayName`, `cloudPlatform`, `fileName` 입니다. v4.0.0 부터 서버 내 저장 경로(`filePath`)는 응답에 포함되지 않습니다. 파일은 `GET /cloud-auth/zos/download/:fileName` 으로 내려받습니다.
 
 </details>
@@ -76,6 +78,7 @@ curl -X POST "https://api.example.com/api/cloud-auth/zos" \
 |------|------|--------|-----------|
 | `DTO-VALIDATION-01` | 422 | Request body validation failed. | `center` 누락, `cloudPlatform` 미입력 또는 허용 enum(`oci`, `nhn`, `ncp`, `aws`, `azure`, `minio`) 외 값 |
 | `FILE-ERROR-11` | 400 | Invalid file path. | 사용자 email 에 경로 구분자가 있어 저장 디렉터리 밖을 가리킴. 파일 저장 전에 거절됩니다 |
+| `CLOUD-AUTH-ERROR-03` | 409 | `A key file named '<fileName>' already exists.` | (v4.0.0) 같은 사용자의 저장 디렉터리에 같은 이름의 키 파일이 이미 있음. 파일을 쓰기 전에 거절됩니다 |
 
 </details>
 

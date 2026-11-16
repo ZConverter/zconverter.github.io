@@ -88,7 +88,7 @@ curl -X POST "https://api.example.com/api/replications" \
 | `replicationMode` | string | Optional | 복제 모드 (기본값: `full`) | {% include zdm/replication-modes.md %} |
 | `jobName` | string | Optional | 작업 이름 | - |
 | `ip` | string | Optional | 타겟 IP 주소 | - |
-| `port` | number | Optional | 타겟 포트 | - |
+| `port` | number | Optional | 타겟 포트. 1 ~ 65535 의 정수여야 합니다. 범위 밖이면 422 `DTO-VALIDATION-01` 입니다(v4.0.0, V1 · V2 공통) | - |
 | `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (기본값: 0, 0=무제한) | - |
 | `schedule` | object \| number | Optional | 스케줄 객체 또는 스케줄 ID. 복제는 type `0`~`6`(basic)만 지원합니다. 아래 "schedule 객체 구조" 참조 | - |
@@ -129,6 +129,8 @@ curl -X POST "https://api.example.com/api/replications" \
 | `targetRepository` | string | Required | 타겟 레포지토리 (단일 ID 또는 경로, 예: `"41"`) | - |
 
 > 그 외 공통 필드 (`sourceCenter`, `targetCenter`, `jobName`, `ip`, `port`, `compression`, `networkLimit`, `schedule`, `autoStart`)는 V2와 동일합니다.
+>
+> **V1 이름 중복 검사 (v4.0.0)**: 종전 V1 등록은 같은 source center 의 이름 중복을 검사하지 않아 같은 이름의 작업이 둘 생길 수 있었습니다. 이제 V2 와 같이 중복이면 400 `BAD_REQUEST`(아래 "작업 이름 중복"), 같은 이름의 동시 등록이 겹쳐 락 대기가 한도를 넘으면 409 `CONFLICT` 입니다.
 
 **V1 요청 예시:**
 
@@ -299,6 +301,8 @@ curl -X POST "https://api.example.com/api/replications" \
 <summary><strong>에러 응답</strong></summary>
 
 **유효성 검사 실패 (422 Unprocessable Entity)**
+
+`port` 가 1 ~ 65535 의 정수가 아닐 때도 이 응답입니다(`details` 의 `port`: `port must be between 1 and 65535`).
 
 ```json
 {

@@ -83,7 +83,7 @@ curl -X PUT "https://api.example.com/api/backups/1" \
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (0 이상) | - |
 | `schedule` | object \| number | Optional | 스케줄 객체 또는 기존 스케줄 ID. 스케줄 타입에 따라 작업 모드가 자동 전환됩니다. [스케줄 개요]({{ base_path }}/docs/schedule/overview) 참조 | - |
 | `repository` | object | Optional | 레포지토리 정보 | - |
-| `repository.id` | number | Optional | 레포지토리 ID. 생략 시 기존 백업 작업의 레포지토리를 그대로 유지하고 `repository.path` 만 변경 | - |
+| `repository.id` | number | Optional | 레포지토리 ID. 작업이 속한 center 의 레포지토리여야 하며 다른 center 의 것이면 404 입니다(v4.0.0). 생략 시 기존 백업 작업의 레포지토리를 그대로 유지하고 `repository.path` 만 변경 | - |
 | `repository.type` | string | Optional | 레포지토리 타입 | {% include zdm/repository-types.md %} |
 | `repository.path` | string | Optional | 레포지토리 경로 | - |
 | `scriptPath` | string | Optional | 실행할 스크립트 경로 | - |
@@ -231,6 +231,22 @@ curl -X PUT "https://api.example.com/api/backups/1" \
   "error": {
     "code": "JOB-ERROR-01",
     "message": "Backup job with ID '999' not found"
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
+**다른 center 의 레포지토리 (404 Not Found)**
+
+`repository.id` 가 작업이 속한 center 의 레포지토리가 아니면 반환됩니다(v4.0.0). 종전에는 다른 center 의 레포지토리 ID 도 받아 저장했습니다. 메시지의 `<id>` 는 작업이 속한 center 의 ID 입니다.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "ZDM-REPOSITORY-ERROR-01",
+    "message": "Repository ID '41' does not belong to Center '1'"
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"
 }

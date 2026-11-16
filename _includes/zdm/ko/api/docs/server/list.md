@@ -429,6 +429,26 @@ curl -X GET "https://api.example.com/api/servers?page=1&limit=10" \
 }
 ```
 
+`page` 또는 `limit` 을 보냈다면(v4.0.0) 매칭되지 않는 `center` 에서도 `{ data, pagination }` 모양을 유지합니다. 종전에는 `data` 만 있는 빈 배열이었습니다.
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": true,
+  "data": [],
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 0,
+    "totalItems": 0,
+    "itemsPerPage": 10,
+    "hasNextPage": false,
+    "hasPreviousPage": false
+  },
+  "message": "Server information list",
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
 </details>
 
 </details>

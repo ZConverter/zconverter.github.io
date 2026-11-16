@@ -47,7 +47,7 @@ curl -X GET "https://api.example.com/api/os-replications/histories/1?center=dest
 |----------|------|------|------|--------|------|--------|
 | `Authorization` | Header | string | Required | - | 인증 토큰(발급받은 값 그대로) | - |
 | `identifier` | Path | string | Required | - | 히스토리 ID(숫자) 또는 작업 이름 | - |
-| `jobId` | Query | number | Optional | - | 작업 ID 필터 | - |
+| `jobId` | Query | number | Optional | - | 작업 ID 필터. `0` 이나 빈 값(`?jobId=`)도 조건으로 적용되어 일치하는 항목이 없으므로 404 입니다(v4.0.0) | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `server` | Query | string | Optional | - | 대상 서버 이름 필터 | - |
 | `result` | Query | string | Optional | - | 작업 결과 필터 | {% include zdm/replication-history-result.md %} |

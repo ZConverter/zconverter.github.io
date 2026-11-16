@@ -78,54 +78,40 @@ zdm-cli schedule verify -p ./Basic_schedule-20250106120000.json
 </details>
 
 <details markdown="1" open>
-<summary><strong>출력 예시 (Text format)</strong></summary>
+<summary><strong>출력 예시</strong></summary>
 
-> **참고:** `schedule verify`는 로컬 파일 검증 명령어로, API 호출 없이 단순 메시지만 출력합니다.
-> `--output` 옵션은 지원되지 않습니다.
+> **참고:** `schedule verify`는 로컬 파일 검증 명령어로, API 호출 없이 결과 메시지만 출력합니다.
+> `--output json` 을 지원합니다. 검증에 실패하면 종료 코드 `2` 로 끝납니다.
+> 시간 필드(`time`)는 `HH:MM`(24시간) 형식이어야 하며 `99:99` 는 실패합니다.
 
 **Text 형식:**
 
-**검증 성공:**
+**검증 성공 (종료 코드 0):**
 
 ```
-* Schedule 데이터가 유효합니다
+* Schedule data is valid.
 ```
 
-**검증 실패 - 파일 없음:**
+**JSON 형식 (`-o json`):**
 
-```
-* 파일을 찾을 수 없습니다: /path/to/schedule.json
-```
-
-**검증 실패 - JSON 형식 오류:**
-
-```
-* 유효하지 않은 JSON 형식입니다
+```json
+{"status":"success","message":"Schedule data is valid."}
 ```
 
-**검증 실패 - type 필드 누락:**
+**검증 실패 (종료 코드 2):**
 
-```
-* type 필드가 없습니다
-```
+실패 메시지는 표준에러에 `* [ERROR] <메시지>` 형태로 출력됩니다. `-o json` 이면 표준에러에 실패 응답(`error.code` 포함)이 출력됩니다.
 
-**검증 실패 - type 범위 오류:**
-
-```
-* type은 0~12 범위의 숫자여야 합니다
-```
-
-**검증 실패 - basic 필드 누락:**
-
-```
-* basic 필드가 없습니다
-```
-
-**검증 실패 - 필수 필드 누락:**
-
-```
-* basic.time은 필수 입력 항목입니다
-```
+| 실패 사유 | 메시지 |
+|-----------|--------|
+| 파일 없음 | `file not found: /path/to/schedule.json` |
+| JSON 형식 오류 | `invalid JSON format` |
+| 객체가 아닌 내용 (`null`, 배열 등) | `schedule data must be a JSON object` |
+| type 필드 누락 | `missing type field` |
+| type 범위 오류 | `type must be a number between 0 and 12` |
+| basic 필드 누락 | `missing basic field` |
+| 필수 필드 누락 | `[basic] Type:3 requires basic-time` |
+| 시간 형식 오류 | `basic-time must be in HH:MM format. current input: 99:99` |
 
 </details>
 

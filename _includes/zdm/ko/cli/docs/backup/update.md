@@ -76,8 +76,8 @@ zdm-cli backup update --id 123 --mode increment --output json
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --center | -c | string | Optional | config 설정값 | 작업 대상 Center | - |
-| --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
-| --name | - | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
+| --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID (`--name` 과 함께 쓸 수 없음) | - |
+| --name | - | string | Optional<span class="required-note">*</span> | - | 작업 Name (`--id` 와 함께 쓸 수 없음). (숫자로만 된 이름은 작업 ID 로 해석되므로 이런 작업은 `--id` 를 사용하세요) | - |
 | --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
 | --status | - | string | Optional | - | 작업 상태 | `start`, `stop` |
 | --repository-id | -ri | number | Optional | - | Repository ID | - |
@@ -90,12 +90,19 @@ zdm-cli backup update --id 123 --mode increment --output json
 | --compression | -comp | string | Optional | - | 작업 압축 사용 여부 | `use`, `not use` |
 | --encryption | -enc | string | Optional | - | 작업 암호화 사용 여부 | `use`, `not use` |
 | --exclude-dir | -exd | string | Optional | - | 작업 제외 폴더 | - |
-| --script-path | -sp | string | Optional | - | 작업시 사용할 script full path | - |
+| --script-path | -sp | string | Optional | - | 작업시 사용할 script full path. 빈 값은 거부됩니다 (스크립트를 지울 수 없음) | - |
 | --script-run | -sr | string | Optional | - | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 | --network-limit | -nl | number | Optional | - | 작업 Network 제한 속도 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
-> <span class="required-note">*</span> --id 또는 --name 중 최소 하나는 필수로 입력해야 합니다.
+> <span class="required-note">*</span> --id 또는 --name 중 하나는 필수로 입력해야 하며, 둘을 함께 주면 요청 전에 거부됩니다.
+
+아래 입력은 요청을 보내기 전에 종료 코드 `2` 로 거부됩니다.
+
+| 입력 | 메시지 |
+|------|--------|
+| `--id` 와 `--name` 을 함께 지정 | `id and name cannot be used together` |
+| 비었거나 공백뿐인 `--script-path` | `script-path must not be empty (clearing a script is not supported)` |
 
 </details>
 

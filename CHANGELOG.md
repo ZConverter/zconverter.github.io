@@ -9,6 +9,40 @@
 ## 2026년 11월
 
 <details>
+<summary><code>[11-16] [Changed] [API&nbsp;v4.0.0]</code> <b>API 4.0.0 재업로드 계약 변경 반영 (품질 점검 수정)</b></summary>
+
+- 다른 center 의 같은 이름 작업에 잘못 적용되던 동작 정정: recovery ID 삭제에 다른 center `?center` 를 주면 404, os-replication · replication V1 이름 삭제와 V1 이름 수정은 같은 이름이 여럿이면 409, os-replication 이름 + center 미존재 404, V1 삭제의 `?center` 수용과 엄격한 쿼리 검사(400).
+- 이미 있는 이름으로 이름 변경 400(replication V1 · V4 · os-replication), V1 등록 이름 중복 400. 작업 ID 0 은 404, `?jobId=0` 은 빈 목록.
+- 입력 범위 · 소속 검사: backup 수정에 다른 center 저장소 404, 스케줄 간격 1~2147483647(벗어나면 422 `SCHEDULE-ERROR-36` / `-38`), replication `port` 1~65535(422), `GET /schedules/:id` 숫자 아닌 값 400, replication 수정 본문에서 `transferType` · `targetRepository` · `exclude` · `multiString` 제거.
+- cloud-auth: 같은 이름 키 파일 업로드 409 `CLOUD-AUTH-ERROR-03`, 다운로드 열기 오류를 표준 오류 형식으로.
+- 응답 정리: 없는 center 의 페이지 조회는 `{data, pagination}`, recovery 이력 기본 정렬 `nID` 내림차순, backup 모니터링 정보 행 필터가 비면 404.
+- backup 등록: `excludeDir` 는 `|` 로 저장, `individual[].excludePartition` 은 받지 않음(보내도 무시).
+- 4.0.0 릴리스 노트(API)에 하위 호환 불가 묶음 5개 추가. 에러 코드 · backup · recovery · replication · os-replication · schedule · cloud-auth · server · zdm · license 문서 반영. 이전 버전 보존본은 변경 없음.
+
+</details>
+
+<details>
+<summary><code>[11-16] [Changed] [CLI&nbsp;v4.0.0]</code> <b>CLI 명령 동작 점검 결과 반영 (4.0.0 재업로드)</b></summary>
+
+- `schedule verify`: 실패 시 종료 코드 2, `-o json` 지원, 메시지를 실제 출력(영문)으로 교체, 시간 형식 검사 추가.
+- `schedule create`: 파일 저장 실패 시 등록 전에 중단(종료 코드 1), `--interactive` 입력 검사 규칙 안내.
+- `file download`: 저장 경로 해석 표, 받는 중 `.part` 파일 사용 · 실패 시 삭제, 실패 코드 표. `file upload`: 실패 코드 표(`TOKEN_EXPIRED` · `TOKEN_MISSING` · `REQUEST_TIMEOUT`).
+- `cloud-auth zos-download`: `--file-name` 구분자 검사, 상태별 종료 코드 표.
+- `recovery update`: `--network-limit` 기본값 삭제, `--backup-file` 지정 시 `--mode` 적용 범위, `--target-partition` 단독 거부, `--id` · `--name` 동시 거부, 빈 `--script-path` 거부 안내. `backup update`: 같은 두 거부 안내.
+- `backup regist`: `--mode` 를 선택(기본 full)으로 바로잡고 `--interactive` 파라미터 · 예시 추가. `config set`: 토큰 가림 표시 예시. `token issue`: `--user-mail` 형식 검사 · 저장 실패 경고 · stdout `tokenUrl` 줄 삭제 안내. `backup delete`: `errorMessage` 줄 안내. `os-replication regist` · `update`: 스케줄 사전 검사 안내.
+- 사이트의 v4.0.0 릴리스 노트(`changelog/4.0.0.md`)에 "수정 — 명령 동작 점검 결과" 항목 추가. 이전 버전 보존본은 변경 없음.
+- `recovery list` 단건 조회 들여쓰기 변경은 문서 예시가 이미 2칸이라 릴리스 노트에만 반영.
+- backup regist `--ind` 예시에서 항목별 `excludePartition` 삭제. 파티션 제외는 `--exclude-partition`(작업 전체)만 적용된다는 안내 추가.
+- `replication regist`: `--ip` 를 IPv4 주소 또는 호스트 이름으로 설명하고 거부 조건(`999.1.1.1`)과 오류 메시지 · 종료 코드 `2` 안내 추가.
+- `recovery monit`: `--server-type` 이 `source` · `target` 만 받는다는 안내 추가.
+- `backup update` · `backup delete` · `recovery update` · `recovery delete`: `--name` 설명에 숫자로만 된 이름은 작업 ID 로 해석된다는 안내 추가.
+- `schedule create`: `--interactive` 타입 선택지 이름이 `--type` 이름표와 같고 0 · 1 · 2 · 4 · 12 에만 짧은 설명이 붙는다는 안내 추가(화면 예시는 문서에 없음).
+- 사이트 v4.0.0 릴리스 노트 "수정 — 명령 동작 점검 결과" 에 위 항목과 `replication_version` 숫자 `1` 처리를 추가.
+- 계약 변화 없음(문서만 변경).
+
+</details>
+
+<details>
 <summary><code>[11-16] [Added] [API&nbsp;v4.0.0 · CLI&nbsp;v4.0.0]</code> <b>스케줄 타입 12 (매년) 문서</b></summary>
 
 - 스케줄 타입 표(`enums.yml`)에 12(`Yearly`, 일반 작업용, 날짜 기준 `{ month, day, time }` · 요일 기준 `{ month, week, day, time }`)를 추가. 스케줄 개요에 Type 12 구조 · 예시 3종 · 응답 `description` 문구 · 표현할 수 없는 경우를 추가하고, 등록 · 조회 문서의 type 범위를 0~12 로 수정.

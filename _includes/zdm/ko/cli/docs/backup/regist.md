@@ -70,6 +70,9 @@ zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --script-path
 
 # 파티션별 개별 설정 (JSON 형태)
 zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --individual '[{"partition":"/","jobName":"root_backup"}]'
+
+# 생략한 옵션(서버, 모드, Repository, 파티션)을 질문으로 입력
+zdm-cli backup regist --interactive
 ```
 
 </details>
@@ -79,8 +82,8 @@ zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --individual 
 
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| --server | - | string | Required | - | 작업 대상 Server | - |
-| --mode | - | string | Required | - | 작업 모드 | {% include zdm/job-modes.md backup=true %} |
+| --server | - | string | Required | - | 작업 대상 Server (`--interactive` 와 함께 생략하면 입력을 물음) | - |
+| --mode | - | string | Optional | full | 작업 모드. 생략하면 full 이고, `--interactive` 를 주면 모드를 물어봄 (기본 선택은 full) | {% include zdm/job-modes.md backup=true %} |
 | --center | -c | string | Optional | config 설정값 | 작업 등록 Center | - |
 | --repository-id | -ri | number | Optional | config 설정값 | 작업시 사용할 Repository ID | - |
 | --repository-path | -rp | string | Optional | config 설정값 | 작업시 사용할 Repository Path (미입력 시 config 기본값 사용, 없으면 생략) | - |
@@ -99,6 +102,7 @@ zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --individual 
 | --script-path | -sp | string | Optional | - | 작업시 사용할 script full path | - |
 | --script-run | -sr | string | Optional | - | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 | --individual | -ind | string | Optional | - | 파티션별 개별 설정 (JSON 문자열) | - |
+| --interactive | -i | boolean | Optional | false | 생략한 핵심 옵션(`--server`, `--mode`, `--repository-id`, `--partition`)을 단계별 질문으로 입력받음 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 </details>
@@ -120,13 +124,14 @@ zdm-cli backup regist --server ca-rocky810_172.25.0.48 --mode full --individual 
     "encryption": false,
     "rotation": 1,
     "excludeDir": "/tmp,/var/log",
-    "excludePartition": "/dev",
     "networkLimit": 100,
     "autoStart": true,
     "description": "Root partition backup"
   }
 ]
 ```
+
+파티션 제외는 `--exclude-partition` 으로 작업 전체에 지정합니다. `--ind` 항목 안의 `excludePartition` 은 적용되지 않습니다.
 
 </details>
 

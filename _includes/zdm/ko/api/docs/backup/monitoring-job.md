@@ -180,9 +180,25 @@ curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
 }
 ```
 
+**필터 조건 불일치 (404 Not Found)**
+
+작업은 있으나 정보 행 필터(`partition` · `drive` · `mode` · `repositoryType` · `repositoryPath` 등)에 맞는 결과가 없을 때 반환됩니다(v4.0.0). 종전에는 400 `JOB-ERROR-20` 이었습니다. 단건 조회(`GET /backups/:identifier`)의 필터 불일치와 같은 판정입니다.
+
+```json
+{
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "success": false,
+  "error": {
+    "code": "JOB-ERROR-01",
+    "message": "Backup job with Name 'daily-backup' exists, but no results match the specified filter conditions."
+  },
+  "timestamp": "2025-01-15T10:30:00.000+09:00"
+}
+```
+
 **작업 데이터 불완전 (400 Bad Request)**
 
-백업 작업 데이터가 불완전한 경우 반환됩니다. (backup 은 존재하지만 backupInfo 정보가 없는 경우)
+필터 없이도 작업 데이터가 불완전한 경우 반환됩니다. (backup 은 존재하지만 backupInfo 정보가 없는 경우)
 
 ```json
 {

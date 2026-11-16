@@ -46,6 +46,16 @@ curl -X DELETE "https://api.example.com/api/replications/backup-replication-01?c
 > * `?center=` 처럼 **키는 보냈는데 값이 비어 있으면** 400 입니다. 파라미터를 **생략**하는 것은 종전대로 "센터 지정 없음" 입니다.
 > * 이전에도 같은 규칙이었으나 검증 위치가 서비스 계층에서 **요청 스키마로 옮겨져 에러 형식이 바뀌었습니다.**
 
+<details markdown="1">
+<summary><strong>V1 차이점</strong></summary>
+
+* V1 은 작업 이름으로 삭제할 때 `center` 가 필수가 아닙니다. 다만 같은 이름의 작업이 둘 이상이면 아무것도 지우지 않고 409 `CONFLICT` 로 거부합니다(아래 에러 응답).
+* V1 삭제도 `center` 를 받습니다(v4.0.0). 종전 V1 삭제에는 `center` 가 없었습니다. 작업 이름으로 지우면 그 center 안에서만 찾고, 작업 ID 로 지우면 작업이 그 center 에 속해야 합니다. 속하지 않으면 404 입니다.
+* 쿼리 검사가 V2 와 같아졌습니다(v4.0.0). 선언되지 않은 쿼리 키, `?center=` 처럼 값이 빈 `center`, 2개 이상의 `center` 는 400 `DTO-VALIDATION-03` 입니다. 종전 V1 은 쿼리를 검사하지 않고 무시했습니다.
+* 삭제되는 이력 · 로그는 지우는 작업이 속한 center 의 것뿐입니다. 종전에는 다른 center 의 같은 이름 작업 이력 · 로그도 지워졌습니다.
+
+</details>
+
 </details>
 
 <details markdown="1" open>
@@ -118,12 +128,34 @@ curl -X DELETE "https://api.example.com/api/replications/backup-replication-01?c
   "success": false,
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
-    "code": "JOB-ERROR-01",
-    "message": "Replication not found (identifier: 999)"
+    "code": "NOT_FOUND",
+    "message": "Replication not found (identifier: 999, center: 1)"
   },
   "timestamp": "2026-03-20T10:30:00.000+09:00"
 }
 ```
+
+`center` 를 지정하지 않은 V1 요청의 메시지에는 `center` 가 붙지 않습니다(`Replication not found (identifier: 999)`). ID 로 지우면서 지정한 `center` 가 작업의 center 와 다를 때도 같은 404 입니다.
+
+**같은 이름의 작업이 여러 개 — V1 이름 삭제 (409 Conflict)**
+
+V1 에서 작업 **이름**으로 삭제하면서 `center` 를 생략했는데 같은 이름의 작업이 둘 이상이면 아무것도 삭제하지 않고 거부합니다(v4.0.0). 종전에는 그중 한쪽이 지워졌습니다. 메시지에 걸린 작업 ID 가 실리므로 **ID 로 다시 요청**하거나 `center` 를 함께 지정하세요.
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "CONFLICT",
+    "message": "Multiple replication jobs named 'backup-replication-01' exist (ids: 3, 7). Delete by job id instead."
+  },
+  "timestamp": "2026-03-20T10:30:00.000+09:00"
+}
+```
+
+**잘못된 쿼리 (400 Bad Request)**
+
+`center` 를 2개 이상 지정했거나 값이 빈 경우, V1 에서는 선언되지 않은 쿼리 키를 보낸 경우 반환됩니다. 코드는 `DTO-VALIDATION-03` 입니다.
 
 </details>
 

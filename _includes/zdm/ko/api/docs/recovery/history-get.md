@@ -50,7 +50,7 @@ curl -X GET "https://api.example.com/api/recoveries/histories/1024?center=1,zdm-
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 히스토리 ID (숫자) 또는 작업 이름 | - |
-| `jobId` | Query | number | Optional | - | 작업 ID 필터 | - |
+| `jobId` | Query | number | Optional | - | 작업 ID 필터. `0` 이나 빈 값(`?jobId=`)도 조건으로 적용되어 일치하는 항목이 없으므로 404 입니다(v4.0.0) | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `server` | Query | string | Optional | - | 서버 이름 필터 (`serverType`에 따라 소스/타겟 구분) | - |
 | `serverType` | Query | string | Optional | `target` | 서버 타입 (`server`와 함께 사용) | `source`, `target` |

@@ -33,11 +33,12 @@ curl -X DELETE "https://api.example.com/api/os-replications/1" \
 |---------|------|------|------|------|
 | `Authorization` | Header | string | Required | 인증 토큰(발급받은 값 그대로) |
 | `identifier` | Path | string | Required | 작업 ID(숫자) 또는 작업 이름 |
-| `center` | Query | string | Optional | 센터 ID/이름 **정확히 1개**. 지정 시 작업의 센터 소속과 일치하지 않으면 `CENTER_MISMATCH`(403) |
+| `center` | Query | string | Optional | 센터 ID/이름 **정확히 1개**. 작업 **ID** 로 지정했을 때 작업의 센터 소속과 일치하지 않으면 `CENTER-ERROR-01`(403). 작업 **이름**으로 지정하면 그 center 안에서만 찾으며, 없으면 404 |
 
 > * 삭제는 대상이 모호하면 안 되므로 `center` 는 **정확히 1개만** 허용합니다. `?center=1,zdm-b` 처럼 여러 개를 지정하면 400 입니다.
 > * `?center=` 처럼 **키는 보냈는데 값이 비어 있으면** 400 입니다. 파라미터를 **생략**하는 것은 종전대로 "센터 지정 없음" 입니다.
 > * 이전에도 같은 규칙이었으나 검증 위치가 서비스 계층에서 **요청 스키마로 옮겨져 에러 형식이 바뀌었습니다.**
+> * 작업 **이름**은 center 안에서만 유일합니다. 이름으로 삭제하면서 `center` 를 생략했을 때 같은 이름의 작업이 둘 이상이면 아무것도 지우지 않고 409 `CONFLICT` 로 거부합니다(v4.0.0). 종전에는 그중 하나를 지웠습니다. 메시지에 걸린 작업 ID 가 실리므로 **ID 로 다시 삭제**하거나 `center` 를 함께 지정하세요.
 
 </details>
 
@@ -104,8 +105,9 @@ curl -X DELETE "https://api.example.com/api/os-replications/1" \
 
 | 코드 | HTTP | 설명 |
 |------|------|------|
-| `NOT_FOUND` | 404 | 작업 / center 미존재 |
-| `CENTER-ERROR-01` | 403 | 작업의 center 소속과 요청 center 불일치 |
+| `NOT_FOUND` | 404 | 작업 / center 미존재. 이름으로 삭제하면서 `center` 를 지정했는데 그 center 에 그 이름이 없을 때도 404 입니다(v4.0.0, 종전에는 `CENTER-ERROR-01`) |
+| `CENTER-ERROR-01` | 403 | 작업 **ID** 로 지정했는데 그 작업이 요청 `center` 에 속하지 않음 |
+| `CONFLICT` | 409 | 이름으로 삭제하면서 `center` 를 생략했는데 같은 이름의 작업이 둘 이상 (v4.0.0). 메시지: `Multiple os replication jobs named '<이름>' exist (ids: …). Delete by job id instead.` |
 | `INTERNAL_SERVER_ERROR` | 500 | 트랜잭션 실패 등 내부 오류 |
 
 </details>

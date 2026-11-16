@@ -9,6 +9,7 @@ Schedule Data를 생성하여 JSON 파일로 저장하고 ZDM 서버에 자동�
 > * Schedule 정보를 생성하고 JSON 파일로 저장한 후, ZDM 서버에 자동으로 등록하는 명령어입니다.
 > * Schedule Type에 따라 Basic Schedule 또는 Basic + Advanced Schedule을 생성합니다. 타입별 구조와 작업에 붙이는 방법은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
 > * 생성된 파일은 로컬에 저장되며, 서버 등록 결과(ID, 타입, 상태, 설명)가 함께 출력됩니다.
+> * 파일 저장에 실패하면 서버에 등록하지 않고 `Failed to save schedule: <이유>` 로 멈추며 종료 코드 `1` 로 끝납니다.
 
 <details markdown="1" open>
 <summary><strong>명령어 구문</strong></summary>
@@ -83,7 +84,7 @@ zdm-cli schedule create -t 3 --basic-time "02:00" --center 9
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --type | -t | number | Required | - | Schedule Type | {% include zdm/schedule-types.md inline=true %} |
-| --interactive | -i | boolean | Optional | false | 누락된 옵션을 단계별 질문으로 입력받습니다. Type 12 는 먼저 "Select yearly schedule basis" 에서 날짜 기준(date)과 요일 기준(weekday)을 고릅니다 | - |
+| --interactive | -i | boolean | Optional | false | 누락된 옵션을 단계별 질문으로 입력받습니다. 입력 단계에서 일반 옵션과 같은 규칙(요일은 소문자 `mon`~`sun`, 쉼표 목록은 공백 없이, 시간은 `HH:MM`, 숫자는 정수)으로 검사해 어긋나면 그 자리에서 다시 묻습니다. 타입 선택지의 이름은 `--type` 이름표와 같고, 이름만으로 입력 방식이 드러나지 않는 0 · 1 · 2 · 4 · 12 에만 짧은 설명이 붙습니다. Type 12 는 먼저 "Select yearly schedule basis" 에서 날짜 기준(date)과 요일 기준(weekday)을 고릅니다 | - |
 | --path | -p | string | Optional | - | 생성된 Schedule File 저장 Path | - |
 | --center | -c | string | Optional | - | Schedule 등록 Center ID 또는 Name | - |
 | --user | -u | string | Optional | - | Schedule 등록 User ID 또는 Email | - |

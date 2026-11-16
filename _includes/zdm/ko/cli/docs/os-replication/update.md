@@ -96,7 +96,7 @@ zdm-cli os-replication update -c center01 --id 1 --cn new-job-name
 | --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 (`basic` 키 없으면 자동 래핑) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
-> 이 작업은 Basic 스케줄(type 0~6 또는 12)만 받습니다. Smart(type 7~11)를 지정하면 `JOB-ERROR-101` 로 거부됩니다. jobMode `full` / `increment` 모두 허용합니다 (**sync 미지원** — replication 과 차이). 변경 시 `updatedFields[]` 에 `{ field: "schedule", previous: <객체>, new: <객체> }` 형식으로 노출됩니다. 자동 래핑과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
+> 이 작업은 Basic 스케줄(type 0~6 또는 12)만 받습니다. Smart(type 7~11)를 지정하면 `JOB-ERROR-101` 로 거부됩니다. jobMode `full` / `increment` 모두 허용합니다 (**sync 미지원** — replication 과 차이). 스케줄 양식은 요청 전에 다른 작업 명령과 같은 규칙으로 검사하며, 맞지 않으면 서버에 보내지 않고 종료 코드 `2` 로 끝납니다 (예: `--schedule '{}'` → `schedule requires "type" field`). 변경 시 `updatedFields[]` 에 `{ field: "schedule", previous: <객체>, new: <객체> }` 형식으로 노출됩니다. 자동 래핑과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
 
 </details>
 

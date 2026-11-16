@@ -53,7 +53,7 @@ curl -X GET "https://api.example.com/api/recoveries/histories?page=1&limit=10" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `jobId` | Query | number | Optional | - | 작업 ID 필터 | - |
+| `jobId` | Query | number | Optional | - | 작업 ID 필터. `0` 이나 빈 값(`?jobId=`)도 조건으로 적용되어 일치하는 작업이 없으므로 빈 목록입니다(v4.0.0). 전체를 받으려면 `jobId` 를 보내지 않습니다 | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `server` | Query | string | Optional | - | 서버 이름 필터 (`serverType`에 따라 소스/타겟 구분) | - |
 | `serverType` | Query | string | Optional | `target` | 서버 타입 (`server`와 함께 사용) | `source`, `target` |
@@ -62,7 +62,7 @@ curl -X GET "https://api.example.com/api/recoveries/histories?page=1&limit=10" \
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
 | `center` | Query | string | Optional | - | center 식별자 필터 (ID/이름, comma-separated 다중 가능, 예: `destconm,9`) | - |
-| `sort` | Query | string | Optional | `desc` | 정렬 순서 | `asc`, `desc` |
+| `sort` | Query | string | Optional | `desc` | 정렬 순서. 작업 이력 `nID` 기준이며 파라미터를 하나도 보내지 않아도 내림차순(최신순)입니다(v4.0.0). 종전에는 필터 없이 부르면 저장 순서였습니다 | `asc`, `desc` |
 
 > **참고:**
 > - `serverType`이 `target`(기본값)이면 `server`는 복구 대상 서버 이름을, `source`이면 소스 서버 이름을 기준으로 필터링합니다.

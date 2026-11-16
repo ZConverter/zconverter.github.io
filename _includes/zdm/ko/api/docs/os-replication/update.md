@@ -45,7 +45,7 @@ curl -X PUT "https://api.example.com/api/os-replications/1" \
 | `Authorization` | Header | string | Required | 인증 토큰(발급받은 값 그대로) | |
 | `identifier` | Path | string | Required | 작업 ID 또는 이름 | |
 | `center` | Body | string \| number | Required | 센터 ID 또는 이름 (소속 검증용) | |
-| `changeName` | Body | string | Optional | 변경할 작업 이름 | |
+| `changeName` | Body | string | Optional | 변경할 작업 이름. 같은 center 에 이미 있는 이름이면 400 `BAD_REQUEST` 입니다(v4.0.0) | |
 | `status` | Body | string | Optional | 작업 상태. 대소문자를 구분하지 않습니다 | `start`, `stop` |
 | `uploadMode` | Body | string | Optional | 업로드 모드 | `full`, `increment` |
 | `uploadFolderName` | Body | string | Optional | 업로드 폴더 이름 | |
@@ -150,8 +150,9 @@ curl -X PUT "https://api.example.com/api/os-replications/1" \
 
 | 코드 | HTTP | 설명 |
 |------|------|------|
-| `NOT_FOUND` | 404 | 작업 / center 미존재 |
-| `CENTER-ERROR-01` | 403 | 작업의 center 소속과 요청 center 불일치 |
+| `NOT_FOUND` | 404 | 작업 / center 미존재. 작업 **이름**으로 지정하면 본문 `center` 안에서만 찾으므로, 그 center 에 그 이름이 없을 때도 404 입니다(v4.0.0, 종전에는 `CENTER-ERROR-01`). 메시지는 `Os Replication not found (identifier: <identifier>)` |
+| `CENTER-ERROR-01` | 403 | 작업 **ID** 로 지정했는데 그 작업이 요청 `center` 에 속하지 않음 |
+| `BAD_REQUEST` | 400 | `changeName` 이 같은 center 에 이미 있는 작업 이름(v4.0.0). 종전에는 같은 이름의 작업이 둘이 됐습니다. 메시지는 `Os Replication jobName already exists in the center (jobName: <이름>, centerID: <id>)` |
 | `INTERNAL_SERVER_ERROR` | 500 | 트랜잭션 실패 등 내부 오류 |
 
 </details>

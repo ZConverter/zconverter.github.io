@@ -101,6 +101,7 @@ zdm-cli recovery monit --server-id 456 --output table
 > <span class="required-note">*</span> **`--detail` 은 파티션별 진행률을 켜는 옵션이 아닙니다.** 파티션/드라이브별 `status` · `percent` · `message` · 시간 정보는 `--detail` 없이도 출력됩니다. `--detail` 이 더하는 것은 각 파티션의 **메타데이터**(대상 디스크·크기·복구 방식·디스크 번호·덮어쓰기)와, 작업 기준 조회의 **작업 로그**뿐입니다. 서버 기준 조회는 `--detail` 을 지정해도 로그를 출력하지 않습니다.<br>
 > <span class="required-note">*</span> `--mode` 는 **`--detail` 에서만 보이는 필드로 행을 거릅니다.** `--detail` 없이 `--mode` 를 지정하면 행이 줄어든 근거가 출력에 나타나지 않습니다. 걸러진 이유까지 확인하려면 `--detail` 과 함께 쓰세요.<br>
 > <span class="required-note">*</span> `--status` · `--server-type` · `--job-name-filter` · `--page` · `--limit` 은 서버 기준 조회 전용이며 작업 기준 조회에서는 전송되지 않습니다.<br>
+> <span class="required-note">*</span> `--server-type` 은 `source` · `target` 만 받으며, 목록 밖 값은 인자 오류로 거부됩니다.<br>
 > <span class="required-note">*</span> `--job-name` 은 모니터링할 작업을 지목하는 값이고, `--job-name-filter` 는 서버 기준 조회로 돌아온 job 목록에서 이름이 정확히 일치하는 작업만 남기는 필터입니다 — 서로 다른 옵션입니다.
 
 </details>

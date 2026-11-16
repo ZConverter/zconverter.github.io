@@ -29,7 +29,7 @@ curl -X GET "https://api.example.com/api/schedules/15" \
   -H "Authorization: <token>"
 ```
 
-> `:identifier`는 숫자 스케줄 ID만 의미 있습니다. 내부적으로 `Number(identifier)`로 변환되며, 비숫자 값은 `NaN`이 되어 `404 Not Found`로 응답합니다.
+> `:identifier`는 숫자 스케줄 ID만 받습니다. 숫자가 아닌 값은 400 `DTO-VALIDATION-02` 입니다(v4.0.0). 종전에는 조회까지 가서 404 로 응답했습니다.
 
 </details>
 
@@ -38,7 +38,7 @@ curl -X GET "https://api.example.com/api/schedules/15" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `identifier` | Path | string | Required | - | 스케줄 ID | - |
+| `identifier` | Path | string | Required | - | 스케줄 ID (숫자 문자열). 숫자가 아니면 400 | - |
 
 </details>
 
@@ -145,7 +145,7 @@ curl -X GET "https://api.example.com/api/schedules/15" \
 
 **스케줄을 찾을 수 없음 (404 Not Found) — `SCHEDULE_NOT_FOUND`**
 
-해당 ID의 스케줄이 DB에 존재하지 않거나, `:identifier`가 비숫자여서 `Number(identifier) = NaN`인 경우 반환됩니다. 실제 응답 메시지는 `customMessage`(영문)가 그대로 내려옵니다.
+해당 ID의 스케줄이 DB에 존재하지 않는 경우 반환됩니다. 실제 응답 메시지는 `customMessage`(영문)가 그대로 내려옵니다.
 
 ```json
 {
@@ -159,9 +159,28 @@ curl -X GET "https://api.example.com/api/schedules/15" \
 }
 ```
 
+**스케줄 ID 형식 오류 (400 Bad Request) — `DTO-VALIDATION-02`**
+
+`:identifier` 가 숫자가 아닌 경우 반환됩니다(v4.0.0).
+
+```json
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "DTO-VALIDATION-02",
+    "message": "URL parameter validation failed.",
+    "details": {
+      "identifier": ["identifier must be a number (Schedule ID only)"]
+    }
+  },
+  "timestamp": "2026-05-19T10:30:00.000+09:00"
+}
+```
+
 **스케줄 설명 변환 실패 (422 Unprocessable Entity) — `SCHEDULE_DESCRIPTION_CONVERSION_FAILED`**
 
-스케줄 설명 변환이 실패한 경우 반환됩니다. 정의되지 않은 스케줄 유형은 이 오류가 아니라 `type` `"Unknown"` · `description` `"-"` 로 내려옵니다. 입력 path param 형식 위반은 별도 422가 아니라 위의 404로 떨어집니다(길이 1 이상 문자열만 검증).
+스케줄 설명 변환이 실패한 경우 반환됩니다. 정의되지 않은 스케줄 유형은 이 오류가 아니라 `type` `"Unknown"` · `description` `"-"` 로 내려옵니다.
 
 ```json
 {

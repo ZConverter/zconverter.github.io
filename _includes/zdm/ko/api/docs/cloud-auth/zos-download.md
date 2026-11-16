@@ -94,18 +94,23 @@ curl -X GET "https://api.example.com/api/cloud-auth/zos/download/config.conf" \
 
 > v3.0.0 부터 다운로드 404 도 다른 엔드포인트와 **동일한 응답 형식**을 사용합니다. 이전 버전에서는 `traceId` / `timestamp` 가 없고 `error.code` 에 에러 정의 객체 전체가 실리는 불일치가 있었습니다.
 
-**다운로드 전송 중 오류 (500 Internal Server Error)**
+**파일을 열지 못함 (500 Internal Server Error)**
+
+파일은 있으나 열지 못한 경우 반환됩니다. v4.0.0 부터 다른 엔드포인트와 같은 표준 에러 형식입니다. 종전에는 `{ "error": ... }` 만 담은 별도 형식이었고 `success` · `traceId` · `timestamp` 가 없었습니다.
 
 ```json
 {
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "INTERNAL_SERVER_ERROR",
     "message": "An error occurred during file download."
-  }
+  },
+  "timestamp": "2026-11-16T10:30:00.000+09:00"
 }
 ```
 
-> 위 응답은 응답 헤더가 아직 전송되지 않은 경우에만 반환됩니다. 헤더가 이미 전송된 뒤 스트림 오류가 발생하면 연결이 즉시 종료되어 파일이 잘린 상태로 다운로드됩니다.
+> 위 응답은 응답 헤더가 아직 전송되지 않은 경우에만 반환됩니다. 헤더가 이미 전송된 뒤 전송 중 오류가 나거나 클라이언트가 연결을 끊으면 연결이 종료되어 파일이 잘린 상태로 받게 됩니다. 이때 서버는 열린 파일을 닫습니다.
 
 </details>
 
@@ -117,6 +122,6 @@ curl -X GET "https://api.example.com/api/cloud-auth/zos/download/config.conf" \
 | `UNAUTHORIZED` | 401 | Authentication required. | 토큰이 없거나 유효하지 않음 |
 | `FILE-ERROR-11` | 400 | `Invalid file path (traversal detected): <fileName>` | `fileName` 이 기준 디렉토리를 벗어남 (`..` 포함 또는 절대 경로) |
 | `FILE-ERROR-01` | 404 | `File '<fileName>' not found.` | 사용자 ZOS 경로에 해당 파일이 존재하지 않음 |
-| `-` | 500 | An error occurred during file download. | 파일 전송 중 읽기 스트림 오류 (헤더 전송 전) |
+| `INTERNAL_SERVER_ERROR` | 500 | An error occurred during file download. | 파일을 열지 못함 (헤더 전송 전) |
 
 </details>

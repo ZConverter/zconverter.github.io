@@ -34,10 +34,12 @@
 | `week` | string | 주차 | `"1"` ~ `"5"` (복수: `"1,3"`) |
 | `day` | string | 요일(type 4,5,7,8,10, type 12 의 요일 기준) 또는 날짜(type 0,6,9,11, type 12 의 날짜 기준) | 요일: `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"` (복수: `"mon, tue, wed"`), 날짜: `"1"` ~ `"31"` 또는 `"last"` (복수: `"1,15,20"`) |
 | `time` | string | 시간 | `"HH:mm"` 형식 (`"00:00"` ~ `"23:59"`) |
-| `interval.minute` | string | 분 간격 (type 1) | 숫자 문자열 (예: `"5"`) |
-| `interval.hour` | string | 시간 간격 (type 2) | 숫자 문자열 (예: `"2"`) |
+| `interval.minute` | string | 분 간격 (type 1) | `"1"` ~ `"2147483647"` 의 정수 문자열 (예: `"5"`) |
+| `interval.hour` | string | 시간 간격 (type 2) | `"1"` ~ `"2147483647"` 의 정수 문자열 (예: `"2"`) |
 
 값은 모두 문자열로 보냅니다. 숫자(`2026`)로 보내면 검증 단계에서 거부됩니다.
+
+**간격(`interval`) 범위 (v4.0.0)**: type 1 의 `interval.minute`, type 2 의 `interval.hour` 는 1 이상 2147483647 이하의 정수여야 합니다. `"0"`, 음수, 소수, 범위를 넘는 값은 422 `SCHEDULE-ERROR-36`(minute) · `SCHEDULE-ERROR-38`(hour) 입니다. 종전에는 `"0"` 이 0 주기로 저장됐고, 범위를 넘는 값은 저장 단계에서 500 이었습니다. 59분(type 1) 또는 23시간(type 2)을 넘는 값도 받으며 그대로 분 · 시간 단위로 실행합니다. 예를 들어 `"90"` 은 90분마다입니다.
 
 **날짜 `31` 은 그 달의 말일입니다 (`last` 별칭).** type 6, 9, 11, 12 에서 `day` 에 `31` 을 보내면 31일이 아니라 "그 달의 마지막 날"로 저장됩니다. `last`(대소문자 무시)를 보내면 같은 값이 됩니다. type 0(한 번 실행)은 달력 날짜이므로 이 규칙이 적용되지 않습니다.
 
@@ -553,6 +555,32 @@ type 0~12 에 없는 값이 저장된 스케줄을 조회하면 오류 없이 `d
 
 <details markdown="1" open>
 <summary><strong>대표 에러 응답 (요청 ↔ 응답)</strong></summary>
+
+**간격 값이 범위를 벗어남 (422 Unprocessable Entity)**
+
+```json
+// 요청
+{
+  "center": "6",
+  "type": 1,
+  "basic": { "time": "00:00", "interval": { "minute": "0" } }
+}
+```
+
+```json
+// 응답
+{
+  "success": false,
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "error": {
+    "code": "SCHEDULE-ERROR-36",
+    "message": "minute must be an integer between 1 and 2147483647."
+  },
+  "timestamp": "2026-11-16T10:30:00.000+09:00"
+}
+```
+
+type 2 의 `interval.hour` 는 `SCHEDULE-ERROR-38`, 메시지 `hour must be an integer between 1 and 2147483647.` 입니다.
 
 **Smart 타입(7)에 basic.day로 복수 요일 입력 (409 Conflict)**
 

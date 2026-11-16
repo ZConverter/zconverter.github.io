@@ -53,7 +53,7 @@ curl -X GET "https://api.example.com/api/recoveries?page=1&limit=10" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `jobId` | Query | number | Optional | - | 작업 ID 필터 | - |
+| `jobId` | Query | number | Optional | - | 작업 ID 필터. `0` 이나 빈 값(`?jobId=`)도 조건으로 적용되어 일치하는 작업이 없으므로 빈 목록입니다(v4.0.0). 전체를 받으려면 `jobId` 를 보내지 않습니다 | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `server` | Query | string | Optional | - | 작업 대상 서버 이름/ID 필터 | - |
 | `serverType` | Query | string | Optional | - | 서버 타입 필터 | {% include zdm/server-modes.md %} |

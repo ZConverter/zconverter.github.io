@@ -87,4 +87,20 @@ timestamp : 2025-01-01 10:00:00
 
 </details>
 
+<details markdown="1" open>
+<summary><strong>실패 시</strong></summary>
+
+업로드 실패 응답은 다른 명령과 같은 규칙으로 해석됩니다.
+
+| 상황 | 종료 코드 | 오류 코드 (`error.code`) |
+|------|-----------|--------------------------|
+| 토큰 만료 (401) | `3` | `TOKEN_EXPIRED` — `Token expired. Please reissue the token` |
+| 토큰 없음 (401) | `3` | `TOKEN_MISSING` — `Authentication required. Please issue a token first` |
+| 그 밖의 서버 오류 응답 | 상태에 따라 `2`(4xx) · `3`(403) · `7`(5xx) | 서버가 준 코드, 없으면 `HTTP_<상태>` |
+| 요청 시간 초과 | `4` | `REQUEST_TIMEOUT` |
+
+- 서버 오류 응답의 `traceId` 가 `-o json` 실패 응답에 실립니다.
+
+</details>
+
 ---

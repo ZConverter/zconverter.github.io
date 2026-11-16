@@ -84,8 +84,8 @@ curl -X POST "https://api.example.com/api/backups" \
 | `rotation` | number | Optional | 작업 반복 횟수 (1~30, 기본값 `1`) | - |
 | `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
 | `encryption` | string | Optional | 암호화 사용 여부 | {% include zdm/use-options.md %} |
-| `excludeDir` | string | Optional | 작업에서 제외힐 디렉토리 목록 | - |
-| `excludePartition` | string | Optional | 작업에서 제외할 파티션 목록 | - |
+| `excludeDir` | string \| array | Optional | 작업에서 제외할 디렉토리 목록. 쉼표로 구분한 문자열이나 배열을 받고, `\|` 로 구분해 저장합니다(예: `/tmp,/var/cache` → `/tmp\|/var/cache`) | - |
+| `excludePartition` | string | Optional | 작업에서 제외할 파티션 목록. 파티션을 제외하는 방법은 이 최상위 필드뿐입니다 | - |
 | `mailEvent` | string | Optional | 이벤트 알림 이메일 | - |
 | `networkLimit` | number | Optional | 네트워크 제한 속도 (0: 무제한, 그외: 해당 속도로 제한) | - |
 | `autoStart` | string | Optional | 자동 시작 여부 | {% include zdm/use-options.md %} |
@@ -113,12 +113,13 @@ curl -X POST "https://api.example.com/api/backups" \
 | `compression` | string | Optional | 압축 사용 여부 | {% include zdm/use-options.md %} |
 | `encryption` | string | Optional | 암호화 사용 여부 | {% include zdm/use-options.md %} |
 | `excludeDir` | string/array | Optional | 제외 디렉토리 | - |
-| `excludePartition` | string/array | Optional | 제외 파티션 | - |
 | `mailEvent` | string | Optional | 이벤트 알림 이메일 | - |
 | `networkLimit` | number | Optional | 네트워크 제한 속도 | - |
 | `autoStart` | string | Optional | 자동 시작 여부 | {% include zdm/use-options.md %} |
 | `scriptPath` | string | Optional | 실행할 스크립트 경로 | - |
 | `scriptRun` | string | Optional | 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
+
+> `individual[]` 에는 `excludePartition` 이 없습니다(v4.0.0). 보내도 오류 없이 무시되며, 파티션 제외는 최상위 `excludePartition` 으로만 지정합니다.
 
 **사용 예시:**
 

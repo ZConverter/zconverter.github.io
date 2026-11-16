@@ -61,6 +61,7 @@ curl -X GET "https://api.example.com/api/backups/1?detail=true" \
 > - 값 형식은 API가 정규화하므로 `C`, `C:`, `/data`가 모두 허용됩니다. OS에 따라 파라미터를 구분해 고를 필요가 없습니다.
 > - `server`, `center`는 **키만 보내고 값이 비면**(`?center=`) 400입니다. 파라미터를 **생략**하는 것은 종전대로 "해당 필터 없음"이며 동작이 달라지지 않습니다.
 > - `server`는 서버 ID와 이름을 모두 받습니다.
+> - 백업 ID `0` 은 어떤 작업과도 맞지 않아 404 입니다(v4.0.0). 종전에는 `0` 을 조건 없음으로 보아 가장 최근 작업을 돌려줬습니다.
 > - `center`는 ID/이름을 콤마로 여러 개 지정할 수 있습니다. (예: `?center=1,zdm-b`) 해석되지 않는 식별자가 섞여 있으면 해석된 것만으로 조회 범위가 좁혀집니다.
 
 </details>
@@ -213,7 +214,7 @@ curl -X GET "https://api.example.com/api/backups/1?detail=true" \
           "compression": "use",
           "encryption": "not use",
           "rotation": "7",
-          "excludeDir": "/tmp,/var/cache",
+          "excludeDir": "/tmp|/var/cache",
           "networkSpeed": "0",
           "notification": {
             "mail": "admin@example.com"
@@ -264,7 +265,7 @@ curl -X GET "https://api.example.com/api/backups/1?detail=true" \
 | `job.info.options.compression` | string | detail | 압축 사용 여부 (`use`, `not use`) |
 | `job.info.options.encryption` | string | detail | 암호화 사용 여부 (`use`, `not use`) |
 | `job.info.options.rotation` | string | detail | 보관 주기 |
-| `job.info.options.excludeDir` | string | detail | 제외 디렉토리 |
+| `job.info.options.excludeDir` | string | detail | 제외 디렉토리. 저장된 값 그대로 `\|` 로 구분합니다(등록 · 수정 모두 `\|` 로 저장, v4.0.0). 없으면 `-` |
 | `job.info.options.networkSpeed` | string | detail | 네트워크 제한 속도 |
 | `job.info.options.notification.mail` | string | detail | 알림 이메일 |
 | `job.lastUpdated` | string | - | 정보 업데이트 시간 |

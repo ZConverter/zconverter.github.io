@@ -79,9 +79,11 @@ zdm-cli replication regist --sc srcconm --tc destconm --ut backup -j 91 --tri 44
 |----------|------|------|------|--------|------|--------|
 | --source-center | --sc | string | Optional | config 설정값 | 소스 Center ID 또는 이름 | - |
 | --job-name | --jn | string | Optional | - | 작업 이름 | - |
-| --ip | - | string | Optional | - | 타겟 IP 주소 | - |
+| --ip | - | string | Optional | - | 타겟 IP 주소 또는 호스트 이름 | - |
 | --port | - | number | Optional | 22 | 타겟 SSH 포트 (0 입력 시 비활성화) | - |
 | --mode | - | string | Optional | full | Replication 모드 (모든 모드에서 schedule 허용 — v2.0.2) | `full`, `increment`, `sync` |
+
+> `--ip` 는 IPv4 주소 또는 호스트 이름(영문 · 숫자 · 하이픈 이름을 점으로 이은 것, 253자 이하)을 받습니다. 숫자와 점으로만 된 값은 IPv4 로만 판정하므로 `999.1.1.1` 은 거부됩니다. 형식이 맞지 않으면 요청 전에 종료 코드 `2` 와 `Invalid IP address or hostname: <값>` 메시지로 실패합니다.
 
 **unit-type=backup 전용**
 

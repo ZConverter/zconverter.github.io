@@ -89,6 +89,8 @@ curl -X POST "https://api.example.com/api/cloud-auth/recovery" \
 > - `regionSub` 미입력 시 — 리전 데이터에서 해당 리전의 첫 번째 zone 자동 설정
 >
 > **검증 실패 예:** `cloudType=gcp` 인데 `file` 미첨부 시 `FILE-ERROR-01` (HTTP 404) 반환.
+>
+> **같은 이름의 키 파일 (v4.0.0):** 같은 사용자가 같은 이름의 키 파일(예: `service-account.json`)을 다시 올리면 409 `CLOUD-AUTH-ERROR-03` 입니다. 종전에는 이전 파일을 덮어써서, 그 파일을 쓰던 앞선 등록이 새 키를 쓰게 됐습니다. 이름을 바꿔 올리세요. 등록을 삭제해도 키 파일은 지워지지 않으므로, 같은 이름을 다시 쓰려면 파일을 정리해야 합니다. 검증이나 등록에 실패한 업로드 파일은 서버가 지웁니다.
 
 </details>
 
@@ -121,6 +123,7 @@ curl -X POST "https://api.example.com/api/cloud-auth/recovery" \
 |------|------|------|
 | `FILE-ERROR-01` | 404 | GCP 키 파일 미첨부 (`cloudType=gcp` 시 필수) |
 | `FILE-ERROR-11` | 400 | 업로드 파일명 또는 사용자 email 이 저장 디렉터리 밖을 가리킴 (v4.0.0). 파일 이동·등록 전에 거절됩니다 |
+| `CLOUD-AUTH-ERROR-03` | 409 | 같은 이름의 키 파일이 이미 있음 (v4.0.0, GCP 등록) |
 | `CENTER-ERROR-01` | 403 | 지정한 `center`에 속하지 않음 (삭제 시) |
 | `CLOUD-AUTH-ERROR-01` | 400 | 업로드 파일 크기 초과(10MB) |
 | `CLOUD-AUTH-ERROR-02` | 400 | 파일 업로드 실패 |

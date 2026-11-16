@@ -44,7 +44,7 @@ curl -X GET "https://api.example.com/api/replications/1?detail=true" \
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | `identifier` | Path | string | Required | - | 복제 작업 ID (숫자) 또는 작업 이름 | - |
-| `jobId` | Query | number | Optional | - | 작업 ID 필터 | - |
+| `jobId` | Query | number | Optional | - | 작업 ID 필터. `0` 이나 빈 값(`?jobId=`)도 조건으로 적용되어 일치하는 항목이 없으므로 404 입니다(v4.0.0) | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
 | `server` | Query | string | Optional | - | 대상 서버 이름/ID 필터 | - |
 | `status` | Query | string | Optional | - | 작업 상태 필터. 응답 `job.info.status.current` 와 같은 상태 값이며 대소문자를 구분하지 않습니다. 작업은 있으나 상태가 다르면 404 입니다(아래 에러 응답 참고) | {% include zdm/replication-job-status.md %} |

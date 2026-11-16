@@ -42,7 +42,7 @@ zdm-cli recovery delete --center 9 --name "my-recovery" --output table
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --center | -c | string | Required | - | 작업 대상 Center | - |
-| --name | - | string | Optional<span class="required-note">*</span> | - | 작업 이름 | - |
+| --name | - | string | Optional<span class="required-note">*</span> | - | 작업 이름. (숫자로만 된 이름은 작업 ID 로 해석되므로 이런 작업은 `--id` 를 사용하세요) | - |
 | --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 

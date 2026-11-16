@@ -55,8 +55,11 @@ zdm-cli recovery update --center 9 --id 123 --mail-event "admin@example.com"
 # 작업 상태 변경
 zdm-cli recovery update --center 9 --id 123 --status stop
 
-# 특정 파티션의 모드 변경
+# 특정 이미지를 쓰는 항목의 모드만 변경 (작업의 다른 항목은 그대로)
 zdm-cli recovery update --center 9 --id 123 --backup-file "server01_ROOT_0262.ZIA" --mode inc
+
+# 그 이미지가 여러 파티션에 복구된 경우 파티션 하나로 좁힘
+zdm-cli recovery update --center 9 --id 123 --backup-file "server01_ROOT_0262.ZIA" --target-partition /data --mode inc
 
 # 복합 설정 변경
 zdm-cli recovery update --center 9 --id 123 --change-name "MyRecovery" --platform aws --after-reboot reboot --network-limit 500
@@ -70,27 +73,35 @@ zdm-cli recovery update --center 9 --id 123 --change-name "MyRecovery" --platfor
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --center | -c | string | Required | - | 작업 대상 Center | - |
-| --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID | - |
-| --name | - | string | Optional<span class="required-note">*</span> | - | 작업 Name | - |
+| --id | - | number | Optional<span class="required-note">*</span> | - | 작업 ID (`--name` 과 함께 쓸 수 없음) | - |
+| --name | - | string | Optional<span class="required-note">*</span> | - | 작업 Name (`--id` 와 함께 쓸 수 없음). (숫자로만 된 이름은 작업 ID 로 해석되므로 이런 작업은 `--id` 를 사용하세요) | - |
 | --change-name | -cn | string | Optional | - | 변경할 작업 이름 | - |
 | --platform | -pf | string | Optional | - | 변경할 플랫폼 | {% include zdm/platforms.md baremetal=true inline=true %} |
 | --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 (`basic` 키 없으면 자동 래핑) | - |
 | --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID (복사하지 않고 그대로 참조). 작업과 같은 center 의 스케줄이어야 하고 기본 유형(type 0~6 또는 12)만 받습니다 | - |
 | --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 (`basic` 키 없으면 자동 래핑) | - |
-| --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md recovery=true %} |
+| --mode | - | string | Optional | - | 작업 모드. `--backup-file` 을 함께 주면 그 이미지를 쓰는 항목에만 적용되고, 주지 않으면 작업 전체에 적용됩니다 | {% include zdm/job-modes.md recovery=true %} |
 | --after-reboot | -ar | string | Optional | - | 작업 완료 후 부팅 모드 | `reboot`, `shutdown`, `none` |
 | --mail-event | -me | string | Optional | - | 작업 이벤트 수신 메일 | - |
-| --network-limit | -nl | number | Optional | 0 | 작업 Network 제한 속도 (Mbps) | - |
-| --script-path | -sp | string | Optional | - | 작업 스크립트 경로 | - |
+| --network-limit | -nl | number | Optional | - | 작업 Network 제한 속도 (Mbps). 주지 않으면 기존 제한이 유지되고, `0` 을 명시하면 제한을 해제합니다 | - |
+| --script-path | -sp | string | Optional | - | 작업 스크립트 경로. 빈 값은 거부됩니다 (스크립트를 지울 수 없음) | - |
 | --script-run | -sr | string | Optional | - | 작업 스크립트 실행 타이밍 | {% include zdm/script-timing.md %} |
 | --status | - | string | Optional | - | 작업 상태. `start` 는 대상 서버가 사용 중이면 `JOB-ERROR-64` (409) 로 거부됩니다 (`stop` 은 영향 없음) | `start`, `stop` |
 | --backup-file | -bf | string | Optional | - | 수정할 항목을 지목할 backup image 파일 이름 | - |
-| --target-partition | -tp | string | Optional | - | 같은 이미지가 여러 파티션에 복구된 경우 그중 하나로 좁힘 (Linux `/data`, Windows `C:`) | - |
+| --target-partition | -tp | string | Optional | - | 같은 이미지가 여러 파티션에 복구된 경우 그중 하나로 좁힘 (Linux `/data`, Windows `C:`). `--backup-file` 없이는 쓸 수 없음 | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
 > Recovery 는 Basic 스케줄(type 0~6 또는 12)만 받습니다. Smart(type 7~11)를 지정하면 `JOB-ERROR-101` 로 거부됩니다. 자동 래핑과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
 
-> <span class="required-note">*</span> --id 또는 --name 중 하나는 필수로 입력해야 합니다.
+> <span class="required-note">*</span> --id 또는 --name 중 하나는 필수로 입력해야 하며, 둘을 함께 주면 요청 전에 거부됩니다.
+
+아래 입력은 요청을 보내기 전에 종료 코드 `2` 로 거부됩니다.
+
+| 입력 | 메시지 |
+|------|--------|
+| `--id` 와 `--name` 을 함께 지정 | `id and name cannot be used together` |
+| `--backup-file` 없이 `--target-partition` 지정 | `--target-partition requires --backup-file (it narrows which entries using that image change)` |
+| 비었거나 공백뿐인 `--script-path` | `script-path must not be empty (clearing a script is not supported)` |
 
 </details>
 
