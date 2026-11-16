@@ -28,12 +28,12 @@ navigation: api-{version}
 ```bash
 # 기본 요청
 curl -X {METHOD} "https://api.example.com/api/{endpoint}" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json"
 
 # 파라미터 포함 요청
 curl -X {METHOD} "https://api.example.com/api/{endpoint}?param=value" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

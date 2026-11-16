@@ -22,7 +22,7 @@
 ```bash
 # 파일 다운로드
 curl -X GET "https://api.example.com/api/files/download/file-1705312200000-123456789-document.txt" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -o downloaded-file.txt
 ```
 

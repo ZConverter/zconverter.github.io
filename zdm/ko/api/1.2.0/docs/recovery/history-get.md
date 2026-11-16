@@ -30,15 +30,15 @@ lang: ko
 ```bash
 # 작업 ID로 조회
 curl -X GET "https://api.example.com/api/recoveries/histories/10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 작업 이름으로 조회
 curl -X GET "https://api.example.com/api/recoveries/histories/daily-recovery" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 작업 이름 + 필터 적용
 curl -X GET "https://api.example.com/api/recoveries/histories/daily-recovery?result=failed&page=1&limit=5" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

@@ -21,7 +21,7 @@
 
 ```bash
 curl -X GET "https://api.example.com/api/licenses/key/ABCDEFGH12345678IJKLMN" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

@@ -23,11 +23,11 @@
 ```bash
 # 백업 ID로 삭제
 curl -X DELETE "https://api.example.com/api/backups/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 백업 이름으로 삭제
 curl -X DELETE "https://api.example.com/api/backups/daily-backup" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

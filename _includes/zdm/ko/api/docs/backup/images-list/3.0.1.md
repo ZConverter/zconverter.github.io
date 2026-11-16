@@ -59,49 +59,49 @@
 ```bash
 # 전체 조회 (등록된 모든 저장소 스캔)
 curl -X GET "https://api.example.com/api/backups/images" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # Center로 스캔 범위 축소 (권장)
 curl -X GET "https://api.example.com/api/backups/images?center=6" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # Center 복수 지정 (ID/이름 혼용 가능)
 curl -X GET "https://api.example.com/api/backups/images?center=1,zdm-b" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 저장소 타입으로 스캔 범위 축소
 curl -X GET "https://api.example.com/api/backups/images?repositoryType=nfs" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 저장소 하나만 스캔
 curl -X GET "https://api.example.com/api/backups/images?repositoryId=13" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 서버 필터 (선택) - 이름 또는 ID
 curl -X GET "https://api.example.com/api/backups/images?server=source-centos7-bios (192.168.2.104)" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 curl -X GET "https://api.example.com/api/backups/images?server=12" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 작업 이름 필터 (정확히 일치)
 curl -X GET "https://api.example.com/api/backups/images?jobName=source-centos7-bios_ROOT" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 파티션/드라이브 필터 (Linux, Windows 구분 없이 하나만 사용)
 curl -X GET "https://api.example.com/api/backups/images?partition=/" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 curl -X GET "https://api.example.com/api/backups/images?partition=C" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 오래된 이미지부터 정렬
 curl -X GET "https://api.example.com/api/backups/images?sort=asc" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/backups/images?center=6&page=1&limit=10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

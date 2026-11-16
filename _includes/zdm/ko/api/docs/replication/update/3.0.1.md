@@ -26,7 +26,7 @@
 ```bash
 # 복제 작업 이름 변경 및 모드 수정
 curl -X PUT "https://api.example.com/api/replications/1" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",
@@ -37,7 +37,7 @@ curl -X PUT "https://api.example.com/api/replications/1" \
 
 # 복제 작업 시작
 curl -X PUT "https://api.example.com/api/replications/backup-replication-01" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",
@@ -46,7 +46,7 @@ curl -X PUT "https://api.example.com/api/replications/backup-replication-01" \
 
 # 스케줄 변경
 curl -X PUT "https://api.example.com/api/replications/1" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",

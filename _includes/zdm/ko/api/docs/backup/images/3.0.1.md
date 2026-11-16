@@ -29,42 +29,42 @@
 ```bash
 # 서버 이름으로 조회
 curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 서버 ID로 조회 (이름으로 변환 후 비교)
 curl -X GET "https://api.example.com/api/backups/images/server/12" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 작업 이름으로 필터 (정확히 일치)
 curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)?jobName=source-centos7-bios_ROOT" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 파티션/드라이브 필터 (Linux, Windows 구분 없이 하나만 사용)
 curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)?partition=/" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 curl -X GET "https://api.example.com/api/backups/images/server/SOURCE-2012 (192.168.0.179)?partition=C" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)?page=1&limit=10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 필터 조합
 curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)?jobName=source-centos7-bios_ROOT&partition=/&page=1&limit=10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # Center 및 Repository 필터
 curl -X GET "https://api.example.com/api/backups/images/server/source-amazon2023-bios_(192.168.2.99)?center=6&repositoryId=13" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # Center 복수 지정 (ID/이름 혼용 가능)
 curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)?center=1,zdm-b" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # Repository Path 필터
 curl -X GET "https://api.example.com/api/backups/images/server/source-centos7-bios (192.168.2.104)?repositoryPath=/ZConverter" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

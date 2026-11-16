@@ -24,7 +24,7 @@ Recovery 클라우드 인증 정보를 등록합니다.
 ```bash
 # AWS 등록
 curl -X POST "https://api.example.com/api/cloud-auth/recovery" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -F "center=center-01" \
   -F "cloudType=aws" \
   -F "displayName=AWS 프로덕션" \
@@ -35,7 +35,7 @@ curl -X POST "https://api.example.com/api/cloud-auth/recovery" \
 
 # GCP 등록 (키 파일 필수)
 curl -X POST "https://api.example.com/api/cloud-auth/recovery" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -F "file=@/path/to/service-key.json" \
   -F "center=center-01" \
   -F "cloudType=gcp" \
@@ -52,7 +52,7 @@ curl -X POST "https://api.example.com/api/cloud-auth/recovery" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 설명 | 선택값 |
 |---------|------|------|------|------|--------|
-| `Authorization` | Header | string | Required | Bearer 토큰 | |
+| `Authorization` | Header | string | Required | 인증 토큰(발급받은 값 그대로) | |
 | `center` | Body | string | Required | 센터 ID 또는 이름 | |
 | `cloudType` | Body | string | Required | 클라우드 타입 | `aws`, `gcp` |
 | `displayName` | Body | string | Optional | 표시 이름 (미입력 시 자동생성: `{PLATFORM}_RECOVERY_{timestamp}`) | |

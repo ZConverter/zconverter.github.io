@@ -30,19 +30,19 @@ lang: ko
 ```bash
 # 전체 백업 히스토리 조회
 curl -X GET "https://api.example.com/api/backups/histories" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 필터 적용 조회
 curl -X GET "https://api.example.com/api/backups/histories?result=success&server=server-01" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 파티션 필터 적용 조회
 curl -X GET "https://api.example.com/api/backups/histories?server=server-01&partition=C:" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/backups/histories?page=1&limit=10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

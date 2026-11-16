@@ -23,7 +23,7 @@
 ```bash
 # 공통 필드 수정 (모든 파티션에 동일하게 적용)
 curl -X PUT "https://api.example.com/api/recoveries/1" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",
@@ -34,7 +34,7 @@ curl -X PUT "https://api.example.com/api/recoveries/1" \
 
 # 개별 파티션 모드만 변경 (jobList만 사용)
 curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",
@@ -49,7 +49,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 # 전체 모드 + 개별 파티션 예외 설정 (Linux)
 # mode: 모든 파티션에 increment 적용 후, jobList로 "/" 파티션만 full로 재변경
 curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",
@@ -65,7 +65,7 @@ curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
 
 # Windows 드라이브 개별 모드 변경
 curl -X PUT "https://api.example.com/api/recoveries/daily-recovery" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",

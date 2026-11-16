@@ -24,7 +24,7 @@
 ```bash
 # NFS 레포지토리 등록
 curl -X POST "https://api.example.com/api/zdms/repositories" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",
@@ -36,7 +36,7 @@ curl -X POST "https://api.example.com/api/zdms/repositories" \
 
 # SMB 레포지토리 등록
 curl -X POST "https://api.example.com/api/zdms/repositories" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "Main-Center",

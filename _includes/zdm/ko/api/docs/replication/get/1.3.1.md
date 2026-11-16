@@ -25,15 +25,15 @@
 ```bash
 # 작업 ID로 조회
 curl -X GET "https://api.example.com/api/replications/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 작업 이름으로 조회
 curl -X GET "https://api.example.com/api/replications/backup-replication-01" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 상세 정보 포함 조회
 curl -X GET "https://api.example.com/api/replications/1?detail=true" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

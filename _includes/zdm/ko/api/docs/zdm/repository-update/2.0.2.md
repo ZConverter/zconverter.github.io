@@ -24,7 +24,7 @@
 ```bash
 # 레포지토리 원격 경로 수정
 curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "Main-Center",
@@ -33,7 +33,7 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
 
 # 레포지토리 IP 추가
 curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",
@@ -42,7 +42,7 @@ curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
 
 # 여러 필드 동시 수정
 curl -X PUT "https://api.example.com/api/zdms/repositories/1" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "Main-Center",

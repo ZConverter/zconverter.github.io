@@ -24,7 +24,7 @@
 ```bash
 # 사용자 ID로 업데이트
 curl -X PUT "https://api.example.com/api/users/1" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "username": "김철수",
@@ -34,7 +34,7 @@ curl -X PUT "https://api.example.com/api/users/1" \
 
 # 이메일로 업데이트
 curl -X PUT "https://api.example.com/api/users/user@example.com" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "phone": "010-1234-5678",

@@ -22,7 +22,7 @@
 
 ```bash
 curl -X POST "https://api.example.com/api/licenses" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",

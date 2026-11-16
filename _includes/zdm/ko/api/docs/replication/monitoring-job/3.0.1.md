@@ -25,11 +25,11 @@
 ```bash
 # 복제 ID로 모니터링 조회
 curl -X GET "https://api.example.com/api/replications/monitoring/job/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 작업 이름으로 모니터링 조회
 curl -X GET "https://api.example.com/api/replications/monitoring/job/backup-replication-01" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

@@ -24,7 +24,7 @@ ZDM 레포지토리 연결을 검증합니다.
 ```bash
 # SMB 레포지토리 연결 검증
 curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",
@@ -37,7 +37,7 @@ curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
 
 # NFS 레포지토리 연결 검증
 curl -X POST "https://api.example.com/api/zdms/repositories/verify" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "Main-Center",
