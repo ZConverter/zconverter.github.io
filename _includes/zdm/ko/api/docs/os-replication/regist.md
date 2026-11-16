@@ -25,7 +25,7 @@
 
 ```bash
 curl -X POST "https://api.example.com/api/os-replications" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "center-01",
@@ -48,7 +48,7 @@ curl -X POST "https://api.example.com/api/os-replications" \
 
 ```bash
 curl -X POST "https://api.example.com/api/os-replications" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "center-01",
@@ -69,7 +69,7 @@ curl -X POST "https://api.example.com/api/os-replications" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |---------|------|------|------|--------|------|--------|
-| `Authorization` | Header | string | Required | | Bearer 토큰 | |
+| `Authorization` | Header | string | Required | | 인증 토큰(발급받은 값 그대로) | |
 | `center` | Body | string | Required | | 센터 ID 또는 이름 | |
 | `replicationType` | Body | string | Required | | 복제 방식 | `upload`, `download` |
 | `cloudKeyId` | Body | number | Required | | Cloud Key ID | |
@@ -133,7 +133,7 @@ curl -X POST "https://api.example.com/api/os-replications" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "JOB-ERROR-103",
-    "message": "Replication jobs accept schedule type 0-6 only (received: 7)."
+    "message": "Replication jobs accept schedule type 0-6 or 12 only (received: 7)."
   },
   "timestamp": "2026-04-08T12:00:00.000+09:00"
 }

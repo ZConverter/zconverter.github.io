@@ -21,7 +21,7 @@ OS 복제 히스토리 목록을 조회합니다.
 
 ```bash
 curl -X GET "https://api.example.com/api/os-replications/histories?page=1&limit=10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>
@@ -31,7 +31,7 @@ curl -X GET "https://api.example.com/api/os-replications/histories?page=1&limit=
 
 | 파라미터 | 위치 | 타입 | 필수 | 설명 | 선택값 |
 |---------|------|------|------|------|--------|
-| `Authorization` | Header | string | Required | Bearer 토큰 | |
+| `Authorization` | Header | string | Required | 인증 토큰(발급받은 값 그대로) | |
 | `jobId` | Query | number | Optional | 작업 ID 필터 | |
 | `jobName` | Query | string | Optional | 작업 이름 필터 | |
 | `server` | Query | string | Optional | 서버 이름 필터 | |

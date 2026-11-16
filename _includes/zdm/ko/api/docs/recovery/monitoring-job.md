@@ -24,23 +24,23 @@
 ```bash
 # 복구 작업 ID로 조회 (파티션별 진행률 포함)
 curl -X GET "https://api.example.com/api/recoveries/monitoring/job/12" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 복구 작업 이름으로 조회
 curl -X GET "https://api.example.com/api/recoveries/monitoring/job/daily-recovery" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 파티션 메타데이터 + 작업 로그까지 포함해 조회
 curl -X GET "https://api.example.com/api/recoveries/monitoring/job/daily-recovery?detail=true" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 특정 파티션만 남겨 조회 (detail 없이도 그 파티션의 진행률이 나옵니다)
 curl -X GET "https://api.example.com/api/recoveries/monitoring/job/daily-recovery?partition=/home" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 다중 센터 범위 지정 (comma-separated; ID 또는 이름 혼용 가능)
 curl -X GET "https://api.example.com/api/recoveries/monitoring/job/daily-recovery?center=1,zdm-b" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

@@ -23,23 +23,23 @@
 ```bash
 # 히스토리 ID로 조회
 curl -X GET "https://api.example.com/api/backups/histories/1024" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 작업 이름으로 조회
 curl -X GET "https://api.example.com/api/backups/histories/daily-backup" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 작업 이름 + 필터 적용
 curl -X GET "https://api.example.com/api/backups/histories/daily-backup?result=success&server=server-01" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 작업 이름 + 페이지네이션 적용
 curl -X GET "https://api.example.com/api/backups/histories/daily-backup?page=1&limit=10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # center 범위를 지정해 조회
 curl -X GET "https://api.example.com/api/backups/histories/1024?center=1,zdm-b" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

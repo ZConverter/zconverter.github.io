@@ -24,19 +24,19 @@
 ```bash
 # 스케줄 ID로 삭제
 curl -X DELETE "https://api.example.com/api/schedules/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # center 소속 검증과 함께 삭제 (스케줄이 해당 센터 소속이 아니면 403)
 curl -X DELETE "https://api.example.com/api/schedules/1?center=1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # path param 형태 — 스케줄 ID 15 삭제
 curl -X DELETE "https://api.example.com/api/schedules/15" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # path param + center 검증 — 스케줄 ID 15가 center ID 1 소속인지 확인 후 삭제
 curl -X DELETE "https://api.example.com/api/schedules/15?center=1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

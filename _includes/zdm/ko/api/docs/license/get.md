@@ -24,11 +24,11 @@
 ```bash
 # 라이선스 ID로 조회
 curl -X GET "https://api.example.com/api/licenses/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 라이선스 이름으로 조회
 curl -X GET "https://api.example.com/api/licenses/Enterprise-License" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

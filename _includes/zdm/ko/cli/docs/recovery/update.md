@@ -46,7 +46,7 @@ zdm-cli recovery update --center 9 --id 123 --schedule-id 1234
 # 스케줄 변경 (JSON 파일 사용)
 zdm-cli recovery update --center 9 --id 123 --schedule-file "schedule.json"
 
-# 스케줄 변경 (JSON 문자열 사용, basic 자동 래핑) — type 은 정수 0 ~ 6
+# 스케줄 변경 (JSON 문자열 사용, basic 자동 래핑) — type 은 정수 0 ~ 6 또는 12
 zdm-cli recovery update --center 9 --id 123 --schedule '{"type":3,"time":"03:00"}'
 
 # 메일 알림 수신자 변경
@@ -75,7 +75,7 @@ zdm-cli recovery update --center 9 --id 123 --change-name "MyRecovery" --platfor
 | --change-name | -cn | string | Optional | - | 변경할 작업 이름 | - |
 | --platform | -pf | string | Optional | - | 변경할 플랫폼 | {% include zdm/platforms.md baremetal=true inline=true %} |
 | --schedule | -sc | string | Optional | - | 스케줄 JSON 문자열 (`basic` 키 없으면 자동 래핑) | - |
-| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID (복사하지 않고 그대로 참조). 작업과 같은 center 의 스케줄이어야 하고 기본 유형(type 0~6)만 받습니다 | - |
+| --schedule-id | -sc-id | number | Optional | - | 기존 스케줄 ID (복사하지 않고 그대로 참조). 작업과 같은 center 의 스케줄이어야 하고 기본 유형(type 0~6 또는 12)만 받습니다 | - |
 | --schedule-file | -sc-f | string | Optional | - | 스케줄 JSON 파일 경로 (`basic` 키 없으면 자동 래핑) | - |
 | --mode | - | string | Optional | - | 작업 모드 | {% include zdm/job-modes.md recovery=true %} |
 | --after-reboot | -ar | string | Optional | - | 작업 완료 후 부팅 모드 | `reboot`, `shutdown`, `none` |
@@ -88,7 +88,7 @@ zdm-cli recovery update --center 9 --id 123 --change-name "MyRecovery" --platfor
 | --target-partition | -tp | string | Optional | - | 같은 이미지가 여러 파티션에 복구된 경우 그중 하나로 좁힘 (Linux `/data`, Windows `C:`) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
 
-> Recovery 는 Basic 스케줄(type 0~6)만 받습니다. Smart(type 7~11)를 지정하면 `JOB-ERROR-101` 로 거부됩니다. 자동 래핑과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
+> Recovery 는 Basic 스케줄(type 0~6 또는 12)만 받습니다. Smart(type 7~11)를 지정하면 `JOB-ERROR-101` 로 거부됩니다. 자동 래핑과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
 
 > <span class="required-note">*</span> --id 또는 --name 중 하나는 필수로 입력해야 합니다.
 

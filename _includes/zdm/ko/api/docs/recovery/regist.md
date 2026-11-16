@@ -23,7 +23,7 @@
 ```bash
 # 기본 복구 작업 등록
 curl -X POST "https://api.example.com/api/recoveries" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",
@@ -39,7 +39,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 
 # 상세 설정 포함 복구 작업 등록
 curl -X POST "https://api.example.com/api/recoveries" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",
@@ -425,7 +425,7 @@ curl -X POST "https://api.example.com/api/recoveries" \
 }
 ```
 
-타입별 `basic` 구성(type 0~6)은 [스케줄 개요]({{ base_path }}/docs/schedule/overview#타입별-요청-예시-type-0--11)를 참조하세요.
+타입별 `basic` 구성(type 0~6 또는 12)은 [스케줄 개요]({{ base_path }}/docs/schedule/overview#타입별-요청-예시-type-0--12)를 참조하세요.
 
 ---
 

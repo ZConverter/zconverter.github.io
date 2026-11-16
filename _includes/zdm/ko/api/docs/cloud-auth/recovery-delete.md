@@ -22,7 +22,7 @@ Recovery 클라우드 인증 정보를 삭제합니다.
 
 ```bash
 curl -X DELETE "https://api.example.com/api/cloud-auth/recovery/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>
@@ -32,7 +32,7 @@ curl -X DELETE "https://api.example.com/api/cloud-auth/recovery/1" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 설명 |
 |---------|------|------|------|------|
-| `Authorization` | Header | string | Required | Bearer 토큰 |
+| `Authorization` | Header | string | Required | 인증 토큰(발급받은 값 그대로) |
 | `identifier` | Path | number | Required | 삭제할 인증 정보 ID |
 | `center` | Query | string | Optional | 센터 ID 또는 이름 — **정확히 1개만** 허용(여러 개·빈 값은 400). 지정 시 대상 레코드가 해당 center 소속인지 검증(불일치 시 `CENTER-ERROR-01`/403) |
 

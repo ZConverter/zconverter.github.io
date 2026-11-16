@@ -25,19 +25,19 @@
 ```bash
 # 작업 ID로 조회
 curl -X GET "https://api.example.com/api/replications/histories/10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 작업 이름으로 조회
 curl -X GET "https://api.example.com/api/replications/histories/backup-replication-01" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 작업 이름 + 필터 적용
 curl -X GET "https://api.example.com/api/replications/histories/backup-replication-01?result=success" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # center 로 좁혀서 조회 (다른 center 의 히스토리면 404)
 curl -X GET "https://api.example.com/api/replications/histories/10?center=destconm" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

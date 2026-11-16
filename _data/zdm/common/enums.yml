@@ -253,3 +253,8 @@ schedule-types:
     description: "매년 특정 월/일 (basic: 단일 월/날짜, advanced: 복수 월/날짜)"
     category: "Smart"
     basic: "{ month, day, time }"
+  - number: 12
+    value: "Yearly"
+    description: "매년 특정 월의 날짜 또는 주차·요일 (일반 작업)"
+    category: "Basic"
+    basic: "{ month, day, time } 또는 { month, week, day, time }"

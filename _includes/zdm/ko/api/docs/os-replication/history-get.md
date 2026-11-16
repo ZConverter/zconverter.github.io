@@ -23,19 +23,19 @@ OS 복제 히스토리를 단건 조회합니다.
 ```bash
 # 히스토리 ID로 조회
 curl -X GET "https://api.example.com/api/os-replications/histories/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 작업 이름으로 조회
 curl -X GET "https://api.example.com/api/os-replications/histories/os_repl_upload_server-01" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 작업 이름 + 필터 적용
 curl -X GET "https://api.example.com/api/os-replications/histories/os_repl_upload_server-01?result=success" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # center 로 좁혀서 조회 (다른 center 의 히스토리면 404)
 curl -X GET "https://api.example.com/api/os-replications/histories/1?center=destconm" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>
@@ -45,7 +45,7 @@ curl -X GET "https://api.example.com/api/os-replications/histories/1?center=dest
 
 | 파라미터 | 위치 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
-| `Authorization` | Header | string | Required | - | Bearer 토큰 | - |
+| `Authorization` | Header | string | Required | - | 인증 토큰(발급받은 값 그대로) | - |
 | `identifier` | Path | string | Required | - | 히스토리 ID(숫자) 또는 작업 이름 | - |
 | `jobId` | Query | number | Optional | - | 작업 ID 필터 | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |

@@ -21,7 +21,7 @@ OS 복제 작업을 단건 조회합니다.
 
 ```bash
 curl -X GET "https://api.example.com/api/os-replications/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>
@@ -31,7 +31,7 @@ curl -X GET "https://api.example.com/api/os-replications/1" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 설명 |
 |---------|------|------|------|------|
-| `Authorization` | Header | string | Required | Bearer 토큰 |
+| `Authorization` | Header | string | Required | 인증 토큰(발급받은 값 그대로) |
 | `identifier` | Path | string | Required | 작업 ID(숫자) 또는 작업 이름 |
 | `status` | Query | string | Optional | 작업 상태 필터. 응답 `job.info.status.current` 와 같은 상태 값(`preparing`, `processing`, `complete`, `scheduled`, `registered`, `canceling`, `canceled`, `error`)이며 대소문자를 구분하지 않습니다. 작업은 있으나 상태가 다르면 404 입니다 |
 | `center` | Query | string | Optional | center 식별자(ID/이름, 콤마 다중 지정 가능). 지정한 center 에 속한 작업만 조회합니다. 존재하지 않는 center 이거나 그 center 에 작업이 없으면 404 입니다 |

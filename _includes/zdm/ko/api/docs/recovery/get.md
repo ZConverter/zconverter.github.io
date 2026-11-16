@@ -23,15 +23,15 @@
 ```bash
 # 복구 ID로 조회
 curl -X GET "https://api.example.com/api/recoveries/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 복구 이름으로 조회
 curl -X GET "https://api.example.com/api/recoveries/daily-recovery" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 상세 정보 포함 조회
 curl -X GET "https://api.example.com/api/recoveries/1?detail=true" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

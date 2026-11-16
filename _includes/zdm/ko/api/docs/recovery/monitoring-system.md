@@ -25,31 +25,31 @@
 ```bash
 # 서버 ID로 조회 (파티션별 진행률 포함)
 curl -X GET "https://api.example.com/api/recoveries/monitoring/system/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 서버 이름으로 조회
 curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-server" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 진행 중인 작업만 조회
 curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-server?status=processing" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 이 서버가 target 인 복구만 조회
 curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-server?serverType=target" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 파티션 메타데이터까지 포함해 조회 (폴링용이 아닙니다)
 curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-server?detail=true" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 다중 센터 범위 지정 (comma-separated; ID 또는 이름 혼용 가능)
 curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-server?center=1,zdm-b" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/recoveries/monitoring/system/target-server?page=1&limit=10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

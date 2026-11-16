@@ -25,15 +25,15 @@
 ```bash
 # 전체 레포지토리 조회
 curl -X GET "https://api.example.com/api/zdms/repositories" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 필터 적용 조회
 curl -X GET "https://api.example.com/api/zdms/repositories?type=nfs" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/zdms/repositories?page=1&limit=10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

@@ -40,6 +40,7 @@ zdm-cli schedule list --type 3
 
 # Type별 Schedule 조회 (문자열, 대소문자 무관)
 zdm-cli schedule list --type daily
+zdm-cli schedule list --type yearly
 zdm-cli schedule list --type "Smart Weekly (Specific Day of the Week)"
 
 # 활성화된 Schedule만 조회
@@ -70,7 +71,7 @@ zdm-cli schedule list --asc
 |----------|------|------|------|--------|------|--------|
 | --center | -c | string | Optional | - | 조회할 Center ID 또는 Name (콤마 구분으로 복수 지정 가능) | - |
 | --id | - | number | Optional | - | 조회할 Schedule ID (해당 옵션 사용시 단일 조회) | - |
-| --type | - | string | Optional | - | 조회할 Schedule Type (숫자 0~11 또는 Type 이름) | {% include zdm/schedule-types.md inline=true %} |
+| --type | - | string | Optional | - | 조회할 Schedule Type (숫자 0~12 또는 Type 이름) | {% include zdm/schedule-types.md inline=true %} |
 | --state | - | string | Optional | - | 조회할 Schedule 상태 | {% include zdm/schedule-state.md %} |
 | --asc | - | boolean | Optional | false | 오름차순 정렬 (기본값: 내림차순) | - |
 | --output | -o | string | Optional | text | 출력 형식 | {% include zdm/output-formats.md %} |
@@ -83,6 +84,8 @@ zdm-cli schedule list --asc
 {% include zdm/schedule-types.md number=true %}
 
 </details>
+
+> Type 12 의 이름은 소문자 `yearly` 입니다. `--type 12` 와 `--type yearly` 는 같습니다.
 
 <details markdown="1" open>
 <summary><strong>출력 예시</strong></summary>

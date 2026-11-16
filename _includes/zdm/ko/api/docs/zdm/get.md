@@ -24,15 +24,15 @@
 ```bash
 # ZDM ID로 조회
 curl -X GET "https://api.example.com/api/zdms/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # ZDM 이름으로 조회
 curl -X GET "https://api.example.com/api/zdms/Main-Center" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 상세 정보 포함 조회
 curl -X GET "https://api.example.com/api/zdms/1?detail=true&repository=true" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

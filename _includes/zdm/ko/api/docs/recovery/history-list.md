@@ -23,27 +23,27 @@
 ```bash
 # 전체 복구 히스토리 조회
 curl -X GET "https://api.example.com/api/recoveries/histories" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 타겟 서버로 필터 (기본값: target)
 curl -X GET "https://api.example.com/api/recoveries/histories?server=target-server" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 소스 서버로 필터
 curl -X GET "https://api.example.com/api/recoveries/histories?server=source-server&serverType=source" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 파티션 + 결과 필터
 curl -X GET "https://api.example.com/api/recoveries/histories?partition=C:&result=failed" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 다중 센터 필터 (comma-separated; ID 또는 이름 혼용 가능)
 curl -X GET "https://api.example.com/api/recoveries/histories?center=1,zdm-b" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/recoveries/histories?page=1&limit=10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

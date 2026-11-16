@@ -36,7 +36,7 @@
 <details markdown="1" open>
 <summary><strong>Basic vs Smart Schedule</strong></summary>
 
-- **Basic Schedule (Type 0~6):** `basic` 객체만 필요
+- **Basic Schedule (Type 0~6, 12):** `basic` 객체만 필요
 - **Smart Schedule (Type 7~11):** `basic`과 `advanced` 객체 모두 필요. `basic` 에는 단일 값만 넣을 수 있고 `advanced` 에는 복수 값을 넣을 수 있습니다. Smart 스케줄은 Backup 작업(`--mode smart`)에서만 쓸 수 있습니다.
 
 </details>
@@ -48,7 +48,7 @@
 <details markdown="1" open>
 <summary><strong>스케줄 JSON 형식</strong></summary>
 
-- `type` 은 숫자(0~11)로 적습니다. 타입 이름 문자열은 입력에 쓰지 않습니다.
+- `type` 은 숫자(0~12)로 적습니다. 타입 이름 문자열은 입력에 쓰지 않습니다.
 - `year`, `month`, `week`, `day`, `time`, `interval.hour`, `interval.minute` 의 값은 모두 **문자열**입니다. `"year": 2026` 처럼 숫자로 적으면 서버가 등록을 거부하므로 `"year": "2026"` 으로 적습니다.
 - 타입에 필요한 필드만 적으면 됩니다. 필요 없는 필드는 생략하거나 빈 문자열(`""`)로 둡니다.
 - 복수 값은 쉼표로 구분합니다 (예: `"mon, tue"`, `"1,3"`).
@@ -86,10 +86,10 @@
 
 | 작업 | `--schedule-id` 타입 | 사용할 수 있는 타입 | 숫자 ID 처리 | Smart 입력 시 |
 |------|---------------------|--------------------|--------------|---------------|
-| [Backup]({{ base_path }}/docs/backup/regist) | string | 0~11 | 복사 (새 ID 로 스케줄 생성) | 허용. `--mode smart` 필요 |
-| [Recovery]({{ base_path }}/docs/recovery/regist) | number | 0~6 | 참조 (복사하지 않음) | 거부 (`JOB-ERROR-101`) |
-| [Replication]({{ base_path }}/docs/replication/regist) | number | 0~6 | 참조 (복사하지 않음) | 등록 `JOB-ERROR-103`, 수정 `JOB-ERROR-101` |
-| [OS Replication]({{ base_path }}/docs/os-replication/regist) | number | 0~6 | 참조 (복사하지 않음) | 등록 `JOB-ERROR-103`, 수정 `JOB-ERROR-101` |
+| [Backup]({{ base_path }}/docs/backup/regist) | string | 0~12 | 복사 (새 ID 로 스케줄 생성) | 허용. `--mode smart` 필요 |
+| [Recovery]({{ base_path }}/docs/recovery/regist) | number | 0~6, 12 | 참조 (복사하지 않음) | 거부 (`JOB-ERROR-101`) |
+| [Replication]({{ base_path }}/docs/replication/regist) | number | 0~6, 12 | 참조 (복사하지 않음) | 등록 `JOB-ERROR-103`, 수정 `JOB-ERROR-101` |
+| [OS Replication]({{ base_path }}/docs/os-replication/regist) | number | 0~6, 12 | 참조 (복사하지 않음) | 등록 `JOB-ERROR-103`, 수정 `JOB-ERROR-101` |
 
 - **복사:** 입력한 ID 의 스케줄 내용을 복사해 새 스케줄을 만들고 작업에 연결합니다. 작업이 쓰는 스케줄 ID 는 입력한 ID 와 다릅니다.
 - **참조:** 입력한 ID 의 스케줄을 그대로 작업에 연결합니다. 여러 작업이 같은 스케줄을 공유할 수 있습니다.
@@ -107,7 +107,7 @@
 
 아래 예시는 `schedule regist` 에 넘기는 파일 형식입니다. 작업의 `--schedule` 옵션에는 `center` 를 빼고 `type` 과 `basic`(Smart 는 `advanced` 포함)만 넣습니다.
 
-### Basic Schedule (Type 0~6)
+### Basic Schedule (Type 0~6, 12)
 
 <details markdown="1">
 <summary><strong>(0) Once - 한 번 실행</strong></summary>

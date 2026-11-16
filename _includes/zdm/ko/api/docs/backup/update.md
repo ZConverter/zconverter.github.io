@@ -24,7 +24,7 @@
 ```bash
 # 백업 작업 수정
 curl -X PUT "https://api.example.com/api/backups/1" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "changeName": "weekly-backup",
@@ -35,7 +35,7 @@ curl -X PUT "https://api.example.com/api/backups/1" \
 
 # 스케줄 변경
 curl -X PUT "https://api.example.com/api/backups/daily-backup" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "schedule": {
@@ -49,7 +49,7 @@ curl -X PUT "https://api.example.com/api/backups/daily-backup" \
 
 # 기존 스케줄 ID로 변경
 curl -X PUT "https://api.example.com/api/backups/1" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "schedule": 123
@@ -102,7 +102,7 @@ curl -X PUT "https://api.example.com/api/backups/1" \
 
 - 아래 자동 전환은 **스케줄을 객체로 보낼 때만** 적용됩니다. 최상위 숫자 ID 는 자동 전환되지 않습니다(아래 참조).
 - Full/Increment 작업에 Smart 스케줄 객체(타입 7~11)를 등록하면, 작업 모드가 자동으로 Smart로 전환됩니다.
-- Smart 작업에 Full/Increment 스케줄 객체(타입 0~6)를 등록하면, 작업 모드가 자동으로 Full로 전환되고 Advanced 스케줄이 초기화됩니다.
+- Smart 작업에 Full/Increment 스케줄 객체(타입 0~6 또는 12)를 등록하면, 작업 모드가 자동으로 Full로 전환되고 Advanced 스케줄이 초기화됩니다.
 - `mode` 필드를 함께 지정하면 해당 값이 우선 적용됩니다.
 - Smart 작업(또는 `mode: "smart"`)에 최상위 숫자 ID 를 보내면 전환되지 않고 400 (`JOB-ERROR-102`)입니다. Smart 작업을 단일 basic 스케줄로 바꾸려면 숫자 ID 와 함께 `mode: "full"`(또는 `"increment"`)을 보내세요. 이때 Advanced 스케줄은 0 으로 초기화됩니다.
 
@@ -119,7 +119,7 @@ curl -X PUT "https://api.example.com/api/backups/1" \
 - 존재하지 않는 ID 는 404 (`SCHEDULE-ERROR-01`)입니다.
 - 지정한 스케줄이 작업이 속한 center 의 것이 아니면 403 (`CENTER-ERROR-01`)입니다(`Schedule ID '<id>' does not belong to center <center>`). `nCenterID = 0` 도 하나의 center 로 비교합니다.
 - 판정 mode 는 요청 `mode`(없으면 기존 작업 mode)입니다. Smart mode 에 최상위 숫자 ID 를 보내면 400 (`JOB-ERROR-102`, `Smart job mode cannot use a single schedule ID. Use the object form { type, basic: <id>, advanced: <id> }.`)입니다.
-- Full/Increment mode 에 Smart 스케줄 행(타입 7~11)의 ID 를 보내면 400 (`JOB-ERROR-101`, `Schedule ID '<id>' is a smart schedule (type N). Full/increment job modes accept schedule type 0-6 only.`)입니다.
+- Full/Increment mode 에 Smart 스케줄 행(타입 7~11)의 ID 를 보내면 400 (`JOB-ERROR-101`, `Schedule ID '<id>' is not a basic schedule (type <n>). Full/increment job modes accept schedule type 0-6 or 12 only.`)입니다.
 - 객체의 `basic` / `advanced` 자리를 비우고 Smart 스케줄을 보내면 400 (`JOB-ERROR-102`, `Smart job mode requires both a basic and an advanced schedule.`)입니다. 종전에는 500 이었습니다.
 - 검사 순서는 존재(404) → center(403) → mode·type(400)입니다.
 

@@ -53,7 +53,7 @@ zdm-cli schedule regist -p /path/to/schedule.json --output table
 <details markdown="1" open>
 <summary><strong>입력 파일 형식</strong></summary>
 
-**Basic Schedule (Type 0~6):**
+**Basic Schedule (Type 0~6, 12):**
 
 ```json
 {

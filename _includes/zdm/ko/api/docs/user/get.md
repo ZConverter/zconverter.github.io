@@ -24,11 +24,11 @@
 ```bash
 # 사용자 ID로 조회
 curl -X GET "https://api.example.com/api/users/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 이메일로 조회
 curl -X GET "https://api.example.com/api/users/user@example.com" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

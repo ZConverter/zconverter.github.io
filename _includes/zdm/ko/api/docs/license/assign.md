@@ -23,7 +23,7 @@
 ```bash
 # ID로 할당
 curl -X PUT "https://api.example.com/api/licenses/assign" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "server": "1",
@@ -32,7 +32,7 @@ curl -X PUT "https://api.example.com/api/licenses/assign" \
 
 # 이름으로 할당
 curl -X PUT "https://api.example.com/api/licenses/assign" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "server": "server-01",

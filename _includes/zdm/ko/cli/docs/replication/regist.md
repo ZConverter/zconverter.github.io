@@ -114,10 +114,10 @@ zdm-cli replication regist --sc srcconm --tc destconm --ut backup -j 91 --tri 44
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --schedule | - | string | Optional | - | 스케줄 JSON 문자열 (`basic` 키 없으면 자동 래핑) | - |
-| --schedule-id | - | number | Optional | - | 기존 스케줄 ID (복사하지 않고 그대로 참조). 작업과 같은 center 의 스케줄이어야 하고 기본 유형(type 0~6)만 받습니다 | - |
+| --schedule-id | - | number | Optional | - | 기존 스케줄 ID (복사하지 않고 그대로 참조). 작업과 같은 center 의 스케줄이어야 하고 기본 유형(type 0~6 또는 12)만 받습니다 | - |
 | --schedule-file | - | string | Optional | - | 스케줄 JSON 파일 경로 (`basic` 키 없으면 자동 래핑) | - |
 
-> 이 작업은 Basic 스케줄(type 0~6)만 받습니다. Smart(type 7~11)를 지정하면 `JOB-ERROR-103` 로 거부됩니다. jobMode `full` / `increment` / `sync` 모두 허용합니다. 지정 시 응답에 `schedule: { id, type, description }` 객체가 포함됩니다. 자동 래핑과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
+> 이 작업은 Basic 스케줄(type 0~6 또는 12)만 받습니다. Smart(type 7~11)를 지정하면 `JOB-ERROR-103` 로 거부됩니다. jobMode `full` / `increment` / `sync` 모두 허용합니다. 지정 시 응답에 `schedule: { id, type, description }` 객체가 포함됩니다. 자동 래핑과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
 
 **출력**
 

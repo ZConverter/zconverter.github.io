@@ -59,6 +59,15 @@ zdm-cli schedule create -t 10 --basic-month 5 --basic-week 2 --basic-day sat --b
 # [Type 11]: Smart Custom Monthly Date - Basic: 매년 4월 19일, Advanced: 매년 10,11월 25,28일
 zdm-cli schedule create -t 11 --basic-month 4 --basic-day 19 --basic-time 12:00 --advanced-month "10,11" --advanced-day "25,28" --advanced-time 12:00
 
+# [Type 12]: Yearly (날짜 기준) - 매년 3,6,9,12월 말일 23:00
+zdm-cli schedule create -t 12 --basic-month "3,6,9,12" --basic-day last --basic-time 23:00
+
+# [Type 12]: Yearly (요일 기준) - 매년 6,12월 마지막 주 일요일 04:00 (--basic-week 를 주면 요일 기준)
+zdm-cli schedule create -t 12 --basic-month "6,12" --basic-week 5 --basic-day sun --basic-time 04:00
+
+# 누락된 옵션을 단계별 질문으로 입력
+zdm-cli schedule create --interactive
+
 # 사용자 지정 경로에 저장
 zdm-cli schedule create -t 3 --basic-time 12:00 -p /custom/path/schedule.json
 
@@ -74,20 +83,21 @@ zdm-cli schedule create -t 3 --basic-time "02:00" --center 9
 | 파라미터 | 별칭 | 타입 | 필수 | 기본값 | 설명 | 선택값 |
 |----------|------|------|------|--------|------|--------|
 | --type | -t | number | Required | - | Schedule Type | {% include zdm/schedule-types.md inline=true %} |
+| --interactive | -i | boolean | Optional | false | 누락된 옵션을 단계별 질문으로 입력받습니다. Type 12 는 먼저 "Select yearly schedule basis" 에서 날짜 기준(date)과 요일 기준(weekday)을 고릅니다 | - |
 | --path | -p | string | Optional | - | 생성된 Schedule File 저장 Path | - |
 | --center | -c | string | Optional | - | Schedule 등록 Center ID 또는 Name | - |
 | --user | -u | string | Optional | - | Schedule 등록 User ID 또는 Email | - |
 | --basic-year | -by | string | Optional | - | Basic Schedule - 년도 설정 | - |
-| --basic-month | -bm | string | Optional | - | Basic Schedule - 월 설정 | - |
-| --basic-week | -bw | string | Optional | - | Basic Schedule - 주 설정 | - |
-| --basic-day | -bd | string | Optional | - | Basic Schedule - 일 설정 | - |
+| --basic-month | -bm | string | Optional | - | Basic Schedule - 월 설정 (Type 12: 쉼표로 구분한 1~12) | - |
+| --basic-week | -bw | string | Optional | - | Basic Schedule - 주 설정 (1~5, 5 = 마지막 주). Type 12 에서 지정하면 요일 기준이 됩니다 | - |
+| --basic-day | -bd | string | Optional | - | Basic Schedule - 일 설정 (Type 6, 9, 11, 12: 1~31 또는 `last`, 31 = 말일. 요일 지정 타입: mon~sun) | - |
 | --basic-time | -bt | string | Optional | - | Basic Schedule - 시간 설정 (HH:MM) | - |
 | --basic-interval-hour | -bih | string | Optional | - | Basic Schedule - 간격 시간 | - |
 | --basic-interval-minute | -bim | string | Optional | - | Basic Schedule - 간격 분 | - |
 | --advanced-year | -ay | string | Optional | - | Advanced Schedule - 년도 설정 (Smart Schedule용, Type 7~11) | - |
 | --advanced-month | -am | string | Optional | - | Advanced Schedule - 월 설정 (Smart Schedule용) | - |
 | --advanced-week | -aw | string | Optional | - | Advanced Schedule - 주 설정 (Smart Schedule용) | - |
-| --advanced-day | -ad | string | Optional | - | Advanced Schedule - 일 설정 (Smart Schedule용) | - |
+| --advanced-day | -ad | string | Optional | - | Advanced Schedule - 일 설정 (Smart Schedule용. Type 9, 11: 1~31 또는 `last`, 31 = 말일) | - |
 | --advanced-time | -at | string | Optional | - | Advanced Schedule - 시간 설정 (Smart Schedule용, HH:MM) | - |
 | --advanced-interval-hour | -aih | string | Optional | - | Advanced Schedule - 간격 시간 (Smart Schedule용) | - |
 | --advanced-interval-minute | -aim | string | Optional | - | Advanced Schedule - 간격 분 (Smart Schedule용) | - |
@@ -98,6 +108,18 @@ zdm-cli schedule create -t 3 --basic-time "02:00" --center 9
 <summary><strong>Schedule Types</strong></summary>
 
 {% include zdm/schedule-types.md number=true %}
+
+</details>
+
+<details markdown="1" open>
+<summary><strong>Type 12 (매년) 와 Day 값</strong></summary>
+
+- Type 12 는 일반 스케줄이며, CLI 타입 이름은 소문자 `yearly` 입니다. `-t` 에는 숫자 `12` 를 씁니다.
+- 날짜 기준: `--basic-month`, `--basic-day`, `--basic-time` 을 줍니다. 주(week) 값은 보내지 않습니다.
+- 요일 기준: 위 옵션에 `--basic-week` 를 더하면 월 · 주 · 요일(`mon`~`sun`) · 시간 형태가 됩니다.
+- Day 값: Type 6, 9, 11, 12 의 일은 `1`~`31` 또는 `last` 입니다. `31` 은 그 달의 말일입니다.
+- Week 값: `1`~`5` 이고 `5` 는 마지막 주입니다.
+- `-t` 는 정수 0~12 만 받습니다. `-t 3.5` 처럼 정수가 아닌 값은 거부됩니다.
 
 </details>
 

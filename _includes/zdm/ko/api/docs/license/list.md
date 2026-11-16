@@ -25,19 +25,19 @@
 ```bash
 # 전체 라이선스 목록 조회
 curl -X GET "https://api.example.com/api/licenses" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 카테고리별 조회
 curl -X GET "https://api.example.com/api/licenses?category=zdm(backup)" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 만료일 기준 조회
 curl -X GET "https://api.example.com/api/licenses?exp=2025-12-31" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/licenses?page=1&limit=10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

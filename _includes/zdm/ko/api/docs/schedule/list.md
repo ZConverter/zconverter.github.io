@@ -24,35 +24,35 @@
 ```bash
 # 전체 스케줄 목록 조회 (필터 없음, 페이지네이션 미적용)
 curl -X GET "https://api.example.com/api/schedules" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 타입별 조회
 curl -X GET "https://api.example.com/api/schedules?type=daily" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 활성화 상태별 조회
 curl -X GET "https://api.example.com/api/schedules?state=enabled" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 타입 + 정렬 (오름차순)
 curl -X GET "https://api.example.com/api/schedules?type=daily&sort=asc" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 정확한 원문 타입 (공백/괄호 포함 → URL 인코딩 필요)
 curl -X GET "https://api.example.com/api/schedules?type=Smart%20Custom%20%28Specific%20Month%20and%20Date%29" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 다중 센터 필터 (comma-separated; ID 또는 이름 혼용 가능)
 curl -X GET "https://api.example.com/api/schedules?center=1,3,5" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 페이지네이션 (2페이지, 페이지당 20개)
 curl -X GET "https://api.example.com/api/schedules?page=2&limit=20" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 단일 ID 조회 필터
 curl -X GET "https://api.example.com/api/schedules?id=15" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>
@@ -64,7 +64,7 @@ curl -X GET "https://api.example.com/api/schedules?id=15" \
 |----------|------|------|------|--------|------|--------|
 | `id` | Query | number | Optional | - | 스케줄 ID 필터 | - |
 | `jobName` | Query | string | Optional | - | 작업 이름 필터 | - |
-| `type` | Query | string | Optional | - | 스케줄 타입 필터. 대소문자와 앞뒤 공백을 무시하며 12종 모두 필터됩니다(4.0.0 이전에는 대소문자를 구분했고 5~11 이름은 결과가 0건) | [선택값 참조](#type-선택값) |
+| `type` | Query | string | Optional | - | 스케줄 타입 필터. 대소문자와 앞뒤 공백을 무시하며 13종(`yearly` 포함) 모두 필터됩니다(4.0.0 이전에는 대소문자를 구분했고 5~11 이름은 결과가 0건). 이름만 받고 숫자는 받지 않습니다 | [선택값 참조](#type-선택값) |
 | `state` | Query | string | Optional | - | 활성화 상태 필터 | {% include zdm/schedule-state.md %} |
 | `page` | Query | number | Optional | 1 | 페이지 번호 (1부터 시작) | - |
 | `limit` | Query | number | Optional | 20 | 페이지당 항목 수 | - |
@@ -150,7 +150,7 @@ curl -X GET "https://api.example.com/api/schedules?id=15" \
 <details markdown="1">
 <summary>다양한 type 값 응답 (200 OK) - PascalCase 표시 + Unknown 폴백</summary>
 
-> 응답의 `type`/`state`는 displayMappings에 따라 첫 글자 대문자 표기로 반환됩니다. DB 값이 매핑되지 않은 경우 `"Unknown"`이 반환됩니다.
+> 응답의 `type`/`state`는 displayMappings에 따라 첫 글자 대문자 표기로 반환됩니다. DB 값이 매핑되지 않은 경우(예: 정의되지 않은 type) 오류 없이 `type` 은 `"Unknown"`, `description` 은 `"-"` 로 반환됩니다. type 12 는 `"Yearly"` 로 표시됩니다.
 > `description`은 시스템이 자동 생성하며 `[Basic]` 또는 `[Advanced]` 접두사로 시작합니다.
 
 ```json
@@ -308,7 +308,7 @@ curl -X GET "https://api.example.com/api/schedules?id=15" \
     "code": "DTO-VALIDATION-03",
     "message": "Query parameter validation failed.",
     "details": {
-      "type": ["type must be one of: once, every minute, hourly, daily, weekly, Monthly (Specific Week and Day of the Week), Monthly on Specific Date, Smart Weekly (Specific Day of the Week), Smart Monthly (Specific Week and Day of the Week), Smart Monthly (Specific Date), Smart Custom (Specific Month, Week and Day of the Week), Smart Custom (Specific Month and Date)"]
+      "type": ["type must be one of: once, every minute, hourly, daily, weekly, Monthly (Specific Week and Day of the Week), Monthly on Specific Date, Smart Weekly (Specific Day of the Week), Smart Monthly (Specific Week and Day of the Week), Smart Monthly (Specific Date), Smart Custom (Specific Month, Week and Day of the Week), Smart Custom (Specific Month and Date), yearly"]
     }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"

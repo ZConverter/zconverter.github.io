@@ -24,7 +24,7 @@
 ```bash
 # 기본 백업 작업 등록
 curl -X POST "https://api.example.com/api/backups" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",
@@ -41,7 +41,7 @@ curl -X POST "https://api.example.com/api/backups" \
 
 # 스케줄 포함 백업 작업 등록
 curl -X POST "https://api.example.com/api/backups" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",
@@ -487,7 +487,7 @@ ID `15` 는 단일 선택 스케줄(basic 용), ID `16` 은 복수 선택 스케
 }
 ```
 
-#### 2. smart 모드에 일반 스케줄(type 0~6) 동봉 (`JOB-ERROR-102`)
+#### 2. smart 모드에 일반 스케줄(type 0~6 또는 12) 동봉 (`JOB-ERROR-102`)
 
 요청:
 
@@ -513,7 +513,7 @@ ID `15` 는 단일 선택 스케줄(basic 용), ID `16` 은 복수 선택 스케
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "JOB-ERROR-102",
-    "message": "For smart job type, schedule must contain both basic and advanced."
+    "message": "Smart job mode requires schedule type 7-11 (received: 3)."
   },
   "timestamp": "2026-05-19T10:30:00.000+09:00"
 }
@@ -636,8 +636,9 @@ ID `15` 는 단일 선택 스케줄(basic 용), ID `16` 은 복수 선택 스케
 
 | 요청 모드 | 허용 schedule type | 위반 시 |
 |----------|------------------|---------|
-| `full` / `increment` | 0 ~ 6 | `JOB-ERROR-101` (400) |
+| `full` / `increment` | 0 ~ 6, 12 | `JOB-ERROR-101` (400) |
 | `smart` | 7 ~ 11 | `JOB-ERROR-102` (400) |
+| `smart` + type 12 (매년, `basic`·`advanced` 어느 자리든) | - | 400 (`JOB-ERROR-102` / `JOB-ERROR-104` / `JOB-ERROR-108`). 객체 형식은 `Smart job mode requires schedule type 7-11 (received: 12).` 입니다. Smart 의 매년 일정은 type 10·11 을 쓰세요 |
 | `smart` (basic 또는 advanced 누락) | - | `JOB-ERROR-102` (400, 종전 500) |
 | `smart` + 최상위 숫자 ID | - | `JOB-ERROR-102` (400) |
 | `smart` (schedule 자체 누락) | - | `JOB-ERROR-107` (400) |
@@ -650,7 +651,7 @@ ID `15` 는 단일 선택 스케줄(basic 용), ID `16` 은 복수 선택 스케
 - Smart 스케줄을 부분 ID 로 지정할 때는 참조하는 스케줄의 저장 패턴이 자리와 맞아야 합니다. 단일 선택 스케줄은 `basic` 에만, 복수 선택 스케줄은 `advanced` 에만 쓸 수 있고 어긋나면 400 (`JOB-ERROR-108`)입니다.
 - 존재하지 않는 ID 는 404 (`SCHEDULE-ERROR-01`)입니다.
 - 최상위 숫자 ID 는 **full/increment 전용**입니다. `mode` 가 `smart` 인데 숫자 ID 를 보내면 400 (`JOB-ERROR-102`, `Smart job mode cannot use a single schedule ID. Use the object form { type, basic: <id>, advanced: <id> }.`)입니다. Smart 는 객체 형식 `{ "type": 7, "basic": <ID>, "advanced": <ID> }` 으로 지정하세요.
-- full/increment 에 Smart 스케줄 행(타입 7~11)의 ID 를 보내면 400 (`JOB-ERROR-101`, `Schedule ID '<id>' is a smart schedule (type N). Full/increment job modes accept schedule type 0-6 only.`)입니다.
+- full/increment 에 Smart 스케줄 행(타입 7~11)의 ID 를 보내면 400 (`JOB-ERROR-101`, `Schedule ID '<id>' is not a basic schedule (type <n>). Full/increment job modes accept schedule type 0-6 or 12 only.`)입니다.
 - 지정한 스케줄이 요청 `center` 의 것이 아니면 403 (`CENTER-ERROR-01`, `Schedule ID '<id>' does not belong to center <center>`)입니다. `nCenterID = 0` 도 하나의 center 로 비교합니다.
 - 객체 안 `basic`·`advanced` 자리의 숫자 ID 는 행의 type 이 요청 `type` 과 같아야 하며 어긋나면 400 (`JOB-ERROR-108`, `Schedule ID '<id>' is type <n>, but the request type is <m>.`), 다른 center 의 행이면 403 (`CENTER-ERROR-01`)입니다.
 - 검사 순서는 존재(404) → center(403) → mode·type(400)입니다.

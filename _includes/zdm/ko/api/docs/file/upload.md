@@ -23,7 +23,7 @@
 ```bash
 # 단일 파일 업로드
 curl -X POST "https://api.example.com/api/files/upload" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -F "file=@/path/to/file.txt"
 ```
 

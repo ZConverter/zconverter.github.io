@@ -64,7 +64,7 @@ zdm-cli recovery image-regist --backup-file "server01_ROOT_0262.ZIA" --target "t
 | `--start` | — | boolean | Optional | 등록 후 즉시 시작. 대상 서버가 사용 중이면 등록은 되고 자동 시작만 생략됩니다 |
 | `--network-limit` | `-nl` | number | Optional | 네트워크 제한 속도 |
 | `--schedule` | `-sc` | string | Optional | 스케줄 JSON 문자열 |
-| `--schedule-id` | `-sc-id` | number | Optional | 기존 스케줄 ID. 작업과 같은 center 의 스케줄이어야 하고 기본 유형(type 0~6)만 받습니다 |
+| `--schedule-id` | `-sc-id` | number | Optional | 기존 스케줄 ID. 작업과 같은 center 의 스케줄이어야 하고 기본 유형(type 0~6 또는 12)만 받습니다 |
 | `--schedule-file` | `-sc-f` | string | Optional | 스케줄 정의 파일 |
 | `--script-path` / `--script-run` | `-sp` / `-sr` | string | Optional | 작업 전후 스크립트 |
 | `--cloud-auth` | `-ca` | string | Optional | 플랫폼 인증정보 |

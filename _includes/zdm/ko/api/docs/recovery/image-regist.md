@@ -119,7 +119,7 @@ source 서버 없이 backup image 파일만으로 복구 작업을 등록합니�
 
 ```bash
 curl -X POST "https://api.example.com/api/recoveries/image" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "center-01",
@@ -135,7 +135,7 @@ curl -X POST "https://api.example.com/api/recoveries/image" \
 
 ```bash
 curl -X POST "https://api.example.com/api/recoveries/image" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "center-01",

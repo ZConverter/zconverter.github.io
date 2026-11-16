@@ -9,7 +9,8 @@
 > * 새로운 스케줄을 시스템에 등록합니다.
 > * 스케줄 타입에 따라 다른 구조의 basic/advanced 객체가 필요합니다.
 > * Smart 스케줄 (type 7~11)의 경우 basic과 advanced 모두 필요합니다.
-> * 타입별 구조, 필드 규칙, 타입별 요청 예시(type 0~11)는 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참조하세요.
+> * type 12(매년)는 일반 스케줄이라 `basic` 만 사용합니다. 날짜 기준 `{ month, day, time }` 과 요일 기준 `{ month, week, day, time }` 두 가지 구조가 있습니다.
+> * 타입별 구조, 필드 규칙, 타입별 요청 예시(type 0~12)는 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참조하세요.
 
 <details markdown="1" open>
 <summary><strong>엔드포인트</strong></summary>
@@ -26,7 +27,7 @@
 ```bash
 # 일반 Daily 스케줄 등록 (center를 문자열로 전달)
 curl -X POST "https://api.example.com/api/schedules" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": "1",
@@ -39,7 +40,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 
 # 일반 Daily 스케줄 등록 (center를 숫자로 전달)
 curl -X POST "https://api.example.com/api/schedules" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": 1,
@@ -54,7 +55,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 # Smart Weekly 스케줄 등록 (type 7)
 # basic.day는 단일 요일만 허용 (복수 선택 불가)
 curl -X POST "https://api.example.com/api/schedules" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "center": 1,
@@ -81,7 +82,7 @@ curl -X POST "https://api.example.com/api/schedules" \
 | `center` | string \| number | Required | 센터 ID (숫자) 또는 센터 이름 |
 | `user` | string \| number | Optional | 사용자 이메일 또는 사용자 등록 ID (숫자만) |
 | `jobName` | string | Optional | 스케줄을 할당할 작업 이름 |
-| `type` | number | Required | 스케줄 타입 (0 ~ 11) |
+| `type` | number | Required | 스케줄 타입 (0 ~ 12) |
 | `basic` | object | Optional | 기본 스케줄 구조 |
 | `advanced` | object | Optional | 고급 스케줄 구조 (Smart 스케줄용, backup 작업 전용) |
 
@@ -144,11 +145,11 @@ curl -X POST "https://api.example.com/api/schedules" \
 | 필드 | 타입 | 설명 |
 |------|------|------|
 | `basic.id` | string | 기본 스케줄 ID |
-| `basic.type` | number | 스케줄 타입 (0~11 enum 정수) |
+| `basic.type` | number | 스케줄 타입 (0~12 enum 정수) |
 | `basic.state` | number | 활성화 상태 (0=disabled, 1=enabled) |
 | `basic.description` | string | 스케줄 설명 |
 | `advanced.id` | string | 고급 스케줄 ID (Smart 스케줄만) |
-| `advanced.type` | number | 스케줄 타입 (Smart 스케줄만, 0~11 enum 정수) |
+| `advanced.type` | number | 스케줄 타입 (Smart 스케줄만, 7~11 enum 정수) |
 | `advanced.state` | number | 활성화 상태 (Smart 스케줄만, 0=disabled, 1=enabled) |
 | `advanced.description` | string | 스케줄 설명 (Smart 스케줄만) |
 
@@ -167,7 +168,7 @@ curl -X POST "https://api.example.com/api/schedules" \
     "code": "DTO-VALIDATION-01",
     "message": "Request body validation failed.",
     "details": {
-      "type": ["invalid schedule type (must be 0 ~ 11)"]
+      "type": ["invalid schedule type (must be 0 ~ 12)"]
     }
   },
   "timestamp": "2025-01-15T10:30:00.000+09:00"

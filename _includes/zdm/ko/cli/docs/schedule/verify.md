@@ -50,7 +50,7 @@ zdm-cli schedule verify -p ./Basic_schedule-20250106120000.json
 |-----------|------|
 | 파일 존재 | 지정된 경로에 파일이 존재하는지 확인 |
 | JSON 형식 | 유효한 JSON 형식인지 확인 |
-| type 필드 | type 필드가 존재하고 0~11 범위의 숫자인지 확인 |
+| type 필드 | type 필드가 존재하고 0~12 범위의 정수인지 확인 |
 | basic 필드 | basic 필드가 존재하는지 확인 |
 | Type별 검증 | Schedule Type에 따른 필수 필드 및 형식 검증 |
 | Advanced 검증 | Smart Schedule (Type 7~11)의 경우 advanced 필드 검증 |
@@ -112,7 +112,7 @@ zdm-cli schedule verify -p ./Basic_schedule-20250106120000.json
 **검증 실패 - type 범위 오류:**
 
 ```
-* type은 0~11 범위의 숫자여야 합니다
+* type은 0~12 범위의 숫자여야 합니다
 ```
 
 **검증 실패 - basic 필드 누락:**

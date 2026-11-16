@@ -23,11 +23,11 @@
 ```bash
 # 복구 ID로 삭제
 curl -X DELETE "https://api.example.com/api/recoveries/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 복구 이름으로 삭제 (이름 삭제 시 center 필수, 1개만)
 curl -X DELETE "https://api.example.com/api/recoveries/daily-recovery?center=1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

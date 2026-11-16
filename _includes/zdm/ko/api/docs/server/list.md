@@ -27,19 +27,19 @@
 ```bash
 # 전체 서버 목록 조회
 curl -X GET "https://api.example.com/api/servers" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 필터 적용 조회
 curl -X GET "https://api.example.com/api/servers?mode=source&os=lin&connection=connect" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 추가 정보 포함 조회
 curl -X GET "https://api.example.com/api/servers?disk=true&network=true&detail=true" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/servers?page=1&limit=10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

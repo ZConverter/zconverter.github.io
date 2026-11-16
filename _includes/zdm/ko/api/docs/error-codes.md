@@ -137,8 +137,8 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 | `SCHEDULE-ERROR-15` | 400 | time 값이 누락됐습니다. |
 | `SCHEDULE-ERROR-16` | 400 | time 은 'HH:mm' 형식(00:00 ~ 23:59)이어야 합니다. |
 | `SCHEDULE-ERROR-17` | 400 | day 값이 누락됐습니다. |
-| `SCHEDULE-ERROR-18` | 422 | day 값이 유효하지 않습니다. |
-| `SCHEDULE-ERROR-19` | 400 | day 는 1 ~ 31 사이여야 합니다. |
+| `SCHEDULE-ERROR-18` | 422 | day 값이 유효하지 않습니다. 날짜는 콤마로 구분한 1~31 또는 `last` 입니다(31 = 말일). |
+| `SCHEDULE-ERROR-19` | 400 | day 는 1 ~ 31 사이여야 합니다. 메시지 끝에 `31 = last day of the month` 안내가 붙습니다(type 6, 9, 11, 12). |
 | `SCHEDULE-ERROR-20` | 409 | 이 스케줄 타입은 day 를 복수로 선택할 수 없습니다. |
 | `SCHEDULE-ERROR-21` | 400 | day 값이 누락됐습니다. |
 | `SCHEDULE-ERROR-22` | 422 | day 값이 유효하지 않습니다. (mon, tue, wed, thu, fri, sat, sun 중 하나) |
@@ -171,6 +171,7 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 | `SCHEDULE-ERROR-49` | 422 | SMART_CUSTOM_MONTHLY_BY_WEEKDAY 타입의 필수 필드가 누락됐습니다. |
 | `SCHEDULE-ERROR-50` | 422 | SMART_CUSTOM_MONTHLY_BY_DATE 타입의 필수 필드가 누락됐습니다. |
 | `SCHEDULE-ERROR-51` | 409 | 사용 중인 스케줄이라 삭제할 수 없습니다. |
+| `SCHEDULE-ERROR-52` | 422 | YEARLY(type 12) 타입의 필수 필드가 누락됐습니다. 월과 함께 날짜 또는 주·요일이 있어야 합니다. 요청 형식 검증을 통과한 입력은 이 오류에 도달하지 않는 내부 방어 코드입니다. |
 
 </details>
 
@@ -268,10 +269,10 @@ API 가 에러 응답의 `error.code` 로 반환하는 코드 목록입니다.
 | 코드 | HTTP | 설명 |
 |------|------|------|
 | `JOB-ERROR-100` | 404 | 지정한 스케줄을 찾을 수 없습니다. |
-| `JOB-ERROR-101` | 400 | full/increment 작업은 스케줄에 basic 만 포함해야 합니다. backup 에서 full/increment mode 에 Smart 스케줄 행(타입 7~11)의 숫자 ID 를 보낼 때도 이 코드입니다. recovery·replication·os-replication 수정에서 Smart 스케줄 ID 를 보낼 때도 같습니다. |
-| `JOB-ERROR-102` | 400 | smart 작업은 스케줄에 basic 과 advanced 를 모두 포함해야 합니다. backup 에서 smart mode 에 최상위 숫자 ID 를 보낼 때(`Smart job mode cannot use a single schedule ID. …`), 객체 형식 smart 스케줄에서 basic 또는 advanced 가 빠졌을 때(`Smart job mode requires both a basic and an advanced schedule.`)도 이 코드입니다. 후자는 종전에 500 이었습니다. |
-| `JOB-ERROR-103` | 400 | full/increment 작업의 스케줄 타입은 0 ~ 6 이어야 합니다. |
-| `JOB-ERROR-104` | 400 | smart 작업의 스케줄 타입은 7 ~ 11 이어야 합니다. |
+| `JOB-ERROR-101` | 400 | full/increment 작업은 스케줄에 basic 만 포함해야 합니다. backup 에서 full/increment mode 에 일반이 아닌 스케줄 행(타입 7~11)의 숫자 ID 를 보낼 때도 이 코드입니다(`Schedule ID '<id>' is not a basic schedule (type <n>). Full/increment job modes accept schedule type 0-6 or 12 only.`). recovery·replication·os-replication 수정에서 Smart 스케줄 ID 를 보낼 때도 같습니다. |
+| `JOB-ERROR-102` | 400 | smart 작업의 스케줄이 smart 형식이 아닙니다. 객체 형식에 일반 스케줄 type(0~6 또는 12)을 주면 `Smart job mode requires schedule type 7-11 (received: <n>).` 입니다. backup 에서 smart mode 에 최상위 숫자 ID 를 보낼 때(`Smart job mode cannot use a single schedule ID. …`), 객체 형식 smart 스케줄에서 basic 또는 advanced 가 빠졌을 때(`Smart job mode requires both a basic and an advanced schedule.`)도 이 코드입니다. 후자는 종전에 500 이었습니다. |
+| `JOB-ERROR-103` | 400 | full/increment 작업의 스케줄 타입은 0 ~ 6 또는 12 이어야 합니다. 복제 작업은 `Replication jobs accept schedule type 0-6 or 12 only (received: <n>).` 입니다. |
+| `JOB-ERROR-104` | 400 | smart 작업의 스케줄 타입은 7 ~ 11 이어야 합니다. type 12 를 보내면 `Smart job mode requires schedule type 7-11 (received: 12).` 로 거부됩니다. |
 | `JOB-ERROR-105` | 400 | basic 과 advanced 의 스케줄 타입이 일치하지 않습니다. |
 | `JOB-ERROR-106` | 500 | 스케줄 수정에 실패했습니다. |
 | `JOB-ERROR-107` | 400 | Smart Backup 은 스케줄이 필수입니다. |

@@ -24,11 +24,11 @@
 ```bash
 # ZDM ID로 삭제
 curl -X DELETE "https://api.example.com/api/zdms/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # ZDM 이름으로 삭제
 curl -X DELETE "https://api.example.com/api/zdms/Main-Center" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

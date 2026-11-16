@@ -25,23 +25,23 @@
 ```bash
 # 전체 복제 작업 목록 조회
 curl -X GET "https://api.example.com/api/replications" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 필터 적용 조회
 curl -X GET "https://api.example.com/api/replications?mode=full&status=processing" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 상세 정보 포함 조회
 curl -X GET "https://api.example.com/api/replications?detail=true" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 복제 단위별 필터 조회
 curl -X GET "https://api.example.com/api/replications?unit=repository" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/replications?page=1&limit=10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

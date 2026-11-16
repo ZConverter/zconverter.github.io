@@ -27,7 +27,7 @@
 ```bash
 # backup 단위 복제 등록
 curl -X POST "https://api.example.com/api/replications" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "sourceCenter": "1",
@@ -42,7 +42,7 @@ curl -X POST "https://api.example.com/api/replications" \
 
 # repository 단위 복제 등록 (다중 소스)
 curl -X POST "https://api.example.com/api/replications" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "sourceCenter": "1",
@@ -56,7 +56,7 @@ curl -X POST "https://api.example.com/api/replications" \
 
 # server 단위 복제 등록 (스케줄 포함)
 curl -X POST "https://api.example.com/api/replications" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "sourceCenter": "1",
@@ -135,7 +135,7 @@ curl -X POST "https://api.example.com/api/replications" \
 ```bash
 # image 단위 복제 등록 (V1)
 curl -X POST "https://api.example.com/api/replications" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "sourceCenter": "1",
@@ -150,7 +150,7 @@ curl -X POST "https://api.example.com/api/replications" \
 
 # repository 단위 복제 등록 (V1)
 curl -X POST "https://api.example.com/api/replications" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -H "Content-Type: application/json" \
   -d '{
     "sourceCenter": "1",
@@ -200,7 +200,7 @@ curl -X POST "https://api.example.com/api/replications" \
   "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "error": {
     "code": "JOB-ERROR-103",
-    "message": "Replication jobs accept schedule type 0-6 only (received: 7)."
+    "message": "Replication jobs accept schedule type 0-6 or 12 only (received: 7)."
   },
   "timestamp": "2026-04-17T10:30:00.000+09:00"
 }

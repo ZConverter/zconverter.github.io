@@ -28,27 +28,27 @@
 ```bash
 # 서버 ID로 파티션 조회
 curl -X GET "https://api.example.com/api/servers/1/partitions" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 서버 이름으로 파티션 조회
 curl -X GET "https://api.example.com/api/servers/server-01/partitions" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 필터 적용 조회
 curl -X GET "https://api.example.com/api/servers/1/partitions?fileSystem=ext4" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 파티션 지목 필터 (값 형식은 API가 정규화 - "/home", "C", "C:" 모두 허용)
 curl -X GET "https://api.example.com/api/servers/1/partitions?partition=/home" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # drive는 partition과 같은 컬럼을 가리키는 별칭 - 둘 중 하나만 사용 (동시 지정 시 400)
 curl -X GET "https://api.example.com/api/servers/1/partitions?drive=C" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 페이지네이션 적용 조회
 curl -X GET "https://api.example.com/api/servers/1/partitions?page=1&limit=10" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

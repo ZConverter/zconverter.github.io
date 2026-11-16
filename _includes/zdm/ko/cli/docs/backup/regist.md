@@ -9,6 +9,7 @@ Backup 작업을 등록하는 명령어입니다.
 > * 새로운 Backup 작업을 등록합니다. 서버의 전체 파티션 또는 특정 파티션에 대한 백업 작업을 설정할 수 있습니다.
 > * `--mode smart` 지정 시 schedule 옵션(`--schedule`, `--schedule-id`, `--schedule-file`) 중 하나가 반드시 필요합니다.
 > * `--schedule-id` 의 객체 형식(`'{"type":...,"basic":ID,"advanced":ID}'`)은 smart 전용입니다. `--mode full` 이나 `--mode increment` 에 주면 요청 전에 종료 코드 `2` 로 끝납니다: `schedule-id in '{"type":...,"basic":ID,"advanced":ID}' form is for smart mode only (use --mode smart, or a single ID for full mode)`
+> * `--mode smart` 에는 smart 타입(7~11)만 쓸 수 있습니다. `--schedule-id` 객체 · `--schedule` · `--schedule-file` 의 `type` 이 0~6 또는 12 이면 요청 전에 종료 코드 `2` 로 끝납니다: `Smart job mode requires schedule type 7-11 (received: <n>).` `--schedule-id` 의 `type` 에는 숫자 7~11 또는 smart 타입 이름만 쓸 수 있습니다.
 > * `type` 이 참조하는 스케줄의 type 과 다르면 서버가 `400 JOB-ERROR-108`, 다른 center 의 스케줄이면 `403 CENTER-ERROR-01` 로 거부합니다.
 > * `--schedule` 또는 `--schedule-file` 의 JSON 에 `basic` 키가 없으면 자동으로 `basic` 으로 감쌉니다. 규칙과 JSON 형식은 [스케줄 개요]({{ base_path }}/docs/schedule/overview)를 참고하세요.
 

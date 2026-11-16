@@ -3,7 +3,7 @@
 스케줄 객체의 구조와 필드 규칙을 설명하는 레퍼런스입니다. 백업·복구·복제·OS 복제 작업의 `schedule` 필드와 `POST /schedules` 요청 본문은 모두 이 구조를 따릅니다.
 
 - 스케줄을 단독으로 등록하는 방법은 [POST /schedules]({{ base_path }}/docs/schedule/regist)를 참고하세요.
-- `type` 은 숫자(`0`~`11`)로 지정합니다.
+- `type` 은 숫자(`0`~`12`)로 지정합니다. 단건·목록 조회의 `?type=` 필터는 숫자가 아니라 타입 이름(`yearly` 등)을 받습니다.
 
 ---
 
@@ -32,12 +32,23 @@
 | `year` | string | 연도 | `"2026"` 형식 |
 | `month` | string | 월 | `"1"` ~ `"12"` (복수: `"1,6,12"`) |
 | `week` | string | 주차 | `"1"` ~ `"5"` (복수: `"1,3"`) |
-| `day` | string | 요일(type 4,5,7,8,10) 또는 날짜(type 0,6,9,11) | 요일: `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"` (복수: `"mon, tue, wed"`), 날짜: `"1"` ~ `"31"` (복수: `"1,15,20"`) |
+| `day` | string | 요일(type 4,5,7,8,10, type 12 의 요일 기준) 또는 날짜(type 0,6,9,11, type 12 의 날짜 기준) | 요일: `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`, `"sat"`, `"sun"` (복수: `"mon, tue, wed"`), 날짜: `"1"` ~ `"31"` 또는 `"last"` (복수: `"1,15,20"`) |
 | `time` | string | 시간 | `"HH:mm"` 형식 (`"00:00"` ~ `"23:59"`) |
 | `interval.minute` | string | 분 간격 (type 1) | 숫자 문자열 (예: `"5"`) |
 | `interval.hour` | string | 시간 간격 (type 2) | 숫자 문자열 (예: `"2"`) |
 
 값은 모두 문자열로 보냅니다. 숫자(`2026`)로 보내면 검증 단계에서 거부됩니다.
+
+**날짜 `31` 은 그 달의 말일입니다 (`last` 별칭).** type 6, 9, 11, 12 에서 `day` 에 `31` 을 보내면 31일이 아니라 "그 달의 마지막 날"로 저장됩니다. `last`(대소문자 무시)를 보내면 같은 값이 됩니다. type 0(한 번 실행)은 달력 날짜이므로 이 규칙이 적용되지 않습니다.
+
+| 입력 | 의미 | 실행일 예시 |
+|------|------|-------------|
+| `"day": "31"` 또는 `"day": "last"` | 매월(또는 지정한 월) 말일 | 4월 30일, 5월 31일, 2월 28일(윤년 29일) |
+| `"day": "15,last"` | 15일과 말일 | 6월 15일·30일 |
+| `"day": "30"` | 30일 | 2월에는 실행되지 않습니다. 말일이 필요하면 `last` 를 쓰세요 |
+
+- 응답 `description` 에는 `last day` 로 표시됩니다.
+- "31일에만 실행"처럼 31일을 따로 지정할 수는 없습니다. 31일까지 있는 달은 말일이 곧 31일이므로 말일로 지정하세요.
 
 </details>
 
@@ -50,13 +61,14 @@
 
 | 필드 | 설명 |
 |------|------|
-| `type` | 스케줄 타입 번호 (`0`~`11`) |
+| `type` | 스케줄 타입 번호 (`0`~`12`) |
 | `basic` | 기본 스케줄. 스케줄 객체 또는 기존 스케줄 ID. 모든 타입에서 필요 |
 | `advanced` | 추가 스케줄. Smart 타입(`7`~`11`)에서만 사용하며 이 경우 `basic` 과 함께 필요 |
 
-- 일반 스케줄(type `0`~`6`)은 `basic` 만 사용합니다. Full·Increment 작업에 쓰입니다.
+- 일반 스케줄(type `0`~`6` 또는 `12`)은 `basic` 만 사용합니다. Full·Increment 작업에 쓰입니다.
 - Smart 스케줄(type `7`~`11`)에서 `basic` 은 Full 백업, `advanced` 는 Increment 백업 일정입니다. Smart 는 백업 작업(`smart` 모드)에서만 사용할 수 있습니다.
-- 복구·복제·OS 복제 작업은 일반 스케줄(type `0`~`6`)만 받습니다.
+- type `12`(매년)는 일반 스케줄입니다. 백업의 Smart 작업은 `basic`·`advanced` 어느 자리에도 type `12` 를 받지 않고 400 으로 거부합니다. Smart 의 매년 일정은 type `10`·`11` 로 지정합니다.
+- 복구·복제·OS 복제 작업은 일반 스케줄(type `0`~`6` 또는 `12`)만 받습니다.
 
 </details>
 
@@ -119,7 +131,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 
 ---
 
-## 타입별 요청 예시 (type 0 ~ 11)
+## 타입별 요청 예시 (type 0 ~ 12)
 
 각 예시는 `POST /schedules` 요청 본문입니다. 작업 등록·수정의 `schedule` 객체에서는 `center` 를 빼고 같은 `type`/`basic`/`advanced` 구성을 씁니다.
 
@@ -394,6 +406,72 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 
 </details>
 
+<details markdown="1">
+<summary><strong>Type 12: 일반 스케줄 (매년)</strong></summary>
+
+<details markdown="1">
+<summary><strong>Type 12 - {{ schedule_types[12].description }}</strong></summary>
+
+`month`, `day`, `time` 은 필수이고 `week` 는 선택입니다. `week` 를 보내면 요일 기준, 보내지 않으면 날짜 기준입니다. 일반 스케줄이므로 `basic` 만 사용하며, 모든 필드에 값을 여러 개 지정할 수 있습니다.
+
+| 방식 | 구조 | 필드 |
+|------|------|------|
+| 날짜 기준 | `{ month, day, time }` | `month`: 1~12, `day`: 1~31 또는 `last`, `time`: `HH:mm` |
+| 요일 기준 | `{ month, week, day, time }` | `week`: 1~5 (5 는 마지막 주), `day`: `mon`~`sun` |
+
+**날짜 기준** — 6월·12월 15일과 말일 05:00
+
+```json
+{
+  "center": "6",
+  "type": 12,
+  "basic": {
+    "month": "6,12",
+    "day": "15,last",
+    "time": "05:00"
+  }
+}
+```
+
+**요일 기준** — 11월 넷째 주 목요일 18:00
+
+```json
+{
+  "center": "6",
+  "type": 12,
+  "basic": {
+    "month": "11",
+    "week": "4",
+    "day": "thu",
+    "time": "18:00"
+  }
+}
+```
+
+**요일 기준, 마지막 주** — 3월 마지막 금요일 21:00
+
+```json
+{
+  "center": "6",
+  "type": 12,
+  "basic": {
+    "month": "3",
+    "week": "5",
+    "day": "fri",
+    "time": "21:00"
+  }
+}
+```
+
+- `week` 를 보내면 요일 기준으로만 동작하고 `day` 는 요일로 해석합니다. 날짜와 요일을 함께 쓰는 조건(예: 13일이면서 금요일)은 표현할 수 없습니다.
+- "매년 ○월 31일" 은 지정할 수 없습니다. `31` 은 말일로 처리되므로 31일까지 있는 달에는 말일을 지정하세요. 2월 말일은 윤년이면 29일, 아니면 28일입니다.
+- 한 스케줄에는 실행 시각을 하나만 지정할 수 있습니다. 하루에 여러 번 실행해야 하면 스케줄을 나누세요.
+- 월을 12개 모두 지정하면 사실상 매월 실행입니다.
+
+</details>
+
+</details>
+
 ---
 
 ## 예시 모음
@@ -423,8 +501,9 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 
 | 필드 | 길이 | 입력 예시 | 저장 예시 |
 |------|------|-----------|---------------|
-| `day` (날짜형, type 0/6/9/11) | 31 슬롯 | `"1"` | `1\|0\|0\|0\|0\|...\|0\|` (31개) |
+| `day` (날짜형, type 0/6/9/11/12) | 31 슬롯 | `"1"` | `1\|0\|0\|0\|0\|...\|0\|` (31개) |
 | `day` (날짜형) | 31 슬롯 | `"15, 20"` | `0\|...\|0\|1\|0\|0\|0\|0\|1\|0\|...\|` (15·20 위치에 1) |
+| `day` (날짜형, type 6/9/11/12) | 31 슬롯 | `"31"` 또는 `"last"` | 마지막(31번째) 슬롯만 1 — 말일 |
 | `week` | 5 슬롯 | `"1"` | `1\|0\|0\|0\|0\|` |
 | `week` | 5 슬롯 | `"2, 4"` | `0\|1\|0\|1\|0\|` |
 | `month` | 12 슬롯 | `"1,4,7,10"` | `1\|0\|0\|1\|0\|0\|1\|0\|0\|1\|0\|0\|` |
@@ -457,8 +536,16 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 | 10 (advanced) | `{month:"1,4,7,10", week:"2,4", day:"wed, fri", time:"16:00"}` | `[Advanced] Start working at 16:00 on the Second Week, Fourth Week / Wednesday, Friday of January, April, July, October` |
 | 11 (basic) | `{month:"3", day:"1", time:"05:00"}` | `[Basic] Start working on March 1 at 05:00` |
 | 11 (advanced) | `{month:"3,6,9,12", day:"15,20,25", time:"17:00"}` | `[Advanced] Start working at 17:00 on the 15, 20, 25 of March, June, September, December` |
+| 12 (날짜 기준) | `{month:"6,12", day:"15,last", time:"05:00"}` | `[Basic] Start working at 05:00 on the 15, last day of June, December every year.` |
+| 12 (요일 기준) | `{month:"11", week:"4", day:"thu", time:"18:00"}` | `[Basic] Start working at 18:00 on the Fourth Week Thursday of November every year.` |
+| 12 (마지막 주) | `{month:"3", week:"5", day:"fri", time:"21:00"}` | `[Basic] Start working at 21:00 on the Last Week Friday of March every year.` |
+| 12 (여러 주·요일) | `{month:"1,4,7,10", week:"2,4", day:"tue, thu", time:"02:30"}` | `[Basic] Start working at 02:30 on the Second Week, Fourth Week / Tuesday, Thursday of January, April, July, October every year.` |
 
 > 주차 표기는 `1→First`, `2→Second`, `3→Third`, `4→Fourth`, `5→Last`로 변환됩니다. 월 표기는 영문 풀네임(`January` ~ `December`).
+
+type 6, 9, 11, 12 에서 날짜에 말일(`31` 또는 `last`)이 포함되면 해당 자리가 `last day` 로 표시됩니다. 예: type 6 `{day:"1,31", time:"03:00"}` → `[Basic] Start working at 03:00 1, last day every month.`, type 9 → `... on the last day of every month.`, type 11 `{month:"2", day:"31", time:"03:00"}` → `[Basic] Start working on February last day at 03:00`.
+
+type 0~12 에 없는 값이 저장된 스케줄을 조회하면 오류 없이 `description` 이 `-`, `type` 이 `Unknown` 으로 나옵니다.
 
 </details>
 
@@ -640,7 +727,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
     "code": "DTO-VALIDATION-01",
     "message": "Request body validation failed.",
     "details": {
-      "type": ["invalid schedule type (must be 0 ~ 11)"]
+      "type": ["invalid schedule type (must be 0 ~ 12)"]
     }
   },
   "timestamp": "2026-05-19T10:30:00.000+09:00"
@@ -672,7 +759,7 @@ Smart 스케줄 (type 7~11)의 **basic** 부분에서는 각 필드에 **단일 
 }
 ```
 
-날짜(`day`)가 범위를 벗어나면 `SCHEDULE-ERROR-19`(400), `time` 형식이 `HH:mm` 이 아니면 `SCHEDULE-ERROR-16`(400)이 같은 형식으로 반환됩니다. 월과 일의 조합(예: 2월 30일)은 검사하지 않으며 각 값이 범위 안이면 허용됩니다.
+날짜(`day`)가 범위를 벗어나면 `SCHEDULE-ERROR-19`(400, 메시지 끝에 `31 = last day of the month` 안내 포함), `time` 형식이 `HH:mm` 이 아니면 `SCHEDULE-ERROR-16`(400)이 같은 형식으로 반환됩니다. 월과 일의 조합(예: 2월 30일)은 검사하지 않으며 각 값이 범위 안이면 허용됩니다.
 
 </details>
 

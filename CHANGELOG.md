@@ -9,6 +9,27 @@
 ## 2026년 11월
 
 <details>
+<summary><code>[11-16] [Added] [API&nbsp;v4.0.0 · CLI&nbsp;v4.0.0]</code> <b>스케줄 타입 12 (매년) 문서</b></summary>
+
+- 스케줄 타입 표(`enums.yml`)에 12(`Yearly`, 일반 작업용, 날짜 기준 `{ month, day, time }` · 요일 기준 `{ month, week, day, time }`)를 추가. 스케줄 개요에 Type 12 구조 · 예시 3종 · 응답 `description` 문구 · 표현할 수 없는 경우를 추가하고, 등록 · 조회 문서의 type 범위를 0~12 로 수정.
+- type 6 · 9 · 11 · 12 의 날짜 `31` = 말일, `last` 별칭 규칙과 알 수 없는 type 의 `Unknown` / `-` 표시를 스케줄 문서에 추가.
+- 일반 스케줄만 받는 API · CLI 문서(backup · recovery · replication · os-replication · schedule)의 "type 0~6" 을 "0~6 또는 12" 로 수정. backup Smart 작업은 type 12 를 거부한다는 설명 추가.
+- 에러 코드 문서: `JOB-ERROR-101` · `-103` · `-104` 메시지, `SCHEDULE-ERROR-18` · `-19` 안내 갱신, `SCHEDULE-ERROR-52` 추가.
+- 4.0.0 릴리스 노트(API · CLI)에 type 12 추가, 알 수 없는 type 500 수정, "31 = 말일" 수정을 반영. 이전 버전 보존본은 변경 없음.
+- smart 작업에 일반 스케줄 type(0~6 또는 12)을 객체 형식으로 줄 때의 `JOB-ERROR-102` 메시지를 `Smart job mode requires schedule type 7-11 (received: <n>).` 로 갱신(backup regist 예시 · 표, 에러 코드 문서).
+- CLI 구현에 맞춰 CLI 문서 갱신: `schedule create` 의 Type 12 두 형태(날짜 기준 · `--basic-week` 를 더한 요일 기준) 예시 · `--interactive` · Day/Week 값 안내, `schedule list` 의 `yearly` 이름, `backup regist` · `update` 및 4.0.0 릴리스 노트에 smart 모드가 smart 이외 타입(0~6, 12)을 요청 전에 거부(종료 코드 2)하는 동작 변경 추가.
+- 계약 변화 없음(문서만 변경).
+
+</details>
+
+<details>
+<summary><code>[11-12] [Fixed] [API&nbsp;전 버전]</code> <b>인증 헤더 예시·설명에서 Bearer 접두사 삭제</b></summary>
+
+- API 는 `Authorization` 헤더에 발급받은 토큰 값만 받는다(접두사 없음). 문서의 `Authorization: Bearer <token>` 예시를 `Authorization: <token>` 으로, 파라미터 표의 "Bearer 토큰" 을 "인증 토큰(발급받은 값 그대로)" 으로 바꿈. 모든 버전의 API 문서(269개 파일) 대상, CLI 문서는 해당 없음.
+
+</details>
+
+<details>
 <summary><code>[11-12] [Changed] [CLI&nbsp;v4.0.0]</code> <b>backup·recovery·replication·os-replication --schedule-id (smart 객체 형식 · center · type 조건)</b></summary>
 
 - `backup update --schedule-id '{"type":7,"basic":ID,"advanced":ID}'` 가 `--mode smart` 없이도 동작함을 backup update 문서에 반영. smart 작업에 숫자 하나를 주면 서버가 400 `JOB-ERROR-102` 로 거부함을 추가.

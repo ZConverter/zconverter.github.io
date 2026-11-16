@@ -109,6 +109,7 @@ zdm-cli backup update --id 123 --mode increment --output json
 - `'{"type":7,"basic":ID,"advanced":ID}'` 형식은 `--mode` 없이도 받습니다. 작업의 현재 모드를 유지한 채 smart 작업의 스케줄만 교체합니다.
 - smart 작업에 숫자 하나를 주면 서버가 `400 JOB-ERROR-102` 로 거부합니다.
 - `--mode full` · `--mode increment` 에 이 형식을 주면 요청 전에 종료 코드 `2` 로 끝납니다: `schedule-id in '{"type":...,"basic":ID,"advanced":ID}' form is for smart mode only (use --mode smart, or a single ID for full mode)`
+- `--mode smart` 와 함께 smart 가 아닌 타입(0~6, 12)을 주면 요청 전에 종료 코드 `2` 로 끝납니다: `Smart job mode requires schedule type 7-11 (received: <n>).` `type` 에는 숫자 7~11 또는 smart 타입 이름만 쓸 수 있습니다.
 - `type` 이 참조하는 스케줄의 type 과 다르면 서버가 `400 JOB-ERROR-108` 로 거부합니다. 다른 center 의 스케줄을 참조하면 `403 CENTER-ERROR-01` 입니다.
 
 </details>

@@ -22,11 +22,11 @@
 ```bash
 # 스케줄 ID로 조회 (ID = 1)
 curl -X GET "https://api.example.com/api/schedules/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 스케줄 ID로 조회 (ID = 15)
 curl -X GET "https://api.example.com/api/schedules/15" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 > `:identifier`는 숫자 스케줄 ID만 의미 있습니다. 내부적으로 `Number(identifier)`로 변환되며, 비숫자 값은 `NaN`이 되어 `404 Not Found`로 응답합니다.
@@ -97,7 +97,7 @@ curl -X GET "https://api.example.com/api/schedules/15" \
 
 **성공 응답 (200 OK) — type/state 매핑 실패 시 Unknown fallback (state 한정)**
 
-스케줄 상태가 알 수 없는 값일 때 `state`는 `"Unknown"`으로 내려옵니다. 단, 스케줄 유형 자체가 알 수 없는 값이면 422 `Schedule description conversion failed.`로 실패하므로 type 측 `"Unknown"`을 성공 응답에서 받는 경우는 없습니다.
+스케줄 상태가 알 수 없는 값일 때 `state`는 `"Unknown"`으로 내려옵니다. 스케줄 유형이 정의되지 않은 값이면 오류 없이 `type` 은 `"Unknown"`, `description` 은 `"-"` 로 내려옵니다(4.0.0 이전에는 500). type 12 는 `"Yearly"` 로 표시됩니다.
 
 ```json
 {
@@ -120,7 +120,7 @@ curl -X GET "https://api.example.com/api/schedules/15" \
 }
 ```
 
-> `description` prefix 규칙: 단순 주기(`Once`/`Every Minute`/`Hourly`/`Daily`/`Weekly`/`Monthly...`)는 항상 `[Basic]`. Smart(`SMART_*`, type 7~11)는 다중 선택일 때 `[Advanced]`, 단일 선택일 때 `[Basic]`이 자동 부착됩니다.
+> `description` prefix 규칙: 단순 주기(`Once`/`Every Minute`/`Hourly`/`Daily`/`Weekly`/`Monthly...`)는 항상 `[Basic]`. type 12(`Yearly`)도 항상 `[Basic]`. Smart(`SMART_*`, type 7~11)는 다중 선택일 때 `[Advanced]`, 단일 선택일 때 `[Basic]`이 자동 부착됩니다.
 
 </details>
 
@@ -161,7 +161,7 @@ curl -X GET "https://api.example.com/api/schedules/15" \
 
 **스케줄 설명 변환 실패 (422 Unprocessable Entity) — `SCHEDULE_DESCRIPTION_CONVERSION_FAILED`**
 
-스케줄 유형이 지원되지 않는 값(예: `99` `UNKNOWN` 등 정의되지 않은 enum)이거나, 스케줄 설명 변환이 실패한 경우 반환됩니다. 입력 path param 형식 위반은 별도 422가 아니라 위의 404로 떨어집니다(길이 1 이상 문자열만 검증).
+스케줄 설명 변환이 실패한 경우 반환됩니다. 정의되지 않은 스케줄 유형은 이 오류가 아니라 `type` `"Unknown"` · `description` `"-"` 로 내려옵니다. 입력 path param 형식 위반은 별도 422가 아니라 위의 404로 떨어집니다(길이 1 이상 문자열만 검증).
 
 ```json
 {

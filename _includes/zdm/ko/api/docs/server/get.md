@@ -25,15 +25,15 @@
 ```bash
 # 서버 ID로 조회
 curl -X GET "https://api.example.com/api/servers/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 서버 이름으로 조회
 curl -X GET "https://api.example.com/api/servers/server-01" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 상세 정보 포함 조회
 curl -X GET "https://api.example.com/api/servers/1?detail=true&disk=true" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

@@ -25,11 +25,11 @@
 ```bash
 # 서버 ID로 삭제
 curl -X DELETE "https://api.example.com/api/servers/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 서버 이름으로 삭제
 curl -X DELETE "https://api.example.com/api/servers/server-01" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

@@ -24,11 +24,11 @@
 ```bash
 # 백업 ID로 모니터링 조회
 curl -X GET "https://api.example.com/api/backups/monitoring/job/1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 
 # 백업 이름으로 모니터링 조회
 curl -X GET "https://api.example.com/api/backups/monitoring/job/daily-backup" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: <token>"
 ```
 
 </details>

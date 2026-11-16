@@ -22,7 +22,7 @@ ZOS 인증 키 파일을 다운로드합니다.
 
 ```bash
 curl -X GET "https://api.example.com/api/cloud-auth/zos/download/config.conf" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: <token>" \
   -o config.conf
 ```
 
@@ -33,7 +33,7 @@ curl -X GET "https://api.example.com/api/cloud-auth/zos/download/config.conf" \
 
 | 파라미터 | 위치 | 타입 | 필수 | 설명 |
 |---------|------|------|------|------|
-| `Authorization` | Header | string | Required | Bearer 토큰 |
+| `Authorization` | Header | string | Required | 인증 토큰(발급받은 값 그대로) |
 | `fileName` | Path | string | Required | 다운로드할 파일명 |
 
 </details>
